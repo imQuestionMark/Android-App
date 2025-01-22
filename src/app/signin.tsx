@@ -1,17 +1,30 @@
 /* eslint-disable max-lines-per-function */
+import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView, ScrollView } from 'react-native';
+import { z } from 'zod';
 
 import { ControlledInput } from '@/components/ui';
 
+const schema = z.object({
+  email: z
+    .string()
+    .min(1, { message: 'Email is required' })
+    .email({ message: 'Incorrect Mail id' }),
+});
+
+type TSignup = z.infer<typeof schema>;
+
 export default function Signin() {
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit } = useForm<TSignup>({
     defaultValues: {
       email: '',
     },
+    resolver: zodResolver(schema),
   });
+
   const sendOTP = () => {
     alert('SIGNIN');
   };

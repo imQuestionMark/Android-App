@@ -170,32 +170,29 @@
 //   );
 // }
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView, ScrollView } from 'react-native';
+import { z } from 'zod';
 
 import { ControlledInput } from '@/components/ui';
 
+const schema = z.object({
+  firstName: z.string({ required_error: 'Please enter your First Name' }),
+  lastName: z.string({ required_error: 'Please enter your Last Name' }),
+  phone: z.string({ required_error: 'Please enter your Phone Number' }),
+  email: z
+    .string()
+    .min(1, { message: 'Email is required' })
+    .email({ message: 'Incorrect Mail id' }),
+});
 export default function OnboardingScreen() {
-  const { control, handleSubmit } = useForm({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: 0,
-    },
+  const { control } = useForm({
+    resolver: zodResolver(schema),
   });
   //const router = useRouter();
-
-  const onSubmit = (data: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: number;
-  }) => {
-    console.log(data);
-  };
 
   const signUp = () => {
     alert('SIGNIN');
@@ -219,10 +216,6 @@ export default function OnboardingScreen() {
             <ControlledInput
               name="firstName"
               control={control}
-              // rules={{
-              //   required: 'First name is required',
-              // }}
-
               label="Enter your first name"
             />
           </View>
@@ -231,8 +224,6 @@ export default function OnboardingScreen() {
             <ControlledInput
               name="lastName"
               control={control}
-              // rules={{ required: 'Last name is required' }}
-
               label="Enter your last name"
             />
           </View>
@@ -241,14 +232,6 @@ export default function OnboardingScreen() {
             <ControlledInput
               name="email"
               control={control}
-              // rules={{
-              //   // required: 'Email is required',
-              //   pattern: {
-              //     value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-              //     message: 'Enter a valid email address',
-              //   },
-              // }}
-
               label="Enter your mail id"
               hint="we will send you the 4 digit verification code"
             />
@@ -258,23 +241,14 @@ export default function OnboardingScreen() {
             <ControlledInput
               name="phone"
               control={control}
-              // rules={{
-              //   required: 'Phone number is required',
-              //   pattern: {
-              //     value: /^\d{10}$/,
-              //     message: 'Enter a valid 10-digit phone number',
-              //   },
-              // }}
+              keyboardType="numeric"
               label="Enter your phone No"
             />
           </View>
         </View>
 
         <View className="mx-[25px]">
-          <Pressable
-            onPress={handleSubmit(onSubmit)}
-            className="h-[60px] rounded-lg bg-[#0400D1] py-3"
-          >
+          <Pressable className="h-[60px] rounded-lg bg-[#0400D1] py-3">
             <Text className="text-4.5 h-[31px] text-center font-[Poppins] font-semibold leading-[30.6px] text-white">
               Send OTP
             </Text>

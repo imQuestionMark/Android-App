@@ -45,20 +45,29 @@
 /* eslint-disable unused-imports/no-unused-imports */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-lines-per-function */
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView, ScrollView } from 'react-native';
 import { OtpInput } from 'react-native-otp-entry';
+import { z } from 'zod';
 
 import { signIn } from '@/lib';
 
+const schema = z.object({
+  otp: z.string({ required_error: 'Please enter otp' }),
+});
+
+type TSignup = z.infer<typeof schema>;
+
 export default function Verification() {
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit } = useForm<TSignup>({
     defaultValues: {
       otp: '',
     },
+    resolver: zodResolver(schema),
   });
 
   const submitotp = (data: { otp: string }) => {
@@ -97,8 +106,8 @@ export default function Verification() {
             render={({ field: { onChange, value } }) => (
               <OtpInput
                 numberOfDigits={4}
-                onTextChange={(text) => {
-                  onChange(text);
+                onTextChange={(otp) => {
+                  onChange(otp);
                 }}
                 type="numeric"
               />
