@@ -18,7 +18,7 @@ const schema = z.object({
 type TSignup = z.infer<typeof schema>;
 
 export default function Signin() {
-  const { control, handleSubmit } = useForm<TSignup>({
+  const { control, handleSubmit ,formState: { errors }} = useForm<TSignup>({
     defaultValues: {
       email: '',
     },
@@ -48,7 +48,7 @@ export default function Signin() {
             name="email"
             control={control}
             // rules={{
-            //   // required: 'Email is required',
+            //   required: 'Email is required',
             //   pattern: {
             //     value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
             //     message: 'Enter a valid email address',
@@ -58,6 +58,9 @@ export default function Signin() {
             label="Enter your mail id"
             hint="we will send you the 4 digit verification code"
           />
+          {errors.email && (
+        <Text className="text-red-500 text-sm font-semibold mb-2">{errors.email.message}</Text>
+      )}
         </View>
 
         <View className="mx-[25px] mt-[413px]">
