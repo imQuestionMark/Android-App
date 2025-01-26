@@ -35,11 +35,10 @@ export default function RootLayout() {
   return (
     <Providers>
       <Stack>
-        <Stack.Screen name="(app)" options={{ headerShown: false }} />
         <Stack.Screen name="signup" options={{ headerShown: false }} />
         <Stack.Screen name="signin" options={{ headerShown: false }} />
         <Stack.Screen name="verification" options={{ headerShown: false }} />
-        {/* <Stack.Screen name="login" options={{ headerShown: false }} /> */}
+     
       </Stack>
     </Providers>
   );
