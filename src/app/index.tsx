@@ -1,63 +1,101 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CalendarDays } from 'lucide-react-native';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Pressable, Text, View } from 'react-native';
-import { SafeAreaView, ScrollView } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { z } from 'zod';
 
+import GradientView from '@/components/onboarding/gradient-view';
+import { Text } from '@/components/ui';
 import { ControlledCalendar } from '@/components/ui/calendars';
 
 const schema = z.object({
   date: z.string(),
 });
 
-type TSignup = z.infer<typeof schema>;
+type TDateofBirth = z.infer<typeof schema>;
+
+const sendDOB = (data: TDateofBirth) => {
+  console.log(data);
+};
 
 export default function Personaldtls() {
-  const { control } = useForm<TSignup>({
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
+  const { control, handleSubmit } = useForm<TDateofBirth>({
     defaultValues: {},
     resolver: zodResolver(schema),
   });
 
+  const toggleCalendar = () => {
+    console.log('Calendar state:', !isCalendarVisible);
+    return setIsCalendarVisible((p) => !p);
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1 bg-slate-400 px-4 pt-8">
-        <View className="mb-3.5 ml-5 mr-[90px] mt-[17px]">
-          <View className="">
-            <Text className="text-black-500 font-[Poppins] text-[32px] font-bold">
-              Welcome{' '}
-              <Text className="font-[Poppins] text-[32px] font-bold text-[#0400D1]">
+    <GradientView className="m-5">
+      <View className="mt-4 flex grow justify-between">
+        <View id="main">
+          <View className="flex gap-2">
+            <View className="flex-row gap-2">
+              <Text className="text-black-500 font-poppins text-[32px] font-bold">
+                Hi
+              </Text>
+              <Text className="font-poppins text-[32px] font-bold text-primary">
                 Swetha
               </Text>
-            </Text>
+            </View>
+            <View>
+              <Text className="font-poppins text-[20px] font-medium text-[#161616]">
+                Enter details
+              </Text>
+            </View>
           </View>
-          <View className="mt-2">
-            <Text className="  font-[Poppins] text-[20px] font-medium text-[#5A5A5A]">
-              Enter details
+
+          <View className="mt-6">
+            <Text className="  font-poppins text-[20px] font-medium text-[#161616]">
+              Enter your D.O.B
             </Text>
+
+            {/* @TODO: Fix max width based on dimensions */}
+            <Pressable
+              onPress={toggleCalendar}
+              className="mt-[22px] max-w-64 flex-row items-center gap-4 rounded-md bg-[#F4F7FF] px-7 py-[10px]"
+            >
+              <CalendarDays color="#5A5A5A" />
+              <Text className="text-[#5A5A5A]">dd/mm/yyyy</Text>
+            </Pressable>
+
+            {isCalendarVisible && (
+              <ControlledCalendar name="date" control={control} />
+            )}
+          </View>
+
+          <View className="mt-6">
+            <Text className="  font-poppins text-[20px] font-medium text-[#161616]">
+              Enter your Nationality
+            </Text>
+
+            <Pressable className="mt-[22px] flex-row items-center gap-4 rounded-md bg-[#F4F7FF] px-7 py-[10px]">
+              <Text className="text-[#5A5A5A]">Select box T.B.D</Text>
+            </Pressable>
           </View>
         </View>
-        <View className="ml-5">
-          <Text className="  font-[Poppins] text-[20px] font-medium text-[#161616]">
-            Enter your D.O.B
-          </Text>
 
-          <ControlledCalendar
-            name="date"
-            control={control}
-          ></ControlledCalendar>
-        </View>
+        <View id="bottomNavigation">
+          <View className="flex items-end">
+            <Pressable className="mb-6 p-4" onPress={handleSubmit(sendDOB)}>
+              <Text className="font-poppins text-[20px] font-medium text-primary">
+                Confirm
+              </Text>
+            </Pressable>
+          </View>
 
-        <View className="mx-[25px] mt-[413px]">
-          <Pressable
-            //onPress={handleSubmit(sendOTP)}
-            className="h-[60px] rounded-lg bg-[#0400D1] py-3"
-          >
-            <Text className="text-4.5 h-[31px] text-center font-[Poppins] font-semibold leading-[30.6px] text-white">
-              Send OTP
-            </Text>
-          </Pressable>
+          <View id="StatusBar" className="flex-row justify-between gap-4">
+            <View className="h-1 grow rounded-xl bg-primary" />
+            <View className="h-1 grow rounded-xl bg-[#C9C9C9]" />
+          </View>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </GradientView>
   );
 }
