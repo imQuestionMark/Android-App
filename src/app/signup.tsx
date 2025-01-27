@@ -1,10 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from 'expo-router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Pressable, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView, ScrollView } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { z } from 'zod';
 
+import GradientView from '@/components/onboarding/gradient-view';
 import { ControlledInput } from '@/components/ui';
 
 const schema = z.object({
@@ -29,11 +31,11 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1 bg-slate-400 px-4 pt-8">
+    <GradientView>
+      <ScrollView className="flex-1  px-4 pt-8">
         <View className="mb-4 ml-4 mr-[90px] mt-[17px]">
           <Text className="text-black-500 font-poppins text-[32px] font-bold">
-            Welcome{' '}
+            Welcome
             <Text className="font-poppins text-[32px] font-bold text-primary">
               Onboard!
             </Text>
@@ -88,21 +90,22 @@ export default function OnboardingScreen() {
               <Text className="m-0 p-0 text-center font-poppins font-medium leading-[30.6px] text-gray-500">
                 If you already have an account?
               </Text>
-              <TouchableOpacity onPress={signUp} className="ml-0 p-0">
+
+              <Link href={{ pathname: '/login' }} className="ml-0 p-0">
                 <Text className="font-medium text-primary"> login</Text>
-              </TouchableOpacity>
+              </Link>
             </View>
 
             <Text className="text-black-400 font-regular text-center font-poppins  leading-[30.6px]">
-              You agree to the{' '}
+              You agree to the
               <Text className="font-medium text-primary underline">
                 terms & Conditions
-              </Text>{' '}
+              </Text>
               & <Text className="text-primary underline">privacy policy</Text>
             </Text>
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </GradientView>
   );
 }

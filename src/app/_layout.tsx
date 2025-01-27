@@ -48,8 +48,9 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="index" options={{}} />
-        <Stack.Screen name="signin" />
-        <Stack.Screen name="verification" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="signup" />
+        <Stack.Screen name="personal-details" />
       </Stack>
     </Providers>
   );
