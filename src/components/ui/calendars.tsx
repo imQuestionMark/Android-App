@@ -112,7 +112,7 @@ export function ControlledCalendar<T extends FieldValues>(
 
   return (
     // @TODO Add shadow
-    <View className="w-full rounded-lg p-4 ">
+    <View className="w-full max-w-[359px] rounded-lg bg-green-200">
       <Calendar
         current={`${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-01`}
         onDayPress={(day: { dateString: any }) =>
@@ -127,6 +127,15 @@ export function ControlledCalendar<T extends FieldValues>(
             setModalVisible={setModalVisible}
           />
         )}
+        hideExtraDays
+        dayComponent={(data) => {
+          console.log(data);
+          return (
+            <Pressable className="flex size-9 items-center justify-center bg-[#F2F2F5]">
+              <Text>{data.date.day}</Text>
+            </Pressable>
+          );
+        }}
       />
 
       <Modal

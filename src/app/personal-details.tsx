@@ -75,7 +75,7 @@ export default function PersonalDetails() {
                 <TouchableWithoutFeedback
                   onPress={() => setIsCalendarVisible(false)}
                 >
-                  <View className="flex-1 items-center justify-center">
+                  <View className="flex-1 ml-5 items-start justify-center">
                     <ControlledCalendar name="date" control={control} />
                   </View>
                 </TouchableWithoutFeedback>
