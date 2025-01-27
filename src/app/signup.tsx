@@ -16,11 +16,12 @@ const schema = z.object({
     .min(1, { message: 'Email is required' })
     .email({ message: 'Incorrect Mail id' }),
 });
+
+// eslint-disable-next-line max-lines-per-function
 export default function OnboardingScreen() {
   const { control } = useForm({
     resolver: zodResolver(schema),
   });
- 
 
   const signUp = () => {
     alert('SIGNIN');

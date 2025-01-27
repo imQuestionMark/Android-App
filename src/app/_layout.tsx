@@ -5,7 +5,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import React from 'react';
+import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -32,13 +32,15 @@ SplashScreen.setOptions({
 });
 
 export default function RootLayout() {
+  useEffect(() => {
+    SplashScreen.hideAsync(); // Hide the splash screen when ready
+  }, []);
+
   return (
     <Providers>
       <Stack>
-        <Stack.Screen name="signup" options={{ headerShown: false }} />
         <Stack.Screen name="signin" options={{ headerShown: false }} />
         <Stack.Screen name="verification" options={{ headerShown: false }} />
-     
       </Stack>
     </Providers>
   );

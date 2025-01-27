@@ -3,7 +3,6 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
-    "jsx": "react-jsx",
     "paths": {
       "@/*": ["./src/*"],
       "@env": ["./src/lib/env.js"]
