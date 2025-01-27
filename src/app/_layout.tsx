@@ -38,9 +38,18 @@ export default function RootLayout() {
 
   return (
     <Providers>
-      <Stack>
-        <Stack.Screen name="signin" options={{ headerShown: false }} />
-        <Stack.Screen name="verification" options={{ headerShown: false }} />
+      <Stack
+        screenOptions={{
+          headerShown: true,
+          headerTitle: '',
+          headerShadowVisible: false,
+          headerTransparent: true,
+          headerStyle: { backgroundColor: 'rgba(0, 0, 0, 0)' },
+        }}
+      >
+        <Stack.Screen name="index" options={{}} />
+        <Stack.Screen name="signin" />
+        <Stack.Screen name="verification" />
       </Stack>
     </Providers>
   );
