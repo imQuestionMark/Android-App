@@ -83,7 +83,7 @@ const _THEME = {
 export function ControlledCalendar<T extends FieldValues>(
   props: ControlledCalendarProps<T>
 ) {
-  const { name, control, rules, hint, markedDates, onSubmit, onBack } = props;
+  const { name, control, rules, hint, markedDates } = props;
   const { field, fieldState } = useController({ control, name, rules });
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -112,7 +112,7 @@ export function ControlledCalendar<T extends FieldValues>(
 
   return (
     // @TODO Add shadow
-    <View className=" w-full rounded-lg  p-4 ">
+    <View className="w-full rounded-lg p-4 ">
       <Calendar
         current={`${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-01`}
         onDayPress={(day: { dateString: any }) =>
@@ -197,7 +197,6 @@ export function ControlledCalendar<T extends FieldValues>(
           {fieldState.error.message}
         </Text>
       )}
-      <CalendarFooter onBack={onBack} onSubmit={onSubmit} />
     </View>
   );
 }

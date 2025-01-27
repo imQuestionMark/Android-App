@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarDays } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Pressable, View } from 'react-native';
+import { Modal, Pressable, TouchableWithoutFeedback, View } from 'react-native';
 import { z } from 'zod';
 
 import GradientView from '@/components/onboarding/gradient-view';
@@ -66,7 +66,20 @@ export default function PersonalDetails() {
             </Pressable>
 
             {isCalendarVisible && (
-              <ControlledCalendar name="date" control={control} />
+              <Modal
+                visible={isCalendarVisible}
+                transparent
+                animationType="fade"
+                onRequestClose={() => setIsCalendarVisible(false)}
+              >
+                <TouchableWithoutFeedback
+                  onPress={() => setIsCalendarVisible(false)}
+                >
+                  <View className="flex-1 items-center justify-center">
+                    <ControlledCalendar name="date" control={control} />
+                  </View>
+                </TouchableWithoutFeedback>
+              </Modal>
             )}
           </View>
 
@@ -82,15 +95,15 @@ export default function PersonalDetails() {
         </View>
 
         <View id="bottomNavigation">
-          <View className="flex items-end">
-            <Pressable className="mb-6 p-4" onPress={handleSubmit(sendDOB)}>
+          <View className="flex items-end ">
+            <Pressable className="mb-6 p-4 " onPress={handleSubmit(sendDOB)}>
               <Text className="font-poppins text-[20px] font-medium text-primary">
                 Confirm
               </Text>
             </Pressable>
           </View>
 
-          <View id="StatusBar" className="flex-row justify-between gap-4">
+          <View className="flex-row justify-between gap-4">
             <View className="h-1 grow rounded-xl bg-primary" />
             <View className="h-1 grow rounded-xl bg-[#C9C9C9]" />
           </View>
