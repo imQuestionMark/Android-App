@@ -41,18 +41,18 @@ export default function Verification() {
       <SafeAreaView className="flex-1 bg-white">
         <ScrollView className="flex-1 bg-slate-400 px-4 pt-8">
           <View className="mx-4 mb-3.5 mt-4">
-            <Text className="text-black-500 flex flex-row font-[Poppins] text-[32px] font-bold">
+            <Text className="text-black-500 flex flex-row font-poppins text-[32px] font-bold">
               Welcome{' '}
-              <Text className="font-[Poppins] text-[32px] font-bold text-[#0400D1]">
+              <Text className="font-poppins text-[32px] font-bold text-primary">
                 Onboard!
               </Text>
             </Text>
           </View>
           <View className="mx-4 mt-1">
-            <Text className="mb-2 font-[Poppins] text-[20px] font-semibold text-[#161616] ">
+            <Text className="mb-2 font-poppins text-[20px] font-semibold text-[#161616] ">
               Verify your account
             </Text>
-            <Text className="mb-1 mt-1.5 font-[Poppins] text-[12px] font-medium leading-[14px] tracking-[0.5px]">
+            <Text className="mb-1 mt-1.5 font-poppins text-[12px] font-medium leading-[14px] tracking-[0.5px]">
               OTP send to your email address.Please enter
             </Text>
           </View>
@@ -113,10 +113,10 @@ export default function Verification() {
           <View className="mx-[25px] mt-[409px]">
             <Pressable
               onPress={handleSubmit(submitotp)}
-              className="flex h-[60px] items-center justify-center rounded-lg bg-[#0400D1] py-3"
+              className="flex h-[60px] items-center justify-center rounded-lg bg-primary py-3"
             >
               <Link href="/signin">
-                <Text className="text-4.5 mt-3.5 h-[31px] text-center font-[Poppins] font-semibold leading-[170%] text-white">
+                <Text className="text-4.5 mt-3.5 h-[31px] text-center font-poppins font-semibold leading-[170%] text-white">
                   VERIFY OTP
                 </Text>
               </Link>
@@ -124,24 +124,20 @@ export default function Verification() {
 
             <View className="mx-[25px]">
               <View className="flex flex-row items-center justify-center">
-                <Text className="m-0 p-0 text-center font-[Poppins] font-medium leading-[30.6px] text-gray-500">
+                <Text className="m-0 p-0 text-center font-poppins font-medium leading-[30.6px] text-gray-500">
                   Didn't recieve code?
                 </Text>
                 <Pressable onPress={signIn} className="ml-0 p-0">
-                  <Text className="font-medium text-[#0400D1]">
-                    {' '}
-                    Resend code
-                  </Text>
+                  <Text className="font-medium text-primary"> Resend code</Text>
                 </Pressable>
               </View>
 
-              <Text className="text-black-400 font-regular flex flex-row text-center font-[Poppins]  leading-[30.6px]">
+              <Text className="text-black-400 font-regular flex flex-row text-center font-poppins  leading-[30.6px]">
                 You agree to the{' '}
-                <Text className="flex flex-row font-medium text-[#0400D1] underline">
+                <Text className="flex flex-row font-medium text-primary underline">
                   terms & Conditions
                 </Text>{' '}
-                &{' '}
-                <Text className="text-[#0400D1] underline">privacy policy</Text>
+                & <Text className="text-primary underline">privacy policy</Text>
               </Text>
             </View>
           </View>
