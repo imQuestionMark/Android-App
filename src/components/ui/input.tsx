@@ -17,12 +17,9 @@ import { Text } from './text';
 const inputTv = tv({
   slots: {
     container: 'mb-2',
-    label:
-      'text-grey-100 mb-2 font-[Poppins] text-[16px] dark:text-neutral-100',
-    hint: 'font-[Poppins] text-[12px] font-medium leading-[14px] tracking-[0.5px]',
-    input: 'h-[50px]  rounded-[6px] bg-white opacity-100',
-    label1:
-      'text-grey-100 mb-2 font-[Poppins] text-[20px] font-semibold  dark:text-neutral-100',
+    label: 'text-grey-100 mb-2 font-poppins text-[16px] dark:text-neutral-100',
+    input: 'h-[50px] rounded-[6px] bg-white px-4 opacity-100',
+    hint: 'mb-2 font-poppins text-xs font-medium text-[#5A5A5A]',
   },
 
   variants: {
@@ -52,7 +49,6 @@ const inputTv = tv({
 
 export interface NInputProps extends TextInputProps {
   label?: string;
-  label1?: string;
   hint?: string;
   disabled?: boolean;
   error?: string;
@@ -77,7 +73,7 @@ interface ControlledInputProps<T extends FieldValues>
     InputControllerType<T> {}
 
 export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
-  const { label, label1, error, testID, hint, ...inputProps } = props;
+  const { label, error, testID, hint, ...inputProps } = props;
   const [isFocussed, setIsFocussed] = React.useState(false);
   const onBlur = React.useCallback(() => setIsFocussed(false), []);
   const onFocus = React.useCallback(() => setIsFocussed(true), []);
@@ -102,18 +98,11 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
           {label}
         </Text>
       )}
-      {label1 && (
-        <Text
-          testID={testID ? `${testID}-label1` : undefined}
-          className={styles.label1()}
-        >
-          {label1}
-        </Text>
-      )}
+
       {hint && (
         <Text
-          testID={testID ? `${testID}-label` : undefined}
-          className={styles.label()}
+          testID={testID ? `${testID}-hint` : undefined}
+          className={styles.hint()}
         >
           {hint}
         </Text>
@@ -135,7 +124,7 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
       {error && (
         <Text
           testID={testID ? `${testID}-error` : undefined}
-          className="text-sm text-danger-400 dark:text-danger-600"
+          className="text-sm text-[#EE2F23]"
         >
           {error}
         </Text>

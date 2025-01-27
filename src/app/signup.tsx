@@ -1,111 +1,152 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
-import React from 'react';
+import { StatusBar } from 'expo-status-bar';
+import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { Pressable, Text, View } from 'react-native';
-import { ScrollView } from 'react-native';
-import { z } from 'zod';
+import { Pressable, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import * as z from 'zod';
 
 import GradientView from '@/components/onboarding/gradient-view';
-import { ControlledInput } from '@/components/ui';
+import { ControlledInput, Text } from '@/components/ui';
 
 const schema = z.object({
-  firstName: z.string({ required_error: 'Please enter your First Name' }),
-  lastName: z.string({ required_error: 'Please enter your Last Name' }),
-  phone: z.string({ required_error: 'Please enter your Phone Number' }),
-  email: z
-    .string()
-    .min(1, { message: 'Email is required' })
-    .email({ message: 'Incorrect Mail id' }),
+  firstName: z
+    .string({ required_error: 'FirstName is required' })
+    .min(3, 'Minimum 3 characters')
+    .max(16, 'Maximum 16 characters'),
+  lastName: z
+    .string({ required_error: 'LastName is required' })
+    .min(3, 'Minimum 3 characters')
+    .max(16, 'Maximum 16 characters'),
+  email: z.string().min(1, 'Email is required').email(),
+  phone: z.coerce
+    .number({
+      required_error: 'Phone no. is required.',
+      message: 'Must be only numbers',
+    })
+    .min(10, 'Phone number must be 10 digits')
+    .max(10, 'Phone number must be 10 digits')
+    .transform(String),
 });
 
-// eslint-disable-next-line max-lines-per-function
-export default function OnboardingScreen() {
-  const { control } = useForm({
+type TSignup = z.infer<typeof schema>;
+
+export default function Signup() {
+  const { control, handleSubmit } = useForm<TSignup>({
+    defaultValues: {
+      firstName: 'John',
+      lastName: '',
+      email: '',
+      phone: '',
+    },
     resolver: zodResolver(schema),
   });
 
-  const signUp = () => {
-    alert('SIGNIN');
-    //router.push('/signup.tsx');
+  const onSubmit = (data: TSignup) => {
+    console.log(data);
   };
 
   return (
-    <GradientView>
-      <ScrollView className="flex-1  px-4 pt-8">
-        <View className="mb-4 ml-4 mr-[90px] mt-[17px]">
-          <Text className="text-black-500 font-poppins text-[32px] font-bold">
-            Welcome
-            <Text className="font-poppins text-[32px] font-bold text-primary">
-              Onboard!
-            </Text>
-          </Text>
-        </View>
-
-        <View className="mx-4 mb-[97px] mt-8">
-          <View className="mb-4">
-            <ControlledInput
-              name="firstName"
-              control={control}
-              label="Enter your first name"
-            />
-          </View>
-
-          <View className="mb-4">
-            <ControlledInput
-              name="lastName"
-              control={control}
-              label="Enter your last name"
-            />
-          </View>
-
-          <View className="mb-4">
-            <ControlledInput
-              name="email"
-              control={control}
-              label="Enter your mail id"
-              hint="we will send you the 4 digit verification code"
-            />
-          </View>
-
-          <View>
-            <ControlledInput
-              name="phone"
-              control={control}
-              keyboardType="numeric"
-              label="Enter your phone No"
-            />
-          </View>
-        </View>
-
-        <View className="mx-[25px]">
-          <Pressable className="h-[60px] rounded-lg bg-primary py-3">
-            <Text className="text-4.5 h-[31px] text-center font-poppins font-semibold leading-[30.6px] text-white">
-              Send OTP
-            </Text>
-          </Pressable>
-
-          <View className="mx-[25px]">
-            <View className="flex flex-row items-center justify-center">
-              <Text className="m-0 p-0 text-center font-poppins font-medium leading-[30.6px] text-gray-500">
-                If you already have an account?
+    <>
+      <GradientView>
+        <KeyboardAwareScrollView
+          // bottomOffset={62}
+          contentContainerClassName="grow"
+        >
+          {/* @TOOD: Fix margin hack */}
+          <View className="z-10 m-4 mt-14 grow">
+            <View className="flex-row gap-2">
+              <Text className="text-[32px] font-bold text-black">Welcome</Text>
+              <Text className="text-[32px] font-bold text-primary">
+                Onboard!
               </Text>
-
-              <Link href={{ pathname: '/login' }} className="ml-0 p-0">
-                <Text className="font-medium text-primary"> login</Text>
-              </Link>
             </View>
 
-            <Text className="text-black-400 font-regular text-center font-poppins  leading-[30.6px]">
-              You agree to the
-              <Text className="font-medium text-primary underline">
-                terms & Conditions
-              </Text>
-              & <Text className="text-primary underline">privacy policy</Text>
-            </Text>
+            <View className="grow justify-between">
+              <View className="">
+                {/* First Name */}
+                <View className="mt-4">
+                  <ControlledInput
+                    name="firstName"
+                    control={control}
+                    placeholder="Enter your first name"
+                    label="Enter your first name"
+                  />
+                </View>
+
+                {/* Last Name */}
+                <View className="mt-4">
+                  <ControlledInput
+                    name="lastName"
+                    control={control}
+                    placeholder="Enter your last name"
+                    label="Enter your last name"
+                  />
+                </View>
+
+                {/* Email  */}
+                <View className="mt-4">
+                  <ControlledInput
+                    name="email"
+                    control={control}
+                    label="Enter your mail id"
+                    placeholder="Enter your mail id"
+                    hint="we will send you the 4 digit verification code"
+                  />
+                </View>
+
+                {/* Phone Number */}
+                <View className="mt-4">
+                  <ControlledInput
+                    name="phone"
+                    control={control}
+                    placeholder="9876543210"
+                    label="Enter your phone number"
+                    keyboardType="numeric"
+                  />
+                </View>
+              </View>
+
+              {/* Footer */}
+              <View className="mt-6">
+                {/* Submit Button */}
+                <Pressable
+                  onPress={handleSubmit(onSubmit)}
+                  className="mt-6 flex h-[60px] items-center justify-center rounded-md bg-primary "
+                >
+                  <Text className="text-center text-lg font-semibold text-white">
+                    Send OTP
+                  </Text>
+                </Pressable>
+
+                <Text className="mt-2 text-center text-sm font-medium text-[#161616]">
+                  If you already have an account ?
+                  <Link
+                    className="font-medium text-primary"
+                    href={{ pathname: '/login' }}
+                  >
+                    &nbsp;Login
+                  </Link>
+                </Text>
+
+                <View className="mt-6 flex-row items-center justify-center gap-1">
+                  <Text className="text-center text-xs">You agree to the</Text>
+                  <Text className="text-center text-xs text-primary ">
+                    Terms & Conditions
+                  </Text>
+                  <Text className="text-center text-xs text-black ">&</Text>
+                  <Text className="text-center text-xs text-primary ">
+                    Privacy policy
+                  </Text>
+                </View>
+              </View>
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </GradientView>
+        </KeyboardAwareScrollView>
+      </GradientView>
+
+      <StatusBar animated style="dark" />
+    </>
   );
 }
