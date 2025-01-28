@@ -172,7 +172,7 @@ const Location = () => {
         placeholder={locationPlaceholder}
         value={selectedLocation}
         onChange={handleLocationChange}
-        activeColor={undefined}
+        activeColor=""
         visibleSelectedItem={false}
         selectedTextProps={{ numberOfLines: 1 }}
         renderItem={(data, selected) => (
