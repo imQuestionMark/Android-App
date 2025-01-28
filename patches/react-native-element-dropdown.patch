@@ -1,0 +1,13 @@
+diff --git a/src/components/MultiSelect/styles.ts b/src/components/MultiSelect/styles.ts
+index 07b1608a9720ea8eb44ef616d60c2e51534aa7c3..10ec6d1677e47ac5be39b1a6e6207605a5a4f1e2 100644
+--- a/src/components/MultiSelect/styles.ts
++++ b/src/components/MultiSelect/styles.ts
+@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
+     writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+   },
+   wrapItem: {
+-    marginBottom: 0.5,
++    marginBottom: 0,
+   },
+   item: {
+     padding: 17,
