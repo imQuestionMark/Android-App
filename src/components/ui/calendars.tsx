@@ -8,7 +8,7 @@ import type {
   RegisterOptions,
 } from 'react-hook-form';
 import { useController } from 'react-hook-form';
-import { Modal, Pressable, TouchableWithoutFeedback, View } from 'react-native';
+import { Modal, Pressable, TouchableWithoutFeedback, View,FlatList } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { tv } from 'tailwind-variants';
 
@@ -46,8 +46,7 @@ interface ControlledCalendarProps<T extends FieldValues> {
   error?: string;
   selectedDate?: string;
   markedDates?: Record<string, any>;
-  onSubmit?: () => void;
-  onBack?: () => void;
+ 
 }
 
 const _MONTHS = [
@@ -64,6 +63,8 @@ const _MONTHS = [
   'November',
   'December',
 ];
+
+const _YEARS = Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i);
 
 const _THEME = {
   calendarBackground: 'white',
@@ -87,15 +88,27 @@ export function ControlledCalendar<T extends FieldValues>(
   const { field, fieldState } = useController({ control, name, rules });
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible1, setModalVisible1] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-
+  const [currentDate, setCurrentDate] = useState({ year: 2025,month: 1,});
   const handleMonthYearChange = (year: number, month: number) => {
     setSelectedYear(year);
     setSelectedMonth(month);
     setModalVisible(false);
+    setModalVisible1(false);
     const newDate = `${year}-${String(month + 1).padStart(2, '0')}-01`;
     field.onChange(newDate);
+  };
+
+  // Years
+  
+  const getYears = () => {
+    setModalVisible1(true); 
+  };
+  const selectYear = (year : number) => {
+    setSelectedYear(year);
+    setModalVisible1(false); 
   };
 
   const customMarkedDates = React.useMemo(() => {
@@ -118,6 +131,7 @@ export function ControlledCalendar<T extends FieldValues>(
         onDayPress={(day: { dateString: any }) =>
           field.onChange(day.dateString)
         }
+        hideExtraDays={true}
         markedDates={customMarkedDates}
         theme={_THEME}
         renderHeader={() => (
@@ -147,9 +161,13 @@ export function ControlledCalendar<T extends FieldValues>(
                   >
                     <ArrowLeft color={black} />
                   </Pressable>
+                  <Pressable 
+                  onPress={getYears}
+                  >
                   <Text className="mx-4 text-lg font-semibold text-gray-700">
                     {selectedYear}
                   </Text>
+                  </Pressable>
                   <Pressable
                     onPress={() => setSelectedYear(selectedYear + 1)}
                     className="rounded-[6px] bg-[#F2F2F5] p-2 "
@@ -188,6 +206,33 @@ export function ControlledCalendar<T extends FieldValues>(
         </TouchableWithoutFeedback>
       </Modal>
 
+      <Modal
+      visible={modalVisible1}
+      transparent
+      animationType="fade"
+      onRequestClose={() => setModalVisible1(false)}>
+        {/* Years */}
+        <View className="flex-1 justify-center items-center">
+        <View className="w-[82%] h-1/3 bg-white rounded-lg p-4">
+                <FlatList
+                data={_YEARS}
+                keyExtractor={(item) => item.toString()}
+                renderItem={({ item ,index}) => (
+              <Pressable
+                onPress={() => selectYear(item)}
+                className={`py-4 ${
+                  item === selectedYear ? "bg-blue-500" : index % 2 === 0 ? "bg-[#DFE8FF]" : "bg-[#FFFFFF]"
+                }`}
+               >
+                <Text className={`text-center text-[15px] ${item === selectedYear ? "text-white font-bold"
+                 : "text-gray-700"}`}>{item}</Text>
+              </Pressable>
+            )}
+            />
+                
+              </View></View>
+      </Modal>
+
       {hint && !fieldState.error && (
         <Text className="mt-2 text-sm text-gray-500">{hint}</Text>
       )}
@@ -211,23 +256,6 @@ const CalendarHeader = ({ setModalVisible, selectedMonth, selectedYear }) => {
   );
 };
 
-const CalendarFooter = ({ onBack, onSubmit }) => {
-  return (
-    <View className="mt-4 flex-row justify-between">
-      <Pressable
-        onPress={onBack}
-        className="mr-2 flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2"
-      >
-        <Text className="text-center font-medium text-gray-700">Back</Text>
-      </Pressable>
-      <Pressable
-        onPress={onSubmit}
-        className="ml-2 flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2"
-      >
-        <Text className="text-center font-medium text-gray-700">Submit</Text>
-      </Pressable>
-    </View>
-  );
-};
+
 
 const MonthModal = () => {};
