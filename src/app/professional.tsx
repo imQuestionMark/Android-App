@@ -1,6 +1,5 @@
-import { remapProps } from 'nativewind';
 import { useCallback, useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { Platform, StyleSheet, Text } from 'react-native';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import Svg, { Path } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
@@ -55,10 +54,10 @@ const dropdownStyles = tv({
 });
 
 // @TODO Figure out how to remap props for MultiSelect
-remapProps(MultiSelect, {
-  className: 'style',
-  selectedTextClassname: 'selectedTextStyle',
-});
+// remapProps(MultiSelect, {
+//   className: 'style',
+//   selectedTextClassname: 'selectedTextStyle',
+// });
 
 const { itemIcon, itemContainer, itemText, itemIconCheck } = dropdownStyles();
 
@@ -99,6 +98,10 @@ const Role = () => {
       <MultiSelect
         style={styles.dropdown}
         selectedTextStyle={styles.selectedTextStyle}
+        containerStyle={{
+          borderRadius: 8,
+          marginTop: Platform.OS === 'ios' ? -96 : 4,
+        }}
         data={designations}
         labelField="label"
         valueField="value"
@@ -132,6 +135,10 @@ const Experience = () => {
         style={styles.dropdown}
         selectedTextStyle={styles.selectedTextStyle}
         data={experience}
+        containerStyle={{
+          borderRadius: 8,
+          marginTop: Platform.OS === 'ios' ? -96 : 4,
+        }}
         labelField="label"
         valueField="value"
         placeholder="Select Experience"
@@ -167,6 +174,10 @@ const Location = () => {
         style={styles.dropdown}
         selectedTextStyle={styles.selectedTextStyle}
         data={locations}
+        containerStyle={{
+          borderRadius: 8,
+          marginTop: Platform.OS === 'ios' ? -96 : 4,
+        }}
         labelField="label"
         valueField="value"
         placeholder={locationPlaceholder}
@@ -188,10 +199,11 @@ const CustomItem = ({ data, selected }: { data: any; selected?: boolean }) => {
     return (
       <View className={itemContainer()}>
         <View className={itemIcon({ selected })}>
-          <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <Svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <Path
-              d="m16.726 7-.64.633c-2.207 2.212-3.878 4.047-5.955 6.158l-2.28-1.928-.69-.584L6 12.66l.683.577 2.928 2.477.633.535.591-.584c2.421-2.426 4.148-4.367 6.532-6.756l.633-.64L16.726 7Z"
-              fill={itemIconCheck({ selected })}
+              d="M6 11L9 13L14.5 7"
+              strokeWidth="2.01011"
+              stroke={itemIconCheck({ selected })}
             />
           </Svg>
         </View>
@@ -208,11 +220,12 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderWidth: 0.5,
     borderRadius: 8,
-    paddingHorizontal: 8,
+    paddingHorizontal: 16,
     backgroundColor: 'white',
   },
   selectedTextStyle: {
     fontSize: 16,
+    borderWidth: 0,
   },
 });
 
