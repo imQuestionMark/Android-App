@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
+import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 
 import GradientView from '@/components/onboarding/gradient-view';
 
 const Professional = () => {
   const [selectedExperience, setSelectedExperience] = useState(null);
   const [selectedDesignation, setSelectedDesignation] = useState(null);
-  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
 
   const experience = [
     { label: '1', value: 1 },
@@ -77,7 +77,7 @@ const Professional = () => {
             <Text className="mb-4 font-poppins text-[16px] font-medium">
               Preferred Location
             </Text>
-            <Dropdown
+            <MultiSelect
               style={styles.dropdown}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
@@ -94,7 +94,7 @@ const Professional = () => {
                   </>
                 );
               }}
-              onChange={(item) => setSelectedLocation(item.value)}
+              onChange={(item) => setSelectedLocation(item)}
             />
           </View>
         </View>
