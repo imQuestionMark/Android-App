@@ -1,14 +1,19 @@
 import { useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
 import GradientView from '@/components/onboarding/gradient-view';
 
 const Professional = () => {
-  const [selectedRole, setSelectedRole] = useState(null);
+  const [selectedExperience, setSelectedExperience] = useState(null);
   const [selectedDesignation, setSelectedDesignation] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
-  const roles = [{ label: 'UX UI Designer', value: 'UX UI Designer' }];
+  const experience = [
+    { label: '1', value: 1 },
+    { label: '2', value: 2 },
+    { label: '3', value: 3 },
+  ];
 
   const designations = [
     { label: 'UXUI designer', value: 'UXUI designer' },
@@ -17,62 +22,96 @@ const Professional = () => {
     { label: 'UX researcher', value: 'UX researcher' },
   ];
 
+  const locations = [
+    { label: 'Chennai', value: 'Chennai' },
+    { label: 'Bangalore', value: 'Bangalore' },
+  ];
+
   return (
     <GradientView>
-      <Text style={styles.title}>Job preference</Text>
+      <View className="m-6">
+        <Text className="font-poppins text-2xl font-semibold">
+          Job preference
+        </Text>
 
-      <Text style={styles.sectionTitle}>Select Your Role</Text>
-      <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        data={roles}
-        labelField="label"
-        valueField="value"
-        placeholder="Select role"
-        value={selectedRole}
-        onChange={(item) => setSelectedRole(item.value)}
-      />
+        <View className="mt-6">
+          <Text className="mb-4 font-poppins text-[16px] font-medium">
+            Select Your Role
+          </Text>
+          <Dropdown
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            data={designations}
+            labelField="label"
+            valueField="value"
+            placeholder="Select Designation"
+            value={selectedDesignation}
+            onChange={(item) => setSelectedDesignation(item.value)}
+          />
 
-      <Text style={styles.sectionTitle}>Choose designation</Text>
-      <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        data={designations}
-        labelField="label"
-        valueField="value"
-        placeholder="Select designation"
-        value={selectedDesignation}
-        onChange={(item) => setSelectedDesignation(item.value)}
-      />
+          <Text className="mb-4 font-poppins text-[16px] font-medium">
+            Experience
+          </Text>
+          <Dropdown
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            data={experience}
+            labelField="label"
+            valueField="value"
+            placeholder="Select Experience"
+            value={selectedExperience}
+            renderItem={(data) => {
+              console.log(data);
+              return (
+                <>
+                  <Text>{data.label} year</Text>
+                </>
+              );
+            }}
+            onChange={(item) => setSelectedExperience(item.value)}
+          />
+
+          <View>
+            <Text className="mb-4 font-poppins text-[16px] font-medium">
+              Preferred Location
+            </Text>
+            <Dropdown
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              data={locations}
+              labelField="label"
+              valueField="value"
+              placeholder="Select Location"
+              value={selectedLocation}
+              renderItem={(data) => {
+                console.log(data);
+                return (
+                  <>
+                    <Text>{data.label}</Text>
+                  </>
+                );
+              }}
+              onChange={(item) => setSelectedLocation(item.value)}
+            />
+          </View>
+        </View>
+      </View>
     </GradientView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
-  },
   dropdown: {
     height: 50,
-    borderColor: 'gray',
+    borderColor: 'white',
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
     marginBottom: 20,
+    backgroundColor: 'white',
   },
   placeholderStyle: {
     fontSize: 16,

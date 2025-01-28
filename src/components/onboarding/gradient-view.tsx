@@ -20,7 +20,7 @@ export default function GradientView({
 }: TGradientViewProps) {
   return (
     <LinearGradient
-      colors={['#DFE8FF', '#FFFFFF']}
+      colors={['#DFE8FF', '#DFE8FF', '#FFFFFF']}
       style={{ flex: 1, flexGrow: 1 }}
     >
       <SafeAreaView className={gradientView({ className })}>
