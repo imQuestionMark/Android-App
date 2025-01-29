@@ -1,3 +1,37 @@
+diff --git a/src/components/MultiSelect/index.tsx b/src/components/MultiSelect/index.tsx
+index f76c4aa0df7556b3be54d599affc44125800e1df..fdbd12ebc7fd327b59dcea90ffd0ee685b5b59cc 100644
+--- a/src/components/MultiSelect/index.tsx
++++ b/src/components/MultiSelect/index.tsx
+@@ -48,6 +48,7 @@ const MultiSelectComponent = React.forwardRef<
+     data = [],
+     value,
+     style = {},
++    buttonStyle = {},
+     labelField,
+     valueField,
+     searchField,
+@@ -417,7 +418,8 @@ const MultiSelectComponent = React.forwardRef<
+         accessibilityLabel={accessibilityLabel}
+         onPress={showOrClose}
+       >
+-        <View style={styles.dropdown}>
++        
++        <View style={StyleSheet.flatten([styles.dropdown, buttonStyle])}>
+           {renderLeftIcon?.(visible)}
+           <Text
+             style={StyleSheet.flatten([
+diff --git a/src/components/MultiSelect/model.ts b/src/components/MultiSelect/model.ts
+index e451a541a6cbd0adc2ee1babb3c04101c9383ac9..3cda27e952d3a7a33e8941648aa6103386f2a7e0 100644
+--- a/src/components/MultiSelect/model.ts
++++ b/src/components/MultiSelect/model.ts
+@@ -22,6 +22,7 @@ export interface MultiSelectProps<T> {
+   testID?: string;
+   itemTestIDField?: string;
+   style?: StyleProp<ViewStyle>;
++  buttonStyle?: StyleProp<ViewStyle>;
+   containerStyle?: StyleProp<ViewStyle>;
+   placeholderStyle?: StyleProp<TextStyle>;
+   inputSearchStyle?: StyleProp<TextStyle>;
 diff --git a/src/components/MultiSelect/styles.ts b/src/components/MultiSelect/styles.ts
 index 07b1608a9720ea8eb44ef616d60c2e51534aa7c3..10ec6d1677e47ac5be39b1a6e6207605a5a4f1e2 100644
 --- a/src/components/MultiSelect/styles.ts

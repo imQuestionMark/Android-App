@@ -172,6 +172,7 @@ const Location = () => {
       </Text>
       <MultiSelect
         style={styles.dropdown}
+        buttonStyle={styles.dropdown}
         selectedTextStyle={styles.selectedTextStyle}
         data={locations}
         containerStyle={{
