@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Platform, StyleSheet, Text } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text } from 'react-native';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import Svg, { Path } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
@@ -73,6 +73,21 @@ const Professional = () => {
           <Role />
           <Experience />
           <Location />
+        </View>
+      </View>
+
+      <View id="bottomNavigation" className="m-6">
+        <View className="flex items-end ">
+          <Pressable className="mb-6 p-4">
+            <Text className="font-poppins text-[20px] font-medium text-primary">
+              Confirm
+            </Text>
+          </Pressable>
+        </View>
+
+        <View className="flex-row justify-between gap-4">
+          <View className="h-1 grow rounded-xl bg-primary" />
+          <View className="h-1 grow rounded-xl bg-[#C9C9C9]" />
         </View>
       </View>
     </GradientView>
