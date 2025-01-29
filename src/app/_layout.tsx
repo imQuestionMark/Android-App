@@ -17,9 +17,9 @@ import { useThemeConfig } from '@/lib/use-theme-config';
 
 export { ErrorBoundary } from 'expo-router';
 
-export const unstable_settings = {
-  initialRouteName: '(app)',
-};
+// export const unstable_settings = {
+//   initialRouteName: '(app)',
+// };
 
 hydrateAuth();
 loadSelectedTheme();
