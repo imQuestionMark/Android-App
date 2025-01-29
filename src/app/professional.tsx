@@ -96,7 +96,7 @@ const Role = () => {
         Select Your Role
       </Text>
       <MultiSelect
-        style={styles.dropdown}
+        pressableStyle={styles.dropdown}
         selectedTextStyle={styles.selectedTextStyle}
         containerStyle={{
           borderRadius: 8,
@@ -132,7 +132,7 @@ const Experience = () => {
         Experience
       </Text>
       <Dropdown
-        style={styles.dropdown}
+        pressableStyle={styles.dropdown}
         selectedTextStyle={styles.selectedTextStyle}
         data={experience}
         containerStyle={{
@@ -171,8 +171,7 @@ const Location = () => {
         Preferred Location
       </Text>
       <MultiSelect
-        style={styles.dropdown}
-        buttonStyle={styles.dropdown}
+        pressableStyle={styles.dropdown}
         selectedTextStyle={styles.selectedTextStyle}
         data={locations}
         containerStyle={{

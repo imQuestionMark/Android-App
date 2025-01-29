@@ -155,5 +155,10 @@
   },
   "osMetadata": {
     "initVersion": "7.0.4"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "react-native-element-dropdown@2.12.4": "patches/react-native-element-dropdown@2.12.4.patch"
+    }
   }
 }
