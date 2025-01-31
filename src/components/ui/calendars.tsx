@@ -2,7 +2,13 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react-native';
 import * as React from 'react';
 import { useState } from 'react';
-import { Modal, Pressable, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  FlatList,
+  Modal,
+  Pressable,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { Calendar as RNCalendar, type DateData } from 'react-native-calendars';
 import { type BasicDayProps } from 'react-native-calendars/src/calendar/day/basic';
 import { type MarkedDates } from 'react-native-calendars/src/types';
@@ -90,12 +96,14 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
     });
   };
 
-  const handleLeftArrowPress = (subtractMonth: () => void) => {
+  const handleLeftArrowPress = (subtractMonth: () => void, date?: XDate) => {
     subtractMonth();
+    if (!date) return console.error('Date object missing');
   };
 
-  const handleRightArrowPress = (addMonth: () => void) => {
+  const handleRightArrowPress = (addMonth: () => void, date?: XDate) => {
     addMonth();
+    if (!date) return console.error('Date object missing');
   };
 
   return (
@@ -103,6 +111,7 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
       <RNCalendar
         hideExtraDays={true}
         markedDates={markedDates}
+        current="2002-05-03"
         enableSwipeMonths
         renderHeader={(date?: XDate) => (
           <CalendarHeader date={date} toggleMonthModal={toggleMonthModal} />
@@ -119,11 +128,14 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
         toggleMonthModal={toggleMonthModal}
         userSelection={userSelection}
         setUserSelection={setUserSelection}
+        toggleYearModal={toggleYearModal}
       />
 
       <YearModal
-        yearModal={toggleYearModal}
-        selectedYear={userSelection.year}
+        toggleYearModal={toggleYearModal}
+        userSelection={userSelection}
+        isYearModalVisisble={isYearModalVisisble}
+        setUserSelection={setUserSelection}
       />
     </View>
   );
@@ -137,7 +149,6 @@ const CalendarHeader = ({
   toggleMonthModal: () => void;
 }) => {
   const title = date?.toString('MMMM yyyy');
-  // console.log('Header props', title);
   return (
     <Pressable onPress={toggleMonthModal} hitSlop={25}>
       <Text className="border-b text-center font-poppins text-base font-bold leading-[19px]  text-[#161616] ">
@@ -200,8 +211,6 @@ const _renderDay = (props: CustomDayProps) => {
     onPress && onPress(date);
   };
 
-  // if (marking !== undefined) console.log(marking);
-
   return (
     <Pressable
       className={base({ state, className: marking?.selectedColor })}
@@ -220,8 +229,10 @@ const MonthModal = ({
   isMonthModalVisisble,
   userSelection,
   setUserSelection,
+  toggleYearModal,
 }: {
   toggleMonthModal: () => void;
+  toggleYearModal: () => void;
   isMonthModalVisisble: boolean;
   userSelection: {
     month: number;
@@ -258,15 +269,18 @@ const MonthModal = ({
                 >
                   <ArrowLeft color={black} />
                 </Pressable>
-                <Pressable
-                // onPress={getYears}
-                >
+                <Pressable onPress={toggleYearModal}>
                   <Text className="mx-4 text-lg font-semibold text-gray-700">
                     {userSelection.year}
                   </Text>
                 </Pressable>
                 <Pressable
-                  // onPress={() => setSelectedYear(selectedYear + 1)}
+                  onPress={() =>
+                    setUserSelection((prev) => ({
+                      ...prev,
+                      year: prev.year + 1,
+                    }))
+                  }
                   className="rounded-[6px] bg-[#F2F2F5] p-2 "
                 >
                   <ArrowRight color={black} />
@@ -278,14 +292,23 @@ const MonthModal = ({
                 {_MONTHS.map((month, index) => (
                   <Pressable
                     key={index}
-                    // onPress={() => handleMonthYearChange(selectedYear, index)}
+                    onPress={() =>
+                      setUserSelection((prev) => ({
+                        ...prev,
+                        month: index,
+                      }))
+                    }
                     className={`min-w-[100px] rounded-md font-poppins ${
-                      index === 0 ? 'bg-[#0466c8] ' : 'bg-transparent'
+                      index === userSelection.month
+                        ? 'bg-[#0466c8] '
+                        : 'bg-transparent'
                     }`}
                   >
                     <Text
                       className={`text-center font-poppins text-[14px] font-normal leading-[35.2px] ${
-                        index === 0 ? 'text-white' : 'text-gray-700'
+                        index === userSelection.month
+                          ? 'text-white'
+                          : 'text-gray-700'
                       }`}
                     >
                       {month}
@@ -301,13 +324,31 @@ const MonthModal = ({
   );
 };
 
-const YearModal = ({ setYearModal, yearModal, selectedYear, selectYear }) => {
+const YearModal = ({
+  setUserSelection,
+  isYearModalVisisble,
+  toggleYearModal,
+  userSelection,
+}: {
+  isYearModalVisisble: boolean;
+  toggleYearModal: () => void;
+  userSelection: {
+    month: number;
+    year: number;
+  };
+  setUserSelection: React.Dispatch<
+    React.SetStateAction<{
+      month: number;
+      year: number;
+    }>
+  >;
+}) => {
   return (
     <Modal
-      visible={yearModal}
+      visible={isYearModalVisisble}
       transparent
       animationType="fade"
-      onRequestClose={() => setYearModal(false)}
+      onRequestClose={toggleYearModal}
     >
       {/* Years */}
       <View className="flex-1 items-center justify-center">
@@ -317,9 +358,15 @@ const YearModal = ({ setYearModal, yearModal, selectedYear, selectYear }) => {
             keyExtractor={(item) => item.toString()}
             renderItem={({ item, index }) => (
               <Pressable
-                onPress={() => selectYear(item)}
+                onPress={() => {
+                  setUserSelection((prev) => ({
+                    ...prev,
+                    year: item,
+                  }));
+                  toggleYearModal();
+                }}
                 className={`py-4 ${
-                  item === selectedYear
+                  item === userSelection.year
                     ? 'bg-blue-500'
                     : index % 2 === 0
                       ? 'bg-[#DFE8FF]'
@@ -328,7 +375,7 @@ const YearModal = ({ setYearModal, yearModal, selectedYear, selectYear }) => {
               >
                 <Text
                   className={`text-center text-[15px] ${
-                    item === selectedYear
+                    item === userSelection.year
                       ? 'font-bold text-white'
                       : 'text-gray-700'
                   }`}
