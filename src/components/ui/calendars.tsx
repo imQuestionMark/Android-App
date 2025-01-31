@@ -2,38 +2,18 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react-native';
 import * as React from 'react';
 import { useState } from 'react';
-import {
-  FlatList,
-  Modal,
-  Pressable,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import { Calendar, type DateData } from 'react-native-calendars';
+import { Pressable, View } from 'react-native';
+import { Calendar as RNCalendar, type DateData } from 'react-native-calendars';
 import { type BasicDayProps } from 'react-native-calendars/src/calendar/day/basic';
+import { type MarkedDates } from 'react-native-calendars/src/types';
 import { tv } from 'tailwind-variants';
-import * as z from 'zod';
+import type XDate from 'xdate';
 
 import { black } from './colors';
 import { Text } from './text';
 
-const DaySchema = z.object({
-  date: z.object({
-    day: z.number(),
-    month: z.number(),
-    year: z.number(),
-  }),
-  marking: z.object({
-    selected: z.boolean(),
-    selectedColor: z.string(),
-    marked: z.boolean(),
-  }),
-});
-
-type TDay = z.infer<typeof DaySchema>;
-
 const _MARKED_DATES = {
-  '2025-01-01': { selected: true, marked: true, selectedColor: 'blue' },
+  '2025-01-01': { selected: true, marked: true, selectedColor: 'bg-red-500' },
   '2025-01-17': { marked: true },
   '2025-01-18': { marked: true, dotColor: 'red', activeOpacity: 0 },
   '2025-01-19': { disabled: true, disableTouchEvent: true },
@@ -75,60 +55,54 @@ const _THEME = {
 };
 
 export function ControlledCalendar() {
-  const [isMonthModalVisisble, setIsMonthModalVisible] = useState(false);
-  const [isYearModalVisisble, setIsYearModalVisible] = useState(false);
-  const [userSelection, setUserSelection] = useState({
-    year: new Date().getFullYear(),
-    month: new Date().getMonth(),
-    day: new Date().getDate(),
-  });
+  const [markedDates, setMarkedDates] = useState<MarkedDates>(_MARKED_DATES);
 
-  const toggleMonthModal = () => (p) => setIsMonthModalVisible(!p);
-  const toggleYearModal = () => (p) => setIsYearModalVisible(!p);
+  return (
+    <>
+      <Calendar markedDates={markedDates} setMarkedDates={setMarkedDates} />
+    </>
+  );
+}
 
-  const handleDayPress = ({ day, month, year, ...rest }) => {
-    console.log('Day Press', { day, month, year, ...rest });
-    setUserSelection({
-      day,
-      year,
-      month,
+type TCalendar = {
+  markedDates: MarkedDates;
+  setMarkedDates: React.Dispatch<React.SetStateAction<MarkedDates>>;
+};
+
+function Calendar({ markedDates, setMarkedDates }: TCalendar) {
+  // const [isMonthModalVisisble, setIsMonthModalVisible] = useState(false);
+  // const [isYearModalVisisble, setIsYearModalVisible] = useState(false);
+
+  // const toggleMonthModal = () => (p) => setIsMonthModalVisible(!p);
+  // const toggleYearModal = () => (p) => setIsYearModalVisible(!p);
+
+  const handleDayPress = ({ day, month, year, dateString }: DateData) => {
+    console.log('Day Press', { day, month, year, dateString });
+
+    const newMarkedDate: MarkedDates = {
+      dateString: { selected: true, selectedColor: 'bg-red-500' },
+    };
+    setMarkedDates({
+      ...markedDates,
+      ...newMarkedDate,
     });
   };
 
-  const handleLeftArrowPress = (subtractMonth) => {
-    console.log('Left Arrow Press');
-    setUserSelection({
-      ...userSelection,
-      month: userSelection.month - 1,
-    });
+  const handleLeftArrowPress = (subtractMonth: () => void) => {
     subtractMonth();
   };
 
-  const handleRightArrowPress = (addMonth) => {
-    console.log('Right Arrow Press');
-    setUserSelection({
-      ...userSelection,
-      month: userSelection.month + 1,
-    });
+  const handleRightArrowPress = (addMonth: () => void) => {
     addMonth();
   };
 
   return (
     <View className="w-full max-w-[359px] rounded-lg bg-green-200">
-      <Calendar
+      <RNCalendar
         hideExtraDays={true}
         markedDates={_MARKED_DATES}
         enableSwipeMonths
-        current={`${userSelection.year}-${userSelection.month + 1}-${userSelection.day}`}
-        renderHeader={(props) => (
-          console.log('Header props', props),
-          (
-            <CalendarHeader
-              selectedMonth={userSelection.month}
-              selectedYear={userSelection.year}
-            />
-          )
-        )}
+        renderHeader={(date?: XDate) => <CalendarHeader date={date} />}
         onPressArrowLeft={handleLeftArrowPress}
         onPressArrowRight={handleRightArrowPress}
         onDayPress={handleDayPress}
@@ -156,17 +130,13 @@ export function ControlledCalendar() {
   );
 }
 
-type TCalendarHeader = {
-  selectedMonth: number;
-  selectedYear: number;
-};
-
-const CalendarHeader = ({ selectedMonth, selectedYear, ...rest }) => {
-  console.log('Header props', { ...rest });
+const CalendarHeader = ({ date }: { date?: XDate }) => {
+  const title = date?.toString('MMMM yyyy');
+  console.log('Header props', title);
   return (
     <Pressable onPress={() => {}} hitSlop={25}>
       <Text className="border-b text-center font-poppins text-base font-bold leading-[19px]  text-[#161616] ">
-        {_MONTHS[selectedMonth]} {selectedYear}
+        {title}
       </Text>
     </Pressable>
   );
@@ -181,7 +151,7 @@ const _renderArrows = (direction: string) => {
 };
 
 type CustomDayProps = BasicDayProps & {
-  date: DateData;
+  date?: DateData;
 };
 
 const dayTv = tv({
@@ -218,132 +188,138 @@ const dayTv = tv({
 
 const { base, dayText } = dayTv();
 
-const _renderDay = (data: CustomDayProps) => {
+const _renderDay = (props: CustomDayProps) => {
+  const { state, marking, date, onPress, accessibilityLabel, testID } = props;
+
   const handleDayPress = () => {
-    console.log(data);
-    data?.onPress && data.onPress(data.date);
+    onPress && onPress(date);
   };
 
-  const theme = data.theme || {};
-  // console.log('Active Styles:', data);
+  if (marking !== undefined) console.log(marking);
 
   return (
-    <Pressable className={base({ state: data.state })} onPress={handleDayPress}>
-      <Text className={dayText({ state: data.state })}>{data.date.day}</Text>
+    <Pressable
+      className={base({ state, className: marking?.selectedColor })}
+      onPress={handleDayPress}
+      accessibilityLabel={accessibilityLabel}
+      testID={testID}
+    >
+      <Text className={dayText({ state })}>{date?.day}</Text>
+      {marking && <View className="size-2 bg-purple-800" />}
     </Pressable>
   );
 };
 
-const MonthModal = ({
-  setMonthModal,
-  monthModal,
-  setSelectedYear,
-  getYears,
-  selectedYear,
-  handleMonthYearChange,
-  selectedMonth,
-}) => {
-  return (
-    <Modal
-      visible={monthModal}
-      transparent
-      animationType="fade"
-      onRequestClose={() => setMonthModal(false)}
-    >
-      <TouchableWithoutFeedback onPress={() => setMonthModal(false)}>
-        <View className="flex-1 items-center justify-center ">
-          <TouchableWithoutFeedback>
-            <View className="w-11/12 max-w-md rounded-lg bg-red-200 p-6">
-              {/* Header */}
-              <View className="mb-4 flex-row items-center justify-between">
-                <Pressable
-                  onPress={() => setSelectedYear(selectedYear - 1)}
-                  className="rounded-md bg-gray-200 p-2"
-                >
-                  <ArrowLeft color={black} />
-                </Pressable>
-                <Pressable onPress={getYears}>
-                  <Text className="mx-4 text-lg font-semibold text-gray-700">
-                    {selectedYear}
-                  </Text>
-                </Pressable>
-                <Pressable
-                  onPress={() => setSelectedYear(selectedYear + 1)}
-                  className="rounded-[6px] bg-[#F2F2F5] p-2 "
-                >
-                  <ArrowRight color={black} />
-                </Pressable>
-              </View>
+// const MonthModal = ({
+//   setMonthModal,
+//   monthModal,
+//   setSelectedYear,
+//   getYears,
+//   selectedYear,
+//   handleMonthYearChange,
+//   selectedMonth,
+// }) => {
+//   return (
+//     <Modal
+//       visible={monthModal}
+//       transparent
+//       animationType="fade"
+//       onRequestClose={() => setMonthModal(false)}
+//     >
+//       <TouchableWithoutFeedback onPress={() => setMonthModal(false)}>
+//         <View className="flex-1 items-center justify-center ">
+//           <TouchableWithoutFeedback>
+//             <View className="w-11/12 max-w-md rounded-lg bg-red-200 p-6">
+//               {/* Header */}
+//               <View className="mb-4 flex-row items-center justify-between">
+//                 <Pressable
+//                   onPress={() => setSelectedYear(selectedYear - 1)}
+//                   className="rounded-md bg-gray-200 p-2"
+//                 >
+//                   <ArrowLeft color={black} />
+//                 </Pressable>
+//                 <Pressable onPress={getYears}>
+//                   <Text className="mx-4 text-lg font-semibold text-gray-700">
+//                     {selectedYear}
+//                   </Text>
+//                 </Pressable>
+//                 <Pressable
+//                   onPress={() => setSelectedYear(selectedYear + 1)}
+//                   className="rounded-[6px] bg-[#F2F2F5] p-2 "
+//                 >
+//                   <ArrowRight color={black} />
+//                 </Pressable>
+//               </View>
 
-              {/* Months */}
-              <View className="flex-row flex-wrap justify-center gap-x-4 gap-y-6">
-                {_MONTHS.map((month, index) => (
-                  <Pressable
-                    key={index}
-                    onPress={() => handleMonthYearChange(selectedYear, index)}
-                    className={`min-w-[100px] rounded-md font-poppins ${
-                      index === selectedMonth
-                        ? 'bg-[#0466c8] '
-                        : 'bg-transparent'
-                    }`}
-                  >
-                    <Text
-                      className={`text-center font-poppins text-[14px] font-normal leading-[35.2px] ${
-                        index === selectedMonth ? 'text-white' : 'text-gray-700'
-                      }`}
-                    >
-                      {month}
-                    </Text>
-                  </Pressable>
-                ))}
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
-  );
-};
+//               {/* Months */}
+//               <View className="flex-row flex-wrap justify-center gap-x-4 gap-y-6">
+//                 {_MONTHS.map((month, index) => (
+//                   <Pressable
+//                     key={index}
+//                     onPress={() => handleMonthYearChange(selectedYear, index)}
+//                     className={`min-w-[100px] rounded-md font-poppins ${
+//                       index === selectedMonth
+//                         ? 'bg-[#0466c8] '
+//                         : 'bg-transparent'
+//                     }`}
+//                   >
+//                     <Text
+//                       className={`text-center font-poppins text-[14px] font-normal leading-[35.2px] ${
+//                         index === selectedMonth ? 'text-white' : 'text-gray-700'
+//                       }`}
+//                     >
+//                       {month}
+//                     </Text>
+//                   </Pressable>
+//                 ))}
+//               </View>
+//             </View>
+//           </TouchableWithoutFeedback>
+//         </View>
+//       </TouchableWithoutFeedback>
+//     </Modal>
+//   );
+// };
 
-const YearModal = ({ setYearModal, yearModal, selectedYear, selectYear }) => {
-  return (
-    <Modal
-      visible={yearModal}
-      transparent
-      animationType="fade"
-      onRequestClose={() => setYearModal(false)}
-    >
-      {/* Years */}
-      <View className="flex-1 items-center justify-center">
-        <View className="h-1/3 w-[82%] rounded-lg bg-green-200 p-4">
-          <FlatList
-            data={_YEARS}
-            keyExtractor={(item) => item.toString()}
-            renderItem={({ item, index }) => (
-              <Pressable
-                onPress={() => selectYear(item)}
-                className={`py-4 ${
-                  item === selectedYear
-                    ? 'bg-blue-500'
-                    : index % 2 === 0
-                      ? 'bg-[#DFE8FF]'
-                      : 'bg-[#FFFFFF]'
-                }`}
-              >
-                <Text
-                  className={`text-center text-[15px] ${
-                    item === selectedYear
-                      ? 'font-bold text-white'
-                      : 'text-gray-700'
-                  }`}
-                >
-                  {item}
-                </Text>
-              </Pressable>
-            )}
-          />
-        </View>
-      </View>
-    </Modal>
-  );
-};
+// const YearModal = ({ setYearModal, yearModal, selectedYear, selectYear }) => {
+//   return (
+//     <Modal
+//       visible={yearModal}
+//       transparent
+//       animationType="fade"
+//       onRequestClose={() => setYearModal(false)}
+//     >
+//       {/* Years */}
+//       <View className="flex-1 items-center justify-center">
+//         <View className="h-1/3 w-[82%] rounded-lg bg-green-200 p-4">
+//           <FlatList
+//             data={_YEARS}
+//             keyExtractor={(item) => item.toString()}
+//             renderItem={({ item, index }) => (
+//               <Pressable
+//                 onPress={() => selectYear(item)}
+//                 className={`py-4 ${
+//                   item === selectedYear
+//                     ? 'bg-blue-500'
+//                     : index % 2 === 0
+//                       ? 'bg-[#DFE8FF]'
+//                       : 'bg-[#FFFFFF]'
+//                 }`}
+//               >
+//                 <Text
+//                   className={`text-center text-[15px] ${
+//                     item === selectedYear
+//                       ? 'font-bold text-white'
+//                       : 'text-gray-700'
+//                   }`}
+//                 >
+//                   {item}
+//                 </Text>
+//               </Pressable>
+//             )}
+//           />
+//         </View>
+//       </View>
+//     </Modal>
+//   );
+// };
