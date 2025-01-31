@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import { Modal, Pressable, TouchableWithoutFeedback, View } from 'react-native';
 import { z } from 'zod';
 
+import { ControlledCalendar } from '@/components/onboarding/calendar';
 import GradientView from '@/components/onboarding/gradient-view';
 import { Text } from '@/components/ui';
-import { ControlledCalendar } from '@/components/ui/calendars';
 
 const schema = z.object({
   date: z.string(),
@@ -75,8 +75,8 @@ export default function PersonalDetails() {
                 <TouchableWithoutFeedback
                   onPress={() => setIsCalendarVisible(false)}
                 >
-                  <View className="flex-1 ml-5 items-start justify-center">
-                    <ControlledCalendar name="date" control={control} />
+                  <View className="ml-5 flex-1 items-start justify-center">
+                    <ControlledCalendar />
                   </View>
                 </TouchableWithoutFeedback>
               </Modal>
