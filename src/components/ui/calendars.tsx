@@ -80,7 +80,7 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
     console.log('Day Press', { day, month, year, dateString });
 
     const newMarkedDate: MarkedDates = {
-      dateString: { selected: true, selectedColor: 'bg-red-500' },
+      [dateString]: { selected: true, selectedColor: 'bg-purple-500' },
     };
     setMarkedDates({
       ...markedDates,
@@ -100,7 +100,7 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
     <View className="w-full max-w-[359px] rounded-lg bg-green-200">
       <RNCalendar
         hideExtraDays={true}
-        markedDates={_MARKED_DATES}
+        markedDates={markedDates}
         enableSwipeMonths
         renderHeader={(date?: XDate) => <CalendarHeader date={date} />}
         onPressArrowLeft={handleLeftArrowPress}
