@@ -55,6 +55,7 @@ export const MonthModal = ({
               <MonthBody
                 updateMonth={updateMonth}
                 activeMonth={userSelection.month}
+                toggleMonthModal={toggleMonthModal}
               />
             </View>
           </TouchableWithoutFeedback>

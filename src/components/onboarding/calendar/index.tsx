@@ -35,20 +35,21 @@ type TCalendar = {
   setMarkedDates: React.Dispatch<React.SetStateAction<MarkedDates>>;
 };
 
-const today = new Date().toISOString().split('T')[0];
+const today = new Date('2022-08-03');
+const current = today.toISOString().split('T')[0];
 
 function Calendar({ markedDates, setMarkedDates }: TCalendar) {
   const [isMonthModalVisisble, setIsMonthModalVisible] = useState(false);
   const [isYearModalVisisble, setIsYearModalVisible] = useState(false);
   const [userSelection, setUserSelection] = useState({
-    month: new Date().getMonth(),
-    year: new Date().getFullYear(),
+    month: today.getMonth(),
+    year: today.getFullYear(),
   });
 
-  const toggleMonthModal = () => setIsMonthModalVisible((prev) => !prev);
-  const toggleYearModal = () => setIsYearModalVisible((prev) => !prev);
+  const toggleMonthModal = () => setIsMonthModalVisible((p) => !p);
+  const toggleYearModal = () => setIsYearModalVisible((p) => !p);
 
-  // const updateMonth = (month: number) => {
+  // const _updateMonth = (month: number) => {
   //   if (month < 0 || month > 11) throw new Error('Invalid month');
 
   //   return setUserSelection((prev) => ({
@@ -57,7 +58,7 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
   //   }));
   // };
 
-  // const updateYear = (year: number) => {
+  // const _updateYear = (year: number) => {
   //   return setUserSelection((prev) => ({
   //     ...prev,
   //     year,
@@ -74,13 +75,13 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
     });
   };
 
-  // @TODO Sync modal data to this.
+  // @TODO Sync modal data in this method.
   const handleLeftArrowPress = (subtractMonth: () => void, date?: XDate) => {
     subtractMonth();
     if (!date) return console.error('Date object missing');
   };
 
-  // @TODO Sync modal data to this.
+  // @TODO Sync modal data in this method.
   const handleRightArrowPress = (addMonth: () => void, date?: XDate) => {
     addMonth();
     if (!date) return console.error('Date object missing');
@@ -91,7 +92,7 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
       <RNCalendar
         hideExtraDays
         enableSwipeMonths
-        current={today}
+        current={current}
         markedDates={markedDates}
         onPressArrowLeft={handleLeftArrowPress}
         onPressArrowRight={handleRightArrowPress}

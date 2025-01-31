@@ -20,15 +20,23 @@ const _MONTHS = [
 type TMonthBody = {
   activeMonth: number;
   updateMonth: (month: number) => void;
+  toggleMonthModal: () => void;
 };
 
-export const MonthBody = ({ activeMonth, updateMonth }: TMonthBody) => {
+export const MonthBody = ({
+  activeMonth,
+  updateMonth,
+  toggleMonthModal,
+}: TMonthBody) => {
   return (
     <View className={container()}>
       {_MONTHS.map((month, idx) => (
         <Pressable
           key={idx}
-          onPress={() => updateMonth(idx)}
+          onPress={() => {
+            updateMonth(idx);
+            toggleMonthModal();
+          }}
           className={button({ active: idx === activeMonth })}
         >
           <Text className={text({ active: idx === activeMonth })}>{month}</Text>
