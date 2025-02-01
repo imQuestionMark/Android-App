@@ -88,14 +88,16 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
     setCurrentState(new Date(dateString));
   };
 
+  const currentDateString = `${currentState.getFullYear()}-${String(currentState.getMonth() + 1).padStart(2, '0')}-${String(currentState.getDate()).padStart(2, '0')}`;
+
   return (
     <View className="w-full max-w-[359px] rounded-lg bg-green-200">
-      <Text>{currentState.toDateString()}</Text>
+      <Text>{currentDateString}</Text>
       <RNCalendar
         onVisibleMonthsChange={handleMonthChange}
         hideExtraDays
         enableSwipeMonths
-        current={`${currentState.getFullYear()}-${currentState.getMonth()}-${currentState.getDate()}`}
+        initialDate={currentDateString}
         markedDates={markedDates}
         onPressArrowLeft={handleLeftArrowPress}
         onPressArrowRight={handleRightArrowPress}
