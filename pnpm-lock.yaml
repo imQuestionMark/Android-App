@@ -154,6 +154,9 @@ importers:
       tailwind-variants:
         specifier: ^0.2.1
         version: 0.2.1(tailwindcss@3.4.4)
+      xdate:
+        specifier: ^0.8.3
+        version: 0.8.3
       zod:
         specifier: ^3.23.8
         version: 3.23.8

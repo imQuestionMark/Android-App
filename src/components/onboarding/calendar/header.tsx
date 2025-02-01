@@ -1,13 +1,14 @@
 import { Pressable, Text } from 'react-native';
+const XDate = require('xdate');
 
-export const CalendarHeader = ({
-  date,
-  toggleMonthModal,
-}: {
-  date?: XDate;
+type THeader = {
+  date: Date;
   toggleMonthModal: () => void;
-}) => {
-  const title = date?.toString('MMMM yyyy');
+};
+
+export const CalendarHeader = ({ date, toggleMonthModal }: THeader) => {
+  const formattedDate = new XDate(date);
+  const title = formattedDate.toString('MMMM yyyy');
   return (
     <Pressable onPress={toggleMonthModal} hitSlop={25}>
       <Text className="border-b text-center font-poppins text-base font-bold leading-[19px] text-[#161616] ">

@@ -5,35 +5,34 @@ import { MonthBody } from './body';
 import { MonthHeader } from './header';
 
 type TMonthModal = {
+  isMonthModalVisisble: boolean;
+  currentState: Date;
   toggleMonthModal: () => void;
   toggleYearModal: () => void;
-  isMonthModalVisisble: boolean;
-  userSelection: {
-    month: number;
-    year: number;
-  };
-  setUserSelection: React.Dispatch<
-    React.SetStateAction<{
-      month: number;
-      year: number;
-    }>
-  >;
+  updateMonth: (month: number) => void;
+  updateYear: (year: number) => void;
 };
 
 export const MonthModal = ({
   toggleMonthModal,
   isMonthModalVisisble,
-  userSelection,
-  setUserSelection,
   toggleYearModal,
+  currentState,
+  updateMonth,
+  updateYear,
 }: TMonthModal) => {
-  const addYear = () => setUserSelection((p) => ({ ...p, year: p.year + 1 }));
+  const addYear = () => {
+    const newYear = currentState.getFullYear() + 1;
+    updateYear(newYear);
+  };
 
-  const subtractYear = () =>
-    setUserSelection((p) => ({ ...p, year: p.year - 1 }));
+  const subtractYear = () => {
+    const newYear = currentState.getFullYear() - 1;
+    updateYear(newYear);
+  };
 
-  const updateMonth = (month: number) =>
-    setUserSelection((p) => ({ ...p, month }));
+  const currentYear = currentState.getFullYear();
+  const currentMonth = currentState.getMonth();
 
   return (
     <Modal
@@ -50,11 +49,11 @@ export const MonthModal = ({
                 addYear={addYear}
                 subtractYear={subtractYear}
                 toggleYearModal={toggleYearModal}
-                year={userSelection.year}
+                year={currentYear}
               />
               <MonthBody
                 updateMonth={updateMonth}
-                activeMonth={userSelection.month}
+                activeMonth={currentMonth}
                 toggleMonthModal={toggleMonthModal}
               />
             </View>
