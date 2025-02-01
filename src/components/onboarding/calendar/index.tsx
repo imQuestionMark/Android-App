@@ -11,6 +11,7 @@ import { _renderArrows } from './arrows';
 import { _renderDay } from './day';
 import { CalendarHeader } from './header';
 import { MonthModal } from './month';
+import { YearModal } from './year-modal';
 
 const _MARKED_DATES = {
   '2025-01-01': { selected: true, marked: true, selectedColor: 'bg-red-500' },
@@ -32,12 +33,6 @@ export function ControlledCalendar() {
 type TCalendar = {
   markedDates: MarkedDates;
   setMarkedDates: React.Dispatch<React.SetStateAction<MarkedDates>>;
-};
-
-type TUserSelection = {
-  day: number;
-  month: number;
-  year: number;
 };
 
 const today = new Date('2022-08-03');
@@ -104,7 +99,7 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
         onPressArrowLeft={handleLeftArrowPress}
         onPressArrowRight={handleRightArrowPress}
         onDayPress={handleDayPress}
-        renderHeader={(date?: XDate) => (
+        renderHeader={() => (
           <CalendarHeader
             date={currentState}
             toggleMonthModal={toggleMonthModal}
@@ -123,10 +118,12 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
         updateYear={_updateYear}
       />
 
-      {/* <YearModal
+      <YearModal
         isYearModalVisisble={isYearModalVisisble}
         toggleYearModal={toggleYearModal}
-      /> */}
+        currentState={currentState}
+        updateYear={_updateYear}
+      />
     </View>
   );
 }

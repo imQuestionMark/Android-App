@@ -9,31 +9,17 @@ const _YEARS = Array.from(
 type TYearModal = {
   isYearModalVisisble: boolean;
   toggleYearModal: () => void;
-  userSelection: {
-    month: number;
-    year: number;
-  };
-  setUserSelection: React.Dispatch<
-    React.SetStateAction<{
-      month: number;
-      year: number;
-    }>
-  >;
+  updateYear: (year: number) => void;
+  currentState: Date;
 };
 
 export const YearModal = ({
-  setUserSelection,
   isYearModalVisisble,
   toggleYearModal,
-  userSelection,
+  updateYear,
+  currentState,
 }: TYearModal) => {
-  const updateYear = (year: number) => {
-    setUserSelection((prev) => ({
-      ...prev,
-      year,
-    }));
-  };
-
+  const currentYear = currentState.getFullYear();
   return (
     <Modal
       transparent
@@ -56,10 +42,10 @@ export const YearModal = ({
                 // @TODO Setup TwMerge
                 className={button({
                   isOddButton: index % 2 === 0,
-                  active: item === userSelection.year,
+                  active: item === currentYear,
                 })}
               >
-                <Text className={text({ active: item === userSelection.year })}>
+                <Text className={text({ active: item === currentYear })}>
                   {item}
                 </Text>
               </Pressable>
