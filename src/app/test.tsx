@@ -1,13 +1,15 @@
-import { MotiView } from 'moti';
+import { Link } from 'expo-router';
 import React, { useState } from 'react';
 import {
   Dimensions,
+  Modal,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import Modal from 'react-native-modal';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,110 +18,118 @@ const App = () => {
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
 
+  const closeModal1 = () => {
+    console.log('first modal closed');
+    setModal1Visible(false);
+  };
+
+  const closeModal2 = () => {
+    console.log('first modal closed');
+    setModal2Visible(false);
+  };
+
+  const closeModal3 = () => {
+    console.log('first modal closed');
+    setModal3Visible(false);
+  };
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView className="flex-1 items-center justify-center bg-orange-950 p-8">
       <TouchableOpacity
         onPress={() => setModal1Visible(true)}
         style={styles.button}
       >
         <Text style={styles.buttonText}>Open Modal 1</Text>
       </TouchableOpacity>
+      <Link href="/personal-details">
+        <Text className="text-3xl text-white">Go to</Text>
+      </Link>
 
       {/* Modal 1 */}
       <Modal
-        isVisible={modal1Visible}
-        backdropOpacity={0.5}
-        propagateSwipe={true} // Allows child modals to interact
-        style={styles.modal}
+        visible={modal1Visible}
+        transparent
+        animationType="fade"
+        onRequestClose={closeModal1}
       >
-        <View style={styles.modalWrapper}>
-          <MotiView
-            from={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ type: 'spring', damping: 10 }}
-            style={[styles.modalContent, styles.absoluteCenter]}
-          >
-            <Text>Modal 1</Text>
-            <TouchableOpacity
-              onPress={() => setModal2Visible(true)}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Open Modal 2</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setModal1Visible(false)}
-              style={styles.closeButton}
-            >
-              <Text>Close</Text>
-            </TouchableOpacity>
-          </MotiView>
-        </View>
+        <TouchableWithoutFeedback onPress={closeModal1}>
+          <View style={styles.modalWrapper}>
+            <TouchableWithoutFeedback>
+              <View style={[styles.modalContent]}>
+                <Text>Modal 1</Text>
+                <TouchableOpacity
+                  onPress={() => setModal2Visible(true)}
+                  style={styles.button}
+                >
+                  <Text style={styles.buttonText}>Open Modal 2</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setModal1Visible(false)}
+                  style={styles.closeButton}
+                >
+                  <Text>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
 
       {/* Modal 2 */}
-      <Modal
-        isVisible={modal2Visible}
-        backdropOpacity={0} // Prevents blocking interactions
-        propagateSwipe={true}
-        style={styles.modal}
-      >
-        <View style={styles.modalWrapper}>
-          <MotiView
-            from={{ translateY: 50, opacity: 0 }}
-            animate={{ translateY: 0, opacity: 1 }}
-            exit={{ translateY: 50, opacity: 0 }}
-            transition={{ type: 'spring', damping: 10 }}
-            style={[styles.modalContent, styles.absoluteCenter]}
-          >
-            <Text>Modal 2</Text>
-            <TouchableOpacity
-              onPress={() => setModal3Visible(true)}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Open Modal 3</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setModal2Visible(false)}
-              style={styles.closeButton}
-            >
-              <Text>Close</Text>
-            </TouchableOpacity>
-          </MotiView>
-        </View>
+      <Modal visible={modal2Visible} transparent style={styles.modal}>
+        <TouchableWithoutFeedback onPress={closeModal2}>
+          <View style={styles.modalWrapper}>
+            <TouchableWithoutFeedback>
+              <View style={[styles.modalContent]}>
+                <Text>Modal 2</Text>
+                <TouchableOpacity
+                  onPress={() => setModal3Visible(true)}
+                  style={styles.button}
+                >
+                  <Text style={styles.buttonText}>Open Modal 3</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setModal2Visible(false)}
+                  style={styles.closeButton}
+                >
+                  <Text>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
 
       {/* Modal 3 */}
-      <Modal
-        isVisible={modal3Visible}
-        backdropOpacity={0}
-        propagateSwipe={true}
-        style={styles.modal}
-      >
-        <View style={styles.modalWrapper}>
-          <MotiView
-            from={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ type: 'spring', damping: 10 }}
-            style={[styles.modalContent, styles.absoluteCenter]}
-          >
-            <Text>Modal 3</Text>
-            <TouchableOpacity
-              onPress={() => setModal3Visible(false)}
-              style={styles.closeButton}
-            >
-              <Text>Close</Text>
-            </TouchableOpacity>
-          </MotiView>
-        </View>
+      <Modal visible={modal3Visible} transparent style={styles.modal}>
+        <TouchableWithoutFeedback onPress={closeModal3}>
+          <View style={styles.modalWrapper}>
+            <TouchableWithoutFeedback>
+              <View style={[styles.modalContent]}>
+                <Text>Modal 3</Text>
+
+                <TouchableOpacity
+                  onPress={() => setModal3Visible(false)}
+                  style={styles.closeButton}
+                >
+                  <Text>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'pink',
+  },
   button: {
     backgroundColor: '#3498db',
     padding: 10,
@@ -144,6 +154,9 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
+    position: 'absolute',
+    top: height * 0.25,
+    left: width * 0.1,
   },
 
   absoluteCenter: {

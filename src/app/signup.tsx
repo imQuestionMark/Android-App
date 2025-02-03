@@ -48,7 +48,7 @@ export default function Signup() {
   };
 
   return (
-    <>
+    <View>
       <GradientView>
         <KeyboardAwareScrollView
           // bottomOffset={62}
@@ -147,6 +147,6 @@ export default function Signup() {
       </GradientView>
 
       <StatusBar animated style="dark" />
-    </>
+    </View>
   );
 }

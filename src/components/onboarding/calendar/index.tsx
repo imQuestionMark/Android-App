@@ -23,11 +23,7 @@ const _MARKED_DATES = {
 export function ControlledCalendar() {
   const [markedDates, setMarkedDates] = useState<MarkedDates>(_MARKED_DATES);
 
-  return (
-    <>
-      <Calendar markedDates={markedDates} setMarkedDates={setMarkedDates} />
-    </>
-  );
+  return <Calendar markedDates={markedDates} setMarkedDates={setMarkedDates} />;
 }
 
 type TCalendar = {

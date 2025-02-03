@@ -47,10 +47,13 @@ export default function RootLayout() {
           headerStyle: { backgroundColor: 'rgba(0, 0, 0, 0)' },
         }}
       >
-        <Stack.Screen name="index" options={{}} />
+        <Stack.Screen name="index" />
         <Stack.Screen name="login" />
         <Stack.Screen name="signup" />
         <Stack.Screen name="personal-details" />
+        <Stack.Screen name="professional" />
+        <Stack.Screen name="verification" />
+        <Stack.Screen name="test" />
       </Stack>
     </Providers>
   );
