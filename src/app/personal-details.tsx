@@ -21,7 +21,7 @@ const sendDOB = (data: TDateofBirth) => {
 
 export default function PersonalDetails() {
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
-  const { control, handleSubmit } = useForm<TDateofBirth>({
+  const { handleSubmit } = useForm<TDateofBirth>({
     defaultValues: {},
     resolver: zodResolver(schema),
   });
