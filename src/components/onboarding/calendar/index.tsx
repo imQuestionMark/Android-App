@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Calendar as RNCalendar } from 'react-native-calendars';
 import {
   type DateData,
@@ -11,7 +11,7 @@ import { _renderArrows } from './arrows';
 import { _renderDay } from './day';
 import { CalendarHeader } from './header';
 import { MonthModal } from './month';
-import { YearModal } from './year-modal';
+import { YearModal } from './year';
 
 const _MARKED_DATES = {
   '2025-01-01': { selected: true, marked: true, selectedColor: 'bg-red-500' },
@@ -87,11 +87,14 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
   const currentDateString = `${currentState.getFullYear()}-${String(currentState.getMonth() + 1).padStart(2, '0')}-${String(currentState.getDate()).padStart(2, '0')}`;
 
   return (
-    <View className="w-full max-w-[359px] rounded-lg bg-green-200">
-      <Text>{currentDateString}</Text>
+    <View
+      className="w-full rounded-lg p-5"
+      onLayout={(e) => console.log(e.nativeEvent.layout.height)}
+    >
       <RNCalendar
         onVisibleMonthsChange={handleMonthChange}
         hideExtraDays
+        style={{ borderRadius: 6 }}
         enableSwipeMonths
         initialDate={currentDateString}
         markedDates={markedDates}

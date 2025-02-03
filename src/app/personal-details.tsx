@@ -59,7 +59,7 @@ export default function PersonalDetails() {
             {/* @TODO: Fix max width based on dimensions */}
             <Pressable
               onPress={toggleCalendar}
-              className="mt-[22px] max-w-64 flex-row items-center gap-4 rounded-md bg-[#F4F7FF] px-7 py-[10px]"
+              className="relative mt-[22px] max-w-64 flex-row items-center gap-4 rounded-md bg-[#F4F7FF] px-7 py-[10px]"
             >
               <CalendarDays color="#5A5A5A" />
               <Text className="text-[#5A5A5A]">dd/mm/yyyy</Text>
@@ -75,7 +75,7 @@ export default function PersonalDetails() {
                 <TouchableWithoutFeedback
                   onPress={() => setIsCalendarVisible(false)}
                 >
-                  <View className="ml-5 flex-1 items-start justify-center">
+                  <View className="max-w-[500px] flex-1 items-center justify-center">
                     <ControlledCalendar />
                   </View>
                 </TouchableWithoutFeedback>

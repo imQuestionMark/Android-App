@@ -66,8 +66,8 @@ export const MonthModal = ({
 
 const monthModalStyles = tv({
   slots: {
-    container: 'flex-1 items-center justify-center',
-    wrapper: 'w-11/12 max-w-md rounded-lg bg-red-200 p-6',
+    container: 'max-w-[500px] w-full flex-1 items-center justify-center p-5',
+    wrapper: 'h-[357px] justify-evenly rounded-lg bg-white p-6',
   },
 });
 
