@@ -1,13 +1,20 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarDays } from 'lucide-react-native';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Modal, Pressable, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import { SelectCountry } from 'react-native-element-dropdown';
 import { z } from 'zod';
 
 import { ControlledCalendar } from '@/components/onboarding/calendar';
 import GradientView from '@/components/onboarding/gradient-view';
-import { Text } from '@/components/ui';
 
 const schema = z.object({
   date: z.string(),
@@ -19,8 +26,83 @@ const sendDOB = (data: TDateofBirth) => {
   console.log(data);
 };
 
+const local_data = [
+  {
+    value: '1',
+    lable: 'United States',
+    image: {
+      uri: 'https://flagcdn.com/w320/us.png',
+    },
+  },
+  {
+    value: '2',
+    lable: 'Canada',
+    image: {
+      uri: 'https://flagcdn.com/w320/ca.png',
+    },
+  },
+  {
+    value: '3',
+    lable: 'United Kingdom',
+    image: {
+      uri: 'https://flagcdn.com/w320/gb.png',
+    },
+  },
+  {
+    value: '4',
+    lable: 'Australia',
+    image: {
+      uri: 'https://flagcdn.com/w320/au.png',
+    },
+  },
+  {
+    value: '5',
+    lable: 'Germany',
+    image: {
+      uri: 'https://flagcdn.com/w320/de.png',
+    },
+  },
+  {
+    value: '10',
+    lable: 'France',
+    image: {
+      uri: 'https://flagcdn.com/w320/fr.png',
+    },
+  },
+  {
+    value: '20',
+    lable: 'Japan',
+    image: {
+      uri: 'https://flagcdn.com/w320/jp.png',
+    },
+  },
+  {
+    value: '30',
+    lable: 'Brazil',
+    image: {
+      uri: 'https://flagcdn.com/w320/br.png',
+    },
+  },
+  {
+    value: '40',
+    lable: 'India',
+    image: {
+      uri: 'https://flagcdn.com/w320/in.png',
+    },
+  },
+  {
+    value: '50',
+    lable: 'China',
+    image: {
+      uri: 'https://flagcdn.com/w320/cn.png',
+    },
+  },
+];
+
 export default function PersonalDetails() {
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
+  const [country, setCountry] = useState('1');
+
   const { handleSubmit } = useForm<TDateofBirth>({
     defaultValues: {},
     resolver: zodResolver(schema),
@@ -88,9 +170,27 @@ export default function PersonalDetails() {
               Enter your Nationality
             </Text>
 
-            <Pressable className="mt-[22px] flex-row items-center gap-4 rounded-md bg-[#F4F7FF] px-7 py-[10px]">
-              <Text className="text-[#5A5A5A]">Select box T.B.D</Text>
-            </Pressable>
+            <View className="mt-[22px]">
+              <SelectCountry
+                style={styles.dropdown}
+                selectedTextStyle={styles.selectedTextStyle}
+                placeholderStyle={styles.placeholderStyle}
+                imageStyle={styles.imageStyle}
+                iconStyle={styles.iconStyle}
+                maxHeight={300}
+                value={country}
+                data={local_data}
+                valueField="value"
+                search
+                labelField="lable"
+                imageField="image"
+                placeholder="Select country"
+                searchPlaceholder="Search..."
+                onChange={(e) => {
+                  setCountry(e.value);
+                }}
+              />
+            </View>
           </View>
         </View>
 
@@ -112,3 +212,34 @@ export default function PersonalDetails() {
     </GradientView>
   );
 }
+
+const styles = StyleSheet.create({
+  dropdown: {
+    backgroundColor: 'white',
+    borderBottomWidth: 0.5,
+    paddingHorizontal: 14,
+    borderWidth: 0,
+    borderRadius: 8,
+    borderColor: 'transparent',
+    paddingVertical: 10,
+  },
+  imageStyle: {
+    width: 24,
+    height: 24,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+});
