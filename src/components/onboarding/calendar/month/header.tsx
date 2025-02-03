@@ -23,7 +23,13 @@ export const MonthHeader = ({
         <ArrowLeft color={black} />
       </Pressable>
 
-      <Pressable onPress={toggleYearModal}>
+      <Pressable
+        onPress={() => {
+          console.log('Log on Press year modal');
+          toggleYearModal();
+        }}
+        hitSlop={{ bottom: 10, left: 20, right: 20, top: 10 }}
+      >
         <Text className={yearText()}>{year}</Text>
       </Pressable>
 

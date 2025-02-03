@@ -50,7 +50,6 @@
     "axios": "1.7.5",
     "expo": "52.0.26",
     "expo-constants": "17.0.4",
-    "expo-dev-client": "5.0.9",
     "expo-font": "13.0.3",
     "expo-image": "2.0.4",
     "expo-linear-gradient": "14.0.2",
@@ -78,7 +77,6 @@
     "react-native-gesture-handler": "2.20.2",
     "react-native-keyboard-controller": "1.13.2",
     "react-native-mmkv": "3.1.0",
-    "react-native-modal": "13.0.1",
     "react-native-otp-entry": "1.8.2",
     "react-native-reanimated": "3.16.1",
     "react-native-restart": "0.0.27",
@@ -94,6 +92,7 @@
     "zustand": "4.5.5"
   },
   "devDependencies": {
+    "expo-dev-client": "5.0.9",
     "@babel/core": "7.26.0",
     "@commitlint/cli": "19.2.2",
     "@commitlint/config-conventional": "19.2.2",
