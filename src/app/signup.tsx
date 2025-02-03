@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { Pressable, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -35,7 +34,7 @@ type TSignup = z.infer<typeof schema>;
 export default function Signup() {
   const { control, handleSubmit } = useForm<TSignup>({
     defaultValues: {
-      firstName: 'John',
+      firstName: '',
       lastName: '',
       email: '',
       phone: '',
@@ -48,12 +47,9 @@ export default function Signup() {
   };
 
   return (
-    <View>
+    <>
       <GradientView>
-        <KeyboardAwareScrollView
-          // bottomOffset={62}
-          contentContainerClassName="grow"
-        >
+        <KeyboardAwareScrollView contentContainerClassName="grow">
           {/* @TOOD: Fix margin hack */}
           <View className="z-10 m-4 mt-14 grow">
             <View className="flex-row gap-2">
@@ -147,6 +143,6 @@ export default function Signup() {
       </GradientView>
 
       <StatusBar animated style="dark" />
-    </View>
+    </>
   );
 }
