@@ -97,6 +97,7 @@
     "@commitlint/config-conventional": "19.2.2",
     "@dev-plugins/react-query": "0.0.7",
     "@expo/config": "10.0.3",
+    "@tanstack/eslint-plugin-query": "^5.66.0",
     "@testing-library/jest-dom": "6.5.0",
     "@testing-library/react-native": "12.7.2",
     "@types/i18n-js": "3.8.9",
