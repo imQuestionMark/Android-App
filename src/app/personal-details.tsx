@@ -114,8 +114,8 @@ export default function PersonalDetails() {
   };
 
   return (
-    <GradientView className="m-5">
-      <View className="mt-4 flex grow justify-between">
+    <GradientView>
+      <View className="m-4 flex grow justify-between">
         <View id="main">
           <View className="flex gap-2">
             <View className="flex-row gap-2">
@@ -124,11 +124,6 @@ export default function PersonalDetails() {
               </Text>
               <Text className="font-poppins text-[32px] font-bold text-primary">
                 Swetha
-              </Text>
-            </View>
-            <View>
-              <Text className="font-poppins text-[20px] font-medium text-[#161616]">
-                Enter details
               </Text>
             </View>
           </View>
@@ -141,7 +136,7 @@ export default function PersonalDetails() {
             {/* @TODO: Fix max width based on dimensions */}
             <Pressable
               onPress={toggleCalendar}
-              className="relative mt-[22px] max-w-64 flex-row items-center gap-4 rounded-md bg-[#F4F7FF] px-7 py-[10px]"
+              className="relative mt-3 max-w-64 flex-row items-center gap-4 rounded-md bg-[#F4F7FF] px-7 py-[10px]"
             >
               <CalendarDays color="#5A5A5A" />
               <Text className="text-[#5A5A5A]">dd/mm/yyyy</Text>
@@ -170,7 +165,7 @@ export default function PersonalDetails() {
               Enter your Nationality
             </Text>
 
-            <View className="mt-[22px]">
+            <View className="mt-3">
               <SelectCountry
                 style={styles.dropdown}
                 selectedTextStyle={styles.selectedTextStyle}

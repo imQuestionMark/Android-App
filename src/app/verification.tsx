@@ -55,83 +55,81 @@ export default function Verification() {
     console.log('OTP Submitted:', data.otp);
   };
 
-  const signIn = () => {};
-
   return (
     <GradientView>
-      <KeyboardAwareScrollView
-        bottomOffset={62}
-        contentContainerClassName="grow"
-      >
-        <View className="flex-1 justify-between px-4 pt-8">
+      <KeyboardAwareScrollView contentContainerClassName="grow">
+        <View className="m-4 flex-1 justify-between">
           <View className="flex-1 ">
-            <View className="mx-4 mb-3.5 mt-4">
-              <Text className="text-black-500 flex flex-row font-poppins text-[32px] font-bold">
+            <View className="mb-3.5 flex-row gap-2">
+              <Text className="font-poppins text-[32px] font-bold text-black">
                 Welcome
-                <Text className="font-poppins text-[32px] font-bold text-primary">
-                  Onboard!
-                </Text>
+              </Text>
+              <Text className="font-poppins text-[32px] font-bold text-primary">
+                Onboard!
               </Text>
             </View>
-            <View className="mx-4 mt-1">
+
+            <View className="">
               <Text className="mb-2 font-poppins text-[20px] font-semibold text-[#161616] ">
                 Verify your account
               </Text>
               <Text className="mb-1 mt-1.5 font-poppins text-[12px] font-medium leading-[14px] tracking-[0.5px]">
-                OTP send to your email address.Please enter
+                OTP send to your email address. Please enter
               </Text>
             </View>
-            <View className="mx-4 mt-4">
+
+            <View className="mt-8">
               <Controller
                 name="otp"
                 control={control}
                 render={({ field: { onChange } }) => (
-                  <View className="mt-4">
-                    <OtpInput
-                      numberOfDigits={4}
-                      theme={_THEME}
-                      onTextChange={(otp) => {
-                        onChange(otp);
-                      }}
-                      type="numeric"
-                      autoFocus={true}
-                    />
-                  </View>
+                  <OtpInput
+                    numberOfDigits={4}
+                    // @ts-ignore
+                    theme={_THEME}
+                    onTextChange={(otp) => {
+                      onChange(otp);
+                    }}
+                    type="numeric"
+                    autoFocus={false}
+                  />
                 )}
               />
             </View>
           </View>
 
-          <View className="mx-[25px]">
+          <View>
             <Pressable
               onPress={handleSubmit(submitotp)}
-              className="flex h-[60px] items-center justify-center rounded-lg bg-primary py-3"
+              className="flex h-[60px] items-center justify-center rounded-md bg-primary "
             >
-              <Link href="/signin">
-                <Text className="text-4.5 mt-3.5 h-[31px] text-center font-poppins font-semibold leading-[170%] text-white">
-                  VERIFY OTP
-                </Text>
-              </Link>
+              <Text className="font-poppins text-lg font-semibold text-white">
+                VERIFY OTP
+              </Text>
             </Pressable>
-            <View className="mx-[25px]">
-              <View className="flex flex-row items-center justify-center">
-                <Text className="m-0 p-0 text-center font-poppins font-medium leading-[30.6px] text-gray-500">
-                  Didn't recieve code?
+
+            <View className="">
+              <View className="flex flex-row items-center justify-center gap-2">
+                <Text className="text-center font-poppins font-medium leading-[30px] text-gray-500 ">
+                  Didn't receive OTP?
                 </Text>
-                <Pressable onPress={signIn} className="ml-0 p-0">
-                  <Text className="font-medium text-primary"> Resend code</Text>
-                </Pressable>
+
+                <Link href={{ pathname: '/signup' }}>
+                  <Text className="font-medium text-primary">Resend</Text>
+                </Link>
               </View>
 
-              <Text className="text-black-400 font-regular flex flex-row text-center font-poppins  leading-[30.6px]">
-                You agree to the
-                <Text className="flex flex-row font-medium text-primary underline">
+              <View className="flex-row items-center justify-center gap-1.5">
+                <Text className="font-regular  font-poppinstext-black">
+                  You agree to the
+                </Text>
+                <Text className="text-primary underline">
                   terms & Conditions
                 </Text>
-                & <Text className="text-primary underline">privacy policy</Text>
-              </Text>
+                <Text className="">&</Text>
+                <Text className="text-primary underline">privacy policy</Text>
+              </View>
             </View>
-            V
           </View>
         </View>
       </KeyboardAwareScrollView>

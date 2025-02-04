@@ -64,7 +64,7 @@ const { itemIcon, itemContainer, itemText, itemIconCheck } = dropdownStyles();
 const Professional = () => {
   return (
     <GradientView>
-      <View className="m-6">
+      <View className="m-4">
         <Text className="font-poppins text-2xl font-semibold">
           Job preference
         </Text>

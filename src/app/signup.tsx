@@ -1,13 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import { useForm } from 'react-hook-form';
-import { Pressable, View } from 'react-native';
+import { Pressable, View, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import * as z from 'zod';
 
 import GradientView from '@/components/onboarding/gradient-view';
-import { ControlledInput, Text } from '@/components/ui';
+import { ControlledInput } from '@/components/ui';
 
 const schema = z.object({
   firstName: z
@@ -51,7 +50,7 @@ export default function Signup() {
       <GradientView>
         <KeyboardAwareScrollView contentContainerClassName="grow">
           {/* @TOOD: Fix margin hack */}
-          <View className="z-10 m-4 mt-14 grow">
+          <View className="z-10 m-4 grow">
             <View className="flex-row gap-2">
               <Text className="text-[32px] font-bold text-black">Welcome</Text>
               <Text className="text-[32px] font-bold text-primary">
@@ -105,44 +104,47 @@ export default function Signup() {
               </View>
 
               {/* Footer */}
-              <View className="mt-6">
+              <View className="">
                 {/* Submit Button */}
                 <Pressable
                   onPress={handleSubmit(onSubmit)}
-                  className="mt-6 flex h-[60px] items-center justify-center rounded-md bg-primary "
+                  className="flex h-[60px] items-center justify-center rounded-md  bg-primary "
                 >
-                  <Text className="text-center text-lg font-semibold text-white">
+                  <Text className="text-lg font-semibold text-white font-poppins">
                     Send OTP
                   </Text>
                 </Pressable>
 
-                <Text className="mt-2 text-center text-sm font-medium text-[#161616]">
-                  If you already have an account ?
-                  <Link
-                    className="font-medium text-primary"
-                    href={{ pathname: '/login' }}
-                  >
-                    &nbsp;Login
-                  </Link>
-                </Text>
+                <View className="">
+                  <View className="flex flex-row items-center justify-center gap-2">
+                    <Text className="text-center font-poppins font-medium leading-[30px] text-gray-500 ">
+                      If you already have an account?
+                    </Text>
 
-                <View className="mt-6 flex-row items-center justify-center gap-1">
-                  <Text className="text-center text-xs">You agree to the</Text>
-                  <Text className="text-center text-xs text-primary ">
-                    Terms & Conditions
-                  </Text>
-                  <Text className="text-center text-xs text-black ">&</Text>
-                  <Text className="text-center text-xs text-primary ">
-                    Privacy policy
-                  </Text>
+                    <Link href={{ pathname: '/login' }} className="">
+                      <Text className="font-medium text-primary">Login</Text>
+                    </Link>
+                  </View>
+
+                  <View className="flex-row items-center justify-center gap-1.5">
+                    <Text className="font-regular  font-poppinstext-black">
+                      You agree to the
+                    </Text>
+                    <Text className="text-primary underline">
+                      terms & Conditions
+                    </Text>
+                    <Text className="">&</Text>
+                    <Text className="text-primary underline">
+                      privacy policy
+                    </Text>
+                  </View>
                 </View>
+                {/*  */}
               </View>
             </View>
           </View>
         </KeyboardAwareScrollView>
       </GradientView>
-
-      <StatusBar animated style="dark" />
     </>
   );
 }

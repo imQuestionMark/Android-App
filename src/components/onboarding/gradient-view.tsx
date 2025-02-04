@@ -1,4 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
+import { StatusBar } from 'expo-status-bar';
 import React, { type ReactNode } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { tv } from 'tailwind-variants';
@@ -11,7 +12,7 @@ type TGradientViewProps = {
 };
 
 const gradientView = tv({
-  base: 'flex grow justify-between',
+  base: 'mt-14 flex grow justify-between',
 });
 
 export default function GradientView({
@@ -20,13 +21,14 @@ export default function GradientView({
 }: TGradientViewProps) {
   return (
     <LinearGradient
-      colors={['#DFE8FF', '#DFE8FF', '#FFFFFF']}
+      colors={['#DFE8FF', '#DFE8FF', 'white']}
       style={{ flex: 1, flexGrow: 1 }}
     >
       <SafeAreaView className={gradientView({ className })}>
         {children}
-        <Hashtag className="absolute bottom-0 right-0 z-[-1]" />
+        <Hashtag className="absolute bottom-[-40] right-0 z-[-1]" />
       </SafeAreaView>
+      <StatusBar animated style="dark" />
     </LinearGradient>
   );
 }
