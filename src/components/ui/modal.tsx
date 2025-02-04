@@ -34,11 +34,9 @@ import type {
 } from '@gorhom/bottom-sheet';
 import { BottomSheetModal, useBottomSheet } from '@gorhom/bottom-sheet';
 import * as React from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { Path, Svg } from 'react-native-svg';
-
-import { Text } from './text';
 
 type ModalProps = BottomSheetModalProps & {
   title?: string;
@@ -62,7 +60,7 @@ export const useModal = () => {
   return { ref, present, dismiss };
 };
 
-export const Modal = React.forwardRef(
+export const BottomModal = React.forwardRef(
   (
     {
       snapPoints: _snapPoints = ['60%'],
