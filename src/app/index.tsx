@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 const Index = () => {
   return (
     <>
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 items-center justify-center bg-white">
         <Link className="m-4 border px-8 py-4" href="/unasdf" replace>
           unknown
         </Link>

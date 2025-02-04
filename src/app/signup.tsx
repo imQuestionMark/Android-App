@@ -104,7 +104,7 @@ export default function Signup() {
               </View>
 
               {/* Footer */}
-              <View className="">
+              <View className="mt-6">
                 {/* Submit Button */}
                 <Pressable
                   onPress={handleSubmit(onSubmit)}
