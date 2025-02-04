@@ -4,7 +4,7 @@ import { I18nManager } from 'react-native';
 
 import { cleanup, render, screen, setup } from '@/lib/test-utils';
 
-import { Input } from './input';
+import { Input } from '../input';
 
 afterEach(cleanup);
 

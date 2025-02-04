@@ -5,7 +5,7 @@ import React from 'react';
 
 import { cleanup, screen, setup } from '@/lib/test-utils';
 
-import { Checkbox, Radio, Switch } from './checkbox';
+import { Checkbox, Radio, Switch } from '../checkbox';
 
 afterEach(cleanup);
 

@@ -5,7 +5,7 @@ import React from 'react';
 import type { OptionType } from '@/components/ui';
 import { cleanup, render, screen, setup } from '@/lib/test-utils';
 
-import { Select } from './select';
+import { Select } from '../select';
 
 afterEach(cleanup);
 
