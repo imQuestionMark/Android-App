@@ -5,10 +5,9 @@ import { tv, type VariantProps } from 'tailwind-variants';
 
 const buttonStyles = tv({
   slots: {
-    base: 'flex-row items-center justify-center gap-2 rounded-lg disabled:cursor-not-allowed',
-    text: 'text-center font-medium',
+    base: 'flex-row items-center justify-center gap-2 rounded-md',
+    text: 'text-center font-poppins font-medium',
     iconContainer: 'shrink-0',
-    spinner: '',
   },
   variants: {
     variant: {
@@ -33,11 +32,13 @@ const buttonStyles = tv({
       md: {
         base: 'h-9 px-3',
         text: 'text-sm',
-        iconContainer: 'size-4',
+      },
+      lg: {
+        base: 'p-5',
+        text: 'text-lg font-semibold',
       },
       icon: {
         base: 'size-10',
-        iconContainer: 'size-5',
       },
     },
     isDisabled: {

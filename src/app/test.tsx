@@ -8,22 +8,22 @@ const isLoading = true;
 
 export default function ButtonExample() {
   return (
-    <View className="gap-4 bg-white p-4">
+    <View className="flex-1  justify-center gap-4 bg-white p-4">
       {/* Basic usage */}
       <Button>
         <ButtonText>Click me</ButtonText>
       </Button>
 
       {/* With icon */}
-      <Button variant="outline">
+      <Button variant="outline" className="gap-1 border-red-700">
         <ButtonIcon>
-          <Heart color="red" fill="red" />
+          <Heart color="red" fill="red" size={14} />
         </ButtonIcon>
-        <ButtonText>Like</ButtonText>
+        <ButtonText className="text-red-400">Like</ButtonText>
       </Button>
 
       {/* Loading state */}
-      <Button isLoading={isLoading}>
+      <Button isLoading={isLoading} size="md">
         {isLoading && <ActivityIndicator />}
         <ButtonText>Processing...</ButtonText>
       </Button>
@@ -35,18 +35,14 @@ export default function ButtonExample() {
         className="rounded-full border-black"
       >
         <ButtonIcon>
-          <Heart size={20} />
+          <Heart size={14} fill={'black'} />
         </ButtonIcon>
       </Button>
 
       {/* Disabled state */}
-      <Button isDisabled>
+      <Button isLoading size="lg">
+        {isLoading && <ActivityIndicator color={'white'} size="large" />}
         <ButtonText>Disabled</ButtonText>
-      </Button>
-
-      {/* Custom classes */}
-      <Button className="bg-purple-500">
-        <ButtonText className="text-white">Custom Style</ButtonText>
       </Button>
     </View>
   );

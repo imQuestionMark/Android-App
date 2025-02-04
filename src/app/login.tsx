@@ -1,15 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Link, useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { Alert, Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { z } from 'zod';
 
+import { client } from '@/api';
 import GradientView from '@/components/onboarding/gradient-view';
 import { ControlledInput } from '@/components/ui';
-import { useMutation } from '@tanstack/react-query';
-import { client } from '@/api';
-import { AxiosError } from 'axios';
+import { Button, ButtonText } from '@/components/ui/button';
 
 const schema = z.object({
   email: z
@@ -75,14 +75,9 @@ export default function Signin() {
             </View>
           </View>
           <View>
-            <Pressable
-              onPress={handleSubmit(sendOTP)}
-              className="flex h-[60px] items-center justify-center rounded-md  bg-primary "
-            >
-              <Text className="font-poppins text-lg font-semibold text-white">
-                Send OTP
-              </Text>
-            </Pressable>
+            <Button size="lg" onPress={handleSubmit(sendOTP)}>
+              <ButtonText>Send OTP</ButtonText>
+            </Button>
 
             <View className="">
               <View className="flex flex-row items-center justify-center gap-2">
