@@ -23,7 +23,7 @@ export default function ButtonExample() {
       </Button>
 
       {/* Loading state */}
-      <Button isLoading={isLoading} size="md">
+      <Button isDisabled={isLoading} size="md">
         {isLoading && <ActivityIndicator />}
         <ButtonText>Processing...</ButtonText>
       </Button>
@@ -40,7 +40,7 @@ export default function ButtonExample() {
       </Button>
 
       {/* Disabled state */}
-      <Button isLoading size="lg">
+      <Button isDisabled size="lg">
         {isLoading && <ActivityIndicator color={'white'} size="large" />}
         <ButtonText>Disabled</ButtonText>
       </Button>

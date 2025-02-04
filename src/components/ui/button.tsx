@@ -62,7 +62,6 @@ type ButtonContextValue = TButtonVariants & {
 const ButtonContext = createContext<ButtonContextValue>({});
 
 type ButtonProps = {
-  isLoading?: boolean;
   className?: string;
   children?: React.ReactNode;
 } & PressableProps &
@@ -71,38 +70,32 @@ type ButtonProps = {
 const Button = React.forwardRef<
   React.ElementRef<typeof Pressable>,
   ButtonProps
->(
-  (
-    { className, variant, size, isLoading, isDisabled, children, ...props },
-    ref
-  ) => {
-    const buttonContext = {
-      variant,
-      size,
-      isLoading,
-      isDisabled,
-    };
+>(({ className, variant, size, isDisabled, children, ...props }, ref) => {
+  const buttonContext = {
+    variant,
+    size,
+    isDisabled,
+  };
 
-    const { base } = buttonStyles({
-      variant,
-      size,
-      isDisabled,
-    });
+  const { base } = buttonStyles({
+    variant,
+    size,
+    isDisabled,
+  });
 
-    return (
-      <ButtonContext.Provider value={buttonContext}>
-        <Pressable
-          ref={ref}
-          disabled={isDisabled}
-          className={base({ className })}
-          {...props}
-        >
-          {children}
-        </Pressable>
-      </ButtonContext.Provider>
-    );
-  }
-);
+  return (
+    <ButtonContext.Provider value={buttonContext}>
+      <Pressable
+        ref={ref}
+        disabled={isDisabled}
+        className={base({ className })}
+        {...props}
+      >
+        {children}
+      </Pressable>
+    </ButtonContext.Provider>
+  );
+});
 
 type ButtonTextProps = {
   className?: string;

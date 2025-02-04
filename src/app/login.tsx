@@ -1,13 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Link, useRouter } from 'expo-router';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { z } from 'zod';
 
 import { client } from '@/api';
 import GradientView from '@/components/onboarding/gradient-view';
+import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 
@@ -20,22 +22,22 @@ const schema = z.object({
 
 type TLogin = z.infer<typeof schema>;
 
-const MOCK_SUCCESS = 'http/200/1234';
+const MOCK_SUCCESS = 'http/200/1234?delay=1500';
 const MOCK_FAILURE = 'http/404/Invalid Email Credentials';
 
 export default function Signin() {
   const { control, handleSubmit } = useForm<TLogin>({
     defaultValues: {
-      email: '',
+      email: 'test@gmail.com',
     },
     resolver: zodResolver(schema),
   });
 
   const router = useRouter();
 
-  const { mutate: handleLogin } = useMutation({
+  const { mutate: handleLogin, isPending } = useMutation({
     mutationFn: async (data: TLogin) => {
-      const response = await client.post(MOCK_FAILURE, data);
+      const response = await client.post(MOCK_SUCCESS, data);
       return response.data;
     },
     onSuccess: (data) => {
@@ -75,7 +77,12 @@ export default function Signin() {
             </View>
           </View>
           <View>
-            <Button size="lg" onPress={handleSubmit(sendOTP)}>
+            <Button
+              size="lg"
+              onPress={handleSubmit(sendOTP)}
+              isDisabled={isPending}
+            >
+              {isPending && <ActivityIndicator color={'white'} />}
               <ButtonText>Send OTP</ButtonText>
             </Button>
 
@@ -90,16 +97,7 @@ export default function Signin() {
                 </Link>
               </View>
 
-              <View className="flex-row items-center justify-center gap-1.5">
-                <Text className="font-regular  font-poppinstext-black">
-                  You agree to the
-                </Text>
-                <Text className="text-primary underline">
-                  terms & Conditions
-                </Text>
-                <Text className="">&</Text>
-                <Text className="text-primary underline">privacy policy</Text>
-              </View>
+              <TermsandConditions />
             </View>
           </View>
         </View>

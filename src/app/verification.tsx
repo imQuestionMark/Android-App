@@ -1,12 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
+import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Alert, Pressable, Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { OtpInput } from 'react-native-otp-entry';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import GradientView from '@/components/onboarding/gradient-view';
+import { TermsandConditions } from '@/components/onboarding/terms-text';
+import { Button, ButtonText } from '@/components/ui/button';
 
 const schema = z.object({
   otp: z.string({ required_error: 'Please enter otp' }),
@@ -101,14 +104,14 @@ export default function Verification() {
 
           {/* Footer */}
           <View>
-            <Pressable
+            <Button
+              size="lg"
               onPress={handleSubmit(submitotp)}
-              className="flex h-[60px] items-center justify-center rounded-md bg-primary "
+              // isDisabled={isPending}
             >
-              <Text className="font-poppins text-lg font-semibold text-white">
-                VERIFY OTP
-              </Text>
-            </Pressable>
+              {/* {isPending && <ActivityIndicator color={'white'} />} */}
+              <ButtonText>Send OTP</ButtonText>
+            </Button>
 
             <View>
               <View className="flex flex-row items-center justify-center gap-2">
@@ -121,16 +124,7 @@ export default function Verification() {
                 </Link>
               </View>
 
-              <View className="flex-row items-center justify-center gap-1.5">
-                <Text className="font-regular  font-poppinstext-black">
-                  You agree to the
-                </Text>
-                <Text className="text-primary underline">
-                  terms & Conditions
-                </Text>
-                <Text className="">&</Text>
-                <Text className="text-primary underline">privacy policy</Text>
-              </View>
+              <TermsandConditions />
             </View>
           </View>
         </View>

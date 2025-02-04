@@ -1,11 +1,12 @@
 import { useCallback, useState } from 'react';
-import { Platform, Pressable, StyleSheet, Text } from 'react-native';
+import { Platform, StyleSheet, Text } from 'react-native';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import Svg, { Path } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
 
 import GradientView from '@/components/onboarding/gradient-view';
 import { View } from '@/components/ui';
+import { Button, ButtonText } from '@/components/ui/button';
 
 type TDropdownData = {
   label: string;
@@ -79,11 +80,11 @@ const Professional = () => {
 
         <View id="bottomNavigation" className="">
           <View className="flex items-end ">
-            <Pressable className="mb-6 p-4">
-              <Text className="font-poppins text-[20px] font-medium text-primary">
+            <Button variant="ghost" size="lg">
+              <ButtonText className="text-[20px] font-medium">
                 Confirm
-              </Text>
-            </Pressable>
+              </ButtonText>
+            </Button>
           </View>
 
           <View className="flex-row justify-between gap-4">
