@@ -64,30 +64,32 @@ const { itemIcon, itemContainer, itemText, itemIconCheck } = dropdownStyles();
 const Professional = () => {
   return (
     <GradientView>
-      <View className="m-4">
-        <Text className="font-poppins text-2xl font-semibold">
-          Job preference
-        </Text>
+      <View className="m-4 flex-1 justify-between">
+        <View className="">
+          <Text className="font-poppins text-2xl font-semibold">
+            Job preference
+          </Text>
 
-        <View className="mt-6">
-          <Role />
-          <Experience />
-          <Location />
-        </View>
-      </View>
-
-      <View id="bottomNavigation" className="m-6">
-        <View className="flex items-end ">
-          <Pressable className="mb-6 p-4">
-            <Text className="font-poppins text-[20px] font-medium text-primary">
-              Confirm
-            </Text>
-          </Pressable>
+          <View className="mt-6">
+            <Role />
+            <Experience />
+            <Location />
+          </View>
         </View>
 
-        <View className="flex-row justify-between gap-4">
-          <View className="h-1 grow rounded-xl bg-primary" />
-          <View className="h-1 grow rounded-xl bg-[#C9C9C9]" />
+        <View id="bottomNavigation" className="">
+          <View className="flex items-end ">
+            <Pressable className="mb-6 p-4">
+              <Text className="font-poppins text-[20px] font-medium text-primary">
+                Confirm
+              </Text>
+            </Pressable>
+          </View>
+
+          <View className="flex-row justify-between gap-4">
+            <View className="h-1 grow rounded-xl bg-primary" />
+            <View className="h-1 grow rounded-xl bg-[#C9C9C9]" />
+          </View>
         </View>
       </View>
     </GradientView>

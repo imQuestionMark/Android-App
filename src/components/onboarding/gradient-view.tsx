@@ -12,7 +12,7 @@ type TGradientViewProps = {
 };
 
 const gradientView = tv({
-  base: 'mt-14 flex grow justify-between',
+  base: 'mt-14 flex grow',
 });
 
 export default function GradientView({

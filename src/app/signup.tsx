@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { Pressable, View, Text } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import * as z from 'zod';
 
@@ -110,7 +110,7 @@ export default function Signup() {
                   onPress={handleSubmit(onSubmit)}
                   className="flex h-[60px] items-center justify-center rounded-md  bg-primary "
                 >
-                  <Text className="text-lg font-semibold text-white font-poppins">
+                  <Text className="font-poppins text-lg font-semibold text-white">
                     Send OTP
                   </Text>
                 </Pressable>

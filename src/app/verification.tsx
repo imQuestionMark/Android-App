@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
-import { Pressable, Text, View } from 'react-native';
+import { Alert, Pressable, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { OtpInput } from 'react-native-otp-entry';
 import { z } from 'zod';
@@ -52,13 +52,14 @@ export default function Verification() {
   });
 
   const submitotp = (data: { otp: string }) => {
-    console.log('OTP Submitted:', data.otp);
+    Alert.alert('OTP Submitted:', data.otp);
   };
 
   return (
-    <GradientView>
+    <GradientView className="">
       <KeyboardAwareScrollView contentContainerClassName="grow">
         <View className="m-4 flex-1 justify-between">
+          {/* Title */}
           <View className="flex-1 ">
             <View className="mb-3.5 flex-row gap-2">
               <Text className="font-poppins text-[32px] font-bold text-black">
@@ -98,6 +99,7 @@ export default function Verification() {
             </View>
           </View>
 
+          {/* Footer */}
           <View>
             <Pressable
               onPress={handleSubmit(submitotp)}
@@ -108,7 +110,7 @@ export default function Verification() {
               </Text>
             </Pressable>
 
-            <View className="">
+            <View>
               <View className="flex flex-row items-center justify-center gap-2">
                 <Text className="text-center font-poppins font-medium leading-[30px] text-gray-500 ">
                   Didn't receive OTP?
