@@ -1,12 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { Pressable, Text, View } from 'react-native';
+import { Alert, Pressable, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { z } from 'zod';
 
 import GradientView from '@/components/onboarding/gradient-view';
 import { ControlledInput } from '@/components/ui';
+import { useMutation } from '@tanstack/react-query';
+import { client } from '@/api';
+import { AxiosError } from 'axios';
 
 const schema = z.object({
   email: z
@@ -15,18 +18,34 @@ const schema = z.object({
     .email({ message: 'Incorrect Mail id' }),
 });
 
-type TSignup = z.infer<typeof schema>;
+type TLogin = z.infer<typeof schema>;
+
+const MOCK_SUCCESS = 'http/200/1234';
+const MOCK_FAILURE = 'http/404/Invalid Email Credentials';
 
 export default function Signin() {
-  const { control, handleSubmit } = useForm<TSignup>({
+  const { control, handleSubmit } = useForm<TLogin>({
     defaultValues: {
       email: '',
     },
     resolver: zodResolver(schema),
   });
 
-  const sendOTP = () => {
-    alert('SIGNIN');
+  const router = useRouter();
+
+  const { mutate: handleLogin } = useMutation({
+    mutationFn: async (data: TLogin) => {
+      const response = await client.post(MOCK_FAILURE, data);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      console.log('Login successful:', data);
+      router.replace({ pathname: '/verification' });
+    },
+  });
+
+  const sendOTP = (data: TLogin) => {
+    handleLogin(data);
   };
 
   return (
