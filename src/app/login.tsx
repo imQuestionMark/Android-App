@@ -1,17 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { type AxiosError } from 'axios';
 import { Link, useRouter } from 'expo-router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { toast } from 'sonner-native';
 import { z } from 'zod';
 
 import { client } from '@/api';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
-import { ControlledInput } from '@/components/ui';
+import { ControlledInput, showError } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 
 const schema = z.object({
@@ -23,7 +23,7 @@ const schema = z.object({
 
 type TLogin = z.infer<typeof schema>;
 
-const MOCK_SUCCESS = 'http/200/1234?delay=1500';
+// const MOCK_SUCCESS = 'http/200/1234?delay=1500';
 const MOCK_FAILURE = 'http/404/Invalid Email Credentials';
 
 export default function Signin() {
@@ -45,12 +45,9 @@ export default function Signin() {
       console.log('Login successful:', data);
       router.replace({ pathname: '/verification' });
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       console.log(error);
-      toast.error(error.message || 'Operation failed!', {
-        description: 'Something went wrong.',
-        duration: 2000,
-      });
+      showError(error);
     },
   });
 
