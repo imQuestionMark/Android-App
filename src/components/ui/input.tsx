@@ -7,17 +7,16 @@ import type {
 } from 'react-hook-form';
 import { useController } from 'react-hook-form';
 import type { TextInputProps } from 'react-native';
-import { I18nManager, StyleSheet, View } from 'react-native';
+import { I18nManager, StyleSheet, Text, View } from 'react-native';
 import { TextInput as NTextInput } from 'react-native';
 import { tv } from 'tailwind-variants';
 
 import colors from './colors';
-import { Text } from './text';
 
 const inputTv = tv({
   slots: {
     container: 'mb-2',
-    label: 'text-grey-100 mb-2 font-poppins text-[16px] dark:text-neutral-100',
+    label: 'text-grey-100 mb-2 font-poppins text-[16px] ',
     input: 'h-[50px] rounded-[6px] bg-white px-4 opacity-100',
     hint: 'mb-2 font-poppins text-xs font-medium text-[#5A5A5A]',
   },
@@ -31,7 +30,7 @@ const inputTv = tv({
     error: {
       true: {
         input: 'border-danger-600',
-        label: 'text-danger-600 dark:text-danger-600',
+        label: 'text-danger-600',
       },
     },
     disabled: {
