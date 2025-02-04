@@ -9,7 +9,7 @@ import * as React from 'react';
 import type { FieldValues } from 'react-hook-form';
 import { useController } from 'react-hook-form';
 import { Platform, View } from 'react-native';
-import { Pressable, type PressableProps } from 'react-native';
+import { Pressable, type PressableProps, Text } from 'react-native';
 import type { SvgProps } from 'react-native-svg';
 import Svg, { Path } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
@@ -19,8 +19,7 @@ import { CaretDown } from '@/components/ui/icons';
 
 import type { InputControllerType } from './input';
 import { useModal } from './modal';
-import { Modal } from './modal';
-import { Text } from './text';
+import { BottomModal as Modal } from './modal';
 
 const selectTv = tv({
   slots: {

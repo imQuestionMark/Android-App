@@ -1,9 +1,7 @@
 import { FlashList as NFlashList } from '@shopify/flash-list';
 import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
-
-import { Text } from './text';
 type Props = {
   isLoading: boolean;
 };

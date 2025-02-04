@@ -1,11 +1,9 @@
 import { Link } from 'expo-router';
 import { Text, View } from 'react-native';
 
-import GradientView from '@/components/onboarding/gradient-view';
-
 const Index = () => {
   return (
-    <GradientView>
+    <>
       <View className="flex-1 items-center justify-center">
         <Link className="m-4 border px-8 py-4" href="/unasdf" replace>
           unknown
@@ -38,7 +36,7 @@ const Index = () => {
           <Text>verification</Text>
         </Link>
       </View>
-    </GradientView>
+    </>
   );
 };
 

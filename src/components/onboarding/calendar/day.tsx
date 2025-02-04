@@ -1,9 +1,7 @@
-import { Pressable, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { type DateData } from 'react-native-calendars';
 import { type BasicDayProps } from 'react-native-calendars/src/calendar/day/basic';
 import { tv } from 'tailwind-variants';
-
-import { Text } from '../../ui/text';
 
 type CustomDayProps = BasicDayProps & {
   date?: DateData;

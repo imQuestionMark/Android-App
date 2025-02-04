@@ -1,10 +1,9 @@
-import React from 'react';
+import { useState } from 'react';
+import { Text } from 'react-native';
 
 import type { OptionType } from '@/components/ui';
 import { Input, Select, View } from '@/components/ui';
 import { Checkbox, Radio, Switch } from '@/components/ui';
-
-import { Title } from './title';
 
 const options: OptionType[] = [
   { value: 'chocolate', label: 'Chocolate' },
@@ -13,10 +12,10 @@ const options: OptionType[] = [
 ];
 
 export const Inputs = () => {
-  const [value, setValue] = React.useState<string | number | undefined>();
+  const [value, setValue] = useState<string | number | undefined>();
   return (
     <>
-      <Title text="Form" />
+      <Text>Form</Text>
       <View>
         <Input label="Default" placeholder="Lorem ipsum dolor sit amet" />
         <Input label="Error" error="This is a message error" />
@@ -36,7 +35,7 @@ export const Inputs = () => {
 };
 
 const CheckboxExample = () => {
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = useState(false);
   return (
     <Checkbox.Root
       checked={checked}
@@ -51,7 +50,7 @@ const CheckboxExample = () => {
 };
 
 const RadioExample = () => {
-  const [selected, setSelected] = React.useState(false);
+  const [selected, setSelected] = useState(false);
   return (
     <Radio.Root
       checked={selected}
@@ -66,7 +65,7 @@ const RadioExample = () => {
 };
 
 const SwitchExample = () => {
-  const [active, setActive] = React.useState(false);
+  const [active, setActive] = useState(false);
   return (
     <Switch.Root
       checked={active}
