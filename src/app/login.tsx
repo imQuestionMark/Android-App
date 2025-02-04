@@ -5,6 +5,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { toast } from 'sonner-native';
 import { z } from 'zod';
 
 import { client } from '@/api';
@@ -37,12 +38,19 @@ export default function Signin() {
 
   const { mutate: handleLogin, isPending } = useMutation({
     mutationFn: async (data: TLogin) => {
-      const response = await client.post(MOCK_SUCCESS, data);
+      const response = await client.post(MOCK_FAILURE, data);
       return response.data;
     },
     onSuccess: (data) => {
       console.log('Login successful:', data);
       router.replace({ pathname: '/verification' });
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error.message || 'Operation failed!', {
+        description: 'Something went wrong.',
+        duration: 2000,
+      });
     },
   });
 
