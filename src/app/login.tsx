@@ -35,21 +35,21 @@ export default function Signin() {
         <View className="m-4 flex-1 justify-between ">
           <View className="">
             <View className="mb-3.5 flex-row gap-2">
-              <Text className="font-poppins text-[32px] font-bold text-[#161616]">
+              <Text className="font-poppins text-[32px] font-bold text-primary">
                 Sign
               </Text>
 
-              <Text className="font-poppins text-[32px] font-bold text-primary">
-                in!
+              <Text className="font-poppins text-[32px] font-bold text-[#161616]">
+                in
               </Text>
             </View>
 
             <View>
               <ControlledInput
                 name="email"
-                placeholder="Enter your mail id"
+                placeholder="Enter your email id"
                 control={control}
-                label="Enter your mail id"
+                label="Enter your email address"
                 hint="we will send you the 4 digit verification code"
                 keyboardType="email-address"
               />
@@ -57,12 +57,13 @@ export default function Signin() {
           </View>
           <View>
             <Pressable
-              onPress={handleSubmit(sendOTP)}
               className="flex h-[60px] items-center justify-center rounded-md  bg-primary "
-            >
+            ><Link
+            href={{pathname:'/verification'}}>
               <Text className="font-poppins text-lg font-semibold text-white">
                 Send OTP
               </Text>
+              </Link>
             </Pressable>
 
             <View className="">

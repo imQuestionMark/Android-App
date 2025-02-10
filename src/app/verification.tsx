@@ -104,10 +104,10 @@ export default function Verification() {
             <Pressable
               onPress={handleSubmit(submitotp)}
               className="flex h-[60px] items-center justify-center rounded-md bg-primary "
-            >
+            ><Link href={{pathname:'/personal-details'}}>
               <Text className="font-poppins text-lg font-semibold text-white">
                 VERIFY OTP
-              </Text>
+              </Text></Link>
             </Pressable>
 
             <View>

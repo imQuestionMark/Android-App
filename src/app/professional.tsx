@@ -5,7 +5,10 @@ import Svg, { Path } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
 
 import GradientView from '@/components/onboarding/gradient-view';
-import { View } from '@/components/ui';
+import { ControlledInput, View } from '@/components/ui';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 type TDropdownData = {
   label: string;
@@ -29,6 +32,12 @@ const locations = [
   { label: 'Chennai', value: 'Chennai' },
   { label: 'Bangalore', value: 'Bangalore' },
 ];
+
+const mode=[
+  {label:'Full Time', value:'Full Time'},
+  {label:'Part Time', value:'Part Time'},
+  {label:'Hybrid', value:'Hybrid'},
+]
 
 const dropdownStyles = tv({
   slots: {
@@ -74,6 +83,9 @@ const Professional = () => {
             <Role />
             <Experience />
             <Location />
+            <ModeOfWork />
+            <CTC />
+            <ExpCTC />
           </View>
         </View>
 
@@ -209,6 +221,107 @@ const Location = () => {
       />
     </View>
   );
+};
+
+const ModeOfWork = () => {
+  const [selectedMode, setSelectedMode] = useState<string[]>([]);
+
+  const handleModeChange = useCallback((data: string[]) => {
+    setSelectedMode(data);
+  }, []);
+
+  const flattenedMode = selectedMode.join(', ');
+  const ModePlaceholder = selectedMode.length
+    ? flattenedMode
+    : 'Select Mode';
+
+  return (
+    <View className="mb-5">
+      <Text className="mb-4 font-poppins text-[16px] font-medium">
+        Preferred(Mode of work)
+      </Text>
+      <MultiSelect
+        pressableStyle={styles.dropdown}
+        selectedTextStyle={styles.selectedTextStyle}
+        data={mode}
+        containerStyle={{
+          borderRadius: 8,
+          marginTop: Platform.OS === 'ios' ? -96 : 4,
+        }}
+        labelField="label"
+        valueField="value"
+        placeholder={ModePlaceholder}
+        value={selectedMode}
+        onChange={handleModeChange}
+        activeColor=""
+        visibleSelectedItem={false}
+        selectedTextProps={{ numberOfLines: 1 }}
+        renderItem={(data, selected) => (
+          <CustomItem data={data} selected={selected} />
+        )}
+      />
+    </View>
+  );
+};
+
+const schema = z.object({
+  ctc: z
+    .string()
+    .min(1, { message: 'CTC is required' })
+});
+
+type CTC = z.infer<typeof schema>;
+
+
+const CTC = () =>{
+  const { control, handleSubmit } = useForm<CTC>({
+    defaultValues: {
+      ctc: '',
+    },
+    resolver: zodResolver(schema),
+  });
+
+return(
+<View>
+<Text className="mb-4 font-poppins text-[16px] font-medium">
+        Current CTC
+      </Text>
+<ControlledInput
+                name="ctc"
+                control={control}
+              />
+</View>
+);
+};
+
+const schema1 = z.object({
+  expctc: z
+    .string()
+    .min(1, { message: 'CTC is required' })
+});
+
+type ExpCTC = z.infer<typeof schema1>;
+
+
+const ExpCTC = () =>{
+  const { control, handleSubmit } = useForm<ExpCTC>({
+    defaultValues: {
+      expctc: '',
+    },
+    resolver: zodResolver(schema),
+  });
+
+return(
+<View>
+<Text className="mb-4 font-poppins text-[16px] font-medium">
+        Expected CTC
+      </Text>
+<ControlledInput
+                name="expctc"
+                control={control}
+              />
+</View>
+);
 };
 
 const CustomItem = ({ data, selected }: { data: any; selected?: boolean }) => {

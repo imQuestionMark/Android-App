@@ -5,13 +5,13 @@ const Index = () => {
   return (
     <>
       <View className="flex-1 items-center justify-center bg-white">
-        <Link className="m-4 border px-8 py-4" href="/unasdf" replace>
+        {/* <Link className="m-4 border px-8 py-4" href="/unasdf" replace>
           unknown
         </Link>
         <Link className="m-4 border px-8 py-4" href={{ pathname: '/_sitemap' }}>
           <Text>_sitemap</Text>
-        </Link>
-        <Link className="m-4 border px-8 py-4" href={{ pathname: '/login' }}>
+        </Link> */}
+        {/* <Link className="m-4 border px-8 py-4" href={{ pathname: '/login' }}>
           <Text>Login</Text>
         </Link>
         <Link
@@ -25,16 +25,16 @@ const Index = () => {
           href={{ pathname: '/professional' }}
         >
           <Text>professional</Text>
-        </Link>
+        </Link> */}
         <Link className="m-4 border px-8 py-4" href={{ pathname: '/signup' }}>
           <Text>signup</Text>
         </Link>
-        <Link
+        {/* <Link
           className="m-4 border px-8 py-4"
           href={{ pathname: '/verification' }}
         >
           <Text>verification</Text>
-        </Link>
+        </Link> */}
       </View>
     </>
   );
