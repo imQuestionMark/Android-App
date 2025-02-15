@@ -1,5 +1,5 @@
-declare module '@tanstack/react-query' {
-  interface Register {
-    defaultError: AxiosError;
-  }
-}
+// declare module '@tanstack/react-query' {
+//   interface Register {
+//     defaultError: AxiosError;
+//   }
+// }
