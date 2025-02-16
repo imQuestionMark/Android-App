@@ -8,11 +8,13 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput } from '@/components/ui';
-import { loginInputSchema, useLoginMutation, Variables } from '@/api/authentication/signIn';
-
+import {
+  loginInputSchema,
+  useLoginMutation,
+  Variables,
+} from '@/api/authentication/signIn';
 
 import { Button, ButtonText } from '@/components/ui/button';
-
 
 export default function Signin() {
   const { control, handleSubmit } = useForm<Variables>({

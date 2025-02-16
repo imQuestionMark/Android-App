@@ -4,11 +4,7 @@ import type { AxiosError } from 'axios';
 import { createMutation } from 'react-query-kit';
 import { router, useRouter } from 'expo-router';
 import { z } from 'zod';
-
-const MOCK_FAILURE = 'http/404/Invalid Email Credentials';
-const MOCK_SUCCESS = 'http/200/1234?delay=1500';
-
-
+import { API_ROUTES } from '@/routes/api-routes';
 
 export const SignUpInputschema = z.object({
   firstName: z
@@ -26,14 +22,13 @@ export const SignUpInputschema = z.object({
       message: 'Must be only numbers',
     })
     .min(10, 'Phone number must be 10 digits')
-    //.max(10, 'Phone number must be 10 digits')
+    .max(10, 'Phone number must be 10 digits')
     .transform(String),
 });
 
 export type Variables = z.infer<typeof SignUpInputschema>;
 
-
-const SignUpResponseschema =z.object({
+const SignUpResponseschema = z.object({
   status: z.number(),
   message: z.string(),
   id: z.string(),
@@ -42,20 +37,22 @@ const SignUpResponseschema =z.object({
 type Response = z.infer<typeof SignUpResponseschema>;
 
 const submitForm = async (data: Variables) => {
-  const response = await client.post(MOCK_SUCCESS, data);
+  const response = await client.post(API_ROUTES.SIGNUP, data);
   return SignUpResponseschema.parse(response.data);
 };
 
-export const useSignUpMutation = createMutation<Response, Variables, AxiosError>(
-  {
-    mutationFn: submitForm,
-    onSuccess: (data) => {
-      console.log('Login successful:', data);
-      router.replace({ pathname: '/login' });
-    },
-    onError: (error: AxiosError) => {
-      console.error(error);
-      showError(error);
-    },
-  }
-);
+export const useSignUpMutation = createMutation<
+  Response,
+  Variables,
+  AxiosError
+>({
+  mutationFn: submitForm,
+  onSuccess: (data) => {
+    console.log('Login successful:', data);
+    router.replace({ pathname: '/login' });
+  },
+  onError: (error: AxiosError) => {
+    console.error(error);
+    showError(error);
+  },
+});

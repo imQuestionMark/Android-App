@@ -4,9 +4,7 @@ import type { AxiosError } from 'axios';
 import { createMutation } from 'react-query-kit';
 import { router, useRouter } from 'expo-router';
 import { z } from 'zod';
-
-const MOCK_FAILURE = 'http/404/Invalid Email Credentials';
-const MOCK_SUCCESS = 'http/200/1234?delay=1500';
+import { API_ROUTES } from '@/routes/api-routes';
 
 export const loginInputSchema = z.object({
   email: z
@@ -26,7 +24,7 @@ const loginResponseSchema = z.object({
 type Response = z.infer<typeof loginResponseSchema>;
 
 const submitForm = async (data: Variables) => {
-  const response = await client.post(MOCK_SUCCESS, data);
+  const response = await client.post(API_ROUTES.LOGIN, data);
   //return loginResponseSchema.parse(response.data);
   return response.data;
 };

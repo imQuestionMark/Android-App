@@ -10,7 +10,7 @@ import * as z from 'zod';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { Button, ButtonText } from '@/components/ui/button';
-import { OTPInputschema, useOtpMutation, Variables } from '@/api/authentication/Verification';
+import { OTPInputschema, useOtpMutation, Variables } from '@/api/authentication/verification';
 
 
 const _THEME = {
