@@ -9,44 +9,23 @@ import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
+import { SignUpInputschema ,useSignUpMutation,Variables} from '@/api/authentication/signUp';
 
-const schema = z.object({
-  firstName: z
-    .string({ required_error: 'FirstName is required' })
-    .min(3, 'Minimum 3 characters')
-    .max(16, 'Maximum 16 characters'),
-  lastName: z
-    .string({ required_error: 'LastName is required' })
-    .min(3, 'Minimum 3 characters')
-    .max(16, 'Maximum 16 characters'),
-  email: z.string().min(1, 'Email is required').email(),
-  phone: z.coerce
-    .number({
-      required_error: 'Phone no. is required.',
-      message: 'Must be only numbers',
-    })
-    .min(10, 'Phone number must be 10 digits')
-    .max(10, 'Phone number must be 10 digits')
-    .transform(String),
-});
 
-type TSignup = z.infer<typeof schema>;
+
 
 export default function Signup() {
-  const { control, handleSubmit } = useForm<TSignup>({
+  const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
       firstName: '',
       lastName: '',
       email: '',
       phone: '',
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(SignUpInputschema),
   });
 
-  const onSubmit = (data: TSignup) => {
-    console.log(data);
-  };
-
+  const { mutate: handleLogin, isPending } = useSignUpMutation();
   return (
     <>
       <GradientView>
@@ -110,7 +89,7 @@ export default function Signup() {
                 {/* Submit Button */}
                 <Button
                   size="lg"
-                  onPress={handleSubmit(onSubmit)}
+                  onPress={handleSubmit((data) => handleLogin(data))}
                   // isDisabled={isPending}
                 >
                   {/* {isPending && <ActivityIndicator color={'white'} />} */}

@@ -8,19 +8,18 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput } from '@/components/ui';
+import { loginInputSchema, useLoginMutation, Variables } from '@/api/authentication/signIn';
+
+
 import { Button, ButtonText } from '@/components/ui/button';
-import {
-  loginSchema,
-  type Variables,
-  useLoginMutation,
-} from '@/api/auth/login';
+
 
 export default function Signin() {
   const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
       email: 'test@gmail.com',
     },
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginInputSchema),
   });
 
   const { mutate: handleLogin, isPending } = useLoginMutation();
@@ -31,21 +30,21 @@ export default function Signin() {
         <View className="m-4 flex-1 justify-between ">
           <View className="">
             <View className="mb-3.5 flex-row gap-2">
-              <Text className="font-poppins text-[32px] font-bold text-[#161616]">
+              <Text className="font-poppins text-[32px] font-bold text-primary">
                 Sign
               </Text>
 
-              <Text className="font-poppins text-[32px] font-bold text-primary">
-                in!
+              <Text className="font-poppins text-[32px] font-bold text-[#161616]">
+                in
               </Text>
             </View>
 
             <View>
               <ControlledInput
                 name="email"
-                placeholder="Enter your mail id"
+                placeholder="Enter your email id"
                 control={control}
-                label="Enter your mail id"
+                label="Enter your email address"
                 hint="we will send you the 4 digit verification code"
                 keyboardType="email-address"
               />

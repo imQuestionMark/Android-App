@@ -10,12 +10,8 @@ import * as z from 'zod';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { Button, ButtonText } from '@/components/ui/button';
+import { OTPInputschema, useOtpMutation, Variables } from '@/api/authentication/Verification';
 
-const schema = z.object({
-  otp: z.string({ required_error: 'Please enter otp' }),
-});
-
-type TSignup = z.infer<typeof schema>;
 
 const _THEME = {
   containerStyle: { height: 52 },
@@ -47,17 +43,14 @@ const _THEME = {
 };
 
 export default function Verification() {
-  const { control, handleSubmit } = useForm<TSignup>({
+  const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
       otp: '',
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(OTPInputschema),
   });
 
-  const submitotp = (data: { otp: string }) => {
-    Alert.alert('OTP Submitted:', data.otp);
-  };
-
+  const { mutate: handleLogin, isPending } = useOtpMutation();
   return (
     <GradientView className="">
       <KeyboardAwareScrollView contentContainerClassName="grow">
@@ -106,7 +99,7 @@ export default function Verification() {
           <View>
             <Button
               size="lg"
-              onPress={handleSubmit(submitotp)}
+              onPress={handleSubmit(data => handleLogin(data))}
               // isDisabled={isPending}
             >
               {/* {isPending && <ActivityIndicator color={'white'} />} */}
