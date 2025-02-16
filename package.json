@@ -116,6 +116,7 @@
     "eslint-import-resolver-typescript": "3.6.3",
     "eslint-plugin-i18n-json": "4.0.0",
     "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-perfectionist": "^4.9.0",
     "eslint-plugin-prettier": "5.2.1",
     "eslint-plugin-react-compiler": "19.0.0-beta-a7bf2bd-20241110",
     "eslint-plugin-simple-import-sort": "10.0.0",
