@@ -15,7 +15,7 @@ import Svg, { Path } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
 
 import colors from '@/components/ui/colors';
-import { CaretDown } from '@/components/ui/icons';
+import { CaretDown } from '@/components/ui/icons/caret-down';
 
 import type { InputControllerType } from './input';
 import { useModal } from './modal';
