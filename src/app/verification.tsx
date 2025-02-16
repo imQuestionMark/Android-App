@@ -7,12 +7,8 @@ import { OtpInput } from 'react-native-otp-entry';
 import { z } from 'zod';
 
 import GradientView from '@/components/onboarding/gradient-view';
+import { OTPInputschema, useOtpMutation, Variables } from '@/api/authentication/Verification';
 
-const schema = z.object({
-  otp: z.string({ required_error: 'Please enter otp' }),
-});
-
-type TSignup = z.infer<typeof schema>;
 
 const _THEME = {
   containerStyle: { height: 52 },
@@ -44,17 +40,14 @@ const _THEME = {
 };
 
 export default function Verification() {
-  const { control, handleSubmit } = useForm<TSignup>({
+  const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
       otp: '',
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(OTPInputschema),
   });
 
-  const submitotp = (data: { otp: string }) => {
-    Alert.alert('OTP Submitted:', data.otp);
-  };
-
+  const { mutate: handleLogin, isPending } = useOtpMutation();
   return (
     <GradientView className="">
       <KeyboardAwareScrollView contentContainerClassName="grow">
@@ -102,12 +95,12 @@ export default function Verification() {
           {/* Footer */}
           <View>
             <Pressable
-              onPress={handleSubmit(submitotp)}
+              onPress={handleSubmit(data => handleLogin(data))}
               className="flex h-[60px] items-center justify-center rounded-md bg-primary "
-            ><Link href={{pathname:'/personal-details'}}>
+            >
               <Text className="font-poppins text-lg font-semibold text-white">
                 VERIFY OTP
-              </Text></Link>
+              </Text>
             </Pressable>
 
             <View>

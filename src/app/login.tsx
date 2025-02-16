@@ -7,27 +7,20 @@ import { z } from 'zod';
 
 import GradientView from '@/components/onboarding/gradient-view';
 import { ControlledInput } from '@/components/ui';
+import { loginInputSchema, useLoginMutation, Variables } from '@/api/authentication/signIn';
 
-const schema = z.object({
-  email: z
-    .string()
-    .min(1, { message: 'Email is required' })
-    .email({ message: 'Incorrect Mail id' }),
-});
 
-type TSignup = z.infer<typeof schema>;
 
 export default function Signin() {
-  const { control, handleSubmit } = useForm<TSignup>({
+  const { control, handleSubmit ,} = useForm<Variables>({
     defaultValues: {
       email: '',
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(loginInputSchema),
   });
 
-  const sendOTP = () => {
-    alert('SIGNIN');
-  };
+
+  const { mutate: handleLogin, isPending } = useLoginMutation();
 
   return (
     <GradientView>
@@ -58,12 +51,13 @@ export default function Signin() {
           <View>
             <Pressable
               className="flex h-[60px] items-center justify-center rounded-md  bg-primary "
-            ><Link
-            href={{pathname:'/verification'}}>
+              onPress={handleSubmit((data) => handleLogin(data))}
+              disabled={isPending}
+              >
               <Text className="font-poppins text-lg font-semibold text-white">
                 Send OTP
               </Text>
-              </Link>
+              
             </Pressable>
 
             <View className="">
