@@ -145,9 +145,9 @@ export default function PersonalDetails() {
 
             {isCalendarVisible && (
               <Modal
-                visible={isCalendarVisible}
                 transparent
                 animationType="fade"
+                visible={isCalendarVisible}
                 onRequestClose={() => setIsCalendarVisible(false)}
               >
                 <TouchableWithoutFeedback
@@ -168,20 +168,20 @@ export default function PersonalDetails() {
 
             <View className="mt-3">
               <SelectCountry
-                style={styles.dropdown}
-                selectedTextStyle={styles.selectedTextStyle}
-                placeholderStyle={styles.placeholderStyle}
-                imageStyle={styles.imageStyle}
-                iconStyle={styles.iconStyle}
+                search
                 maxHeight={300}
                 value={country}
                 data={local_data}
-                valueField="value"
-                search
-                labelField="lable"
                 imageField="image"
+                labelField="lable"
+                valueField="value"
+                style={styles.dropdown}
+                iconStyle={styles.iconStyle}
                 placeholder="Select country"
                 searchPlaceholder="Search..."
+                imageStyle={styles.imageStyle}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
                 onChange={(e) => {
                   setCountry(e.value);
                 }}

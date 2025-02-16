@@ -46,8 +46,8 @@ export default function Signup() {
                   <ControlledInput
                     name="firstName"
                     control={control}
-                    placeholder="Enter your first name"
                     label="Enter your first name"
+                    placeholder="Enter your first name"
                   />
                 </View>
 
@@ -56,8 +56,8 @@ export default function Signup() {
                   <ControlledInput
                     name="lastName"
                     control={control}
-                    placeholder="Enter your last name"
                     label="Enter your last name"
+                    placeholder="Enter your last name"
                   />
                 </View>
 
@@ -77,9 +77,9 @@ export default function Signup() {
                   <ControlledInput
                     name="phone"
                     control={control}
+                    keyboardType="numeric"
                     placeholder="9876543210"
                     label="Enter your phone number"
-                    keyboardType="numeric"
                   />
                 </View>
               </View>
@@ -102,7 +102,7 @@ export default function Signup() {
                       If you already have an account?
                     </Text>
 
-                    <Link href={{ pathname: '/login' }} className="">
+                    <Link className="" href={{ pathname: '/login' }}>
                       <Text className="font-medium text-primary">Login</Text>
                     </Link>
                   </View>

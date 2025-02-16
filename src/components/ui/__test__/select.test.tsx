@@ -19,10 +19,10 @@ describe('Select component ', () => {
     const onSelect = jest.fn();
     render(
       <Select
-        label="Select options"
+        testID="select"
         options={options}
         onSelect={onSelect}
-        testID="select"
+        label="Select options"
       />
     );
     expect(screen.getByTestId('select-trigger')).toBeOnTheScreen();
@@ -34,9 +34,9 @@ describe('Select component ', () => {
     render(
       <Select
         label="Select"
+        testID="select"
         options={options}
         onSelect={onSelect}
-        testID="select"
       />
     );
     expect(screen.getByTestId('select-trigger')).toBeOnTheScreen();
@@ -49,9 +49,9 @@ describe('Select component ', () => {
     render(
       <Select
         label="Select"
+        testID="select"
         options={options}
         onSelect={onSelect}
-        testID="select"
         error="Please select an option"
       />
     );
@@ -66,8 +66,8 @@ describe('Select component ', () => {
     const { user } = setup(
       <Select
         label="Select"
-        options={options}
         testID="select"
+        options={options}
         placeholder="Select an option"
       />
     );
@@ -84,7 +84,7 @@ describe('Select component ', () => {
     const onSelect = jest.fn();
 
     const { user } = setup(
-      <Select options={options} onSelect={onSelect} testID="select" />
+      <Select testID="select" options={options} onSelect={onSelect} />
     );
 
     const selectTrigger = screen.getByTestId('select-trigger');

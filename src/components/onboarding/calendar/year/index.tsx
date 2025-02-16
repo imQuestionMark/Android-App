@@ -14,10 +14,10 @@ const _YEARS = Array.from(
 );
 
 type TYearModal = {
+  currentState: Date;
   isYearModalVisisble: boolean;
   toggleYearModal: () => void;
   updateYear: (year: number) => void;
-  currentState: Date;
 };
 
 export const YearModal = ({

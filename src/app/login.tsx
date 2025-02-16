@@ -62,19 +62,19 @@ export default function Signin() {
             <View>
               <ControlledInput
                 name="email"
-                placeholder="Enter your email id"
                 control={control}
-                label="Enter your email address"
-                hint="we will send you the 4 digit verification code"
                 keyboardType="email-address"
+                label="Enter your email address"
+                placeholder="Enter your email id"
+                hint="we will send you the 4 digit verification code"
               />
             </View>
           </View>
           <View>
             <Button
               size="lg"
-              onPress={handleSubmit((data) => handleLogin(data))}
               isDisabled={isPending}
+              onPress={handleSubmit((data) => handleLogin(data))}
             >
               {isPending && <ActivityIndicator color={'white'} />}
               <ButtonText>Send OTP</ButtonText>
@@ -86,7 +86,7 @@ export default function Signin() {
                   If you already have an account?
                 </Text>
 
-                <Link href={{ pathname: '/signup' }} className="">
+                <Link href={{ pathname: '/signup' }}>
                   <Text className="font-medium text-primary">SignUp</Text>
                 </Link>
               </View>

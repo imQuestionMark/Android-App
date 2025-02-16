@@ -83,14 +83,14 @@ export default function Verification() {
                 control={control}
                 render={({ field: { onChange } }) => (
                   <OtpInput
-                    numberOfDigits={4}
                     // @ts-ignore
                     theme={_THEME}
+                    type="numeric"
+                    autoFocus={false}
+                    numberOfDigits={4}
                     onTextChange={(otp) => {
                       onChange(otp);
                     }}
-                    type="numeric"
-                    autoFocus={false}
                   />
                 )}
               />

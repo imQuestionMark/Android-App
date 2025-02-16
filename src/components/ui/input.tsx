@@ -47,29 +47,29 @@ const inputTv = tv({
 });
 
 export interface NInputProps extends TextInputProps {
-  label?: string;
-  hint?: string;
   disabled?: boolean;
   error?: string;
+  hint?: string;
+  label?: string;
 }
 
 type TRule<T extends FieldValues> =
   | Omit<
       RegisterOptions<T>,
-      'disabled' | 'valueAsNumber' | 'valueAsDate' | 'setValueAs'
+      'disabled' | 'setValueAs' | 'valueAsDate' | 'valueAsNumber'
     >
   | undefined;
 
 export type RuleType<T extends FieldValues> = { [name in keyof T]: TRule<T> };
 export type InputControllerType<T extends FieldValues> = {
-  name: Path<T>;
   control: Control<T>;
+  name: Path<T>;
   rules?: RuleType<T>;
 };
 
 interface ControlledInputProps<T extends FieldValues>
-  extends NInputProps,
-    InputControllerType<T> {}
+  extends InputControllerType<T>,
+    NInputProps {}
 
 export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
   const { label, error, testID, hint, ...inputProps } = props;
@@ -91,8 +91,8 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
     <View className={styles.container()}>
       {label && (
         <Text
-          testID={testID ? `${testID}-label` : undefined}
           className={styles.label()}
+          testID={testID ? `${testID}-label` : undefined}
         >
           {label}
         </Text>
@@ -100,19 +100,19 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
 
       {hint && (
         <Text
-          testID={testID ? `${testID}-hint` : undefined}
           className={styles.hint()}
+          testID={testID ? `${testID}-hint` : undefined}
         >
           {hint}
         </Text>
       )}
       <NTextInput
-        testID={testID}
         ref={ref}
-        placeholderTextColor={colors.neutral[400]}
-        className={styles.input()}
         onBlur={onBlur}
+        testID={testID}
         onFocus={onFocus}
+        className={styles.input()}
+        placeholderTextColor={colors.neutral[400]}
         {...inputProps}
         style={StyleSheet.flatten([
           { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
@@ -122,8 +122,8 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
       />
       {error && (
         <Text
-          testID={testID ? `${testID}-error` : undefined}
           className="text-sm text-[#EE2F23]"
+          testID={testID ? `${testID}-error` : undefined}
         >
           {error}
         </Text>
@@ -146,8 +146,8 @@ export function ControlledInput<T extends FieldValues>(
       onChangeText={field.onChange}
       value={(field.value as string) || ''}
       {...inputProps}
-      error={fieldState.error?.message}
       onBlur={field.onBlur}
+      error={fieldState.error?.message}
     />
   );
 }

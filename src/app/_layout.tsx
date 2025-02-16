@@ -72,11 +72,11 @@ function Providers({ children }: { children: React.ReactNode }) {
             <BottomSheetModalProvider>
               {children}
               <Toaster
-                position="bottom-center"
-                richColors
-                swipeToDismissDirection="left"
                 invert
+                richColors
                 closeButton
+                position="bottom-center"
+                swipeToDismissDirection="left"
               />
             </BottomSheetModalProvider>
           </APIProvider>

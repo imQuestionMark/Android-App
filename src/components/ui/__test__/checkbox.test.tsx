@@ -112,8 +112,8 @@ describe('Checkbox, Radio & Switch components ', () => {
         testID="radio"
         onChange={mockOnChange}
         accessibilityLabel="agree"
-        label="I agree to terms and conditions"
         accessibilityHint="toggle Agree"
+        label="I agree to terms and conditions"
       />
     );
     expect(screen.getByTestId('radio')).toBeOnTheScreen();
@@ -136,8 +136,8 @@ describe('Checkbox, Radio & Switch components ', () => {
     const mockOnChange = jest.fn((checked) => checked);
     const { user } = setup(
       <Radio
-        disabled={true}
         testID="radio"
+        disabled={true}
         onChange={mockOnChange}
         accessibilityLabel="agree"
         accessibilityHint="toggle Agree"
@@ -179,8 +179,8 @@ describe('Checkbox, Radio & Switch components ', () => {
         testID="switch"
         onChange={mockOnChange}
         accessibilityLabel="agree"
-        label="I agree to terms and conditions"
         accessibilityHint="toggle Agree"
+        label="I agree to terms and conditions"
       />
     );
     expect(screen.getByTestId('switch')).toBeOnTheScreen();

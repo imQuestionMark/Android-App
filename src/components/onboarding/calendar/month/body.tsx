@@ -19,8 +19,8 @@ const _MONTHS = [
 
 type TMonthBody = {
   activeMonth: number;
-  updateMonth: (month: number) => void;
   toggleMonthModal: () => void;
+  updateMonth: (month: number) => void;
 };
 
 export const MonthBody = ({
@@ -33,11 +33,11 @@ export const MonthBody = ({
       {_MONTHS.map((month, idx) => (
         <Pressable
           key={idx}
+          className={button({ active: idx === activeMonth })}
           onPress={() => {
             updateMonth(idx);
             toggleMonthModal();
           }}
-          className={button({ active: idx === activeMonth })}
         >
           <Text className={text({ active: idx === activeMonth })}>{month}</Text>
         </Pressable>

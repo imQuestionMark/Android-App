@@ -50,10 +50,10 @@ export const _renderDay = (props: CustomDayProps) => {
 
   return (
     <Pressable
-      className={base({ state, className: marking?.selectedColor })}
+      testID={testID}
       onPress={handleDayPress}
       accessibilityLabel={accessibilityLabel}
-      testID={testID}
+      className={base({ state, className: marking?.selectedColor })}
     >
       <Text className={dayText({ state })}>{date?.day}</Text>
       {marking && <View className="size-2 bg-purple-800" />}

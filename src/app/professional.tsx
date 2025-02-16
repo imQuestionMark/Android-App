@@ -90,9 +90,9 @@ const Professional = () => {
           </View>
         </View>
 
-        <View id="bottomNavigation" className="">
+        <View className="" id="bottomNavigation">
           <View className="flex items-end ">
-            <Button variant="ghost" size="lg">
+            <Button size="lg" variant="ghost">
               <ButtonText className="text-[20px] font-medium">
                 Confirm
               </ButtonText>
@@ -126,24 +126,24 @@ const Role = () => {
         Select Your Role
       </Text>
       <MultiSelect
+        activeColor=""
+        labelField="label"
+        valueField="value"
+        data={designations}
+        onChange={handleRoleChange}
+        value={selectedDesignation}
+        visibleSelectedItem={false}
         pressableStyle={styles.dropdown}
+        placeholder={designationPlaceholder}
+        selectedTextProps={{ numberOfLines: 1 }}
         selectedTextStyle={styles.selectedTextStyle}
+        renderItem={(data, selected) => (
+          <CustomItem data={data} selected={selected} />
+        )}
         containerStyle={{
           borderRadius: 8,
           marginTop: Platform.OS === 'ios' ? -96 : 4,
         }}
-        data={designations}
-        labelField="label"
-        valueField="value"
-        placeholder={designationPlaceholder}
-        value={selectedDesignation}
-        activeColor=""
-        visibleSelectedItem={false}
-        selectedTextProps={{ numberOfLines: 1 }}
-        onChange={handleRoleChange}
-        renderItem={(data, selected) => (
-          <CustomItem data={data} selected={selected} />
-        )}
       />
     </View>
   );
@@ -151,7 +151,7 @@ const Role = () => {
 
 const Experience = () => {
   const [selectedExperience, setSelectedExperience] =
-    useState<TDropdownData | null>(null);
+    useState<null | TDropdownData>(null);
 
   const handleExperienceChange = useCallback((data: TDropdownData) => {
     setSelectedExperience(data);
@@ -162,22 +162,22 @@ const Experience = () => {
         Experience
       </Text>
       <Dropdown
-        pressableStyle={styles.dropdown}
-        selectedTextStyle={styles.selectedTextStyle}
+        activeColor=""
         data={experience}
-        containerStyle={{
-          borderRadius: 8,
-          marginTop: Platform.OS === 'ios' ? -96 : 4,
-        }}
         labelField="label"
         valueField="value"
-        placeholder="Select Experience"
         value={selectedExperience}
-        activeColor=""
+        placeholder="Select Experience"
+        pressableStyle={styles.dropdown}
+        selectedTextStyle={styles.selectedTextStyle}
         onChange={(item) => handleExperienceChange(item.value)}
         renderItem={(data, selected) => (
           <CustomItem data={data} selected={selected} />
         )}
+        containerStyle={{
+          borderRadius: 8,
+          marginTop: Platform.OS === 'ios' ? -96 : 4,
+        }}
       />
     </View>
   );
@@ -201,24 +201,24 @@ const Location = () => {
         Preferred Location
       </Text>
       <MultiSelect
-        pressableStyle={styles.dropdown}
-        selectedTextStyle={styles.selectedTextStyle}
+        activeColor=""
         data={locations}
+        labelField="label"
+        valueField="value"
+        value={selectedLocation}
+        visibleSelectedItem={false}
+        onChange={handleLocationChange}
+        pressableStyle={styles.dropdown}
+        placeholder={locationPlaceholder}
+        selectedTextProps={{ numberOfLines: 1 }}
+        selectedTextStyle={styles.selectedTextStyle}
+        renderItem={(data, selected) => (
+          <CustomItem data={data} selected={selected} />
+        )}
         containerStyle={{
           borderRadius: 8,
           marginTop: Platform.OS === 'ios' ? -96 : 4,
         }}
-        labelField="label"
-        valueField="value"
-        placeholder={locationPlaceholder}
-        value={selectedLocation}
-        onChange={handleLocationChange}
-        activeColor=""
-        visibleSelectedItem={false}
-        selectedTextProps={{ numberOfLines: 1 }}
-        renderItem={(data, selected) => (
-          <CustomItem data={data} selected={selected} />
-        )}
       />
     </View>
   );
@@ -240,24 +240,24 @@ const ModeOfWork = () => {
         Preferred(Mode of work)
       </Text>
       <MultiSelect
-        pressableStyle={styles.dropdown}
-        selectedTextStyle={styles.selectedTextStyle}
         data={mode}
+        activeColor=""
+        labelField="label"
+        valueField="value"
+        value={selectedMode}
+        onChange={handleModeChange}
+        visibleSelectedItem={false}
+        placeholder={ModePlaceholder}
+        pressableStyle={styles.dropdown}
+        selectedTextProps={{ numberOfLines: 1 }}
+        selectedTextStyle={styles.selectedTextStyle}
+        renderItem={(data, selected) => (
+          <CustomItem data={data} selected={selected} />
+        )}
         containerStyle={{
           borderRadius: 8,
           marginTop: Platform.OS === 'ios' ? -96 : 4,
         }}
-        labelField="label"
-        valueField="value"
-        placeholder={ModePlaceholder}
-        value={selectedMode}
-        onChange={handleModeChange}
-        activeColor=""
-        visibleSelectedItem={false}
-        selectedTextProps={{ numberOfLines: 1 }}
-        renderItem={(data, selected) => (
-          <CustomItem data={data} selected={selected} />
-        )}
       />
     </View>
   );
@@ -316,7 +316,7 @@ const CustomItem = ({ data, selected }: { data: any; selected?: boolean }) => {
     return (
       <View className={itemContainer()}>
         <View className={itemIcon({ selected })}>
-          <Svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <Svg width="20" fill="none" height="20" viewBox="0 0 20 20">
             <Path
               d="M6 11L9 13L14.5 7"
               strokeWidth="2.01011"

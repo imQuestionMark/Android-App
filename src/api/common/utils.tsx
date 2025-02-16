@@ -23,14 +23,14 @@ export function normalizePages<T>(pages?: PaginateQuery<T>[]): T[] {
 
 // a function that accept a url and return params as an object
 export function getUrlParameters(
-  url: string | null
-): { [k: string]: string } | null {
+  url: null | string
+): null | { [k: string]: string } {
   if (url === null) {
     return null;
   }
-  let regex = /[?&]([^=#]+)=([^&#]*)/g,
+  let match,
     params = {},
-    match;
+    regex = /[?&]([^=#]+)=([^&#]*)/g;
   while ((match = regex.exec(url))) {
     if (match[1] !== null) {
       //@ts-ignore

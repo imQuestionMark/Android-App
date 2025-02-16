@@ -12,7 +12,7 @@ export default function NotFoundScreen() {
           This screen doesn't exist. Mic testing
         </Text>
 
-        <Link href={{ pathname: '/' }} replace className="mt-4">
+        <Link replace className="mt-4" href={{ pathname: '/' }}>
           <Text className="text-blue-500 underline">Go to home screen!</Text>
         </Link>
       </View>

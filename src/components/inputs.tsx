@@ -12,7 +12,7 @@ const options: OptionType[] = [
 ];
 
 export const Inputs = () => {
-  const [value, setValue] = useState<string | number | undefined>();
+  const [value, setValue] = useState<number | string | undefined>();
   return (
     <>
       <Text>Form</Text>
@@ -21,9 +21,9 @@ export const Inputs = () => {
         <Input label="Error" error="This is a message error" />
         <Input label="Focused" />
         <Select
+          value={value}
           label="Select"
           options={options}
-          value={value}
           onSelect={(option) => setValue(option)}
         />
         <CheckboxExample />
@@ -38,10 +38,10 @@ const CheckboxExample = () => {
   const [checked, setChecked] = useState(false);
   return (
     <Checkbox.Root
+      className="pb-2"
       checked={checked}
       onChange={setChecked}
       accessibilityLabel="accept terms of condition"
-      className="pb-2"
     >
       <Checkbox.Icon checked={checked} />
       <Checkbox.Label text="checkbox" />
@@ -53,10 +53,10 @@ const RadioExample = () => {
   const [selected, setSelected] = useState(false);
   return (
     <Radio.Root
+      className="pb-2"
       checked={selected}
       onChange={setSelected}
       accessibilityLabel="radio button"
-      className="pb-2"
     >
       <Radio.Icon checked={selected} />
       <Radio.Label text="radio button" />
@@ -69,9 +69,9 @@ const SwitchExample = () => {
   return (
     <Switch.Root
       checked={active}
+      className="pb-2"
       onChange={setActive}
       accessibilityLabel="switch"
-      className="pb-2"
     >
       <Switch.Icon checked={active} />
       <Switch.Label text="switch" />
