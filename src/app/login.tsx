@@ -1,19 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useRouter } from 'expo-router';
+import { useMutation } from '@tanstack/react-query';
+import { type AxiosError } from 'axios';
+import { Link, router } from 'expo-router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
+import { client } from '@/api';
+import { loginInputSchema, type Variables } from '@/api/authentication/login';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
-import { ControlledInput } from '@/components/ui';
-import {
-  loginInputSchema,
-  useLoginMutation,
-  Variables,
-} from '@/api/authentication/signIn';
-
+import { ControlledInput, showError } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 
 export default function Signin() {
@@ -24,7 +22,27 @@ export default function Signin() {
     resolver: zodResolver(loginInputSchema),
   });
 
-  const { mutate: handleLogin, isPending } = useLoginMutation();
+  // const { mutate: handleLogin, isPending } = useLoginMutation();
+  const {
+    mutate: handleLogin,
+    isPending,
+    ...rest
+  } = useMutation({
+    mutationFn: async (data: unknown) => {
+      const response = await client.post('MOCK_FAILURE', data);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      console.log('Login successful:', data);
+      router.replace({ pathname: '/verification' });
+    },
+    onError: (error: AxiosError) => {
+      console.log(error);
+      showError(error);
+    },
+  });
+
+  console.log(rest);
 
   return (
     <GradientView>

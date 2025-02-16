@@ -3,16 +3,16 @@ import { Link } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import * as z from 'zod';
 
+import {
+  SignUpInputschema,
+  useSignUpMutation,
+  type Variables,
+} from '@/api/authentication/signup';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
-import { SignUpInputschema ,useSignUpMutation,Variables} from '@/api/authentication/signUp';
-
-
-
 
 export default function Signup() {
   const { control, handleSubmit } = useForm<Variables>({
@@ -25,7 +25,7 @@ export default function Signup() {
     resolver: zodResolver(SignUpInputschema),
   });
 
-  const { mutate: handleLogin, isPending } = useSignUpMutation();
+  const { mutate: handleLogin } = useSignUpMutation();
   return (
     <>
       <GradientView>

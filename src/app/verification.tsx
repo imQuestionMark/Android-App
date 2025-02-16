@@ -2,16 +2,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Alert, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { OtpInput } from 'react-native-otp-entry';
-import * as z from 'zod';
 
+import {
+  OTPInputschema,
+  useOtpMutation,
+  type Variables,
+} from '@/api/authentication/verification';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { Button, ButtonText } from '@/components/ui/button';
-import { OTPInputschema, useOtpMutation, Variables } from '@/api/authentication/verification';
-
 
 const _THEME = {
   containerStyle: { height: 52 },
@@ -50,7 +52,7 @@ export default function Verification() {
     resolver: zodResolver(OTPInputschema),
   });
 
-  const { mutate: handleLogin, isPending } = useOtpMutation();
+  const { mutate: handleLogin } = useOtpMutation();
   return (
     <GradientView className="">
       <KeyboardAwareScrollView contentContainerClassName="grow">
@@ -99,7 +101,7 @@ export default function Verification() {
           <View>
             <Button
               size="lg"
-              onPress={handleSubmit(data => handleLogin(data))}
+              onPress={handleSubmit((data) => handleLogin(data))}
               // isDisabled={isPending}
             >
               {/* {isPending && <ActivityIndicator color={'white'} />} */}

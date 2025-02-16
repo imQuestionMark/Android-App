@@ -1,15 +1,15 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Platform, StyleSheet, Text } from 'react-native';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import Svg, { Path } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
+import { z } from 'zod';
 
 import GradientView from '@/components/onboarding/gradient-view';
 import { ControlledInput, View } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 
 type TDropdownData = {
   label: string;
@@ -34,11 +34,11 @@ const locations = [
   { label: 'Bangalore', value: 'Bangalore' },
 ];
 
-const mode=[
-  {label:'Full Time', value:'Full Time'},
-  {label:'Part Time', value:'Part Time'},
-  {label:'Hybrid', value:'Hybrid'},
-]
+const mode = [
+  { label: 'Full Time', value: 'Full Time' },
+  { label: 'Part Time', value: 'Part Time' },
+  { label: 'Hybrid', value: 'Hybrid' },
+];
 
 const dropdownStyles = tv({
   slots: {
@@ -232,9 +232,7 @@ const ModeOfWork = () => {
   }, []);
 
   const flattenedMode = selectedMode.join(', ');
-  const ModePlaceholder = selectedMode.length
-    ? flattenedMode
-    : 'Select Mode';
+  const ModePlaceholder = selectedMode.length ? flattenedMode : 'Select Mode';
 
   return (
     <View className="mb-5">
@@ -266,63 +264,51 @@ const ModeOfWork = () => {
 };
 
 const schema = z.object({
-  ctc: z
-    .string()
-    .min(1, { message: 'CTC is required' })
+  ctc: z.string().min(1, { message: 'CTC is required' }),
 });
 
-type CTC = z.infer<typeof schema>;
+type CTCProps = z.infer<typeof schema>;
 
-
-const CTC = () =>{
-  const { control, handleSubmit } = useForm<CTC>({
+const CTC = () => {
+  const { control } = useForm<CTCProps>({
     defaultValues: {
       ctc: '',
     },
     resolver: zodResolver(schema),
   });
 
-return(
-<View>
-<Text className="mb-4 font-poppins text-[16px] font-medium">
+  return (
+    <View>
+      <Text className="mb-4 font-poppins text-[16px] font-medium">
         Current CTC
       </Text>
-<ControlledInput
-                name="ctc"
-                control={control}
-              />
-</View>
-);
+      <ControlledInput name="ctc" control={control} />
+    </View>
+  );
 };
 
 const schema1 = z.object({
-  expctc: z
-    .string()
-    .min(1, { message: 'CTC is required' })
+  expctc: z.string().min(1, { message: 'CTC is required' }),
 });
 
-type ExpCTC = z.infer<typeof schema1>;
+type ExpCTCProps = z.infer<typeof schema1>;
 
-
-const ExpCTC = () =>{
-  const { control, handleSubmit } = useForm<ExpCTC>({
+const ExpCTC = () => {
+  const { control } = useForm<ExpCTCProps>({
     defaultValues: {
       expctc: '',
     },
     resolver: zodResolver(schema),
   });
 
-return(
-<View>
-<Text className="mb-4 font-poppins text-[16px] font-medium">
+  return (
+    <View>
+      <Text className="mb-4 font-poppins text-[16px] font-medium">
         Expected CTC
       </Text>
-<ControlledInput
-                name="expctc"
-                control={control}
-              />
-</View>
-);
+      <ControlledInput name="expctc" control={control} />
+    </View>
+  );
 };
 
 const CustomItem = ({ data, selected }: { data: any; selected?: boolean }) => {

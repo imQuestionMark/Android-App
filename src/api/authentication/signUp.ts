@@ -1,10 +1,12 @@
-import { showError } from '@/components/ui';
-import { client } from '../common';
 import type { AxiosError } from 'axios';
+import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
-import { router, useRouter } from 'expo-router';
 import { z } from 'zod';
+
+import { showError } from '@/components/ui';
 import { API_ROUTES } from '@/routes/api-routes';
+
+import { client } from '../common';
 
 export const SignUpInputschema = z.object({
   firstName: z

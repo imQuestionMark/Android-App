@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from 'expo-router';
 import { CalendarDays } from 'lucide-react-native';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -15,7 +16,6 @@ import { z } from 'zod';
 
 import { ControlledCalendar } from '@/components/onboarding/calendar';
 import GradientView from '@/components/onboarding/gradient-view';
-import { Link } from 'expo-router';
 
 const schema = z.object({
   date: z.string(),
@@ -193,10 +193,10 @@ export default function PersonalDetails() {
         <View id="bottomNavigation">
           <View className="flex items-end ">
             <Pressable className="mb-6 p-4 " onPress={handleSubmit(sendDOB)}>
-              <Link href= {{pathname:'/professional'}}>
-              <Text className="font-poppins text-[20px] font-medium text-primary">
-                Confirm
-              </Text>
+              <Link href={{ pathname: '/professional' }}>
+                <Text className="font-poppins text-[20px] font-medium text-primary">
+                  Confirm
+                </Text>
               </Link>
             </Pressable>
           </View>
