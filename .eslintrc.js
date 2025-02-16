@@ -1,8 +1,12 @@
 const path = require('path');
-import pluginQuery from '@tanstack/eslint-plugin-query';
 
 module.exports = {
-  extends: ['expo', 'plugin:tailwindcss/recommended', 'prettier'],
+  extends: [
+    'expo',
+    'plugin:tailwindcss/recommended',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
+    'prettier',
+  ],
   plugins: [
     '@tanstack/query',
     'prettier',
@@ -18,7 +22,10 @@ module.exports = {
   },
   rules: {
     '@tanstack/query/exhaustive-deps': 'error',
-    'prettier/prettier': 'warn',
+    '@tanstack/query/stable-query-client': 'error',
+    '@tanstack/query/no-rest-destructuring': 'error',
+    '@tanstack/query/no-unstable-deps': 'error',
+    'prettier/prettier': 'error',
     'unicorn/filename-case': [
       'error',
       {
