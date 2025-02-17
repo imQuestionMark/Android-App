@@ -2,7 +2,8 @@
 import '../../global.css';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { ThemeProvider } from '@react-navigation/native';
+import { ThemeProvider, useNavigationState } from '@react-navigation/native';
+import { getLoadedFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
@@ -32,7 +33,12 @@ SplashScreen.setOptions({
 });
 
 export default function RootLayout() {
+  const canGoBack = useNavigationState((state) => state.index > 0);
   useEffect(() => {
+    const available = getLoadedFonts();
+
+    console.log('🚀🚀🚀 ~ useEffect ~ available:', available);
+
     SplashScreen.hideAsync(); // Hide the splash screen when ready
   }, []);
 
@@ -40,11 +46,17 @@ export default function RootLayout() {
     <Providers>
       <Stack
         screenOptions={{
-          headerShown: true,
+          headerShown: canGoBack,
           headerTitle: '',
           headerShadowVisible: false,
           headerTransparent: true,
+          headerBackTitle: '',
           headerStyle: { backgroundColor: 'rgba(0, 0, 0, 0)' },
+          // headerLeft: () => (
+          //   <Pressable className="-ml-2" onPress={() => router.back()}>
+          //     <ChevronLeft size={24} color="#808080" />
+          //   </Pressable>
+          // ),
         }}
       >
         <Stack.Screen name="index" />

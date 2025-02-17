@@ -76,9 +76,7 @@ const Professional = () => {
     <GradientView>
       <View className="m-4 flex-1 justify-between">
         <View className="">
-          <Text className="font-poppins text-2xl font-semibold">
-            Job preference
-          </Text>
+          <Text className="font-poppins-semibold text-2xl">Job preference</Text>
 
           <View className="mt-6">
             <Role />

@@ -10,6 +10,14 @@ module.exports = {
     extend: {
       fontFamily: {
         poppins: ['Poppins'],
+        'poppins-thin': ['Poppins-Thin'],
+        'poppins-extralight': ['Poppins-ExtraLight'],
+        'poppins-light': ['Poppins-Light'],
+        'poppins-medium': ['Poppins-Medium'],
+        'poppins-semibold': ['Poppins-SemiBold'],
+        'poppins-bold': ['Poppins-Bold'],
+        'poppins-extrabold': ['Poppins-ExtraBold'],
+        'poppins-black': ['Poppins-Black'],
       },
       colors,
     },

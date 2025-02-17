@@ -2,7 +2,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import React, { type ReactNode } from 'react';
-import { type StyleProp, type ViewStyle } from 'react-native';
+import { Platform, type StyleProp, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { tv } from 'tailwind-variants';
 
@@ -25,6 +25,8 @@ export default function GradientView({
 }: TGradientViewProps) {
   const headerHeight = useHeaderHeight();
   console.log('Header Height', headerHeight);
+  const finalOffset =
+    Platform.OS === 'android' ? headerHeight / 2 : headerHeight / 4;
 
   return (
     <LinearGradient
@@ -33,7 +35,7 @@ export default function GradientView({
     >
       <SafeAreaView
         className={gradientView({ className })}
-        style={[{ paddingTop: headerHeight / 2 }, style]}
+        style={[{ paddingTop: finalOffset }, style]}
       >
         {children}
         <Hashtag className="absolute bottom-[-40] right-0 z-[-1]" />
