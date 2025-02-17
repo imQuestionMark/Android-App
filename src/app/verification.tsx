@@ -10,7 +10,7 @@ import {
   OTPInputschema,
   useOtpMutation,
   type Variables,
-} from '@/api/authentication/verification';
+} from '@/api/authentication/_verification';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { Button, ButtonText } from '@/components/ui/button';

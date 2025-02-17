@@ -1,7 +1,7 @@
 import type { AxiosError } from 'axios';
 import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
-import { z } from 'zod';
+import { z, ZodError } from 'zod';
 
 import { showError } from '@/components/ui';
 import { API_ROUTES } from '@/routes/api-routes';
@@ -39,7 +39,12 @@ export const useLoginMutation = createMutation<Response, Variables, AxiosError>(
       router.replace({ pathname: '/verification' });
     },
     onError: (error: AxiosError) => {
+      // @TODO Test Zod Error.
       console.error(error);
+      if (error instanceof ZodError) {
+        console.warn('Zod Validation Error');
+        console.log(error.flatten());
+      }
       showError(error);
     },
   }
