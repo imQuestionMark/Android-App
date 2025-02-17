@@ -8,7 +8,7 @@ import {
   SignUpInputschema,
   useSignUpMutation,
   type Variables,
-} from '@/api/authentication/_signup';
+} from '@/api/authentication/signup';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput } from '@/components/ui';
