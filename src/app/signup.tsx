@@ -1,13 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import * as z from 'zod';
 
 import GradientView from '@/components/onboarding/gradient-view';
+import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput } from '@/components/ui';
-import { SignUpInputschema ,useSignUpMutation,Variables} from '@/api/authentication/signUp';
+import { Button, ButtonText } from '@/components/ui/button';
+import { SignUpInputschema ,useSignUpMutation,Variables} from '@/api/authentication/signup';
 
 
 
@@ -85,14 +87,14 @@ export default function Signup() {
               {/* Footer */}
               <View className="mt-6">
                 {/* Submit Button */}
-                <Pressable
+                <Button
                   onPress={handleSubmit((data) => handleLogin(data))}
                   className="flex h-[60px] items-center justify-center rounded-md  bg-primary "
                 >
-                  <Text className="font-poppins text-lg font-semibold text-white">
+                  <ButtonText>
                     Submit
-                  </Text>
-                </Pressable>
+                  </ButtonText>
+                </Button>
 
                 <View className="">
                   <View className="flex flex-row items-center justify-center gap-2">
@@ -105,18 +107,7 @@ export default function Signup() {
                     </Link>
                   </View>
 
-                  <View className="flex-row items-center justify-center gap-1.5">
-                    <Text className="font-regular  font-poppinstext-black">
-                      You agree to the
-                    </Text>
-                    <Text className="text-primary underline">
-                      terms & Conditions
-                    </Text>
-                    <Text className="">&</Text>
-                    <Text className="text-primary underline">
-                      privacy policy
-                    </Text>
-                  </View>
+                  <TermsandConditions />
                 </View>
                 {/*  */}
               </View>

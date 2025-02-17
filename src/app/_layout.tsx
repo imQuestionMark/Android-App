@@ -7,9 +7,9 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
-import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { Toaster } from 'sonner-native';
 
 import { APIProvider } from '@/api';
 import { hydrateAuth, loadSelectedTheme } from '@/lib';
@@ -71,7 +71,13 @@ function Providers({ children }: { children: React.ReactNode }) {
           <APIProvider>
             <BottomSheetModalProvider>
               {children}
-              <FlashMessage position="top" />
+              <Toaster
+                position="bottom-center"
+                richColors
+                swipeToDismissDirection="left"
+                invert
+                closeButton
+              />
             </BottomSheetModalProvider>
           </APIProvider>
         </ThemeProvider>

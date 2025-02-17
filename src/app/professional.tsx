@@ -1,14 +1,16 @@
 import { useCallback, useState } from 'react';
-import { Platform, Pressable, StyleSheet, Text } from 'react-native';
+import { Platform, StyleSheet, Text } from 'react-native';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import Svg, { Path } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
 
 import GradientView from '@/components/onboarding/gradient-view';
 import { ControlledInput, View } from '@/components/ui';
+import { Button, ButtonText } from '@/components/ui/button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { CtcInputschema, Variables } from '@/api/profile/professional';
 
 type TDropdownData = {
   label: string;
@@ -91,11 +93,11 @@ const Professional = () => {
 
         <View id="bottomNavigation" className="">
           <View className="flex items-end ">
-            <Pressable className="mb-6 p-4">
-              <Text className="font-poppins text-[20px] font-medium text-primary">
+            <Button variant="ghost" size="lg">
+              <ButtonText className="text-[20px] font-medium">
                 Confirm
-              </Text>
-            </Pressable>
+              </ButtonText>
+            </Button>
           </View>
 
           <View className="flex-row justify-between gap-4">
@@ -264,21 +266,14 @@ const ModeOfWork = () => {
   );
 };
 
-const schema = z.object({
-  ctc: z
-    .string()
-    .min(1, { message: 'CTC is required' })
-});
-
-type CTC = z.infer<typeof schema>;
 
 
 const CTC = () =>{
-  const { control, handleSubmit } = useForm<CTC>({
+  const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
       ctc: '',
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(CtcInputschema),
   });
 
 return(

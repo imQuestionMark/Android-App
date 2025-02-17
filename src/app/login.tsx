@@ -1,20 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { z } from 'zod';
 
 import GradientView from '@/components/onboarding/gradient-view';
+import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput } from '@/components/ui';
-import { loginInputSchema, useLoginMutation, Variables } from '@/api/authentication/signIn';
+import { loginInputSchema, useLoginMutation, Variables } from '@/api/authentication/login';
+import { Button,ButtonText } from '@/components/ui/button';
 
 
 
 export default function Signin() {
   const { control, handleSubmit ,} = useForm<Variables>({
     defaultValues: {
-      email: '',
+      email: 'test@gmail.com',
     },
     resolver: zodResolver(loginInputSchema),
   });
@@ -49,16 +51,16 @@ export default function Signin() {
             </View>
           </View>
           <View>
-            <Pressable
+            <Button
               className="flex h-[60px] items-center justify-center rounded-md  bg-primary "
               onPress={handleSubmit((data) => handleLogin(data))}
               disabled={isPending}
               >
-              <Text className="font-poppins text-lg font-semibold text-white">
+              <ButtonText>
                 Send OTP
-              </Text>
+              </ButtonText>
               
-            </Pressable>
+            </Button>
 
             <View className="">
               <View className="flex flex-row items-center justify-center gap-2">
@@ -71,16 +73,7 @@ export default function Signin() {
                 </Link>
               </View>
 
-              <View className="flex-row items-center justify-center gap-1.5">
-                <Text className="font-regular  font-poppinstext-black">
-                  You agree to the
-                </Text>
-                <Text className="text-primary underline">
-                  terms & Conditions
-                </Text>
-                <Text className="">&</Text>
-                <Text className="text-primary underline">privacy policy</Text>
-              </View>
+              <TermsandConditions />
             </View>
           </View>
         </View>
