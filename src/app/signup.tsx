@@ -30,7 +30,6 @@ export default function Signup() {
     <>
       <GradientView>
         <KeyboardAwareScrollView contentContainerClassName="grow">
-          {/* @TOOD: Fix margin hack */}
           <View className="z-10 m-4 grow">
             <View className="flex-row gap-2">
               <Text className="text-[32px] font-bold text-black">Welcome</Text>
