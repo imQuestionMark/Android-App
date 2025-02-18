@@ -24,7 +24,6 @@ export default function GradientView({
   style,
 }: TGradientViewProps) {
   const headerHeight = useHeaderHeight();
-  console.log('Header Height', headerHeight);
   const finalOffset =
     Platform.OS === 'android' ? headerHeight / 2 : headerHeight / 4;
 
