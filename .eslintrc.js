@@ -1,8 +1,59 @@
 const path = require('path');
 
 module.exports = {
-  extends: ['expo', 'plugin:tailwindcss/recommended', 'prettier'],
+  extends: [
+    'expo',
+    'plugin:tailwindcss/recommended',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
+    'plugin:perfectionist/recommended-natural-legacy',
+    'prettier',
+  ],
+  overrides: [
+    // Configuration for  translations files (i18next)
+    {
+      files: ['src/translations/*.json'],
+      extends: ['plugin:i18n-json/recommended'],
+      rules: {
+        'i18n-json/identical-keys': [
+          2,
+          {
+            filePath: path.resolve('./src/translations/en.json'),
+          },
+        ],
+        'i18n-json/sorted-keys': [
+          2,
+          {
+            order: 'asc',
+            indentSpaces: 2,
+          },
+        ],
+        'i18n-json/valid-json': 2,
+        'i18n-json/valid-message-syntax': [
+          2,
+          {
+            syntax: path.resolve('./scripts/i18next-syntax-validation.js'),
+          },
+        ],
+        'prettier/prettier': [
+          0,
+          {
+            endOfLine: 'auto',
+            singleQuote: true,
+          },
+        ],
+      },
+    },
+    {
+      extends: ['plugin:testing-library/react'],
+      // Configuration for testing files
+      files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+    },
+  ],
+  parserOptions: {
+    project: './tsconfig.json',
+  },
   plugins: [
+    '@tanstack/query',
     'prettier',
     'unicorn',
     '@typescript-eslint',
@@ -11,11 +62,52 @@ module.exports = {
     'simple-import-sort',
     'eslint-plugin-react-compiler',
   ],
-  parserOptions: {
-    project: './tsconfig.json',
-  },
   rules: {
-    'prettier/prettier': 'warn',
+    '@tanstack/query/exhaustive-deps': 'error',
+    '@tanstack/query/no-rest-destructuring': 'error',
+    '@tanstack/query/no-unstable-deps': 'error',
+    '@tanstack/query/stable-query-client': 'error',
+    'perfectionist/sort-exports': 'off',
+    'perfectionist/sort-imports': 'off',
+    'perfectionist/sort-objects': 'off',
+    'perfectionist/sort-modules': 'off',
+    'perfectionist/sort-jsx-props': [
+      'error',
+      {
+        type: 'line-length',
+        order: 'asc',
+        fallbackSort: { type: 'unsorted' },
+        ignoreCase: true,
+      },
+    ],
+    '@typescript-eslint/comma-dangle': 'off', // Avoid conflict rule between Eslint and Prettier
+    '@typescript-eslint/consistent-type-imports': [
+      'warn',
+      {
+        disallowTypeAnnotations: true,
+        fixStyle: 'inline-type-imports',
+        prefer: 'type-imports',
+      },
+    ], // Ensure `import type` is used when it's necessary
+    '@typescript-eslint/no-unused-vars': 'off',
+    'import/no-cycle': ['error', { maxDepth: '∞' }],
+    'import/prefer-default-export': 'off', // Named export is easier to refactor automatically
+    'max-lines-per-function': ['error', 180],
+    'max-params': ['error', 3], // Limit the number of parameters in a function to use object instead
+    'prettier/prettier': 'error',
+    'react/destructuring-assignment': 'off', // Vscode doesn't support automatically destructuring, it's a pain to add a new variable
+    'react/display-name': 'off',
+    'react/no-inline-styles': 'off',
+    'react/require-default-props': 'off', // Allow non-defined react props as undefined
+    'simple-import-sort/exports': 'error',
+    'simple-import-sort/imports': 'error',
+    'tailwindcss/classnames-order': [
+      'warn',
+      {
+        officialSorting: true,
+      },
+    ], // Follow the same ordering as the official plugin `prettier-plugin-tailwindcss`
+    'tailwindcss/no-custom-classname': 'off',
     'unicorn/filename-case': [
       'error',
       {
@@ -23,33 +115,6 @@ module.exports = {
         ignore: ['/android', '/ios'],
       },
     ],
-    'max-params': ['error', 3], // Limit the number of parameters in a function to use object instead
-    'max-lines-per-function': ['error', 70],
-    'react/display-name': 'off',
-    'react/no-inline-styles': 'off',
-    'react/destructuring-assignment': 'off', // Vscode doesn't support automatically destructuring, it's a pain to add a new variable
-    'react/require-default-props': 'off', // Allow non-defined react props as undefined
-    '@typescript-eslint/comma-dangle': 'off', // Avoid conflict rule between Eslint and Prettier
-    '@typescript-eslint/consistent-type-imports': [
-      'warn',
-      {
-        prefer: 'type-imports',
-        fixStyle: 'inline-type-imports',
-        disallowTypeAnnotations: true,
-      },
-    ], // Ensure `import type` is used when it's necessary
-    'import/prefer-default-export': 'off', // Named export is easier to refactor automatically
-    'import/no-cycle': ['error', { maxDepth: '∞' }],
-    'tailwindcss/classnames-order': [
-      'warn',
-      {
-        officialSorting: true,
-      },
-    ], // Follow the same ordering as the official plugin `prettier-plugin-tailwindcss`
-    'simple-import-sort/imports': 'error', // Import configuration for `eslint-plugin-simple-import-sort`
-    'simple-import-sort/exports': 'error', // Export configuration for `eslint-plugin-simple-import-sort`
-    '@typescript-eslint/no-unused-vars': 'off',
-    'tailwindcss/no-custom-classname': 'off',
     'unused-imports/no-unused-imports': 'error',
     'unused-imports/no-unused-vars': [
       'error',
@@ -60,45 +125,4 @@ module.exports = {
       },
     ],
   },
-  overrides: [
-    // Configuration for  translations files (i18next)
-    {
-      files: ['src/translations/*.json'],
-      extends: ['plugin:i18n-json/recommended'],
-      rules: {
-        'i18n-json/valid-message-syntax': [
-          2,
-          {
-            syntax: path.resolve('./scripts/i18next-syntax-validation.js'),
-          },
-        ],
-        'i18n-json/valid-json': 2,
-        'i18n-json/sorted-keys': [
-          2,
-          {
-            order: 'asc',
-            indentSpaces: 2,
-          },
-        ],
-        'i18n-json/identical-keys': [
-          2,
-          {
-            filePath: path.resolve('./src/translations/en.json'),
-          },
-        ],
-        'prettier/prettier': [
-          0,
-          {
-            singleQuote: true,
-            endOfLine: 'auto',
-          },
-        ],
-      },
-    },
-    {
-      // Configuration for testing files
-      files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
-      extends: ['plugin:testing-library/react'],
-    },
-  ],
 };

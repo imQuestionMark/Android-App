@@ -1,6 +1,6 @@
 export type PaginateQuery<T> = {
-  results: T[];
   count: number;
-  next: string | null;
-  previous: string | null;
+  next: null | string;
+  previous: null | string;
+  results: T[];
 };

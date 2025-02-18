@@ -1,10 +1,9 @@
-import React from 'react';
+import { useState } from 'react';
+import { Text } from 'react-native';
 
 import type { OptionType } from '@/components/ui';
 import { Input, Select, View } from '@/components/ui';
 import { Checkbox, Radio, Switch } from '@/components/ui';
-
-import { Title } from './title';
 
 const options: OptionType[] = [
   { value: 'chocolate', label: 'Chocolate' },
@@ -13,18 +12,18 @@ const options: OptionType[] = [
 ];
 
 export const Inputs = () => {
-  const [value, setValue] = React.useState<string | number | undefined>();
+  const [value, setValue] = useState<number | string | undefined>();
   return (
     <>
-      <Title text="Form" />
+      <Text>Form</Text>
       <View>
         <Input label="Default" placeholder="Lorem ipsum dolor sit amet" />
         <Input label="Error" error="This is a message error" />
         <Input label="Focused" />
         <Select
+          value={value}
           label="Select"
           options={options}
-          value={value}
           onSelect={(option) => setValue(option)}
         />
         <CheckboxExample />
@@ -36,13 +35,13 @@ export const Inputs = () => {
 };
 
 const CheckboxExample = () => {
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = useState(false);
   return (
     <Checkbox.Root
+      className="pb-2"
       checked={checked}
       onChange={setChecked}
       accessibilityLabel="accept terms of condition"
-      className="pb-2"
     >
       <Checkbox.Icon checked={checked} />
       <Checkbox.Label text="checkbox" />
@@ -51,13 +50,13 @@ const CheckboxExample = () => {
 };
 
 const RadioExample = () => {
-  const [selected, setSelected] = React.useState(false);
+  const [selected, setSelected] = useState(false);
   return (
     <Radio.Root
+      className="pb-2"
       checked={selected}
       onChange={setSelected}
       accessibilityLabel="radio button"
-      className="pb-2"
     >
       <Radio.Icon checked={selected} />
       <Radio.Label text="radio button" />
@@ -66,13 +65,13 @@ const RadioExample = () => {
 };
 
 const SwitchExample = () => {
-  const [active, setActive] = React.useState(false);
+  const [active, setActive] = useState(false);
   return (
     <Switch.Root
       checked={active}
+      className="pb-2"
       onChange={setActive}
       accessibilityLabel="switch"
-      className="pb-2"
     >
       <Switch.Icon checked={active} />
       <Switch.Label text="switch" />

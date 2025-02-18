@@ -1,32 +1,32 @@
-import type { AxiosError } from 'axios';
-import { Dimensions, Platform } from 'react-native';
-import { showMessage } from 'react-native-flash-message';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner-native';
+import { ZodError } from 'zod';
 
-export const IS_IOS = Platform.OS === 'ios';
-const { width, height } = Dimensions.get('screen');
+const getAxiosErrorMessage = (error: AxiosError) => {
+  if (error.response) return extractError(error?.response?.data).trimEnd();
 
-export const WIDTH = width;
-export const HEIGHT = height;
-
-// for onError react queries and mutations
-export const showError = (error: AxiosError) => {
-  console.log(JSON.stringify(error?.response?.data));
-  const description = extractError(error?.response?.data).trimEnd();
-
-  showMessage({
-    message: 'Error',
-    description,
-    type: 'danger',
-    duration: 4000,
-    icon: 'danger',
-  });
+  // default return
+  return error.message;
 };
 
-export const showErrorMessage = (message: string = 'Something went wrong ') => {
-  showMessage({
-    message,
-    type: 'danger',
-    duration: 4000,
+const getZodErrorMessage = (error: ZodError) =>
+  Object.values(error.flatten().fieldErrors).flat().join(', ');
+
+// for onError react queries and mutations
+export const showError = (error: Error) => {
+  let description = 'Something went wrong 😔';
+
+  if (error instanceof AxiosError) {
+    console.warn('🪓🪓🪓 Axios Error');
+    description = getAxiosErrorMessage(error);
+  }
+  if (error instanceof ZodError) {
+    console.warn('🏹🏹🏹 Zod Validation Error');
+    description = getZodErrorMessage(error);
+  }
+
+  toast.error('Error', {
+    description,
   });
 };
 

@@ -1,146 +1,142 @@
 import React from 'react';
-import type { PressableProps, View } from 'react-native';
-import { ActivityIndicator, Pressable, Text } from 'react-native';
-import type { VariantProps } from 'tailwind-variants';
-import { tv } from 'tailwind-variants';
+import { createContext, useContext } from 'react';
+import { Pressable, type PressableProps, Text, View } from 'react-native';
+import { tv, type VariantProps } from 'tailwind-variants';
 
-const button = tv({
+const buttonStyles = tv({
   slots: {
-    container: 'my-2 flex flex-row items-center justify-center rounded-md px-4',
-    label: 'font-inter text-base font-semibold',
-    indicator: 'h-6 text-white',
+    base: 'flex-row items-center justify-center gap-2 rounded-md',
+    text: 'text-center font-poppins font-medium',
+    iconContainer: 'shrink-0',
   },
-
   variants: {
     variant: {
-      default: {
-        container: 'bg-black dark:bg-white',
-        label: 'text-white dark:text-black',
-        indicator: 'text-white dark:text-black',
+      primary: {
+        base: 'bg-primary',
+        text: 'text-white',
       },
       secondary: {
-        container: 'bg-primary-600',
-        label: 'text-secondary-600',
-        indicator: 'text-white',
+        base: 'bg-gray-200',
+        text: 'text-gray-900',
       },
       outline: {
-        container: 'border border-neutral-400',
-        label: 'text-black dark:text-neutral-100',
-        indicator: 'text-black dark:text-neutral-100',
-      },
-      destructive: {
-        container: 'bg-red-600',
-        label: 'text-white',
-        indicator: 'text-white',
+        base: 'border border-primary',
+        text: 'text-primary',
       },
       ghost: {
-        container: 'bg-transparent',
-        label: 'text-black underline dark:text-white',
-        indicator: 'text-black dark:text-white',
-      },
-      link: {
-        container: 'bg-transparent',
-        label: 'text-black',
-        indicator: 'text-black',
+        base: 'bg-transparent',
+        text: 'text-primary',
       },
     },
     size: {
-      default: {
-        container: 'h-10 px-4',
-        label: 'text-base',
+      md: {
+        base: 'h-9 px-3',
+        text: 'text-sm',
       },
       lg: {
-        container: 'h-12 px-8',
-        label: 'text-xl',
+        base: 'p-5',
+        text: 'text-lg font-semibold',
       },
-      sm: {
-        container: 'h-8 px-3',
-        label: 'text-sm',
-        indicator: 'h-2',
-      },
-      icon: { container: 'size-9' },
-    },
-    disabled: {
-      true: {
-        container: 'bg-neutral-300 dark:bg-neutral-300',
-        label: 'text-neutral-600 dark:text-neutral-600',
-        indicator: 'text-neutral-400 dark:text-neutral-400',
+      icon: {
+        base: 'size-10',
       },
     },
-    fullWidth: {
+    isDisabled: {
       true: {
-        container: '',
-      },
-      false: {
-        container: 'self-center',
+        base: 'opacity-50',
       },
     },
   },
   defaultVariants: {
-    variant: 'default',
-    disabled: false,
-    fullWidth: true,
-    size: 'default',
+    variant: 'primary',
+    size: 'md',
   },
 });
 
-type ButtonVariants = VariantProps<typeof button>;
-interface Props extends ButtonVariants, Omit<PressableProps, 'disabled'> {
-  label?: string;
-  loading?: boolean;
-  className?: string;
-  textClassName?: string;
-}
+type TButtonVariants = VariantProps<typeof buttonStyles>;
 
-export const Button = React.forwardRef<View, Props>(
-  (
-    {
-      label: text,
-      loading = false,
-      variant = 'default',
-      disabled = false,
-      size = 'default',
-      className = '',
-      testID,
-      textClassName = '',
-      ...props
-    },
-    ref
-  ) => {
-    const styles = React.useMemo(
-      () => button({ variant, disabled, size }),
-      [variant, disabled, size]
-    );
+type ButtonContextValue = TButtonVariants & {
+  isLoading?: boolean;
+};
 
-    return (
+const ButtonContext = createContext<ButtonContextValue>({});
+
+type ButtonProps = PressableProps &
+  TButtonVariants & {
+    children?: React.ReactNode;
+    className?: string;
+  };
+
+const Button = React.forwardRef<
+  React.ElementRef<typeof Pressable>,
+  ButtonProps
+>(({ className, variant, size, isDisabled, children, ...props }, ref) => {
+  const buttonContext = {
+    variant,
+    size,
+    isDisabled,
+  };
+
+  const { base } = buttonStyles({
+    variant,
+    size,
+    isDisabled,
+  });
+
+  return (
+    <ButtonContext.Provider value={buttonContext}>
       <Pressable
-        disabled={disabled || loading}
-        className={styles.container({ className })}
-        {...props}
         ref={ref}
-        testID={testID}
+        disabled={isDisabled}
+        className={base({ className })}
+        {...props}
       >
-        {props.children ? (
-          props.children
-        ) : (
-          <>
-            {loading ? (
-              <ActivityIndicator
-                size="small"
-                className={styles.indicator()}
-                testID={testID ? `${testID}-activity-indicator` : undefined}
-              />
-            ) : (
-              <Text
-                testID={testID ? `${testID}-label` : undefined}
-                className={styles.label({ className: textClassName })}
-              >
-                {text}
-              </Text>
-            )}
-          </>
-        )}
+        {children}
       </Pressable>
-    );
-  }
-);
+    </ButtonContext.Provider>
+  );
+});
+
+type ButtonTextProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+const ButtonText = React.forwardRef<
+  React.ElementRef<typeof Text>,
+  ButtonTextProps
+>(({ className, children }, ref) => {
+  const { variant, size } = useContext(ButtonContext);
+  const { text } = buttonStyles({ variant, size });
+
+  return (
+    <Text ref={ref} className={text({ className })}>
+      {children}
+    </Text>
+  );
+});
+
+type ButtonIconProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+const ButtonIcon = React.forwardRef<
+  React.ElementRef<typeof View>,
+  ButtonIconProps
+>(({ className, children }, ref) => {
+  const { variant, size } = useContext(ButtonContext);
+  const { iconContainer } = buttonStyles({ variant, size });
+
+  return (
+    <View ref={ref} className={iconContainer({ className })}>
+      {children}
+    </View>
+  );
+});
+
+Button.displayName = 'Button';
+ButtonText.displayName = 'ButtonText';
+ButtonIcon.displayName = 'ButtonIcon';
+
+export { Button, ButtonIcon, ButtonText };

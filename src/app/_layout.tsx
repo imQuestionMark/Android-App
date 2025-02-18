@@ -2,14 +2,15 @@
 import '../../global.css';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { ThemeProvider } from '@react-navigation/native';
+import { ThemeProvider, useNavigationState } from '@react-navigation/native';
+import { getLoadedFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import React from 'react';
+import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
-import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { Toaster } from 'sonner-native';
 
 import { APIProvider } from '@/api';
 import { hydrateAuth, loadSelectedTheme } from '@/lib';
@@ -17,9 +18,9 @@ import { useThemeConfig } from '@/lib/use-theme-config';
 
 export { ErrorBoundary } from 'expo-router';
 
-export const unstable_settings = {
-  initialRouteName: '(app)',
-};
+// export const unstable_settings = {
+//   initialRouteName: '(app)',
+// };
 
 hydrateAuth();
 loadSelectedTheme();
@@ -32,14 +33,39 @@ SplashScreen.setOptions({
 });
 
 export default function RootLayout() {
+  const canGoBack = useNavigationState((state) => state.index > 0);
+  useEffect(() => {
+    const available = getLoadedFonts();
+
+    console.log('🚀🚀🚀 ~ useEffect ~ available:', available);
+
+    SplashScreen.hideAsync(); // Hide the splash screen when ready
+  }, []);
+
   return (
     <Providers>
-      <Stack>
-        <Stack.Screen name="(app)" options={{ headerShown: false }} />
-        <Stack.Screen name="signup" options={{ headerShown: false }} />
-        <Stack.Screen name="signin" options={{ headerShown: false }} />
-        <Stack.Screen name="verification" options={{ headerShown: false }} />
-        {/* <Stack.Screen name="login" options={{ headerShown: false }} /> */}
+      <Stack
+        screenOptions={{
+          headerShown: canGoBack,
+          headerTitle: '',
+          headerShadowVisible: false,
+          headerTransparent: true,
+          headerBackTitle: '',
+          headerStyle: { backgroundColor: 'rgba(0, 0, 0, 0)' },
+          // headerLeft: () => (
+          //   <Pressable className="-ml-2" onPress={() => router.back()}>
+          //     <ChevronLeft size={24} color="#808080" />
+          //   </Pressable>
+          // ),
+        }}
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="signup" />
+        <Stack.Screen name="personal-details" />
+        <Stack.Screen name="professional" />
+        <Stack.Screen name="verification" />
+        <Stack.Screen name="test" />
       </Stack>
     </Providers>
   );
@@ -50,14 +76,21 @@ function Providers({ children }: { children: React.ReactNode }) {
   return (
     <GestureHandlerRootView
       style={styles.container}
-      className={theme.dark ? `dark` : undefined}
+      // className={theme.dark ? `dark` : undefined} //disable dark mode
     >
       <KeyboardProvider>
         <ThemeProvider value={theme}>
           <APIProvider>
             <BottomSheetModalProvider>
               {children}
-              <FlashMessage position="top" />
+              <Toaster
+                invert
+                richColors
+                closeButton
+                duration={4000}
+                position="bottom-center"
+                swipeToDismissDirection="left"
+              />
             </BottomSheetModalProvider>
           </APIProvider>
         </ThemeProvider>
