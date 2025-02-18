@@ -5,7 +5,8 @@ import type { AppIconBadgeConfig } from 'app-icon-badge/types';
 import { ClientEnv, Env } from './env';
 
 const appIconBadgeConfig: AppIconBadgeConfig = {
-  enabled: Env.APP_ENV !== 'production',
+  // enabled: Env.APP_ENV !== 'production',
+  enabled: false,
   badges: [
     {
       text: Env.APP_ENV,
@@ -57,7 +58,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     package: Env.PACKAGE,
   },
   web: {
-    favicon: './assets/favicon.png',
+    favicon: './assets/icons/adaptive-icon.png',
     bundler: 'metro',
   },
   plugins: [
@@ -66,7 +67,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       {
         backgroundColor: '#0400D1',
         image: './assets/icons/splash-icon-light.png',
-        imageWidth: 150,
+        imageWidth: 250,
         dark: {
           backgroundColor: '#000',
           image: './assets/icons/splash-icon-dark.png',
