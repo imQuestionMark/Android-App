@@ -87,6 +87,7 @@ function Providers({ children }: { children: React.ReactNode }) {
                 invert
                 richColors
                 closeButton
+                duration={4000}
                 position="bottom-center"
                 swipeToDismissDirection="left"
               />
