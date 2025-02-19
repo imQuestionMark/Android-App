@@ -107,6 +107,9 @@ export default function Verification() {
                     type="numeric"
                     autoFocus={false}
                     numberOfDigits={4}
+                    type="numeric"
+                    autoFocus={false}
+                    numberOfDigits={4}
                     onTextChange={(otp) => {
                       onChange(otp);
                     }}

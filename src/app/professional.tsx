@@ -1,21 +1,20 @@
-// import { zodResolver } from '@hookform/resolvers/zod';
-// import { useCallback, useState } from 'react';
-// import { useForm } from 'react-hook-form';
-// import { Platform, StyleSheet, Text } from 'react-native';
-// import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
-// import Svg, { Path } from 'react-native-svg';
-// import { tv } from 'tailwind-variants';
-// import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useCallback, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Platform, StyleSheet, Text } from 'react-native';
+import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
+import Svg, { Path } from 'react-native-svg';
+import { tv } from 'tailwind-variants';
+import { z } from 'zod';
 
-// import { CtcInputschema, type Variables } from '@/api/profile/professional';
-// import GradientView from '@/components/onboarding/gradient-view';
-// import { ControlledInput, View } from '@/components/ui';
-// import { Button, ButtonText } from '@/components/ui/button';
+import GradientView from '@/components/onboarding/gradient-view';
+import { ControlledInput, View } from '@/components/ui';
+import { Button, ButtonText } from '@/components/ui/button';
 
-// type TDropdownData = {
-//   label: string;
-//   value: number;
-// };
+type TDropdownData = {
+  label: string;
+  value: number;
+};
 
 // const designations = [
 //   { label: 'UX UI Designer', value: 'UX UI Designer' },
@@ -35,33 +34,39 @@
 //   { label: 'Bangalore', value: 'Bangalore' },
 // ];
 
-// const mode = [
-//   { label: 'Full Time', value: 'Full Time' },
-//   { label: 'Part Time', value: 'Part Time' },
-//   { label: 'Hybrid', value: 'Hybrid' },
-// ];
+const mode = [
+  { label: 'Full Time', value: 'Full Time' },
+  { label: 'Part Time', value: 'Part Time' },
+  { label: 'Hybrid', value: 'Hybrid' },
+];
 
-// const dropdownStyles = tv({
-//   slots: {
-//     trigger: 'h-[50px] rounded-lg border border-white bg-white px-2',
-//     triggerText: 'text-base text-black',
-//     itemContainer: 'flex-row items-center gap-3 p-4',
-//     itemIcon: 'rounded-xl border-[3px] border-gray-300 bg-white',
-//     itemIconCheck: '',
-//     itemText: 'text-black',
-//   },
-//   variants: {
-//     selected: {
-//       true: {
-//         itemIcon: 'border-[#17A2B8] bg-primary',
-//         itemIconCheck: 'white',
-//         itemText: 'text-primary',
-//       },
-//       false: {
-//         itemIconCheck: 'none',
-//       },
-//     },
-//   },
+const dropdownStyles = tv({
+  slots: {
+    trigger: 'h-[50px] rounded-lg border border-white bg-white px-2',
+    triggerText: 'text-base text-black',
+    itemContainer: 'flex-row items-center gap-3 p-4',
+    itemIcon: 'rounded-xl border-[3px] border-gray-300 bg-white',
+    itemIconCheck: '',
+    itemText: 'text-black',
+  },
+  variants: {
+    selected: {
+      true: {
+        itemIcon: 'border-[#17A2B8] bg-primary',
+        itemIconCheck: 'white',
+        itemText: 'text-primary',
+      },
+      false: {
+        itemIconCheck: 'none',
+      },
+    },
+  },
+});
+
+// @TODO Figure out how to remap props for MultiSelect
+// remapProps(MultiSelect, {
+//   className: 'style',
+//   selectedTextClassname: 'selectedTextStyle',
 // });
 
 // // @TODO Figure out how to remap props for MultiSelect
@@ -72,21 +77,12 @@
 
 // const { itemIcon, itemContainer, itemText, itemIconCheck } = dropdownStyles();
 
-// const Professional = () => {
-//   const { control, handleSubmit } = useForm<Variables>({
-//     defaultValues: {
-//       OTP: '',
-//     },
-//     resolver: zodResolver(OTPInputschema),
-//   });
-
-//   return (
-//     <GradientView>
-//       <View className="m-4 flex-1 justify-between">
-//         <View className="">
-//           <Text className="font-poppins text-2xl font-semibold">
-//             Job preference
-//           </Text>
+const Professional = () => {
+  return (
+    <GradientView>
+      <View className="m-4 flex-1 justify-between">
+        <View className="">
+          <Text className="font-poppins-semibold text-2xl">Job preference</Text>
 
 //           <View className="mt-6">
 //             <Role />
@@ -98,14 +94,14 @@
 //           </View>
 //         </View>
 
-//         <View className="" id="bottomNavigation">
-//           <View className="flex items-end ">
-//             <Button size="lg" variant="ghost">
-//               <ButtonText className="text-[20px] font-medium">
-//                 Confirm
-//               </ButtonText>
-//             </Button>
-//           </View>
+        <View className="" id="bottomNavigation">
+          <View className="flex items-end ">
+            <Button size="lg" variant="ghost">
+              <ButtonText className="text-[20px] font-medium">
+                Confirm
+              </ButtonText>
+            </Button>
+          </View>
 
 //           <View className="flex-row justify-between gap-4">
 //             <View className="h-1 grow rounded-xl bg-primary" />
@@ -124,72 +120,72 @@
 //     setSelectedDesignation(data);
 //   }, []);
 
-//   const flattenedDesignation = selectedDesignation.join(', ');
-//   const designationPlaceholder = selectedDesignation.length
-//     ? flattenedDesignation
-//     : 'Select Designation';
-//   return (
-//     <View className="mb-5">
-//       <Text className="mb-4 font-poppins text-[16px] font-medium">
-//         Select Your Role
-//       </Text>
-//       <MultiSelect
-//         activeColor=""
-//         labelField="label"
-//         valueField="value"
-//         data={designations}
-//         value={selectedDesignation}
-//         visibleSelectedItem={false}
-//         onChange={handleRoleChange}
-//         pressableStyle={styles.dropdown}
-//         placeholder={designationPlaceholder}
-//         selectedTextProps={{ numberOfLines: 1 }}
-//         selectedTextStyle={styles.selectedTextStyle}
-//         renderItem={(data, selected) => (
-//           <CustomItem data={data} selected={selected} />
-//         )}
-//         containerStyle={{
-//           borderRadius: 8,
-//           marginTop: Platform.OS === 'ios' ? -96 : 4,
-//         }}
-//       />
-//     </View>
-//   );
-// };
+  const flattenedDesignation = selectedDesignation.join(', ');
+  const designationPlaceholder = selectedDesignation.length
+    ? flattenedDesignation
+    : 'Select Designation';
+  return (
+    <View className="mb-5">
+      <Text className="mb-4 font-poppins text-[16px] font-medium">
+        Select Your Role
+      </Text>
+      <MultiSelect
+        activeColor=""
+        labelField="label"
+        valueField="value"
+        data={designations}
+        onChange={handleRoleChange}
+        value={selectedDesignation}
+        visibleSelectedItem={false}
+        pressableStyle={styles.dropdown}
+        placeholder={designationPlaceholder}
+        selectedTextProps={{ numberOfLines: 1 }}
+        selectedTextStyle={styles.selectedTextStyle}
+        renderItem={(data, selected) => (
+          <CustomItem data={data} selected={selected} />
+        )}
+        containerStyle={{
+          borderRadius: 8,
+          marginTop: Platform.OS === 'ios' ? -96 : 4,
+        }}
+      />
+    </View>
+  );
+};
 
-// const Experience = () => {
-//   const [selectedExperience, setSelectedExperience] =
-//     useState<null | TDropdownData>(null);
+const Experience = () => {
+  const [selectedExperience, setSelectedExperience] =
+    useState<null | TDropdownData>(null);
 
-//   const handleExperienceChange = useCallback((data: TDropdownData) => {
-//     setSelectedExperience(data);
-//   }, []);
-//   return (
-//     <View className="mb-5">
-//       <Text className="mb-4 font-poppins text-[16px] font-medium">
-//         Experience
-//       </Text>
-//       <Dropdown
-//         activeColor=""
-//         data={experience}
-//         labelField="label"
-//         valueField="value"
-//         value={selectedExperience}
-//         placeholder="Select Experience"
-//         pressableStyle={styles.dropdown}
-//         selectedTextStyle={styles.selectedTextStyle}
-//         onChange={(item) => handleExperienceChange(item.value)}
-//         renderItem={(data, selected) => (
-//           <CustomItem data={data} selected={selected} />
-//         )}
-//         containerStyle={{
-//           borderRadius: 8,
-//           marginTop: Platform.OS === 'ios' ? -96 : 4,
-//         }}
-//       />
-//     </View>
-//   );
-// };
+  const handleExperienceChange = useCallback((data: TDropdownData) => {
+    setSelectedExperience(data);
+  }, []);
+  return (
+    <View className="mb-5">
+      <Text className="mb-4 font-poppins text-[16px] font-medium">
+        Experience
+      </Text>
+      <Dropdown
+        activeColor=""
+        data={experience}
+        labelField="label"
+        valueField="value"
+        value={selectedExperience}
+        placeholder="Select Experience"
+        pressableStyle={styles.dropdown}
+        selectedTextStyle={styles.selectedTextStyle}
+        onChange={(item) => handleExperienceChange(item.value)}
+        renderItem={(data, selected) => (
+          <CustomItem data={data} selected={selected} />
+        )}
+        containerStyle={{
+          borderRadius: 8,
+          marginTop: Platform.OS === 'ios' ? -96 : 4,
+        }}
+      />
+    </View>
+  );
+};
 
 // const Location = () => {
 //   const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
@@ -203,34 +199,34 @@
 //     ? flattenedLocation
 //     : 'Select Location';
 
-//   return (
-//     <View className="mb-5">
-//       <Text className="mb-4 font-poppins text-[16px] font-medium">
-//         Preferred Location
-//       </Text>
-//       <MultiSelect
-//         activeColor=""
-//         data={locations}
-//         labelField="label"
-//         valueField="value"
-//         value={selectedLocation}
-//         visibleSelectedItem={false}
-//         onChange={handleLocationChange}
-//         pressableStyle={styles.dropdown}
-//         placeholder={locationPlaceholder}
-//         selectedTextProps={{ numberOfLines: 1 }}
-//         selectedTextStyle={styles.selectedTextStyle}
-//         renderItem={(data, selected) => (
-//           <CustomItem data={data} selected={selected} />
-//         )}
-//         containerStyle={{
-//           borderRadius: 8,
-//           marginTop: Platform.OS === 'ios' ? -96 : 4,
-//         }}
-//       />
-//     </View>
-//   );
-// };
+  return (
+    <View className="mb-5">
+      <Text className="mb-4 font-poppins text-[16px] font-medium">
+        Preferred Location
+      </Text>
+      <MultiSelect
+        activeColor=""
+        data={locations}
+        labelField="label"
+        valueField="value"
+        value={selectedLocation}
+        visibleSelectedItem={false}
+        onChange={handleLocationChange}
+        pressableStyle={styles.dropdown}
+        placeholder={locationPlaceholder}
+        selectedTextProps={{ numberOfLines: 1 }}
+        selectedTextStyle={styles.selectedTextStyle}
+        renderItem={(data, selected) => (
+          <CustomItem data={data} selected={selected} />
+        )}
+        containerStyle={{
+          borderRadius: 8,
+          marginTop: Platform.OS === 'ios' ? -96 : 4,
+        }}
+      />
+    </View>
+  );
+};
 
 // const ModeOfWork = () => {
 //   const [selectedMode, setSelectedMode] = useState<string[]>([]);
@@ -239,93 +235,99 @@
 //     setSelectedMode(data);
 //   }, []);
 
-//   const flattenedMode = selectedMode.join(', ');
-//   const ModePlaceholder = selectedMode.length ? flattenedMode : 'Select Mode';
+  const flattenedMode = selectedMode.join(', ');
+  const ModePlaceholder = selectedMode.length ? flattenedMode : 'Select Mode';
 
-//   return (
-//     <View className="mb-5">
-//       <Text className="mb-4 font-poppins text-[16px] font-medium">
-//         Preferred(Mode of work)
-//       </Text>
-//       <MultiSelect
-//         data={mode}
-//         activeColor=""
-//         labelField="label"
-//         valueField="value"
-//         value={selectedMode}
-//         onChange={handleModeChange}
-//         visibleSelectedItem={false}
-//         placeholder={ModePlaceholder}
-//         pressableStyle={styles.dropdown}
-//         selectedTextProps={{ numberOfLines: 1 }}
-//         selectedTextStyle={styles.selectedTextStyle}
-//         renderItem={(data, selected) => (
-//           <CustomItem data={data} selected={selected} />
-//         )}
-//         containerStyle={{
-//           borderRadius: 8,
-//           marginTop: Platform.OS === 'ios' ? -96 : 4,
-//         }}
-//       />
-//     </View>
-//   );
-// };
+  return (
+    <View className="mb-5">
+      <Text className="mb-4 font-poppins text-[16px] font-medium">
+        Preferred(Mode of work)
+      </Text>
+      <MultiSelect
+        data={mode}
+        activeColor=""
+        labelField="label"
+        valueField="value"
+        value={selectedMode}
+        onChange={handleModeChange}
+        visibleSelectedItem={false}
+        placeholder={ModePlaceholder}
+        pressableStyle={styles.dropdown}
+        selectedTextProps={{ numberOfLines: 1 }}
+        selectedTextStyle={styles.selectedTextStyle}
+        renderItem={(data, selected) => (
+          <CustomItem data={data} selected={selected} />
+        )}
+        containerStyle={{
+          borderRadius: 8,
+          marginTop: Platform.OS === 'ios' ? -96 : 4,
+        }}
+      />
+    </View>
+  );
+};
 
-// const CTC = () => {
-//   const { control, handleSubmit } = useForm<Variables>({
-//     defaultValues: {
-//       ctc: '',
-//     },
-//     resolver: zodResolver(CtcInputschema),
-//   });
+const schema = z.object({
+  ctc: z.string().min(1, { message: 'CTC is required' }),
+});
 
-//   return (
-//     <View>
-//       <Text className="mb-4 font-poppins text-[16px] font-medium">
-//         Current CTC
-//       </Text>
-//       <ControlledInput name="ctc" control={control} />
-//     </View>
-//   );
-// };
+type CTCProps = z.infer<typeof schema>;
 
-// const schema1 = z.object({
-//   expctc: z.string().min(1, { message: 'CTC is required' }),
-// });
+const CTC = () => {
+  const { control } = useForm<CTCProps>({
+    defaultValues: {
+      ctc: '',
+    },
+    resolver: zodResolver(schema),
+  });
 
-// type ExpCTC = z.infer<typeof schema1>;
+  return (
+    <View>
+      <Text className="mb-4 font-poppins text-[16px] font-medium">
+        Current CTC
+      </Text>
+      <ControlledInput name="ctc" control={control} />
+    </View>
+  );
+};
 
-// const ExpCTC = () => {
-//   const { control, handleSubmit } = useForm<ExpCTC>({
-//     defaultValues: {
-//       expctc: '',
-//     },
-//     resolver: zodResolver(schema1),
-//   });
+const schema1 = z.object({
+  expctc: z.string().min(1, { message: 'CTC is required' }),
+});
 
-//   return (
-//     <View>
-//       <Text className="mb-4 font-poppins text-[16px] font-medium">
-//         Expected CTC
-//       </Text>
-//       <ControlledInput name="expctc" control={control} />
-//     </View>
-//   );
-// };
+type ExpCTCProps = z.infer<typeof schema1>;
 
-// const CustomItem = ({ data, selected }: { data: any; selected?: boolean }) => {
-//   {
-//     return (
-//       <View className={itemContainer()}>
-//         <View className={itemIcon({ selected })}>
-//           <Svg width="20" height="20" fill="none" viewBox="0 0 20 20">
-//             <Path
-//               d="M6 11L9 13L14.5 7"
-//               strokeWidth="2.01011"
-//               stroke={itemIconCheck({ selected })}
-//             />
-//           </Svg>
-//         </View>
+const ExpCTC = () => {
+  const { control } = useForm<ExpCTCProps>({
+    defaultValues: {
+      expctc: '',
+    },
+    resolver: zodResolver(schema),
+  });
+
+  return (
+    <View>
+      <Text className="mb-4 font-poppins text-[16px] font-medium">
+        Expected CTC
+      </Text>
+      <ControlledInput name="expctc" control={control} />
+    </View>
+  );
+};
+
+const CustomItem = ({ data, selected }: { data: any; selected?: boolean }) => {
+  {
+    return (
+      <View className={itemContainer()}>
+        <View className={itemIcon({ selected })}>
+          <Svg width="20" fill="none" height="20" viewBox="0 0 20 20">
+            <Path
+              d="M6 11L9 13L14.5 7"
+              strokeWidth="2.01011"
+              stroke={itemIconCheck({ selected })}
+            />
+          </Svg>
+        </View>
 
 //         <Text className={itemText({ selected })}>{data.label}</Text>
 //       </View>

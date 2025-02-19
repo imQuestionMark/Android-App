@@ -1,13 +1,31 @@
 import { useReactQueryDevTools } from '@dev-plugins/react-query';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import * as React from 'react';
+import {
+  MutationCache,
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
+import { type ReactNode } from 'react';
 
-export const queryClient = new QueryClient();
+import { showError } from '@/components/ui';
 
-export function APIProvider({ children }: { children: React.ReactNode }) {
+export const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError(error) {
+      showError(error);
+    },
+  }),
+  mutationCache: new MutationCache({
+    onError(error) {
+      console.log('Global Mutation Error Handling');
+      showError(error);
+    },
+  }),
+});
+
+export function APIProvider({ children }: { children: ReactNode }) {
   useReactQueryDevTools(queryClient);
   return (
-    // Provide the client to your App
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 }

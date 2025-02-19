@@ -15,7 +15,7 @@ import Svg, { Path } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
 
 import colors from '@/components/ui/colors';
-import { CaretDown } from '@/components/ui/icons';
+import { CaretDown } from '@/components/ui/icons/caret-down';
 
 import type { InputControllerType } from './input';
 import { useModal } from './modal';
@@ -92,8 +92,8 @@ export const Options = React.forwardRef<BottomSheetModal, OptionsProps>(
 
     return (
       <Modal
-        ref={ref}
         index={0}
+        ref={ref}
         snapPoints={snapPoints}
         backgroundStyle={{
           backgroundColor: isDark ? colors.neutral[800] : colors.white,
@@ -216,8 +216,8 @@ export const Select = (props: SelectProps) => {
         )}
       </View>
       <Options
-        testID={testID}
         ref={modal.ref}
+        testID={testID}
         options={options}
         onSelect={onSelectOption}
       />
@@ -252,8 +252,8 @@ export function ControlledSelect<T extends FieldValues>(
 const Check = ({ ...props }: SvgProps) => (
   <Svg
     width={25}
-    height={24}
     fill="none"
+    height={24}
     viewBox="0 0 25 24"
     {...props}
     className="stroke-black dark:stroke-white"

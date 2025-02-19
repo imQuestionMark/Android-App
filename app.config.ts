@@ -66,7 +66,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       'expo-font',
       {
-        fonts: ['./assets/fonts/Inter.ttf'],
+        fonts: [
+          './assets/fonts/Poppins-Black.ttf',
+          './assets/fonts/Poppins-Bold.ttf',
+          './assets/fonts/Poppins-ExtraBold.ttf',
+          './assets/fonts/Poppins-ExtraLight.ttf',
+          './assets/fonts/Poppins-Light.ttf',
+          './assets/fonts/Poppins-Medium.ttf',
+          './assets/fonts/Poppins-Regular.ttf',
+          './assets/fonts/Poppins-SemiBold.ttf',
+          './assets/fonts/Poppins-Thin.ttf',
+        ],
       },
     ],
     'expo-localization',

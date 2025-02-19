@@ -95,13 +95,13 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
         hideExtraDays
         enableSwipeMonths
         markedDates={markedDates}
-        style={{ borderRadius: 6 }}
         onDayPress={handleDayPress}
+        style={{ borderRadius: 6 }}
         initialDate={currentDateString}
         onPressArrowLeft={handleLeftArrowPress}
-        onVisibleMonthsChange={handleMonthChange}
-        onPressArrowRight={handleRightArrowPress}
         dayComponent={(data) => _renderDay(data)}
+        onPressArrowRight={handleRightArrowPress}
+        onVisibleMonthsChange={handleMonthChange}
         renderArrow={(direction: string) => _renderArrows(direction)}
         renderHeader={() => (
           <CalendarHeader

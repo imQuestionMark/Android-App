@@ -45,7 +45,9 @@ export default function Signin() {
                 name="identifier"
                 control={control}
                 keyboardType="email-address"
+                keyboardType="email-address"
                 label="Enter your email address"
+                placeholder="Enter your email id"
                 placeholder="Enter your email id"
                 hint="we will send you the 4 digit verification code"
               />

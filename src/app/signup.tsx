@@ -9,6 +9,11 @@ import {
   useSignUpMutation,
   type Variables,
 } from '@/api/authentication/signup';
+import {
+  SignUpInputschema,
+  useSignUpMutation,
+  type Variables,
+} from '@/api/authentication/signup';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput } from '@/components/ui';
@@ -25,12 +30,11 @@ export default function Signup() {
     resolver: zodResolver(SignUpInputschema),
   });
 
-  const { mutate: handleLogin, isPending } = useSignUpMutation();
+  const { mutate: handleLogin } = useSignUpMutation();
   return (
     <>
       <GradientView>
         <KeyboardAwareScrollView contentContainerClassName="grow">
-          {/* @TOOD: Fix margin hack */}
           <View className="z-10 m-4 grow">
             <View className="flex-row gap-2">
               <Text className="text-[32px] font-bold text-black">Welcome</Text>
@@ -47,6 +51,7 @@ export default function Signup() {
                     name="first_name"
                     control={control}
                     label="Enter your first name"
+                    label="Enter your first name"
                     placeholder="Enter your first name"
                   />
                 </View>
@@ -56,6 +61,7 @@ export default function Signup() {
                   <ControlledInput
                     name="last_name"
                     control={control}
+                    label="Enter your last name"
                     label="Enter your last name"
                     placeholder="Enter your last name"
                   />
@@ -77,6 +83,7 @@ export default function Signup() {
                   <ControlledInput
                     name="phone"
                     control={control}
+                    keyboardType="numeric"
                     keyboardType="numeric"
                     placeholder="9876543210"
                     label="Enter your phone number"
@@ -101,6 +108,7 @@ export default function Signup() {
                       If you already have an account?
                     </Text>
 
+                    <Link className="" href={{ pathname: '/login' }}>
                     <Link className="" href={{ pathname: '/login' }}>
                       <Text className="font-medium text-primary">Login</Text>
                     </Link>

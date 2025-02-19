@@ -172,9 +172,9 @@ export default function PersonalDetails() {
                 maxHeight={300}
                 value={country}
                 data={local_data}
-                valueField="value"
-                labelField="lable"
                 imageField="image"
+                labelField="lable"
+                valueField="value"
                 style={styles.dropdown}
                 iconStyle={styles.iconStyle}
                 placeholder="Select country"
