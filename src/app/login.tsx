@@ -1,26 +1,27 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useRouter } from 'expo-router';
+import { Link } from 'expo-router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
+import {
+  loginInputSchema,
+  type loginput,
+  useLoginMutation,
+} from '@/api/authentication/login';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput } from '@/components/ui';
-import { loginInputSchema, useLoginMutation, Variables } from '@/api/authentication/login';
-import { Button,ButtonText } from '@/components/ui/button';
-
-
+import { Button, ButtonText } from '@/components/ui/button';
 
 export default function Signin() {
-  const { control, handleSubmit ,} = useForm<Variables>({
+  const { control, handleSubmit } = useForm<loginput>({
     defaultValues: {
-      email: 'test@gmail.com',
+      identifier: '19uca048@gmail.com',
     },
     resolver: zodResolver(loginInputSchema),
   });
-
 
   const { mutate: handleLogin, isPending } = useLoginMutation();
 
@@ -41,25 +42,22 @@ export default function Signin() {
 
             <View>
               <ControlledInput
-                name="email"
-                placeholder="Enter your email id"
+                name="identifier"
                 control={control}
-                label="Enter your email address"
-                hint="we will send you the 4 digit verification code"
                 keyboardType="email-address"
+                label="Enter your email address"
+                placeholder="Enter your email id"
+                hint="we will send you the 4 digit verification code"
               />
             </View>
           </View>
           <View>
             <Button
-              className="flex h-[60px] items-center justify-center rounded-md  bg-primary "
-              onPress={handleSubmit((data) => handleLogin(data))}
               disabled={isPending}
-              >
-              <ButtonText>
-                Send OTP
-              </ButtonText>
-              
+              onPress={handleSubmit((data) => handleLogin(data))}
+              className="flex h-[60px] items-center justify-center rounded-md  bg-primary "
+            >
+              <ButtonText>Send OTP</ButtonText>
             </Button>
 
             <View className="">
@@ -68,7 +66,7 @@ export default function Signin() {
                   If you already have an account?
                 </Text>
 
-                <Link href={{ pathname: '/signup' }} className="">
+                <Link className="" href={{ pathname: '/signup' }}>
                   <Text className="font-medium text-primary">SignUp</Text>
                 </Link>
               </View>

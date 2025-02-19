@@ -1,17 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Alert, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { OtpInput } from 'react-native-otp-entry';
-import * as z from 'zod';
 
+import {
+  OTPInputschema,
+  resendOtpMutation,
+  useOtpMutation,
+  type Variables,
+} from '@/api/authentication/verification';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { Button, ButtonText } from '@/components/ui/button';
-import { OTPInputschema, useOtpMutation, Variables } from '@/api/authentication/verification';
-
 
 const _THEME = {
   containerStyle: { height: 52 },
@@ -45,12 +47,31 @@ const _THEME = {
 export default function Verification() {
   const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
-      otp: '',
+      OTP: '',
     },
     resolver: zodResolver(OTPInputschema),
   });
 
+  const [timer, setTimer] = useState(30);
+  const [isResendAvailable, setIsResendAvailable] = useState(false);
+  useEffect(() => {
+    let interval: any;
+    if (timer > 0) {
+      interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
+    } else {
+      setIsResendAvailable(true);
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
+
+  const handleResendOtp = handleSubmit((data) => {
+    handleResend(data);
+    setTimer(30);
+    setIsResendAvailable(false);
+  });
+
   const { mutate: handleLogin, isPending } = useOtpMutation();
+  const { mutate: handleResend } = resendOtpMutation();
   return (
     <GradientView className="">
       <KeyboardAwareScrollView contentContainerClassName="grow">
@@ -77,18 +98,18 @@ export default function Verification() {
 
             <View className="mt-8">
               <Controller
-                name="otp"
+                name="OTP"
                 control={control}
                 render={({ field: { onChange } }) => (
                   <OtpInput
-                    numberOfDigits={4}
                     // @ts-ignore
                     theme={_THEME}
+                    type="numeric"
+                    autoFocus={false}
+                    numberOfDigits={4}
                     onTextChange={(otp) => {
                       onChange(otp);
                     }}
-                    type="numeric"
-                    autoFocus={false}
                   />
                 )}
               />
@@ -98,7 +119,8 @@ export default function Verification() {
           {/* Footer */}
           <View>
             <Button
-              onPress={handleSubmit(data => handleLogin(data))}
+              disabled={isPending}
+              onPress={handleSubmit((data) => handleLogin(data))}
               className="flex h-[60px] items-center justify-center rounded-md bg-primary "
             >
               {/* {isPending && <ActivityIndicator color={'white'} />} */}
@@ -111,9 +133,16 @@ export default function Verification() {
                   Didn't receive OTP?
                 </Text>
 
-                <Link href={{ pathname: '/signup' }}>
-                  <Text className="font-medium text-primary">Resend</Text>
-                </Link>
+                <Pressable
+                  onPress={handleResendOtp}
+                  disabled={!isResendAvailable}
+                >
+                  <ButtonText className="font-medium text-primary">
+                    {isResendAvailable
+                      ? 'Resend OTP'
+                      : `Resend OTP in ${timer}s`}
+                  </ButtonText>
+                </Pressable>
               </View>
 
               <TermsandConditions />

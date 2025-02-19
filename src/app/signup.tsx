@@ -3,23 +3,23 @@ import { Link } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import * as z from 'zod';
 
+import {
+  SignUpInputschema,
+  useSignUpMutation,
+  type Variables,
+} from '@/api/authentication/signup';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
-import { SignUpInputschema ,useSignUpMutation,Variables} from '@/api/authentication/signup';
-
-
-
 
 export default function Signup() {
   const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
+      first_name: '',
+      last_name: '',
+      email_address: '',
       phone: '',
     },
     resolver: zodResolver(SignUpInputschema),
@@ -44,28 +44,28 @@ export default function Signup() {
                 {/* First Name */}
                 <View className="mt-4">
                   <ControlledInput
-                    name="firstName"
+                    name="first_name"
                     control={control}
-                    placeholder="Enter your first name"
                     label="Enter your first name"
+                    placeholder="Enter your first name"
                   />
                 </View>
 
                 {/* Last Name */}
                 <View className="mt-4">
                   <ControlledInput
-                    name="lastName"
+                    name="last_name"
                     control={control}
-                    placeholder="Enter your last name"
                     label="Enter your last name"
+                    placeholder="Enter your last name"
                   />
                 </View>
 
                 {/* Email  */}
                 <View className="mt-4">
                   <ControlledInput
-                    name="email"
                     control={control}
+                    name="email_address"
                     label="Enter your mail id"
                     placeholder="Enter your mail id"
                     hint="we will send you the 4 digit verification code"
@@ -77,9 +77,9 @@ export default function Signup() {
                   <ControlledInput
                     name="phone"
                     control={control}
+                    keyboardType="numeric"
                     placeholder="9876543210"
                     label="Enter your phone number"
-                    keyboardType="numeric"
                   />
                 </View>
               </View>
@@ -88,12 +88,11 @@ export default function Signup() {
               <View className="mt-6">
                 {/* Submit Button */}
                 <Button
+                  disabled={isPending}
                   onPress={handleSubmit((data) => handleLogin(data))}
                   className="flex h-[60px] items-center justify-center rounded-md  bg-primary "
                 >
-                  <ButtonText>
-                    Submit
-                  </ButtonText>
+                  <ButtonText>Submit</ButtonText>
                 </Button>
 
                 <View className="">
@@ -102,7 +101,7 @@ export default function Signup() {
                       If you already have an account?
                     </Text>
 
-                    <Link href={{ pathname: '/login' }} className="">
+                    <Link className="" href={{ pathname: '/login' }}>
                       <Text className="font-medium text-primary">Login</Text>
                     </Link>
                   </View>

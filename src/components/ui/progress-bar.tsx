@@ -9,8 +9,8 @@ import Animated, {
 import { twMerge } from 'tailwind-merge';
 
 type Props = {
-  initialProgress?: number;
   className?: string;
+  initialProgress?: number;
 };
 
 export type ProgressBarRef = {

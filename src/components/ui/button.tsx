@@ -61,11 +61,11 @@ type ButtonContextValue = TButtonVariants & {
 
 const ButtonContext = createContext<ButtonContextValue>({});
 
-type ButtonProps = {
-  className?: string;
-  children?: React.ReactNode;
-} & PressableProps &
-  TButtonVariants;
+type ButtonProps = PressableProps &
+  TButtonVariants & {
+    children?: React.ReactNode;
+    className?: string;
+  };
 
 const Button = React.forwardRef<
   React.ElementRef<typeof Pressable>,
@@ -98,8 +98,8 @@ const Button = React.forwardRef<
 });
 
 type ButtonTextProps = {
-  className?: string;
   children: React.ReactNode;
+  className?: string;
 };
 
 const ButtonText = React.forwardRef<
@@ -117,8 +117,8 @@ const ButtonText = React.forwardRef<
 });
 
 type ButtonIconProps = {
-  className?: string;
   children: React.ReactNode;
+  className?: string;
 };
 
 const ButtonIcon = React.forwardRef<

@@ -17,21 +17,21 @@ export default function ButtonExample() {
       {/* With icon */}
       <Button variant="outline" className="gap-1 border-red-700">
         <ButtonIcon>
-          <Heart color="red" fill="red" size={14} />
+          <Heart size={14} fill="red" color="red" />
         </ButtonIcon>
         <ButtonText className="text-red-400">Like</ButtonText>
       </Button>
 
       {/* Loading state */}
-      <Button isDisabled={isLoading} size="md">
+      <Button size="md" isDisabled={isLoading}>
         {isLoading && <ActivityIndicator />}
         <ButtonText>Processing...</ButtonText>
       </Button>
 
       {/* Icon only */}
       <Button
-        variant="outline"
         size="icon"
+        variant="outline"
         className="rounded-full border-black"
       >
         <ButtonIcon>
@@ -40,8 +40,8 @@ export default function ButtonExample() {
       </Button>
 
       {/* Disabled state */}
-      <Button isDisabled size="lg">
-        {isLoading && <ActivityIndicator color={'white'} size="large" />}
+      <Button size="lg" isDisabled>
+        {isLoading && <ActivityIndicator size="large" color={'white'} />}
         <ButtonText>Disabled</ButtonText>
       </Button>
     </View>

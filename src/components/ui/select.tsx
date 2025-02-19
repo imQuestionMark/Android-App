@@ -57,13 +57,13 @@ const selectTv = tv({
 
 const List = Platform.OS === 'web' ? FlashList : BottomSheetFlatList;
 
-export type OptionType = { label: string; value: string | number };
+export type OptionType = { label: string; value: number | string };
 
 type OptionsProps = {
-  options: OptionType[];
   onSelect: (option: OptionType) => void;
-  value?: string | number;
+  options: OptionType[];
   testID?: string;
+  value?: number | string;
 };
 
 function keyExtractor(item: OptionType) {
@@ -80,10 +80,10 @@ export const Options = React.forwardRef<BottomSheetModal, OptionsProps>(
     const renderSelectItem = React.useCallback(
       ({ item }: { item: OptionType }) => (
         <Option
-          key={`select-item-${item.value}`}
           label={item.label}
-          selected={value === item.value}
           onPress={() => onSelect(item)}
+          selected={value === item.value}
+          key={`select-item-${item.value}`}
           testID={testID ? `${testID}-item-${item.value}` : undefined}
         />
       ),
@@ -101,10 +101,10 @@ export const Options = React.forwardRef<BottomSheetModal, OptionsProps>(
       >
         <List
           data={options}
+          estimatedItemSize={52}
           keyExtractor={keyExtractor}
           renderItem={renderSelectItem}
           testID={testID ? `${testID}-modal` : undefined}
-          estimatedItemSize={52}
         />
       </Modal>
     );
@@ -117,8 +117,8 @@ const Option = React.memo(
     selected = false,
     ...props
   }: PressableProps & {
-    selected?: boolean;
     label: string;
+    selected?: boolean;
   }) => {
     return (
       <Pressable
@@ -133,18 +133,18 @@ const Option = React.memo(
 );
 
 export interface SelectProps {
-  value?: string | number;
-  label?: string;
   disabled?: boolean;
   error?: string;
+  label?: string;
+  onSelect?: (value: number | string) => void;
   options?: OptionType[];
-  onSelect?: (value: string | number) => void;
   placeholder?: string;
   testID?: string;
+  value?: number | string;
 }
 interface ControlledSelectProps<T extends FieldValues>
-  extends SelectProps,
-    InputControllerType<T> {}
+  extends InputControllerType<T>,
+    SelectProps {}
 
 export const Select = (props: SelectProps) => {
   const {
@@ -189,16 +189,16 @@ export const Select = (props: SelectProps) => {
       <View className={styles.container()}>
         {label && (
           <Text
-            testID={testID ? `${testID}-label` : undefined}
             className={styles.label()}
+            testID={testID ? `${testID}-label` : undefined}
           >
             {label}
           </Text>
         )}
         <Pressable
-          className={styles.input()}
           disabled={disabled}
           onPress={modal.present}
+          className={styles.input()}
           testID={testID ? `${testID}-trigger` : undefined}
         >
           <View className="flex-1">
@@ -233,7 +233,7 @@ export function ControlledSelect<T extends FieldValues>(
 
   const { field, fieldState } = useController({ control, name, rules });
   const onSelect = React.useCallback(
-    (value: string | number) => {
+    (value: number | string) => {
       field.onChange(value);
       onNSelect?.(value);
     },
@@ -259,10 +259,10 @@ const Check = ({ ...props }: SvgProps) => (
     className="stroke-black dark:stroke-white"
   >
     <Path
-      d="m20.256 6.75-10.5 10.5L4.506 12"
       strokeWidth={2.438}
       strokeLinecap="round"
       strokeLinejoin="round"
+      d="m20.256 6.75-10.5 10.5L4.506 12"
     />
   </Svg>
 );

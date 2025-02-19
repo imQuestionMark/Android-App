@@ -1,21 +1,22 @@
-import { showError } from '@/components/ui';
-import { client } from '../common';
 import type { AxiosError } from 'axios';
+import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
-import { router, useRouter } from 'expo-router';
 import { z } from 'zod';
 
-const MOCK_FAILURE = 'http/404/Invalid Email Credentials';
-const MOCK_SUCCESS = 'http/200/1234?delay=1500';
+import { showError } from '@/components/ui';
+
+import { client } from '../common';
+
+const API = 'user/signin?method=ML';
 
 export const loginInputSchema = z.object({
-  email: z
+  identifier: z
     .string()
     .min(1, { message: 'Email is required' })
     .email({ message: 'Incorrect Mail id' }),
 });
 
-export type Variables = z.infer<typeof loginInputSchema>;
+export type loginput = z.infer<typeof loginInputSchema>;
 
 const loginResponseSchema = z.object({
   status: z.number(),
@@ -25,22 +26,20 @@ const loginResponseSchema = z.object({
 
 type Response = z.infer<typeof loginResponseSchema>;
 
-const submitForm = async (data: Variables) => {
-  const response = await client.post(MOCK_SUCCESS, data);
+const submitForm = async (data: loginput) => {
+  const response = await client.post(API, data);
   //return loginResponseSchema.parse(response.data);
   return response.data;
 };
 
-export const useLoginMutation = createMutation<Response, Variables, AxiosError>(
-  {
-    mutationFn: submitForm,
-    onSuccess: (data) => {
-      console.log('Login successful:', data);
-      router.replace({ pathname: '/verification' });
-    },
-    onError: (error: AxiosError) => {
-      console.error(error);
-      showError(error);
-    },
-  }
-);
+export const useLoginMutation = createMutation<Response, loginput, AxiosError>({
+  mutationFn: submitForm,
+  onSuccess: (data) => {
+    console.log('Login successful:', data);
+    router.replace({ pathname: '/verification' });
+  },
+  onError: (error: AxiosError) => {
+    console.error(error);
+    showError(error);
+  },
+});

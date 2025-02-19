@@ -1,25 +1,25 @@
-import { showError } from '@/components/ui';
-import { client } from '../common';
 import type { AxiosError } from 'axios';
+import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
-import { router, useRouter } from 'expo-router';
 import { z } from 'zod';
 
-const MOCK_FAILURE = 'http/404/Invalid Email Credentials';
-const MOCK_SUCCESS = 'http/200/1234?delay=1500';
+import { showError } from '@/components/ui';
 
+import { client } from '../common';
 
+//const MOCK_FAILURE = 'http/404/Invalid Email Credentials';t
+const API = 'user/signup';
 
 export const SignUpInputschema = z.object({
-  firstName: z
+  first_name: z
     .string({ required_error: 'FirstName is required' })
     .min(3, 'Minimum 3 characters')
     .max(16, 'Maximum 16 characters'),
-  lastName: z
+  last_name: z
     .string({ required_error: 'LastName is required' })
     .min(3, 'Minimum 3 characters')
     .max(16, 'Maximum 16 characters'),
-  email: z.string().min(1, 'Email is required').email(),
+  email_address: z.string().min(1, 'Email is required').email(),
   phone: z.coerce
     .number({
       required_error: 'Phone no. is required.',
@@ -32,8 +32,7 @@ export const SignUpInputschema = z.object({
 
 export type Variables = z.infer<typeof SignUpInputschema>;
 
-
-const SignUpResponseschema =z.object({
+const SignUpResponseschema = z.object({
   status: z.number(),
   message: z.string(),
   id: z.string(),
@@ -42,20 +41,22 @@ const SignUpResponseschema =z.object({
 type Response = z.infer<typeof SignUpResponseschema>;
 
 const submitForm = async (data: Variables) => {
-  const response = await client.post(MOCK_SUCCESS, data);
+  const response = await client.post(API, data);
   return SignUpResponseschema.parse(response.data);
 };
 
-export const useSignUpMutation = createMutation<Response, Variables, AxiosError>(
-  {
-    mutationFn: submitForm,
-    onSuccess: (data) => {
-      console.log('Login successful:', data);
-      router.replace({ pathname: '/login' });
-    },
-    onError: (error: AxiosError) => {
-      console.error(error);
-      showError(error);
-    },
-  }
-);
+export const useSignUpMutation = createMutation<
+  Response,
+  Variables,
+  AxiosError
+>({
+  mutationFn: submitForm,
+  onSuccess: (data) => {
+    console.log('Login successful:', data);
+    router.replace({ pathname: '/login' });
+  },
+  onError: (error: AxiosError) => {
+    console.error(error);
+    showError(error);
+  },
+});

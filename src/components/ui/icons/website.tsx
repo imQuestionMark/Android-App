@@ -10,8 +10,8 @@ export const Website = ({
 }: SvgProps) => (
   <Svg width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
     <G
-      clipPath="url(#a)"
       stroke={color}
+      clipPath="url(#a)"
       strokeWidth={1.219}
       strokeLinecap="round"
       strokeLinejoin="round"

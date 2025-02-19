@@ -1,357 +1,351 @@
-import { useCallback, useState } from 'react';
-import { Platform, StyleSheet, Text } from 'react-native';
-import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
-import Svg, { Path } from 'react-native-svg';
-import { tv } from 'tailwind-variants';
+// import { zodResolver } from '@hookform/resolvers/zod';
+// import { useCallback, useState } from 'react';
+// import { useForm } from 'react-hook-form';
+// import { Platform, StyleSheet, Text } from 'react-native';
+// import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
+// import Svg, { Path } from 'react-native-svg';
+// import { tv } from 'tailwind-variants';
+// import { z } from 'zod';
 
-import GradientView from '@/components/onboarding/gradient-view';
-import { ControlledInput, View } from '@/components/ui';
-import { Button, ButtonText } from '@/components/ui/button';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { CtcInputschema, Variables } from '@/api/profile/professional';
+// import { CtcInputschema, type Variables } from '@/api/profile/professional';
+// import GradientView from '@/components/onboarding/gradient-view';
+// import { ControlledInput, View } from '@/components/ui';
+// import { Button, ButtonText } from '@/components/ui/button';
 
-type TDropdownData = {
-  label: string;
-  value: number;
-};
+// type TDropdownData = {
+//   label: string;
+//   value: number;
+// };
 
-const designations = [
-  { label: 'UX UI Designer', value: 'UX UI Designer' },
-  { label: 'UX Writer', value: 'UX Writer' },
-  { label: 'UI Designer', value: 'UI Designer' },
-  { label: 'UX Researcher', value: 'UX Researcher' },
-];
+// const designations = [
+//   { label: 'UX UI Designer', value: 'UX UI Designer' },
+//   { label: 'UX Writer', value: 'UX Writer' },
+//   { label: 'UI Designer', value: 'UI Designer' },
+//   { label: 'UX Researcher', value: 'UX Researcher' },
+// ];
 
-const experience = [
-  { label: '1 Year', value: 1 },
-  { label: '2 Years', value: 2 },
-  { label: '3 Years', value: 3 },
-];
+// const experience = [
+//   { label: '1 Year', value: 1 },
+//   { label: '2 Years', value: 2 },
+//   { label: '3 Years', value: 3 },
+// ];
 
-const locations = [
-  { label: 'Chennai', value: 'Chennai' },
-  { label: 'Bangalore', value: 'Bangalore' },
-];
+// const locations = [
+//   { label: 'Chennai', value: 'Chennai' },
+//   { label: 'Bangalore', value: 'Bangalore' },
+// ];
 
-const mode=[
-  {label:'Full Time', value:'Full Time'},
-  {label:'Part Time', value:'Part Time'},
-  {label:'Hybrid', value:'Hybrid'},
-]
+// const mode = [
+//   { label: 'Full Time', value: 'Full Time' },
+//   { label: 'Part Time', value: 'Part Time' },
+//   { label: 'Hybrid', value: 'Hybrid' },
+// ];
 
-const dropdownStyles = tv({
-  slots: {
-    trigger: 'h-[50px] rounded-lg border border-white bg-white px-2',
-    triggerText: 'text-base text-black',
-    itemContainer: 'flex-row items-center gap-3 p-4',
-    itemIcon: 'rounded-xl border-[3px] border-gray-300 bg-white',
-    itemIconCheck: '',
-    itemText: 'text-black',
-  },
-  variants: {
-    selected: {
-      true: {
-        itemIcon: 'border-[#17A2B8] bg-primary',
-        itemIconCheck: 'white',
-        itemText: 'text-primary',
-      },
-      false: {
-        itemIconCheck: 'none',
-      },
-    },
-  },
-});
-
-// @TODO Figure out how to remap props for MultiSelect
-// remapProps(MultiSelect, {
-//   className: 'style',
-//   selectedTextClassname: 'selectedTextStyle',
+// const dropdownStyles = tv({
+//   slots: {
+//     trigger: 'h-[50px] rounded-lg border border-white bg-white px-2',
+//     triggerText: 'text-base text-black',
+//     itemContainer: 'flex-row items-center gap-3 p-4',
+//     itemIcon: 'rounded-xl border-[3px] border-gray-300 bg-white',
+//     itemIconCheck: '',
+//     itemText: 'text-black',
+//   },
+//   variants: {
+//     selected: {
+//       true: {
+//         itemIcon: 'border-[#17A2B8] bg-primary',
+//         itemIconCheck: 'white',
+//         itemText: 'text-primary',
+//       },
+//       false: {
+//         itemIconCheck: 'none',
+//       },
+//     },
+//   },
 // });
 
-const { itemIcon, itemContainer, itemText, itemIconCheck } = dropdownStyles();
+// // @TODO Figure out how to remap props for MultiSelect
+// // remapProps(MultiSelect, {
+// //   className: 'style',
+// //   selectedTextClassname: 'selectedTextStyle',
+// // });
 
-const Professional = () => {
-  return (
-    <GradientView>
-      <View className="m-4 flex-1 justify-between">
-        <View className="">
-          <Text className="font-poppins text-2xl font-semibold">
-            Job preference
-          </Text>
+// const { itemIcon, itemContainer, itemText, itemIconCheck } = dropdownStyles();
 
-          <View className="mt-6">
-            <Role />
-            <Experience />
-            <Location />
-            <ModeOfWork />
-            <CTC />
-            <ExpCTC />
-          </View>
-        </View>
+// const Professional = () => {
+//   const { control, handleSubmit } = useForm<Variables>({
+//     defaultValues: {
+//       OTP: '',
+//     },
+//     resolver: zodResolver(OTPInputschema),
+//   });
 
-        <View id="bottomNavigation" className="">
-          <View className="flex items-end ">
-            <Button variant="ghost" size="lg">
-              <ButtonText className="text-[20px] font-medium">
-                Confirm
-              </ButtonText>
-            </Button>
-          </View>
+//   return (
+//     <GradientView>
+//       <View className="m-4 flex-1 justify-between">
+//         <View className="">
+//           <Text className="font-poppins text-2xl font-semibold">
+//             Job preference
+//           </Text>
 
-          <View className="flex-row justify-between gap-4">
-            <View className="h-1 grow rounded-xl bg-primary" />
-            <View className="h-1 grow rounded-xl bg-[#C9C9C9]" />
-          </View>
-        </View>
-      </View>
-    </GradientView>
-  );
-};
+//           <View className="mt-6">
+//             <Role />
+//             <Experience />
+//             <Location />
+//             <ModeOfWork />
+//             <CTC />
+//             <ExpCTC />
+//           </View>
+//         </View>
 
-const Role = () => {
-  const [selectedDesignation, setSelectedDesignation] = useState<string[]>([]);
+//         <View className="" id="bottomNavigation">
+//           <View className="flex items-end ">
+//             <Button size="lg" variant="ghost">
+//               <ButtonText className="text-[20px] font-medium">
+//                 Confirm
+//               </ButtonText>
+//             </Button>
+//           </View>
 
-  const handleRoleChange = useCallback((data: string[]) => {
-    setSelectedDesignation(data);
-  }, []);
+//           <View className="flex-row justify-between gap-4">
+//             <View className="h-1 grow rounded-xl bg-primary" />
+//             <View className="h-1 grow rounded-xl bg-[#C9C9C9]" />
+//           </View>
+//         </View>
+//       </View>
+//     </GradientView>
+//   );
+// };
 
-  const flattenedDesignation = selectedDesignation.join(', ');
-  const designationPlaceholder = selectedDesignation.length
-    ? flattenedDesignation
-    : 'Select Designation';
-  return (
-    <View className="mb-5">
-      <Text className="mb-4 font-poppins text-[16px] font-medium">
-        Select Your Role
-      </Text>
-      <MultiSelect
-        pressableStyle={styles.dropdown}
-        selectedTextStyle={styles.selectedTextStyle}
-        containerStyle={{
-          borderRadius: 8,
-          marginTop: Platform.OS === 'ios' ? -96 : 4,
-        }}
-        data={designations}
-        labelField="label"
-        valueField="value"
-        placeholder={designationPlaceholder}
-        value={selectedDesignation}
-        activeColor=""
-        visibleSelectedItem={false}
-        selectedTextProps={{ numberOfLines: 1 }}
-        onChange={handleRoleChange}
-        renderItem={(data, selected) => (
-          <CustomItem data={data} selected={selected} />
-        )}
-      />
-    </View>
-  );
-};
+// const Role = () => {
+//   const [selectedDesignation, setSelectedDesignation] = useState<string[]>([]);
 
-const Experience = () => {
-  const [selectedExperience, setSelectedExperience] =
-    useState<TDropdownData | null>(null);
+//   const handleRoleChange = useCallback((data: string[]) => {
+//     setSelectedDesignation(data);
+//   }, []);
 
-  const handleExperienceChange = useCallback((data: TDropdownData) => {
-    setSelectedExperience(data);
-  }, []);
-  return (
-    <View className="mb-5">
-      <Text className="mb-4 font-poppins text-[16px] font-medium">
-        Experience
-      </Text>
-      <Dropdown
-        pressableStyle={styles.dropdown}
-        selectedTextStyle={styles.selectedTextStyle}
-        data={experience}
-        containerStyle={{
-          borderRadius: 8,
-          marginTop: Platform.OS === 'ios' ? -96 : 4,
-        }}
-        labelField="label"
-        valueField="value"
-        placeholder="Select Experience"
-        value={selectedExperience}
-        activeColor=""
-        onChange={(item) => handleExperienceChange(item.value)}
-        renderItem={(data, selected) => (
-          <CustomItem data={data} selected={selected} />
-        )}
-      />
-    </View>
-  );
-};
+//   const flattenedDesignation = selectedDesignation.join(', ');
+//   const designationPlaceholder = selectedDesignation.length
+//     ? flattenedDesignation
+//     : 'Select Designation';
+//   return (
+//     <View className="mb-5">
+//       <Text className="mb-4 font-poppins text-[16px] font-medium">
+//         Select Your Role
+//       </Text>
+//       <MultiSelect
+//         activeColor=""
+//         labelField="label"
+//         valueField="value"
+//         data={designations}
+//         value={selectedDesignation}
+//         visibleSelectedItem={false}
+//         onChange={handleRoleChange}
+//         pressableStyle={styles.dropdown}
+//         placeholder={designationPlaceholder}
+//         selectedTextProps={{ numberOfLines: 1 }}
+//         selectedTextStyle={styles.selectedTextStyle}
+//         renderItem={(data, selected) => (
+//           <CustomItem data={data} selected={selected} />
+//         )}
+//         containerStyle={{
+//           borderRadius: 8,
+//           marginTop: Platform.OS === 'ios' ? -96 : 4,
+//         }}
+//       />
+//     </View>
+//   );
+// };
 
-const Location = () => {
-  const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
+// const Experience = () => {
+//   const [selectedExperience, setSelectedExperience] =
+//     useState<null | TDropdownData>(null);
 
-  const handleLocationChange = useCallback((data: string[]) => {
-    setSelectedLocation(data);
-  }, []);
+//   const handleExperienceChange = useCallback((data: TDropdownData) => {
+//     setSelectedExperience(data);
+//   }, []);
+//   return (
+//     <View className="mb-5">
+//       <Text className="mb-4 font-poppins text-[16px] font-medium">
+//         Experience
+//       </Text>
+//       <Dropdown
+//         activeColor=""
+//         data={experience}
+//         labelField="label"
+//         valueField="value"
+//         value={selectedExperience}
+//         placeholder="Select Experience"
+//         pressableStyle={styles.dropdown}
+//         selectedTextStyle={styles.selectedTextStyle}
+//         onChange={(item) => handleExperienceChange(item.value)}
+//         renderItem={(data, selected) => (
+//           <CustomItem data={data} selected={selected} />
+//         )}
+//         containerStyle={{
+//           borderRadius: 8,
+//           marginTop: Platform.OS === 'ios' ? -96 : 4,
+//         }}
+//       />
+//     </View>
+//   );
+// };
 
-  const flattenedLocation = selectedLocation.join(', ');
-  const locationPlaceholder = selectedLocation.length
-    ? flattenedLocation
-    : 'Select Location';
+// const Location = () => {
+//   const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
 
-  return (
-    <View className="mb-5">
-      <Text className="mb-4 font-poppins text-[16px] font-medium">
-        Preferred Location
-      </Text>
-      <MultiSelect
-        pressableStyle={styles.dropdown}
-        selectedTextStyle={styles.selectedTextStyle}
-        data={locations}
-        containerStyle={{
-          borderRadius: 8,
-          marginTop: Platform.OS === 'ios' ? -96 : 4,
-        }}
-        labelField="label"
-        valueField="value"
-        placeholder={locationPlaceholder}
-        value={selectedLocation}
-        onChange={handleLocationChange}
-        activeColor=""
-        visibleSelectedItem={false}
-        selectedTextProps={{ numberOfLines: 1 }}
-        renderItem={(data, selected) => (
-          <CustomItem data={data} selected={selected} />
-        )}
-      />
-    </View>
-  );
-};
+//   const handleLocationChange = useCallback((data: string[]) => {
+//     setSelectedLocation(data);
+//   }, []);
 
-const ModeOfWork = () => {
-  const [selectedMode, setSelectedMode] = useState<string[]>([]);
+//   const flattenedLocation = selectedLocation.join(', ');
+//   const locationPlaceholder = selectedLocation.length
+//     ? flattenedLocation
+//     : 'Select Location';
 
-  const handleModeChange = useCallback((data: string[]) => {
-    setSelectedMode(data);
-  }, []);
+//   return (
+//     <View className="mb-5">
+//       <Text className="mb-4 font-poppins text-[16px] font-medium">
+//         Preferred Location
+//       </Text>
+//       <MultiSelect
+//         activeColor=""
+//         data={locations}
+//         labelField="label"
+//         valueField="value"
+//         value={selectedLocation}
+//         visibleSelectedItem={false}
+//         onChange={handleLocationChange}
+//         pressableStyle={styles.dropdown}
+//         placeholder={locationPlaceholder}
+//         selectedTextProps={{ numberOfLines: 1 }}
+//         selectedTextStyle={styles.selectedTextStyle}
+//         renderItem={(data, selected) => (
+//           <CustomItem data={data} selected={selected} />
+//         )}
+//         containerStyle={{
+//           borderRadius: 8,
+//           marginTop: Platform.OS === 'ios' ? -96 : 4,
+//         }}
+//       />
+//     </View>
+//   );
+// };
 
-  const flattenedMode = selectedMode.join(', ');
-  const ModePlaceholder = selectedMode.length
-    ? flattenedMode
-    : 'Select Mode';
+// const ModeOfWork = () => {
+//   const [selectedMode, setSelectedMode] = useState<string[]>([]);
 
-  return (
-    <View className="mb-5">
-      <Text className="mb-4 font-poppins text-[16px] font-medium">
-        Preferred(Mode of work)
-      </Text>
-      <MultiSelect
-        pressableStyle={styles.dropdown}
-        selectedTextStyle={styles.selectedTextStyle}
-        data={mode}
-        containerStyle={{
-          borderRadius: 8,
-          marginTop: Platform.OS === 'ios' ? -96 : 4,
-        }}
-        labelField="label"
-        valueField="value"
-        placeholder={ModePlaceholder}
-        value={selectedMode}
-        onChange={handleModeChange}
-        activeColor=""
-        visibleSelectedItem={false}
-        selectedTextProps={{ numberOfLines: 1 }}
-        renderItem={(data, selected) => (
-          <CustomItem data={data} selected={selected} />
-        )}
-      />
-    </View>
-  );
-};
+//   const handleModeChange = useCallback((data: string[]) => {
+//     setSelectedMode(data);
+//   }, []);
 
+//   const flattenedMode = selectedMode.join(', ');
+//   const ModePlaceholder = selectedMode.length ? flattenedMode : 'Select Mode';
 
+//   return (
+//     <View className="mb-5">
+//       <Text className="mb-4 font-poppins text-[16px] font-medium">
+//         Preferred(Mode of work)
+//       </Text>
+//       <MultiSelect
+//         data={mode}
+//         activeColor=""
+//         labelField="label"
+//         valueField="value"
+//         value={selectedMode}
+//         onChange={handleModeChange}
+//         visibleSelectedItem={false}
+//         placeholder={ModePlaceholder}
+//         pressableStyle={styles.dropdown}
+//         selectedTextProps={{ numberOfLines: 1 }}
+//         selectedTextStyle={styles.selectedTextStyle}
+//         renderItem={(data, selected) => (
+//           <CustomItem data={data} selected={selected} />
+//         )}
+//         containerStyle={{
+//           borderRadius: 8,
+//           marginTop: Platform.OS === 'ios' ? -96 : 4,
+//         }}
+//       />
+//     </View>
+//   );
+// };
 
-const CTC = () =>{
-  const { control, handleSubmit } = useForm<Variables>({
-    defaultValues: {
-      ctc: '',
-    },
-    resolver: zodResolver(CtcInputschema),
-  });
+// const CTC = () => {
+//   const { control, handleSubmit } = useForm<Variables>({
+//     defaultValues: {
+//       ctc: '',
+//     },
+//     resolver: zodResolver(CtcInputschema),
+//   });
 
-return(
-<View>
-<Text className="mb-4 font-poppins text-[16px] font-medium">
-        Current CTC
-      </Text>
-<ControlledInput
-                name="ctc"
-                control={control}
-              />
-</View>
-);
-};
+//   return (
+//     <View>
+//       <Text className="mb-4 font-poppins text-[16px] font-medium">
+//         Current CTC
+//       </Text>
+//       <ControlledInput name="ctc" control={control} />
+//     </View>
+//   );
+// };
 
-const schema1 = z.object({
-  expctc: z
-    .string()
-    .min(1, { message: 'CTC is required' })
-});
+// const schema1 = z.object({
+//   expctc: z.string().min(1, { message: 'CTC is required' }),
+// });
 
-type ExpCTC = z.infer<typeof schema1>;
+// type ExpCTC = z.infer<typeof schema1>;
 
+// const ExpCTC = () => {
+//   const { control, handleSubmit } = useForm<ExpCTC>({
+//     defaultValues: {
+//       expctc: '',
+//     },
+//     resolver: zodResolver(schema1),
+//   });
 
-const ExpCTC = () =>{
-  const { control, handleSubmit } = useForm<ExpCTC>({
-    defaultValues: {
-      expctc: '',
-    },
-    resolver: zodResolver(schema),
-  });
+//   return (
+//     <View>
+//       <Text className="mb-4 font-poppins text-[16px] font-medium">
+//         Expected CTC
+//       </Text>
+//       <ControlledInput name="expctc" control={control} />
+//     </View>
+//   );
+// };
 
-return(
-<View>
-<Text className="mb-4 font-poppins text-[16px] font-medium">
-        Expected CTC
-      </Text>
-<ControlledInput
-                name="expctc"
-                control={control}
-              />
-</View>
-);
-};
+// const CustomItem = ({ data, selected }: { data: any; selected?: boolean }) => {
+//   {
+//     return (
+//       <View className={itemContainer()}>
+//         <View className={itemIcon({ selected })}>
+//           <Svg width="20" height="20" fill="none" viewBox="0 0 20 20">
+//             <Path
+//               d="M6 11L9 13L14.5 7"
+//               strokeWidth="2.01011"
+//               stroke={itemIconCheck({ selected })}
+//             />
+//           </Svg>
+//         </View>
 
-const CustomItem = ({ data, selected }: { data: any; selected?: boolean }) => {
-  {
-    return (
-      <View className={itemContainer()}>
-        <View className={itemIcon({ selected })}>
-          <Svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <Path
-              d="M6 11L9 13L14.5 7"
-              strokeWidth="2.01011"
-              stroke={itemIconCheck({ selected })}
-            />
-          </Svg>
-        </View>
+//         <Text className={itemText({ selected })}>{data.label}</Text>
+//       </View>
+//     );
+//   }
+// };
 
-        <Text className={itemText({ selected })}>{data.label}</Text>
-      </View>
-    );
-  }
-};
+// const styles = StyleSheet.create({
+//   dropdown: {
+//     height: 50,
+//     borderColor: 'white',
+//     borderWidth: 0.5,
+//     borderRadius: 8,
+//     paddingHorizontal: 16,
+//     backgroundColor: 'white',
+//   },
+//   selectedTextStyle: {
+//     fontSize: 16,
+//     borderWidth: 0,
+//   },
+// });
 
-const styles = StyleSheet.create({
-  dropdown: {
-    height: 50,
-    borderColor: 'white',
-    borderWidth: 0.5,
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    backgroundColor: 'white',
-  },
-  selectedTextStyle: {
-    fontSize: 16,
-    borderWidth: 0,
-  },
-});
-
-export default Professional;
+// export default Professional;

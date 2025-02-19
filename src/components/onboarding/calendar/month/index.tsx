@@ -5,8 +5,8 @@ import { MonthBody } from './body';
 import { MonthHeader } from './header';
 
 type TMonthModal = {
-  isMonthModalVisisble: boolean;
   currentState: Date;
+  isMonthModalVisisble: boolean;
   toggleMonthModal: () => void;
   toggleYearModal: () => void;
   updateMonth: (month: number) => void;
@@ -36,9 +36,9 @@ export const MonthModal = ({
 
   return (
     <Modal
-      visible={isMonthModalVisisble}
       transparent
       animationType="fade"
+      visible={isMonthModalVisisble}
       onRequestClose={toggleMonthModal}
     >
       <TouchableWithoutFeedback onPress={toggleMonthModal}>
@@ -47,9 +47,9 @@ export const MonthModal = ({
             <View className={wrapper()}>
               <MonthHeader
                 addYear={addYear}
+                year={currentYear}
                 subtractYear={subtractYear}
                 toggleYearModal={toggleYearModal}
-                year={currentYear}
               />
               <MonthBody
                 updateMonth={updateMonth}

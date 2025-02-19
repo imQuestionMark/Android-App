@@ -17,9 +17,9 @@ export const Image = ({
 }: ImgProps) => {
   return (
     <NImage
+      style={style}
       className={className}
       placeholder={placeholder}
-      style={style}
       {...props}
     />
   );

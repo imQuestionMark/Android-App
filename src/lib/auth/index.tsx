@@ -5,11 +5,11 @@ import type { TokenType } from './utils';
 import { getToken, removeToken, setToken } from './utils';
 
 interface AuthState {
-  token: TokenType | null;
-  status: 'idle' | 'signOut' | 'signIn';
+  hydrate: () => void;
   signIn: (data: TokenType) => void;
   signOut: () => void;
-  hydrate: () => void;
+  status: 'idle' | 'signIn' | 'signOut';
+  token: null | TokenType;
 }
 
 const _useAuth = create<AuthState>((set, get) => ({

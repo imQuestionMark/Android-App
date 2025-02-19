@@ -92,39 +92,39 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
       onLayout={(e) => console.log(e.nativeEvent.layout.height)}
     >
       <RNCalendar
-        onVisibleMonthsChange={handleMonthChange}
         hideExtraDays
-        style={{ borderRadius: 6 }}
         enableSwipeMonths
-        initialDate={currentDateString}
         markedDates={markedDates}
-        onPressArrowLeft={handleLeftArrowPress}
-        onPressArrowRight={handleRightArrowPress}
+        style={{ borderRadius: 6 }}
         onDayPress={handleDayPress}
+        initialDate={currentDateString}
+        onPressArrowLeft={handleLeftArrowPress}
+        onVisibleMonthsChange={handleMonthChange}
+        onPressArrowRight={handleRightArrowPress}
+        dayComponent={(data) => _renderDay(data)}
+        renderArrow={(direction: string) => _renderArrows(direction)}
         renderHeader={() => (
           <CalendarHeader
             date={currentState}
             toggleMonthModal={toggleMonthModal}
           />
         )}
-        renderArrow={(direction: string) => _renderArrows(direction)}
-        dayComponent={(data) => _renderDay(data)}
       />
 
       <MonthModal
-        isMonthModalVisisble={isMonthModalVisisble}
-        toggleMonthModal={toggleMonthModal}
-        toggleYearModal={toggleYearModal}
-        currentState={currentState}
-        updateMonth={_updateMonth}
         updateYear={_updateYear}
+        updateMonth={_updateMonth}
+        currentState={currentState}
+        toggleYearModal={toggleYearModal}
+        toggleMonthModal={toggleMonthModal}
+        isMonthModalVisisble={isMonthModalVisisble}
       />
 
       <YearModal
-        isYearModalVisisble={isYearModalVisisble}
-        toggleYearModal={toggleYearModal}
-        currentState={currentState}
         updateYear={_updateYear}
+        currentState={currentState}
+        toggleYearModal={toggleYearModal}
+        isYearModalVisisble={isYearModalVisisble}
       />
     </View>
   );

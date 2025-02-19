@@ -57,8 +57,8 @@ describe('Input component ', () => {
       <Input
         testID="input"
         label="Username"
-        placeholder="Enter your username"
         error="This is an error message"
+        placeholder="Enter your username"
       />
     );
     expect(screen.getByTestId('input')).toBeOnTheScreen();

@@ -5,10 +5,10 @@ import { tv } from 'tailwind-variants';
 import { black } from '@/components/ui/colors';
 
 type TMonthHeader = {
-  year: number;
-  subtractYear: () => void;
   addYear: () => void;
+  subtractYear: () => void;
   toggleYearModal: () => void;
+  year: number;
 };
 
 export const MonthHeader = ({
@@ -24,11 +24,11 @@ export const MonthHeader = ({
       </Pressable>
 
       <Pressable
+        hitSlop={{ bottom: 10, left: 20, right: 20, top: 10 }}
         onPress={() => {
           console.log('Log on Press year modal');
           toggleYearModal();
         }}
-        hitSlop={{ bottom: 10, left: 20, right: 20, top: 10 }}
       >
         <Text className={yearText()}>{year}</Text>
       </Pressable>
