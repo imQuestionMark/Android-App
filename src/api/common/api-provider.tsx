@@ -12,6 +12,7 @@ import { showError } from '@/components/ui';
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError(error) {
+      console.log('Global Query Error Handling');
       showError(error);
     },
   }),
