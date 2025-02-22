@@ -12,9 +12,10 @@ import {
   type Variables,
 } from '@/api/authentication/verification';
 import GradientView from '@/components/onboarding/gradient-view';
-import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ErrorMessage } from '@/components/professional/components/error-message';
 import { Button, ButtonText } from '@/components/ui/button';
+
+const DEFAULT_TIMEOUT = 60;
 
 export default function Verification() {
   const { control, handleSubmit } = useForm<Variables>({
@@ -24,14 +25,14 @@ export default function Verification() {
     resolver: zodResolver(OTPInputSchema),
   });
 
-  const [countdown, setCountDown] = useState(30);
+  const [countdown, setCountdown] = useState(DEFAULT_TIMEOUT);
   const [isResendAvailable, setIsResendAvailable] = useState(false);
 
   useEffect(() => {
     let interval: any;
 
     if (countdown > 0) {
-      interval = setInterval(() => setCountDown((p) => p - 1), 1000);
+      interval = setInterval(() => setCountdown((p) => p - 1), 1000);
     } else {
       setIsResendAvailable(true);
     }
@@ -44,7 +45,7 @@ export default function Verification() {
     const userId = '67b365cfc73d9fe54c790711';
 
     handleResend({ userId });
-    setCountDown(30);
+    setCountdown(DEFAULT_TIMEOUT);
     setIsResendAvailable(false);
   };
 
@@ -55,23 +56,25 @@ export default function Verification() {
       <KeyboardAwareScrollView contentContainerClassName="grow">
         <View className="m-4 flex-1 justify-between">
           {/* Title */}
-          <View className="flex-1 ">
-            <View className="mb-3.5 flex-row gap-2">
-              <Text className="font-poppins text-[32px] font-bold text-black">
-                Welcome
-              </Text>
-              <Text className="font-poppins text-[32px] font-bold text-primary">
-                Onboard!
-              </Text>
-            </View>
+          <View className="flex gap-4">
+            <View className="flex-1 ">
+              <View className="mb-3.5 flex-row gap-2">
+                <Text className="font-poppins-extrabold text-[32px] text-black">
+                  Welcome
+                </Text>
+                <Text className="font-poppins-extrabold text-[32px] text-primary">
+                  Onboard!
+                </Text>
+              </View>
 
-            <View className="">
-              <Text className="mb-2 font-poppins text-[20px] font-semibold text-[#161616] ">
-                Verify your account
-              </Text>
-              <Text className="mb-1 mt-1.5 font-poppins text-[12px] font-medium leading-[14px] tracking-[0.5px]">
-                OTP send to your email address. Please enter
-              </Text>
+              <View className="">
+                <Text className="font-poppins-bold text-[20px] text-black ">
+                  Verify your account
+                </Text>
+                <Text className="font-poppins-semibold text-[12px]">
+                  OTP send to your email address. Please enter
+                </Text>
+              </View>
             </View>
 
             <ControlledOTPInput control={control} />
@@ -89,8 +92,8 @@ export default function Verification() {
             </Button>
 
             <View>
-              <View className="mt-1 flex flex-row justify-center gap-2">
-                <Text className="text-md font-poppins-medium text-gray-500">
+              <View className="mt-1 flex flex-row justify-center">
+                <Text className="text-md font-poppins-medium text-[#161616]">
                   Didn't receive OTP?
                 </Text>
 
@@ -101,16 +104,19 @@ export default function Verification() {
                   disabled={!isResendAvailable}
                 >
                   <ButtonText
-                    className={`text-md font-poppins-medium ${!isResendAvailable ? 'text-gray-500' : 'text-primary'}`}
+                    className={`text-md font-poppins-medium underline ${!isResendAvailable ? 'text-gray-500' : 'text-primary'}`}
                   >
-                    {isResendAvailable
-                      ? 'Resend'
-                      : `Resend OTP in ${countdown}s`}
+                    Resend Code
                   </ButtonText>
                 </Button>
               </View>
-
-              <TermsandConditions />
+              <View className="flex-row justify-center">
+                {!isResendAvailable && (
+                  <Text className="font-poppins-extrabold text-sm text-[#161616]">
+                    Resend code in {countdown} sec
+                  </Text>
+                )}
+              </View>
             </View>
           </View>
         </View>
@@ -120,29 +126,30 @@ export default function Verification() {
 }
 
 const _THEME = {
-  containerStyle: { height: 52 },
+  containerStyle: {
+    height: 52,
+    justifyContent: 'start',
+    gap: 20,
+  },
   pinCodeContainerStyle: {
-    marginLeft: 2,
-    marginRight: 20,
-    marginHorizontal: 20,
     height: 52,
     width: 52,
-    borderRadius: 6,
+    borderRadius: 8,
     backgroundColor: '#FFFFFF',
     borderWidth: 2,
-    borderColor: '#5A5A5A',
+    borderColor: '#00000038',
   },
   focusedPinCodeContainerStyle: {
     borderWidth: 2,
-    borderColor: '#5A5A5A',
+    borderColor: '#0400D1',
   },
   focusStickStyle: {
-    borderColor: '#5A5A5A',
+    borderColor: '#0400D1',
     borderWidth: 1,
     height: 20,
   },
   pinCodeTextStyle: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Bold',
     fontWeight: '600',
     fontSize: 16,
   },
