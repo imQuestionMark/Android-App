@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import { ControlledInput } from '@/components/ui';
 
@@ -9,12 +9,10 @@ type ExpCTCProps = ProfessionalControl & {};
 export const ExpCTC = ({ control }: ExpCTCProps) => {
   return (
     <View className="mb-5">
-      <Text className="mb-4 font-poppins text-[16px] font-medium">
-        Expected CTC
-      </Text>
       <ControlledInput
         control={control}
         name="expectedCTC"
+        label="Expected CTC"
         placeholder="18 LPA"
       />
     </View>

@@ -28,6 +28,14 @@ const Index = () => {
         >
           <Text>professional</Text>
         </Link>
+
+        <Link
+          className="m-4 border px-8 py-4"
+          href={{ pathname: '/professional2' }}
+        >
+          <Text>professional 2</Text>
+        </Link>
+
         <Link href={{ pathname: '/signup' }} className="m-4 border px-8 py-4">
           <Text>signup</Text>
         </Link>
