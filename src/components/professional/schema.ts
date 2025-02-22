@@ -5,6 +5,7 @@ export const professionalFormSchema = z
     roles: z.array(z.string()).min(1, 'Select at least one role'),
     locations: z.array(z.string()).min(1, 'Select at least one location'),
     workModes: z.array(z.string()).min(1, 'Select at least one work mode'),
+    experience: z.coerce.number(),
     currentCTC: z.coerce
       .number({
         required_error: 'Current CTC is required.',

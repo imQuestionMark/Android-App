@@ -1,21 +1,29 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import {
+  type SubmitErrorHandler,
+  type SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import { type GestureResponderEvent, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import GradientView from '@/components/onboarding/gradient-view';
+import {
+  CTC,
+  ExpCTC,
+  Experience,
+  Location,
+  ModeOfWork,
+  Role,
+} from '@/components/professional/components';
 import {
   type ProfessionalFormData,
   professionalFormSchema,
 } from '@/components/professional/schema';
-import { ControlledInput } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 
 const Professional = () => {
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-  } = useForm<ProfessionalFormData>({
+  const { control, handleSubmit } = useForm<ProfessionalFormData>({
     resolver: zodResolver(professionalFormSchema),
     defaultValues: {
       roles: [],
@@ -24,40 +32,46 @@ const Professional = () => {
       currentCTC: '',
       expectedCTC: '',
     },
+    shouldFocusError: false,
   });
 
-  const handlePress = () => {
-    console.log('Inside Handle press');
-    console.log({ errors });
-    handleSubmit((data) => console.log({ data }));
+  const onSubmit: SubmitHandler<ProfessionalFormData> = (data) => {
+    console.log(data);
+  };
+
+  const onError: SubmitErrorHandler<ProfessionalFormData> = (error) => {
+    console.warn(JSON.stringify(error, null, 2));
+  };
+
+  const handlePress = (e: GestureResponderEvent) => {
+    console.log('handleButtonPresss');
+    handleSubmit(onSubmit, onError)(e);
   };
 
   return (
     <GradientView>
-      <View className="m-4 flex-1 justify-between">
-        <View className="">
-          <Text className="font-poppins-semibold text-2xl">Job preference</Text>
+      <KeyboardAwareScrollView contentContainerClassName="grow">
+        <View className="m-4 flex-1 justify-between">
+          <View className="">
+            <Text className="font-poppins-semibold text-2xl">
+              Job preference
+            </Text>
 
-          <View className="mt-6">
-            <ControlledInput
-              name="currentCTC"
-              control={control}
-              label="Current CTC"
-              placeholder="8 LPA"
-            />
-            {/* <Role control={control} />
-            <Experience control={control} />
-            <Location control={control} />
-            <ModeOfWork control={control} /> */}
-            {/* <CTC control={control} /> */}
-            {/* <ExpCTC control={control} /> */}
+            <View className="mt-6">
+              <Role control={control} />
+              <Experience control={control} />
+              <Location control={control} />
+              <ModeOfWork control={control} />
+              <CTC control={control} />
+              <ExpCTC control={control} />
+            </View>
           </View>
-        </View>
 
-        <Button size="lg" variant="primary" onPress={handlePress}>
-          <ButtonText className="text-[20px]">Confirm</ButtonText>
-        </Button>
-      </View>
+          <Button size="lg" variant="primary" onPress={handlePress}>
+            <ButtonText className="text-[20px]">Confirm</ButtonText>
+          </Button>
+        </View>
+      </KeyboardAwareScrollView>
     </GradientView>
   );
 };

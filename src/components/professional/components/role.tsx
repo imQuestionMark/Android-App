@@ -1,4 +1,3 @@
-import React from 'react';
 import { useController } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
