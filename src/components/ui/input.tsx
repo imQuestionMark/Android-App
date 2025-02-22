@@ -18,7 +18,7 @@ const inputTv = tv({
     container: 'mb-2',
     label: 'text-grey-100 mb-2 font-poppins text-[16px] ',
     input: 'h-[50px] rounded-[6px] bg-white px-4 opacity-100',
-    hint: 'mb-2 font-poppins text-xs font-medium text-[#5A5A5A]',
+    hint: 'mb-2 font-poppins text-sm font-medium text-[#5A5A5A]',
   },
 
   variants: {

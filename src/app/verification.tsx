@@ -57,7 +57,7 @@ export default function Verification() {
         <View className="m-4 flex-1 justify-between">
           {/* Title */}
           <View className="flex gap-4">
-            <View className="flex-1 ">
+            <View className="">
               <View className="mb-3.5 flex-row gap-2">
                 <Text className="font-poppins-extrabold text-[32px] text-black">
                   Welcome

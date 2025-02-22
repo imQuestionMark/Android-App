@@ -6,7 +6,7 @@ import { tv, type VariantProps } from 'tailwind-variants';
 const buttonStyles = tv({
   slots: {
     base: 'flex-row items-center justify-center gap-2 rounded-md',
-    text: 'text-center font-poppins font-medium',
+    text: 'text-center font-poppins',
     iconContainer: 'shrink-0',
   },
   variants: {
