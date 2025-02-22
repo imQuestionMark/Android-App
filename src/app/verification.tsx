@@ -1,11 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'expo-router';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { type Control, useController, useForm } from 'react-hook-form';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { OtpInput } from 'react-native-otp-entry';
 
+import { resendOtpMutation } from '@/api/authentication/resend-otp';
 import {
   OTPInputSchema,
   useOtpMutation,
@@ -24,7 +24,32 @@ export default function Verification() {
     resolver: zodResolver(OTPInputSchema),
   });
 
+  const [countdown, setCountDown] = useState(30);
+  const [isResendAvailable, setIsResendAvailable] = useState(false);
+
+  useEffect(() => {
+    let interval: any;
+
+    if (countdown > 0) {
+      interval = setInterval(() => setCountDown((p) => p - 1), 1000);
+    } else {
+      setIsResendAvailable(true);
+    }
+
+    return () => clearInterval(interval);
+  }, [countdown]);
+
+  const handleResendOtp = () => {
+    // @TODO Import userId frome expo-secure-store
+    const userId = '67b365cfc73d9fe54c790711';
+
+    handleResend({ userId });
+    setCountDown(30);
+    setIsResendAvailable(false);
+  };
+
   const { mutate: handleLogin, isPending } = useOtpMutation();
+  const { mutate: handleResend } = resendOtpMutation();
   return (
     <GradientView className="">
       <KeyboardAwareScrollView contentContainerClassName="grow">
@@ -59,19 +84,30 @@ export default function Verification() {
               isDisabled={isPending}
               onPress={handleSubmit((data) => handleLogin(data))}
             >
-              {isPending && <ActivityIndicator color={'white'} />}
+              {isPending && <ActivityIndicator color="white" />}
               <ButtonText>Send OTP</ButtonText>
             </Button>
 
             <View>
-              <View className="flex flex-row items-center justify-center gap-2">
-                <Text className="text-center font-poppins font-medium leading-[30px] text-gray-500 ">
+              <View className="mt-1 flex flex-row justify-center gap-2">
+                <Text className="text-md font-poppins-medium text-gray-500">
                   Didn't receive OTP?
                 </Text>
 
-                <Link href={{ pathname: '/signup' }}>
-                  <Text className="font-medium text-primary">Resend</Text>
-                </Link>
+                <Button
+                  variant="ghost"
+                  className="size-auto"
+                  onPress={handleResendOtp}
+                  disabled={!isResendAvailable}
+                >
+                  <ButtonText
+                    className={`text-md font-poppins-medium ${!isResendAvailable ? 'text-gray-500' : 'text-primary'}`}
+                  >
+                    {isResendAvailable
+                      ? 'Resend'
+                      : `Resend OTP in ${countdown}s`}
+                  </ButtonText>
+                </Button>
               </View>
 
               <TermsandConditions />
