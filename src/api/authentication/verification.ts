@@ -1,9 +1,7 @@
-import type { AxiosError } from 'axios';
 import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
 import { z } from 'zod';
 
-import { showError } from '@/components/ui';
 import { API_ROUTES } from '@/routes/api-routes';
 
 import { client } from '../common';
@@ -29,14 +27,10 @@ const validOtp = async (data: Variables) => {
   return response.data;
 };
 
-export const useOtpMutation = createMutation<Response, Variables, AxiosError>({
+export const useOtpMutation = createMutation<Response, Variables, Error>({
   mutationFn: validOtp,
   onSuccess: (data) => {
     console.log('Login successful:', data);
     router.replace({ pathname: '/personal-details' });
-  },
-  onError: (error: AxiosError) => {
-    console.error(error);
-    showError(error);
   },
 });

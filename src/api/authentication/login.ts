@@ -1,7 +1,6 @@
-import { type AxiosError } from 'axios';
 import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
-import { z, type ZodError } from 'zod';
+import { z } from 'zod';
 
 import { API_ROUTES } from '@/routes/api-routes';
 
@@ -28,11 +27,7 @@ const submitForm = async (data: Variables) => {
   return loginResponseSchema.parse(response.data);
 };
 
-export const useLoginMutation = createMutation<
-  Response,
-  Variables,
-  AxiosError | ZodError
->({
+export const useLoginMutation = createMutation<Response, Variables, Error>({
   mutationFn: submitForm,
   onSuccess: (data) => {
     console.log('Login successful:', data);

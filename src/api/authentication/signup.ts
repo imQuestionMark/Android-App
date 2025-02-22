@@ -1,9 +1,7 @@
-import type { AxiosError } from 'axios';
 import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
 import { z } from 'zod';
 
-import { showError } from '@/components/ui';
 import { API_ROUTES } from '@/routes/api-routes';
 
 import { client } from '../common';
@@ -43,18 +41,10 @@ const submitForm = async (data: Variables) => {
   return SignUpResponseschema.parse(response.data);
 };
 
-export const useSignUpMutation = createMutation<
-  Response,
-  Variables,
-  AxiosError
->({
+export const useSignUpMutation = createMutation<Response, Variables, Error>({
   mutationFn: submitForm,
   onSuccess: (data) => {
     console.log('Login successful:', data);
     router.replace({ pathname: '/login' });
-  },
-  onError: (error: AxiosError) => {
-    console.error(error);
-    showError(error);
   },
 });
