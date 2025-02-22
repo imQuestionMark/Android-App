@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import {
@@ -19,13 +19,13 @@ export default function Signup() {
     defaultValues: {
       firstName: '',
       lastName: '',
-      email: '',
+      emailAddress: '',
       phone: '',
     },
     resolver: zodResolver(SignUpInputschema),
   });
 
-  const { mutate: handleLogin } = useSignUpMutation();
+  const { mutate: handleLogin, isPending } = useSignUpMutation();
   return (
     <>
       <GradientView>
@@ -63,8 +63,8 @@ export default function Signup() {
                 {/* Email  */}
                 <View className="mt-4">
                   <ControlledInput
-                    name="email"
                     control={control}
+                    name="emailAddress"
                     label="Enter your mail id"
                     placeholder="Enter your mail id"
                     hint="we will send you the 4 digit verification code"
@@ -88,10 +88,10 @@ export default function Signup() {
                 {/* Submit Button */}
                 <Button
                   size="lg"
+                  isDisabled={isPending}
                   onPress={handleSubmit((data) => handleLogin(data))}
-                  // isDisabled={isPending}
                 >
-                  {/* {isPending && <ActivityIndicator color={'white'} />} */}
+                  {isPending && <ActivityIndicator color={'white'} />}
                   <ButtonText>Send OTP</ButtonText>
                 </Button>
 

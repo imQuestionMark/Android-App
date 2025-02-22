@@ -15,7 +15,7 @@ export const SignUpInputschema = z.object({
     .string({ required_error: 'LastName is required' })
     .min(3, 'Minimum 3 characters')
     .max(16, 'Maximum 16 characters'),
-  email: z.string().min(1, 'Email is required').email(),
+  emailAddress: z.string().min(1, 'Email is required').email(),
   phone: z.coerce
     .number({
       required_error: 'Phone no. is required.',
@@ -43,8 +43,7 @@ const submitForm = async (data: Variables) => {
 
 export const useSignUpMutation = createMutation<Response, Variables, Error>({
   mutationFn: submitForm,
-  onSuccess: (data) => {
-    console.log('Login successful:', data);
+  onSuccess: () => {
     router.replace({ pathname: '/login' });
   },
 });

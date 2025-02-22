@@ -17,7 +17,7 @@ import { Button, ButtonText } from '@/components/ui/button';
 export default function Signin() {
   const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
-      email: 'test@gmail.com',
+      identifier: '19uca004@gmail.com',
     },
     resolver: zodResolver(loginInputSchema),
   });
@@ -41,7 +41,7 @@ export default function Signin() {
 
             <View>
               <ControlledInput
-                name="email"
+                name="identifier"
                 control={control}
                 keyboardType="email-address"
                 label="Enter your email address"
