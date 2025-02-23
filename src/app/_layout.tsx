@@ -4,7 +4,7 @@ import '../../global.css';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider, useNavigationState } from '@react-navigation/native';
 import { getLoadedFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
@@ -13,7 +13,7 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Toaster } from 'sonner-native';
 
 import { APIProvider } from '@/api';
-import { hydrateAuth } from '@/lib/auth';
+import { hydrateAuth, useAuth } from '@/lib/auth';
 import { loadSelectedTheme } from '@/lib/hooks';
 import { useThemeConfig } from '@/lib/use-theme-config';
 
@@ -35,13 +35,19 @@ SplashScreen.setOptions({
 
 export default function RootLayout() {
   const canGoBack = useNavigationState((state) => state.index > 0);
+  const authStatus = useAuth.use.status();
+
   useEffect(() => {
     const available = getLoadedFonts();
 
     console.log('🚀🚀🚀 ~ useEffect ~ available:', available);
 
-    SplashScreen.hideAsync(); // Hide the splash screen when ready
-  }, []);
+    SplashScreen.hideAsync().then(() => {
+      if (authStatus === 'authenticated') {
+        router.replace({ pathname: '/(protected)/home' });
+      }
+    });
+  }, [authStatus]);
 
   return (
     <Providers>

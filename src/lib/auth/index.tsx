@@ -43,6 +43,7 @@ const _useAuthStore = create<AuthState>((set, get) => ({
   signOut: async () => {
     try {
       await secureStore.remove();
+      devLog('Signing out', '');
       set({ status: 'unauthenticated', token: null });
     } catch (error) {
       showError(
