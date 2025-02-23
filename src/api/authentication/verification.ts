@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
 import { z } from 'zod';
 
+import { signIn } from '@/lib/auth';
 import { API_ROUTES } from '@/routes/api-routes';
 
 import { client } from '../common';
@@ -37,6 +38,8 @@ export const useOtpMutation = createMutation<Response, Variables, Error>({
   mutationFn: validOtp,
   onSuccess: (data) => {
     console.log('OTP Validation successful:', data);
+    // @INFO Save the token in expo-secure-store.
+    signIn(data.data.token);
     router.replace({ pathname: '/personal-details' });
   },
 });

@@ -1,45 +1,77 @@
+import { deleteItemAsync, getItemAsync, setItemAsync } from 'expo-secure-store';
 import { create } from 'zustand';
 
-import { createSelectors } from '../utils';
-import type { TokenType } from './utils';
-import { getToken, removeToken, setToken } from './utils';
+import { showError } from '@/components/ui';
+
+import { createSelectors, devLog } from '../utils';
+
+const TOKEN_KEY = 'GRID_TOKEN';
+
+type AuthStatus = 'authenticated' | 'idle' | 'unauthenticated';
 
 interface AuthState {
-  hydrate: () => void;
-  signIn: (data: TokenType) => void;
-  signOut: () => void;
-  status: 'idle' | 'signIn' | 'signOut';
-  token: null | TokenType;
+  hydrate: () => Promise<void>;
+  signIn: (token: string) => Promise<void>;
+  signOut: () => Promise<void>;
+  status: AuthStatus;
+  token: null | string;
 }
 
-const _useAuth = create<AuthState>((set, get) => ({
+const secureStore = {
+  get: () => getItemAsync(TOKEN_KEY),
+  set: (token: string) => setItemAsync(TOKEN_KEY, token),
+  remove: () => deleteItemAsync(TOKEN_KEY),
+} as const;
+
+const _useAuthStore = create<AuthState>((set, get) => ({
   status: 'idle',
   token: null,
-  signIn: (token) => {
-    setToken(token);
-    set({ status: 'signIn', token });
-  },
-  signOut: () => {
-    removeToken();
-    set({ status: 'signOut', token: null });
-  },
-  hydrate: () => {
+
+  signIn: async (token: string) => {
     try {
-      const userToken = getToken();
-      if (userToken !== null) {
-        get().signIn(userToken);
-      } else {
-        get().signOut();
-      }
-    } catch (e) {
-      // catch error here
-      // Maybe sign_out user!
+      await secureStore.set(token);
+      devLog('Sign In Token:', token);
+      set({ status: 'authenticated', token });
+    } catch (error) {
+      showError(
+        error instanceof Error ? error : new Error('Failed to sign in')
+      );
+      get().signOut();
+    }
+  },
+
+  signOut: async () => {
+    try {
+      await secureStore.remove();
+      set({ status: 'unauthenticated', token: null });
+    } catch (error) {
+      showError(
+        error instanceof Error ? error : new Error('Failed to sign out')
+      );
+      set({ status: 'unauthenticated', token: null });
+    }
+  },
+
+  hydrate: async () => {
+    try {
+      const token = await secureStore.get();
+      devLog('Hydrating:', token);
+
+      if (!token) return get().signOut();
+
+      await get().signIn(token);
+    } catch (error) {
+      showError(
+        error instanceof Error ? error : new Error('Failed to restore session')
+      );
+      get().signOut();
     }
   },
 }));
 
-export const useAuth = createSelectors(_useAuth);
+export const useAuth = createSelectors(_useAuthStore);
 
-export const signOut = () => _useAuth.getState().signOut();
-export const signIn = (token: TokenType) => _useAuth.getState().signIn(token);
-export const hydrateAuth = () => _useAuth.getState().hydrate();
+// @INFO use this only when you need to access these methods outside of React components.
+export const signOut = () => _useAuthStore.getState().signOut();
+export const signIn = (token: string) => _useAuthStore.getState().signIn(token);
+export const hydrateAuth = () => _useAuthStore.getState().hydrate();
