@@ -3,7 +3,6 @@ import '../../global.css';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider, useNavigationState } from '@react-navigation/native';
-import { getLoadedFonts } from 'expo-font';
 import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
@@ -25,9 +24,8 @@ export { ErrorBoundary } from 'expo-router';
 
 hydrateAuth();
 loadSelectedTheme();
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+
 SplashScreen.preventAutoHideAsync();
-// Set the animation options. This is optional.
 SplashScreen.setOptions({
   duration: 500,
   fade: true,
@@ -36,18 +34,21 @@ SplashScreen.setOptions({
 export default function RootLayout() {
   const canGoBack = useNavigationState((state) => state.index > 0);
   const authStatus = useAuth.use.status();
+  const isAuthenticated = authStatus === 'authenticated';
 
   useEffect(() => {
-    const available = getLoadedFonts();
-
-    console.log('🚀🚀🚀 ~ useEffect ~ available:', available);
-
-    SplashScreen.hideAsync().then(() => {
-      if (authStatus === 'authenticated') {
+    const bootstrapAsync = async () => {
+      if (isAuthenticated) {
         router.replace({ pathname: '/(protected)/home' });
+      } else {
+        router.replace({ pathname: '/login' });
       }
-    });
-  }, [authStatus]);
+
+      SplashScreen.hideAsync();
+    };
+
+    bootstrapAsync();
+  }, [isAuthenticated]);
 
   return (
     <Providers>
