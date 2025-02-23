@@ -3,18 +3,11 @@ import axios from 'axios';
 import camelcaseKeys from 'camelcase-keys';
 import snakecaseKeys from 'snakecase-keys';
 
+import { devLog } from '@/lib/utils';
+
 export const client = axios.create({
   baseURL: Env.API_URL,
 });
-
-/**
- * Logs API requests and responses in development mode
- */
-const devLog = (label: string, data: unknown) => {
-  if (Env.APP_ENV === 'development') {
-    console.log(`${label}:`, JSON.stringify(data, null, 2));
-  }
-};
 
 // Request interceptor: Convert request payload keys to snake_case
 client.interceptors.request.use((config) => {

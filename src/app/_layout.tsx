@@ -13,7 +13,8 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Toaster } from 'sonner-native';
 
 import { APIProvider } from '@/api';
-import { hydrateAuth, loadSelectedTheme } from '@/lib';
+import { hydrateAuth } from '@/lib/auth';
+import { loadSelectedTheme } from '@/lib/hooks';
 import { useThemeConfig } from '@/lib/use-theme-config';
 
 export { ErrorBoundary } from 'expo-router';

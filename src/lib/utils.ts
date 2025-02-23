@@ -1,3 +1,4 @@
+import { Env } from '@env';
 import { Linking } from 'react-native';
 import type { StoreApi, UseBoundStore } from 'zustand';
 
@@ -19,4 +20,10 @@ export const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(
   }
 
   return store;
+};
+
+export const devLog = (label: string = 'DEV:', data: unknown) => {
+  if (Env.APP_ENV === 'development') {
+    console.log(`${label}:`, JSON.stringify(data, null, 2));
+  }
 };
