@@ -2,7 +2,7 @@
 import '../../global.css';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { ThemeProvider, useNavigationState } from '@react-navigation/native';
+import { ThemeProvider } from '@react-navigation/native';
 import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
@@ -32,7 +32,6 @@ SplashScreen.setOptions({
 });
 
 export default function RootLayout() {
-  const canGoBack = useNavigationState((state) => state.index > 0);
   const authStatus = useAuth.use.status();
   const isAuthenticated = authStatus === 'authenticated';
 
@@ -41,7 +40,7 @@ export default function RootLayout() {
       if (isAuthenticated) {
         router.replace({ pathname: '/(protected)/home' });
       } else {
-        router.replace({ pathname: '/login' });
+        router.replace({ pathname: '/(authentication)/login' });
       }
 
       SplashScreen.hideAsync();
@@ -52,28 +51,9 @@ export default function RootLayout() {
 
   return (
     <Providers>
-      <Stack
-        screenOptions={{
-          headerShown: canGoBack,
-          headerTitle: '',
-          headerShadowVisible: false,
-          headerTransparent: true,
-          headerBackTitle: '',
-          headerStyle: { backgroundColor: 'rgba(0, 0, 0, 0)' },
-          // headerLeft: () => (
-          //   <Pressable className="-ml-2" onPress={() => router.back()}>
-          //     <ChevronLeft size={24} color="#808080" />
-          //   </Pressable>
-          // ),
-        }}
-      >
-        <Stack.Screen name="index" />
-        <Stack.Screen name="login" />
-        <Stack.Screen name="signup" />
-        <Stack.Screen name="personal-details" />
-        <Stack.Screen name="professional" />
-        <Stack.Screen name="verification" />
-        <Stack.Screen name="test" />
+      <Stack>
+        <Stack.Screen name="(authentication)" />
+        <Stack.Screen name="(protected)" />
       </Stack>
     </Providers>
   );
