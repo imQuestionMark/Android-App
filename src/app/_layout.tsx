@@ -3,7 +3,7 @@ import '../../global.css';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider } from '@react-navigation/native';
-import { router, Stack } from 'expo-router';
+import { router, Stack, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
@@ -34,20 +34,30 @@ SplashScreen.setOptions({
 export default function RootLayout() {
   const authStatus = useAuth.use.status();
   const isAuthenticated = authStatus === 'authenticated';
+  const segments = useSegments();
 
   useEffect(() => {
     const bootstrapAsync = async () => {
-      if (isAuthenticated) {
-        router.replace({ pathname: '/(protected)/home' });
-      } else {
-        router.replace({ pathname: '/(authentication)/login' });
-      }
+      try {
+        const inAuthGroup = segments[0] === '(authentication)';
+        const inProtectedGroup = segments[0] === '(protected)';
 
-      SplashScreen.hideAsync();
+        if (!isAuthenticated && inProtectedGroup) {
+          router.replace('/(authentication)/login');
+        } else if (isAuthenticated && inAuthGroup) {
+          router.replace('/(protected)/home');
+        } else if (!segments.length) {
+          router.replace(
+            isAuthenticated ? '/(protected)/home' : '/(authentication)/login'
+          );
+        }
+      } finally {
+        await SplashScreen.hideAsync();
+      }
     };
 
     bootstrapAsync();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, segments]);
 
   return (
     <Providers>
