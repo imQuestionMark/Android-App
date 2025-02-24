@@ -100,9 +100,9 @@ export default function PersonalDetails() {
 
           <Nationality control={control} />
         </View>
-      </View>
 
-      <BottomNav onPress={() => {}} />
+        <BottomNav onPress={() => {}} />
+      </View>
 
       {__DEV__ && Platform.OS === 'web' && <DevTool control={control} />}
     </GradientView>
