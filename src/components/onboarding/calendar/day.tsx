@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import { type DateData } from 'react-native-calendars';
 import { type BasicDayProps } from 'react-native-calendars/src/calendar/day/basic';
 import { tv } from 'tailwind-variants';
@@ -44,6 +44,11 @@ const { base, dayText } = dayTv();
 export const _renderDay = (props: CustomDayProps) => {
   const { state, marking, date, onPress, accessibilityLabel, testID } = props;
 
+  console.log(marking);
+  // console.log({ state });
+
+  const isSelected = marking?.selected ? 'selected' : '';
+
   const handleDayPress = () => {
     onPress && onPress(date);
   };
@@ -55,8 +60,10 @@ export const _renderDay = (props: CustomDayProps) => {
       accessibilityLabel={accessibilityLabel}
       className={base({ state, className: marking?.selectedColor })}
     >
-      <Text className={dayText({ state })}>{date?.day}</Text>
-      {marking && <View className="size-2 bg-purple-800" />}
+      <Text className={dayText({ state: isSelected })}>{date?.day}</Text>
+      {/* {marking && (
+        <View className="absolute bottom-0.5 size-2 rounded-full bg-purple-800" />
+      )} */}
     </Pressable>
   );
 };

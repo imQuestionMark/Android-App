@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { type Control, useController } from 'react-hook-form';
 import { View } from 'react-native';
 import { Calendar as RNCalendar } from 'react-native-calendars';
 import {
@@ -7,6 +8,8 @@ import {
 } from 'react-native-calendars/src/types';
 import type XDate from 'xdate';
 
+import { type PersonalDetailsProps } from '@/app/(authentication)/personal-details';
+
 import { _renderArrows } from './arrows';
 import { _renderDay } from './day';
 import { CalendarHeader } from './header';
@@ -14,29 +17,30 @@ import { MonthModal } from './month';
 import { YearModal } from './year';
 
 const _MARKED_DATES = {
-  '2025-01-01': { selected: true, marked: true, selectedColor: 'bg-red-500' },
-  '2025-01-17': { marked: true },
-  '2025-01-18': { marked: true, dotColor: 'red', activeOpacity: 0 },
-  '2025-01-19': { disabled: true, disableTouchEvent: true },
+  // '2025-01-01': { selectedColor: 'bg-red-500' },
 };
 
-export function ControlledCalendar() {
-  const [markedDates, setMarkedDates] = useState<MarkedDates>(_MARKED_DATES);
-
-  return <Calendar markedDates={markedDates} setMarkedDates={setMarkedDates} />;
+export function ControlledCalendar({
+  control,
+}: {
+  control: Control<PersonalDetailsProps>;
+}) {
+  return <Calendar control={control} />;
 }
 
 type TCalendar = {
-  markedDates: MarkedDates;
-  setMarkedDates: React.Dispatch<React.SetStateAction<MarkedDates>>;
+  control: Control<PersonalDetailsProps>;
 };
 
-const today = new Date('2022-08-03');
+const today = new Date('2025-01-03');
 
-function Calendar({ markedDates, setMarkedDates }: TCalendar) {
+function Calendar({ control }: TCalendar) {
   const [isMonthModalVisisble, setIsMonthModalVisible] = useState(false);
   const [isYearModalVisisble, setIsYearModalVisible] = useState(false);
   const [currentState, setCurrentState] = useState(today);
+  const [markedDates, setMarkedDates] = useState<MarkedDates>(_MARKED_DATES);
+
+  const { field } = useController({ control, name: 'DOB' });
 
   const toggleMonthModal = () => setIsMonthModalVisible((p) => !p);
   const toggleYearModal = () => setIsYearModalVisible((p) => !p);
@@ -57,10 +61,12 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
 
   const handleDayPress = ({ dateString }: DateData) => {
     const newMarkedDate: MarkedDates = {
-      [dateString]: { selected: true, selectedColor: 'bg-purple-500' },
+      [dateString]: { selected: true, selectedColor: 'bg-primary' },
     };
     console.log('Handle Day Press', new Date(dateString));
     setCurrentState(new Date(dateString));
+    field.onChange(new Date(dateString));
+
     setMarkedDates({
       ...markedDates,
       ...newMarkedDate,
