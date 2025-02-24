@@ -101,7 +101,7 @@ export default function Signup() {
                       If you already have an account?
                     </Text>
 
-                    <Link className="" href={{ pathname: '/login' }}>
+                    <Link replace href={{ pathname: '/login' }}>
                       <Text className="font-medium text-primary">Login</Text>
                     </Link>
                   </View>

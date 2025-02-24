@@ -66,7 +66,7 @@ export default function Signin() {
                   If you already have an account?
                 </Text>
 
-                <Link href={{ pathname: '/signup' }}>
+                <Link replace href={{ pathname: '/signup' }}>
                   <Text className="font-poppins-medium text-primary">
                     SignUp
                   </Text>
