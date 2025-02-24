@@ -22,7 +22,6 @@ export const SignUpInputschema = z.object({
       message: 'Must be only numbers',
     })
     .min(10, 'Phone number must be 10 digits')
-    .max(10, 'Phone number must be 10 digits')
     .transform(String),
 });
 
