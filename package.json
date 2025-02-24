@@ -100,6 +100,7 @@
     "@dev-plugins/react-query": "0.0.7",
     "@expo/config": "10.0.3",
     "@hookform/devtools": "^4.3.3",
+    "@react-native-community/cli": "^15.1.3",
     "@tanstack/eslint-plugin-query": "^5.66.1",
     "@testing-library/jest-dom": "6.5.0",
     "@testing-library/react-native": "12.7.2",

@@ -1,11 +1,10 @@
-import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from 'expo-router';
 import { CalendarDays } from 'lucide-react-native';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Modal,
-  Platform,
   Pressable,
   Text,
   TouchableWithoutFeedback,
@@ -15,7 +14,6 @@ import { z } from 'zod';
 
 import { ControlledCalendar } from '@/components/onboarding/calendar';
 import GradientView from '@/components/onboarding/gradient-view';
-import BottomNav from '@/components/personal-details/bottom-nav';
 import { Nationality } from '@/components/personal-details/nationality';
 
 const personalDetailsSchema = z.object({
@@ -101,10 +99,23 @@ export default function PersonalDetails() {
           <Nationality control={control} />
         </View>
 
-        <BottomNav onPress={() => {}} />
-      </View>
+        <View id="bottomNavigation">
+          <View className="flex items-end ">
+            <Pressable onPress={() => {}} className="mb-6 p-4 ">
+              <Link href={{ pathname: '/' }}>
+                <Text className="font-poppins text-[20px] font-medium text-primary">
+                  Confirm
+                </Text>
+              </Link>
+            </Pressable>
+          </View>
 
-      {__DEV__ && Platform.OS === 'web' && <DevTool control={control} />}
+          <View className="flex-row justify-between gap-4">
+            <View className="h-1 grow rounded-xl bg-primary" />
+            <View className="h-1 grow rounded-xl bg-[#C9C9C9]" />
+          </View>
+        </View>
+      </View>
     </GradientView>
   );
 }
