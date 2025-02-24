@@ -7,7 +7,7 @@ import { createSelectors, devLog } from '../utils';
 
 const TOKEN_KEY = 'GRID_TOKEN';
 
-type AuthStatus = 'authenticated' | 'idle' | 'unauthenticated';
+export type AuthStatus = 'authenticated' | 'idle' | 'unauthenticated';
 
 interface AuthState {
   hydrate: () => Promise<void>;

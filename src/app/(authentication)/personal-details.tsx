@@ -15,6 +15,7 @@ import { z } from 'zod';
 
 import { ControlledCalendar } from '@/components/onboarding/calendar';
 import GradientView from '@/components/onboarding/gradient-view';
+import BottomNav from '@/components/personal-details/bottom-nav';
 import { Nationality } from '@/components/personal-details/nationality';
 
 const personalDetailsSchema = z.object({
@@ -100,6 +101,8 @@ export default function PersonalDetails() {
           <Nationality control={control} />
         </View>
       </View>
+
+      <BottomNav onPress={() => {}} />
 
       {__DEV__ && Platform.OS === 'web' && <DevTool control={control} />}
     </GradientView>

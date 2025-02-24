@@ -118,7 +118,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 10,
     height: 50,
-    alignItems: 'flex-end',
   },
   imageStyle: {
     width: 28,
