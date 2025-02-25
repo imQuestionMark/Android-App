@@ -4,9 +4,9 @@
   "private": true,
   "main": "expo-router/entry",
   "scripts": {
-    "start": "cross-env EXPO_NO_DOTENV=1 expo start",
+    "start": "cross-env EXPO_NO_DOTENV=1 expo start --port 8888",
     "prebuild": "cross-env EXPO_NO_DOTENV=1 pnpm expo prebuild",
-    "android": "cross-env EXPO_NO_DOTENV=1 expo run:android",
+    "android": "cross-env EXPO_NO_DOTENV=1 expo run:android --port 8888",
     "ios": "cross-env EXPO_NO_DOTENV=1 expo run:ios",
     "web": "cross-env EXPO_NO_DOTENV=1 expo start --web",
     "xcode": "xed -b ios",
