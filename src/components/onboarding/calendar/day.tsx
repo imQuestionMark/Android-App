@@ -44,7 +44,7 @@ const { base, dayText } = dayTv();
 export const _renderDay = (props: CustomDayProps) => {
   const { state, marking, date, onPress, accessibilityLabel, testID } = props;
 
-  console.log(marking);
+  // console.log(marking);
   // console.log({ state });
 
   const isSelected = marking?.selected ? 'selected' : '';

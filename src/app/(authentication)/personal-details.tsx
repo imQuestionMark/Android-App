@@ -16,10 +16,13 @@ import GradientView from '@/components/onboarding/gradient-view';
 import BottomNav from '@/components/personal-details/bottom-nav';
 import { Nationality } from '@/components/personal-details/nationality';
 import { useOnboardingStore } from '@/lib/store/onboarding';
+import { usePersonalStore } from '@/lib/store/personal-details';
 
 const personalDetailsSchema = z.object({
-  nationality: z.string(),
-  DOB: z.string(),
+  nationality: z.string({ required_error: 'Nationality must be selected' }),
+  DOB: z
+    .string({ required_error: 'Date of Birth is required' })
+    .date('Invalid Date received'),
   // address: z.string(),
   // gender: z.enum(['M', 'F']),
 });
@@ -31,12 +34,13 @@ type TDateofBirth = z.infer<typeof personalDetailsSchema>;
 export default function PersonalDetails() {
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const { updateCurrentPage, updateStatus } = useOnboardingStore();
+  const { dob } = usePersonalStore();
 
   const { control, handleSubmit } = useForm<TDateofBirth>({
-    defaultValues: {
-      DOB: '03/05/2002',
-      nationality: '',
-    },
+    // defaultValues: {
+    //   DOB: dob,
+    //   nationality: '',
+    // },
     shouldFocusError: false,
     resolver: zodResolver(personalDetailsSchema),
   });
@@ -53,9 +57,13 @@ export default function PersonalDetails() {
         updateStatus('pending');
       },
       (errors) => {
-        console.error('Form validation errors:', errors);
+        console.error(
+          'Form validation errors:',
+          JSON.stringify(errors, null, 2)
+        );
       }
     )();
+    // submit to API. onSuccess callback --> updateCurrentPage(1) --> router.push('/profressional)
   };
 
   return (
@@ -85,11 +93,11 @@ export default function PersonalDetails() {
             {/* @TODO: Fix max width based on dimensions */}
             <Pressable
               onPress={toggleCalendarModal}
-              className="relative mt-3 max-w-64 flex-row items-center gap-4 rounded-md bg-[#F4F7FF] px-7 "
+              className="relative mt-3 max-w-64 flex-row items-center gap-4 rounded-md bg-white px-7 "
             >
               <CalendarDays color="#5A5A5A" />
-              <Text className="py-[10px] font-poppins-medium text-[12px] leading-[16px] text-[#5A5A5A]">
-                dd/mm/yyyy
+              <Text className="py-[10px] font-poppins text-[16px] text-black">
+                {dob || 'dd/mm/yyyy'}
               </Text>
             </Pressable>
 
@@ -102,7 +110,10 @@ export default function PersonalDetails() {
               <TouchableWithoutFeedback onPress={hideCalendarModal}>
                 {/* mb-[150px] */}
                 <View className="max-w-[500px] flex-1 items-center justify-center">
-                  <ControlledCalendar control={control} />
+                  <ControlledCalendar
+                    control={control}
+                    hideCalendarModal={hideCalendarModal}
+                  />
                 </View>
               </TouchableWithoutFeedback>
             </Modal>
