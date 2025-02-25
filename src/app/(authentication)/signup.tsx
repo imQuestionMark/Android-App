@@ -17,10 +17,10 @@ import { Button, ButtonText } from '@/components/ui/button';
 export default function Signup() {
   const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      emailAddress: '',
-      phone: '',
+      firstName: 'test1',
+      lastName: 'test2',
+      emailAddress: '19uca004+test@gmail.com',
+      phone: '9008007001',
     },
     resolver: zodResolver(SignUpInputschema),
   });

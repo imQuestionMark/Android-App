@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { router } from 'expo-router';
 import { CalendarDays } from 'lucide-react-native';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -55,6 +56,7 @@ export default function PersonalDetails() {
         console.log('Form data valid:', data);
         updateCurrentPage(1);
         updateStatus('pending');
+        router.push({ pathname: '/(authentication)/professional' });
       },
       (errors) => {
         console.error(

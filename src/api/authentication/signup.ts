@@ -43,6 +43,6 @@ const submitForm = async (data: Variables) => {
 export const useSignUpMutation = createMutation<Response, Variables, Error>({
   mutationFn: submitForm,
   onSuccess: () => {
-    router.replace({ pathname: '/login' });
+    router.replace({ pathname: '/(authentication)/personal-details' });
   },
 });

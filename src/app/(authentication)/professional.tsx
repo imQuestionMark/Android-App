@@ -8,6 +8,7 @@ import { type GestureResponderEvent, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import GradientView from '@/components/onboarding/gradient-view';
+import BottomNav from '@/components/personal-details/bottom-nav';
 import {
   CTC,
   ExpCTC,
@@ -20,7 +21,6 @@ import {
   type ProfessionalFormData,
   professionalFormSchema,
 } from '@/components/professional/schema';
-import { Button, ButtonText } from '@/components/ui/button';
 
 const Professional = () => {
   const { control, handleSubmit } = useForm<ProfessionalFormData>({
@@ -43,9 +43,9 @@ const Professional = () => {
     console.warn(JSON.stringify(error, null, 2));
   };
 
-  const handlePress = (e: GestureResponderEvent) => {
+  const handlePress = () => {
     console.log('handleButtonPresss');
-    handleSubmit(onSubmit, onError)(e);
+    handleSubmit(onSubmit, onError)();
   };
 
   return (
@@ -67,9 +67,7 @@ const Professional = () => {
             </View>
           </View>
 
-          <Button size="lg" variant="primary" onPress={handlePress}>
-            <ButtonText className="text-[20px]">Confirm</ButtonText>
-          </Button>
+          <BottomNav onPress={handlePress} />
         </View>
       </KeyboardAwareScrollView>
     </GradientView>
