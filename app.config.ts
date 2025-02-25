@@ -5,7 +5,8 @@ import type { AppIconBadgeConfig } from 'app-icon-badge/types';
 import { ClientEnv, Env } from './env';
 
 const appIconBadgeConfig: AppIconBadgeConfig = {
-  enabled: Env.APP_ENV !== 'production',
+  // enabled: Env.APP_ENV !== 'production',
+  enabled: false,
   badges: [
     {
       text: Env.APP_ENV,
@@ -39,28 +40,39 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: Env.BUNDLE_ID,
+    icon: {
+      dark: './assets/icons/ios-dark.png',
+      light: './assets/icons/ios-light.png',
+      tinted: './assets/icons/ios-tinted.png',
+    },
   },
   experiments: {
     typedRoutes: true,
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: './assets/adaptive-icon.png',
-      backgroundColor: '#2E3C4B',
+      foregroundImage: './assets/icons/adaptive-icon.png',
+      monochromeImage: './assets/icons/adaptive-icon.png',
+      backgroundColor: '#0400D1',
     },
     package: Env.PACKAGE,
   },
   web: {
-    favicon: './assets/favicon.png',
+    favicon: './assets/icons/adaptive-icon.png',
     bundler: 'metro',
   },
   plugins: [
     [
       'expo-splash-screen',
       {
-        backgroundColor: '#2E3C4B',
-        image: './assets/splash-icon.png',
-        imageWidth: 150,
+        backgroundColor: '#0400D1',
+        image: './assets/icons/splash-icon-light.png',
+        imageWidth: 250,
+        resizeMode: 'contain',
+        dark: {
+          backgroundColor: '#000',
+          image: './assets/icons/splash-icon-dark.png',
+        },
       },
     ],
     [
