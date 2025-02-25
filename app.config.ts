@@ -30,7 +30,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: 'banana',
   version: Env.VERSION.toString(),
   orientation: 'portrait',
-  icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
   updates: {
@@ -53,7 +52,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     adaptiveIcon: {
       foregroundImage: './assets/icons/adaptive-icon.png',
       monochromeImage: './assets/icons/adaptive-icon.png',
-      backgroundColor: '#0400D1',
+      backgroundColor: '#2800C9',
     },
     package: Env.PACKAGE,
   },
@@ -65,10 +64,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       'expo-splash-screen',
       {
-        backgroundColor: '#0400D1',
+        backgroundColor: '#2800C9',
         image: './assets/icons/splash-icon-light.png',
         imageWidth: 250,
-        resizeMode: 'contain',
+        resizeMode: 'cover',
         dark: {
           backgroundColor: '#000',
           image: './assets/icons/splash-icon-dark.png',
