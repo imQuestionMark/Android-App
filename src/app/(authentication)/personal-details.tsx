@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'expo-router';
 import { CalendarDays } from 'lucide-react-native';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -14,13 +13,15 @@ import { z } from 'zod';
 
 import { ControlledCalendar } from '@/components/onboarding/calendar';
 import GradientView from '@/components/onboarding/gradient-view';
+import BottomNav from '@/components/personal-details/bottom-nav';
 import { Nationality } from '@/components/personal-details/nationality';
+import { useOnboardingStore } from '@/lib/store/onboarding';
 
 const personalDetailsSchema = z.object({
   nationality: z.string(),
-  address: z.string(),
   DOB: z.string(),
-  gender: z.enum(['M', 'F']),
+  // address: z.string(),
+  // gender: z.enum(['M', 'F']),
 });
 
 export type PersonalDetailsProps = z.infer<typeof personalDetailsSchema>;
@@ -29,16 +30,33 @@ type TDateofBirth = z.infer<typeof personalDetailsSchema>;
 
 export default function PersonalDetails() {
   const [showCalendarModal, setShowCalendarModal] = useState(false);
+  const { updateCurrentPage, updateStatus } = useOnboardingStore();
 
-  const { control } = useForm<TDateofBirth>({
+  const { control, handleSubmit } = useForm<TDateofBirth>({
     defaultValues: {
+      DOB: '03/05/2002',
       nationality: '',
     },
+    shouldFocusError: false,
     resolver: zodResolver(personalDetailsSchema),
   });
 
   const toggleCalendarModal = () => setShowCalendarModal((p) => !p);
   const hideCalendarModal = () => setShowCalendarModal(false);
+
+  const goToNext = () => {
+    console.log('Confirm clicked');
+    handleSubmit(
+      (data) => {
+        console.log('Form data valid:', data);
+        updateCurrentPage(1);
+        updateStatus('pending');
+      },
+      (errors) => {
+        console.error('Form validation errors:', errors);
+      }
+    )();
+  };
 
   return (
     <GradientView>
@@ -99,22 +117,7 @@ export default function PersonalDetails() {
           <Nationality control={control} />
         </View>
 
-        <View id="bottomNavigation">
-          <View className="flex items-end ">
-            <Pressable onPress={() => {}} className="mb-6 p-4 ">
-              <Link href={{ pathname: '/' }}>
-                <Text className="font-poppins text-[20px] font-medium text-primary">
-                  Confirm
-                </Text>
-              </Link>
-            </Pressable>
-          </View>
-
-          <View className="flex-row justify-between gap-4">
-            <View className="h-1 grow rounded-xl bg-primary" />
-            <View className="h-1 grow rounded-xl bg-[#C9C9C9]" />
-          </View>
-        </View>
+        <BottomNav onPress={goToNext} />
       </View>
     </GradientView>
   );

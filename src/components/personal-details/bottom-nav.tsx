@@ -21,9 +21,9 @@ const bottomNavStyles = tv({
 
 const { bar, barContainer } = bottomNavStyles();
 
-const BottomNav = ({ onPress }: { onPress: () => void }) => {
-  const totalBars = useOnboardingStore().totalPages;
-  const current = useOnboardingStore().current;
+const BottomNav = ({ onPress }: { onPress?: () => void }) => {
+  const { totalPages, currentPage } = useOnboardingStore();
+  const pages = new Array(totalPages).fill(0);
 
   return (
     <View>
@@ -36,9 +36,9 @@ const BottomNav = ({ onPress }: { onPress: () => void }) => {
       </View>
 
       <View className={barContainer()}>
-        {Array(totalBars).map((_, idx) => {
+        {pages.map((_, idx) => {
           return (
-            <View key={idx} className={bar({ active: current === idx })} />
+            <View key={idx} className={bar({ active: currentPage >= idx })} />
           );
         })}
       </View>
