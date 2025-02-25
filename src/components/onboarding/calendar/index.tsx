@@ -55,6 +55,7 @@ export function ControlledCalendar({ control, hideCalendarModal }: TCalendar) {
     const newMarkedDate: MarkedDates = {
       [dateString]: { selected: true, selectedColor: 'bg-primary' },
     };
+    console.log('Marked date', newMarkedDate);
     console.log('Handle Day Press', new Date(dateString));
     console.log('String format', dateString);
     setUserSelection(new Date(dateString));
