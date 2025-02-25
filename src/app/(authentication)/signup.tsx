@@ -97,7 +97,7 @@ export default function Signup() {
 
                 <View className="">
                   <View className="flex flex-row items-center justify-center gap-2">
-                    <Text className="text-center font-poppins font-medium leading-[30px] text-gray-500 ">
+                    <Text className="text-center font-poppins-medium leading-[30px] text-gray-500">
                       If you already have an account?
                     </Text>
 

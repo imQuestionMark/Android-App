@@ -4,7 +4,7 @@ import {
   type SubmitHandler,
   useForm,
 } from 'react-hook-form';
-import { type GestureResponderEvent, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import GradientView from '@/components/onboarding/gradient-view';
