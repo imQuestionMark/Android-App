@@ -17,7 +17,7 @@ import { Button, ButtonText } from '@/components/ui/button';
 export default function Signin() {
   const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
-      email: 'test@gmail.com',
+      identifier: '19uca004@gmail.com',
     },
     resolver: zodResolver(loginInputSchema),
   });
@@ -30,18 +30,18 @@ export default function Signin() {
         <View className="m-4 flex-1 justify-between ">
           <View className="">
             <View className="mb-3.5 flex-row gap-2">
-              <Text className="font-poppins text-[32px] font-bold text-primary">
+              <Text className="font-poppins-bold text-[32px] text-primary">
                 Sign
               </Text>
 
-              <Text className="font-poppins text-[32px] font-bold text-[#161616]">
+              <Text className="font-poppins-bold text-[32px] text-[#161616]">
                 in
               </Text>
             </View>
 
             <View>
               <ControlledInput
-                name="email"
+                name="identifier"
                 control={control}
                 keyboardType="email-address"
                 label="Enter your email address"
@@ -62,12 +62,14 @@ export default function Signin() {
 
             <View className="">
               <View className="flex flex-row items-center justify-center gap-2">
-                <Text className="text-center font-poppins font-medium leading-[30px] text-gray-500 ">
+                <Text className="text-center font-poppins-medium text-gray-500 ">
                   If you already have an account?
                 </Text>
 
-                <Link href={{ pathname: '/signup' }}>
-                  <Text className="font-medium text-primary">SignUp</Text>
+                <Link replace href={{ pathname: '/signup' }}>
+                  <Text className="font-poppins-medium text-primary">
+                    SignUp
+                  </Text>
                 </Link>
               </View>
 

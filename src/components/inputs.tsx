@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Text } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
 
 import type { OptionType } from '@/components/ui';
-import { Input, Select, View } from '@/components/ui';
+import { Input, Select } from '@/components/ui';
 import { Checkbox, Radio, Switch } from '@/components/ui';
 
 const options: OptionType[] = [

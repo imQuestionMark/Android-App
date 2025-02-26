@@ -1,9 +1,7 @@
-import type { AxiosError } from 'axios';
 import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
 import { z } from 'zod';
 
-import { showError } from '@/components/ui';
 import { API_ROUTES } from '@/routes/api-routes';
 
 import { client } from '../common';
@@ -17,14 +15,13 @@ export const SignUpInputschema = z.object({
     .string({ required_error: 'LastName is required' })
     .min(3, 'Minimum 3 characters')
     .max(16, 'Maximum 16 characters'),
-  email: z.string().min(1, 'Email is required').email(),
+  emailAddress: z.string().min(1, 'Email is required').email(),
   phone: z.coerce
     .number({
       required_error: 'Phone no. is required.',
       message: 'Must be only numbers',
     })
     .min(10, 'Phone number must be 10 digits')
-    .max(10, 'Phone number must be 10 digits')
     .transform(String),
 });
 
@@ -43,18 +40,9 @@ const submitForm = async (data: Variables) => {
   return SignUpResponseschema.parse(response.data);
 };
 
-export const useSignUpMutation = createMutation<
-  Response,
-  Variables,
-  AxiosError
->({
+export const useSignUpMutation = createMutation<Response, Variables, Error>({
   mutationFn: submitForm,
-  onSuccess: (data) => {
-    console.log('Login successful:', data);
-    router.replace({ pathname: '/login' });
-  },
-  onError: (error: AxiosError) => {
-    console.error(error);
-    showError(error);
+  onSuccess: () => {
+    router.replace({ pathname: '/(authentication)/personal-details' });
   },
 });

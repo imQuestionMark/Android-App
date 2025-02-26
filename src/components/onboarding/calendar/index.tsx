@@ -1,11 +1,14 @@
 import { useState } from 'react';
+import { type Control, useController } from 'react-hook-form';
 import { View } from 'react-native';
 import { Calendar as RNCalendar } from 'react-native-calendars';
 import {
   type DateData,
   type MarkedDates,
 } from 'react-native-calendars/src/types';
-import type XDate from 'xdate';
+
+import { type PersonalDetailsProps } from '@/app/(authentication)/personal-details';
+import { usePersonalStore } from '@/lib/store/personal-details';
 
 import { _renderArrows } from './arrows';
 import { _renderDay } from './day';
@@ -14,29 +17,22 @@ import { MonthModal } from './month';
 import { YearModal } from './year';
 
 const _MARKED_DATES = {
-  '2025-01-01': { selected: true, marked: true, selectedColor: 'bg-red-500' },
-  '2025-01-17': { marked: true },
-  '2025-01-18': { marked: true, dotColor: 'red', activeOpacity: 0 },
-  '2025-01-19': { disabled: true, disableTouchEvent: true },
+  // '2025-01-01': { selectedColor: 'bg-red-500' },
 };
-
-export function ControlledCalendar() {
-  const [markedDates, setMarkedDates] = useState<MarkedDates>(_MARKED_DATES);
-
-  return <Calendar markedDates={markedDates} setMarkedDates={setMarkedDates} />;
-}
 
 type TCalendar = {
-  markedDates: MarkedDates;
-  setMarkedDates: React.Dispatch<React.SetStateAction<MarkedDates>>;
+  control: Control<PersonalDetailsProps>;
+  hideCalendarModal: () => void;
 };
 
-const today = new Date('2022-08-03');
+const today = new Date();
 
-function Calendar({ markedDates, setMarkedDates }: TCalendar) {
+export function ControlledCalendar({ control, hideCalendarModal }: TCalendar) {
   const [isMonthModalVisisble, setIsMonthModalVisible] = useState(false);
   const [isYearModalVisisble, setIsYearModalVisible] = useState(false);
-  const [currentState, setCurrentState] = useState(today);
+  const { field } = useController({ control, name: 'DOB' });
+  const [userSelection, setUserSelection] = useState(today);
+  const { updateDOB } = usePersonalStore();
 
   const toggleMonthModal = () => setIsMonthModalVisible((p) => !p);
   const toggleYearModal = () => setIsYearModalVisible((p) => !p);
@@ -44,47 +40,47 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
   const _updateMonth = (month: number) => {
     if (month < 0 || month > 11) throw new Error('Invalid month');
 
-    const newMonth = new Date(new Date(currentState).setMonth(month));
+    const newMonth = new Date(new Date(userSelection).setMonth(month));
     console.log('Updating month', newMonth);
-    setCurrentState(newMonth);
+    setUserSelection(newMonth);
   };
 
   const _updateYear = (year: number) => {
-    const newYear = new Date(new Date(currentState).setFullYear(year));
-    setCurrentState(newYear);
+    const newYear = new Date(new Date(userSelection).setFullYear(year));
+    setUserSelection(newYear);
     console.log('Updating year', newYear);
   };
 
   const handleDayPress = ({ dateString }: DateData) => {
     const newMarkedDate: MarkedDates = {
-      [dateString]: { selected: true, selectedColor: 'bg-purple-500' },
+      [dateString]: { selected: true, selectedColor: 'bg-primary' },
     };
+    console.log('Marked date', newMarkedDate);
     console.log('Handle Day Press', new Date(dateString));
-    setCurrentState(new Date(dateString));
-    setMarkedDates({
-      ...markedDates,
-      ...newMarkedDate,
-    });
+    console.log('String format', dateString);
+    setUserSelection(new Date(dateString));
+    field.onChange(dateString);
+    updateDOB(dateString);
+
+    hideCalendarModal();
   };
 
-  // @TODO Sync modal data in this method.
-  const handleLeftArrowPress = (subtractMonth: () => void, date?: XDate) => {
-    subtractMonth();
-    if (!date) return console.error('Date object missing');
-  };
+  // const handleLeftArrowPress = (subtractMonth: () => void, date?: XDate) => {
+  //   subtractMonth();
+  //   if (!date) return console.error('Date object missing');
+  // };
 
-  // @TODO Sync modal data in this method.
-  const handleRightArrowPress = (addMonth: () => void, date?: XDate) => {
-    addMonth();
-    if (!date) return console.error('Date object missing');
-  };
+  // const handleRightArrowPress = (addMonth: () => void, date?: XDate) => {
+  //   addMonth();
+  //   if (!date) return console.error('Date object missing');
+  // };
 
   const handleMonthChange = (data: DateData[]) => {
     const dateString = data[0].dateString;
-    setCurrentState(new Date(dateString));
+    setUserSelection(new Date(dateString));
   };
 
-  const currentDateString = `${currentState.getFullYear()}-${String(currentState.getMonth() + 1).padStart(2, '0')}-${String(currentState.getDate()).padStart(2, '0')}`;
+  const currentDateString = `${userSelection.getFullYear()}-${String(userSelection.getMonth() + 1).padStart(2, '0')}-${String(userSelection.getDate()).padStart(2, '0')}`;
 
   return (
     <View
@@ -94,18 +90,17 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
       <RNCalendar
         hideExtraDays
         enableSwipeMonths
-        markedDates={markedDates}
         onDayPress={handleDayPress}
         style={{ borderRadius: 6 }}
         initialDate={currentDateString}
-        onPressArrowLeft={handleLeftArrowPress}
         dayComponent={(data) => _renderDay(data)}
-        onPressArrowRight={handleRightArrowPress}
+        // onPressArrowLeft={handleLeftArrowPress}
+        // onPressArrowRight={handleRightArrowPress}
         onVisibleMonthsChange={handleMonthChange}
         renderArrow={(direction: string) => _renderArrows(direction)}
         renderHeader={() => (
           <CalendarHeader
-            date={currentState}
+            date={userSelection}
             toggleMonthModal={toggleMonthModal}
           />
         )}
@@ -114,7 +109,7 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
       <MonthModal
         updateYear={_updateYear}
         updateMonth={_updateMonth}
-        currentState={currentState}
+        currentState={userSelection}
         toggleYearModal={toggleYearModal}
         toggleMonthModal={toggleMonthModal}
         isMonthModalVisisble={isMonthModalVisisble}
@@ -122,7 +117,7 @@ function Calendar({ markedDates, setMarkedDates }: TCalendar) {
 
       <YearModal
         updateYear={_updateYear}
-        currentState={currentState}
+        currentState={userSelection}
         toggleYearModal={toggleYearModal}
         isYearModalVisisble={isYearModalVisisble}
       />

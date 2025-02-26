@@ -2,9 +2,8 @@
 import '../../global.css';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { ThemeProvider, useNavigationState } from '@react-navigation/native';
-import { getLoadedFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { ThemeProvider } from '@react-navigation/native';
+import { router, Stack, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
@@ -13,7 +12,8 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Toaster } from 'sonner-native';
 
 import { APIProvider } from '@/api';
-import { hydrateAuth, loadSelectedTheme } from '@/lib';
+import { hydrateAuth, useAuth } from '@/lib/auth';
+import { loadSelectedTheme } from '@/lib/hooks';
 import { useThemeConfig } from '@/lib/use-theme-config';
 
 export { ErrorBoundary } from 'expo-router';
@@ -24,48 +24,50 @@ export { ErrorBoundary } from 'expo-router';
 
 hydrateAuth();
 loadSelectedTheme();
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+
 SplashScreen.preventAutoHideAsync();
-// Set the animation options. This is optional.
 SplashScreen.setOptions({
   duration: 500,
   fade: true,
 });
 
 export default function RootLayout() {
-  const canGoBack = useNavigationState((state) => state.index > 0);
+  const authStatus = useAuth.use.status();
+  const isAuthenticated = authStatus === 'authenticated';
+  const segments = useSegments();
+
   useEffect(() => {
-    const available = getLoadedFonts();
+    const bootstrapAsync = async () => {
+      try {
+        const inAuthGroup = segments[0] === '(authentication)';
+        const inProtectedGroup = segments[0] === '(protected)';
 
-    console.log('🚀🚀🚀 ~ useEffect ~ available:', available);
+        if (!isAuthenticated && inProtectedGroup) {
+          router.replace('/(authentication)/login');
+        } else if (isAuthenticated && inAuthGroup) {
+          router.replace('/(protected)/home');
+        } else if (!segments.length) {
+          router.replace(
+            isAuthenticated ? '/(protected)/home' : '/(authentication)/login'
+          );
+        }
+      } finally {
+        // @INFO - This is for development only
+        // if (__DEV__) {
+        //   router.navigate({ pathname: '/' });
+        // }
+        await SplashScreen.hideAsync();
+      }
+    };
 
-    SplashScreen.hideAsync(); // Hide the splash screen when ready
-  }, []);
+    bootstrapAsync();
+  }, [isAuthenticated, segments]);
 
   return (
     <Providers>
-      <Stack
-        screenOptions={{
-          headerShown: canGoBack,
-          headerTitle: '',
-          headerShadowVisible: false,
-          headerTransparent: true,
-          headerBackTitle: '',
-          headerStyle: { backgroundColor: 'rgba(0, 0, 0, 0)' },
-          // headerLeft: () => (
-          //   <Pressable className="-ml-2" onPress={() => router.back()}>
-          //     <ChevronLeft size={24} color="#808080" />
-          //   </Pressable>
-          // ),
-        }}
-      >
-        <Stack.Screen name="index" />
-        <Stack.Screen name="login" />
-        <Stack.Screen name="signup" />
-        <Stack.Screen name="personal-details" />
-        <Stack.Screen name="professional" />
-        <Stack.Screen name="verification" />
-        <Stack.Screen name="test" />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(authentication)" />
+        <Stack.Screen name="(protected)" />
       </Stack>
     </Providers>
   );

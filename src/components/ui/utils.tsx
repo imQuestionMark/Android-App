@@ -24,6 +24,7 @@ export const showError = (error: Error) => {
     console.warn('🏹🏹🏹 Zod Validation Error');
     description = getZodErrorMessage(error);
   }
+  console.log(error);
 
   toast.error('Error', {
     description,
