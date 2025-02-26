@@ -110,8 +110,8 @@ importers:
         specifier: 1.1308.1
         version: 1.1308.1(react-native@0.76.7(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.12)(react@18.3.1))(react@18.3.1)
       react-native-edge-to-edge:
-        specifier: 1.1.2
-        version: 1.1.2(react-native@0.76.7(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.12)(react@18.3.1))(react@18.3.1)
+        specifier: 1.4.3
+        version: 1.4.3(react-native@0.76.7(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.12)(react@18.3.1))(react@18.3.1)
       react-native-element-dropdown:
         specifier: 2.12.4
         version: 2.12.4(patch_hash=nw7vhdtcdirwy7xkbt73exy36u)(react-native@0.76.7(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.12)(react@18.3.1))(react@18.3.1)
@@ -6322,11 +6322,11 @@ packages:
       react-native-svg:
         optional: true
 
-  react-native-edge-to-edge@1.1.2:
-    resolution: {integrity: sha512-tbDNQ+MsYHVbaxLEAu4Up6bPktqBP+DdwdM2MVwkO+uVe2TOB6a+57k3i+UJt426dZnL1ccOrzOg2HQ4Oeh3RA==}
+  react-native-edge-to-edge@1.4.3:
+    resolution: {integrity: sha512-fYchwiQ2D/8NzcvJK1sD9Cm25GFQfsLgYmGpohoSpRxwBwR5UCL0wUf4scoQgYncRh9Hmc2t8ml/sikTwMM3ng==}
     peerDependencies:
       react: '>=18.2.0'
-      react-native: '>=0.73.0'
+      react-native: '>=0.74.0'
 
   react-native-element-dropdown@2.12.4:
     resolution: {integrity: sha512-abZc5SVji9FIt7fjojRYrbuvp03CoeZJrgvezQoDoSOrpiTqkX69ix5m+j06W2AVncA0VWvbT+vCMam8SoVadw==}
@@ -15644,7 +15644,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  react-native-edge-to-edge@1.1.2(react-native@0.76.7(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.12)(react@18.3.1))(react@18.3.1):
+  react-native-edge-to-edge@1.4.3(react-native@0.76.7(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.12)(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-native: 0.76.7(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@15.1.3)(@types/react@18.3.12)(react@18.3.1)
