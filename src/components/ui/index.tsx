@@ -10,6 +10,7 @@ export * from './list';
 export * from './modal';
 export * from './progress-bar';
 export * from './select';
+export * from './text';
 export * from './utils';
 
 //Apply cssInterop to Svg to resolve className string into style

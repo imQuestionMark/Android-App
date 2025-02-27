@@ -4,7 +4,7 @@ import { StyleSheet, type TextProps } from 'react-native';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const textStyles = tv({
-  base: 'text-[16px] leading-[24px] font-poppins',
+  base: 'font-poppins text-[16px] leading-[24px]',
   variants: {
     type: {
       heading: 'font-poppins-semibold text-[22px] leading-[33px]',
@@ -20,10 +20,17 @@ const textStyles = tv({
       green: 'text-green',
       error: 'text-error',
     },
-  },
-  defaultVariants: {
-    type: 'paragraph',
-    color: 'body',
+    weight: {
+      100: 'font-poppins-thin',
+      200: 'font-poppins-extralight',
+      300: 'font-poppins-light',
+      400: 'font-poppins-regular',
+      500: 'font-poppins-medium',
+      600: 'font-poppins-semibold',
+      700: 'font-poppins-bold',
+      800: 'font-poppins-extrabold',
+      900: 'font-poppins-black',
+    },
   },
 });
 
@@ -35,12 +42,12 @@ type TypographyProps = TextProps &
     className?: string;
   };
 
-const Text = forwardRef<RNText, TypographyProps>(
-  ({ type, color, className, children, style, ...props }, ref) => {
+export const Typography = forwardRef<RNText, TypographyProps>(
+  ({ type, color, className, weight, children, style, ...props }, ref) => {
     return (
       <RNText
         ref={ref}
-        className={textStyles({ type, color, className })}
+        className={textStyles({ type, color, weight, className })}
         style={StyleSheet.flatten([
           { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
           style,
@@ -52,5 +59,3 @@ const Text = forwardRef<RNText, TypographyProps>(
     );
   }
 );
-
-export default Text;

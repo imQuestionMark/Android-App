@@ -8,19 +8,19 @@ import type {
 } from 'react-hook-form';
 import { useController } from 'react-hook-form';
 import type { TextInputProps } from 'react-native';
-import { I18nManager, StyleSheet, Text, View } from 'react-native';
+import { I18nManager, StyleSheet, View } from 'react-native';
 import { TextInput as NTextInput } from 'react-native';
 import { tv } from 'tailwind-variants';
 
 import { ErrorMessage } from '../professional/components/error-message';
-import colors from './colors';
+import { Typography } from './text';
 
 const inputTv = tv({
   slots: {
     container: 'mb-2',
-    label: 'text-grey-100 mb-2 font-poppins text-[16px] ',
+    label: 'text-grey-100 mb-2 font-poppins-regular text-[16px] ',
     input: 'h-[50px] rounded-md bg-white px-4 opacity-100',
-    hint: 'mb-2 font-poppins text-sm font-medium text-body',
+    hint: 'mb-2 font-poppins-medium  text-sm text-body',
   },
 
   variants: {
@@ -99,28 +99,29 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
   return (
     <View className={styles.container()}>
       {label && (
-        <Text
+        <Typography
           className={styles.label()}
+          color="main"
           testID={testID ? `${testID}-label` : undefined}
         >
           {label}
-        </Text>
+        </Typography>
       )}
 
       {hint && (
-        <Text
+        <Typography
           className={styles.hint()}
           testID={testID ? `${testID}-hint` : undefined}
         >
           {hint}
-        </Text>
+        </Typography>
       )}
 
       <NTextInput
         ref={ref}
         testID={testID}
         className={styles.input()}
-        placeholderTextColor={colors.neutral[400]}
+        placeholderClassName="text-body"
         {...inputProps}
         onBlur={onBlur}
         onFocus={onFocus}

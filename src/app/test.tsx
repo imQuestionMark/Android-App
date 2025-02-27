@@ -1,35 +1,63 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Text from '@/components/ui/text';
+import { Typography } from '../components/ui/text';
 
 const Test = () => {
   return (
     <SafeAreaView className="m-5 grow">
-      <Text type="heading" className="text-error">
+      <Typography type="heading" className="text-error">
         Heading
-      </Text>
-      <Text type="heading" color="green">
+      </Typography>
+      <Typography type="heading" color="green">
         Heading Green
-      </Text>
-      <Text type="heading" color="green" className="text-purple-200">
+      </Typography>
+      <Typography type="heading" color="green" className="text-purple-200">
         Heading Overridden
-      </Text>
-      <Text type="subtext">Subtext</Text>
-      <Text type="subtext" color="primary">
+      </Typography>
+      <Typography type="subtext">Subtext</Typography>
+      <Typography type="subtext" color="primary">
         Subtext Primary
-      </Text>
-      <Text type="paragraph">Paragraph</Text>
-      <Text type="paragraph" color="error">
+      </Typography>
+      <Typography type="paragraph">Paragraph</Typography>
+      <Typography type="paragraph" color="error">
         Paragraph Error
-      </Text>
-      <Text type="label">Label</Text>
-      <Text type="label" color="main">
+      </Typography>
+      <Typography type="label">Label</Typography>
+      <Typography type="label" color="main">
         Label Main
-      </Text>
-      <Text type="placeholder">Placeholder</Text>
-      <Text type="placeholder" color="primary">
+      </Typography>
+      <Typography type="placeholder">Placeholder</Typography>
+      <Typography type="placeholder" color="primary">
         Placeholder Primary
-      </Text>
+      </Typography>
+
+      <Typography weight={100} className="text-[36px]">
+        The quick brown fox
+      </Typography>
+      <Typography weight={200} className="text-[36px]">
+        The quick brown fox
+      </Typography>
+      <Typography weight={300} className="text-[36px]">
+        The quick brown fox
+      </Typography>
+      <Typography weight={400} className="text-[36px]">
+        The quick brown fox
+      </Typography>
+      <Typography weight={500} className="text-[36px]">
+        The quick brown fox
+      </Typography>
+      <Typography weight={600} className="text-[36px]">
+        The quick brown fox
+      </Typography>
+      <Typography weight={700} className="text-[36px]">
+        The quick brown fox
+      </Typography>
+      <Typography weight={800} className="text-[36px]">
+        The quick brown fox
+      </Typography>
+      <Typography weight={900} className="text-[36px]">
+        The quick brown fox
+      </Typography>
     </SafeAreaView>
   );
 };

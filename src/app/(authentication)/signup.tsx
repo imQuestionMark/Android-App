@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import {
@@ -11,7 +11,7 @@ import {
 } from '@/api/authentication/signup';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
-import { ControlledInput } from '@/components/ui';
+import { ControlledInput, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 
 export default function Signup() {
@@ -32,14 +32,16 @@ export default function Signup() {
         <KeyboardAwareScrollView contentContainerClassName="grow">
           <View className="z-10 m-4 grow">
             <View className="flex-row gap-2">
-              <Text className="text-[32px] font-bold text-black">Welcome</Text>
-              <Text className="text-[32px] font-bold text-primary">
+              <Typography weight={600} color="main" className="text-[32px]">
+                Welcome
+              </Typography>
+              <Typography weight={600} color="primary" className="text-[32px]">
                 Onboard!
-              </Text>
+              </Typography>
             </View>
 
             <View className="grow justify-between">
-              <View className="">
+              <View>
                 {/* First Name */}
                 <View className="mt-4">
                   <ControlledInput
@@ -97,12 +99,17 @@ export default function Signup() {
 
                 <View className="">
                   <View className="flex flex-row items-center justify-center gap-2">
-                    <Text className="text-center font-poppins-medium leading-[30px] text-gray-500">
+                    <Typography
+                      className="text-center leading-[30px] text-gray-500"
+                      weight={500}
+                    >
                       If you already have an account?
-                    </Text>
+                    </Typography>
 
                     <Link replace href={{ pathname: '/login' }}>
-                      <Text className="font-medium text-primary">Login</Text>
+                      <Typography color="primary" weight={500}>
+                        Login
+                      </Typography>
                     </Link>
                   </View>
 
