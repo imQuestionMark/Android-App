@@ -74,7 +74,7 @@ export default function PersonalDetails() {
         <View id="main">
           <View>
             <View className="flex-row gap-x-2">
-              <Text className="font-poppins-semibold text-[32px] leading-[48px] text-[#161616]">
+              <Text className="font-poppins-semibold text-[32px] leading-[48px] text-main">
                 Hi
               </Text>
               <Text className="font-poppins-semibold text-[32px] leading-[48px] text-primary">
@@ -82,13 +82,13 @@ export default function PersonalDetails() {
               </Text>
             </View>
 
-            <Text className="font-poppins-medium text-[20px]  text-[#5A5A5A]">
+            <Text className="font-poppins-medium text-[20px]  text-body">
               Enter Details
             </Text>
           </View>
 
           <View className="mt-6">
-            <Text className="font-poppins-medium text-[20px] leading-6 text-[#161616]">
+            <Text className="font-poppins-medium text-[20px] leading-6 text-main">
               Enter Your D.O.B
             </Text>
 
@@ -122,7 +122,7 @@ export default function PersonalDetails() {
           </View>
 
           <View className="mt-6">
-            <Text className="  font-poppins-medium text-[20px] font-medium text-[#161616]">
+            <Text className="  font-poppins-medium text-[20px] font-medium text-main">
               Enter your Nationality
             </Text>
           </View>

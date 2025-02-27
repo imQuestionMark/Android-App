@@ -11,7 +11,7 @@ export const CalendarHeader = ({ date, toggleMonthModal }: THeader) => {
   const title = formattedDate.toString('MMMM yyyy');
   return (
     <Pressable hitSlop={25} onPress={toggleMonthModal}>
-      <Text className="border-b text-center font-poppins text-base font-bold leading-[19px] text-[#161616] ">
+      <Text className="border-b text-center font-poppins text-base font-bold leading-[19px] text-main ">
         {title}
       </Text>
     </Pressable>

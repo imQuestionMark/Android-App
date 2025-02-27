@@ -93,7 +93,7 @@ export default function Verification() {
 
             <View>
               <View className="mt-1 flex flex-row justify-center">
-                <Text className="text-md font-poppins-medium text-[#161616]">
+                <Text className="text-md font-poppins-medium text-main">
                   Didn't receive OTP?
                 </Text>
 
@@ -112,7 +112,7 @@ export default function Verification() {
               </View>
               <View className="flex-row justify-center">
                 {!isResendAvailable && (
-                  <Text className="font-poppins-extrabold text-sm text-[#161616]">
+                  <Text className="font-poppins-extrabold text-sm text-main">
                     Resend code in {countdown} sec
                   </Text>
                 )}

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import type {
   Control,
+  FieldError,
   FieldValues,
   Path,
   RegisterOptions,
@@ -11,31 +12,31 @@ import { I18nManager, StyleSheet, Text, View } from 'react-native';
 import { TextInput as NTextInput } from 'react-native';
 import { tv } from 'tailwind-variants';
 
+import { ErrorMessage } from '../professional/components/error-message';
 import colors from './colors';
 
 const inputTv = tv({
   slots: {
     container: 'mb-2',
     label: 'text-grey-100 mb-2 font-poppins text-[16px] ',
-    input: 'h-[50px] rounded-[6px] bg-white px-4 opacity-100',
-    hint: 'mb-2 font-poppins text-sm font-medium text-[#5A5A5A]',
+    input: 'h-[50px] rounded-md bg-white px-4 opacity-100',
+    hint: 'mb-2 font-poppins text-sm font-medium text-body',
   },
 
   variants: {
     focused: {
       true: {
-        input: 'rounded-[6px] bg-white opacity-100',
+        input: 'border border-primary',
       },
     },
     error: {
       true: {
-        input: 'border-danger-600',
-        label: 'text-danger-600',
+        input: 'border border-danger-600',
       },
     },
     disabled: {
       true: {
-        input: 'rounded-[6px] bg-white opacity-100',
+        input: '',
       },
     },
   },
@@ -48,7 +49,7 @@ const inputTv = tv({
 
 export interface NInputProps extends TextInputProps {
   disabled?: boolean;
-  error?: string;
+  error?: FieldError;
   hint?: string;
   label?: string;
 }
@@ -74,8 +75,16 @@ interface ControlledInputProps<T extends FieldValues>
 export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
   const { label, error, testID, hint, ...inputProps } = props;
   const [isFocussed, setIsFocussed] = React.useState(false);
-  const onBlur = React.useCallback(() => setIsFocussed(false), []);
-  const onFocus = React.useCallback(() => setIsFocussed(true), []);
+
+  const onBlur = React.useCallback(() => {
+    console.log('Input Blurred');
+    setIsFocussed(false);
+  }, []);
+
+  const onFocus = React.useCallback(() => {
+    console.log('Input focussed');
+    setIsFocussed(true);
+  }, []);
 
   const styles = React.useMemo(
     () =>
@@ -106,28 +115,23 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
           {hint}
         </Text>
       )}
+
       <NTextInput
         ref={ref}
-        onBlur={onBlur}
         testID={testID}
-        onFocus={onFocus}
         className={styles.input()}
         placeholderTextColor={colors.neutral[400]}
         {...inputProps}
+        onBlur={onBlur}
+        onFocus={onFocus}
         style={StyleSheet.flatten([
           { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
           { textAlign: I18nManager.isRTL ? 'right' : 'left' },
           inputProps.style,
         ])}
       />
-      {error && (
-        <Text
-          className="text-sm text-[#EE2F23]"
-          testID={testID ? `${testID}-error` : undefined}
-        >
-          {error}
-        </Text>
-      )}
+
+      <ErrorMessage error={error} />
     </View>
   );
 });
@@ -147,7 +151,7 @@ export function ControlledInput<T extends FieldValues>(
       value={(field.value as string) || ''}
       {...inputProps}
       onBlur={field.onBlur}
-      error={fieldState.error?.message}
+      error={fieldState.error}
     />
   );
 }

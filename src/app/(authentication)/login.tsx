@@ -34,7 +34,7 @@ export default function Signin() {
                 Sign
               </Text>
 
-              <Text className="font-poppins-bold text-[32px] text-[#161616]">
+              <Text className="font-poppins-bold text-[32px] text-main">
                 in
               </Text>
             </View>
