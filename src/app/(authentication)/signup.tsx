@@ -75,20 +75,9 @@ export default function Signup() {
                   />
                 </View>
 
-                <View className="mt-4">
-                  <PhoneInput control={control} />
-                </View>
-
                 {/* Phone Number */}
                 <View className="mt-4">
-                  <ControlledInput
-                    name="phone"
-                    control={control}
-                    keyboardType="numeric"
-                    placeholder="9876543210"
-                    label="Enter your phone number"
-                    maxLength={10}
-                  />
+                  <PhoneInput control={control} />
                 </View>
               </View>
 
