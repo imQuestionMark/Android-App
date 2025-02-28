@@ -18,9 +18,9 @@ import { Typography } from './text';
 const inputTv = tv({
   slots: {
     container: 'mb-2',
-    label: 'text-grey-100 mb-2 font-poppins-regular text-[16px] ',
-    input: 'h-[50px] rounded-md bg-white px-4 opacity-100',
-    hint: 'mb-2 font-poppins-medium  text-sm text-body',
+    label: 'mb-2 text-[16px]',
+    input: 'h-[50px] rounded-md bg-white px-4 text-[16px] opacity-100',
+    hint: 'mb-2 text-[12px]',
   },
 
   variants: {
@@ -102,6 +102,7 @@ export const Input = forwardRef<NTextInput, NInputProps>((props, ref) => {
         <Typography
           className={styles.label()}
           color="main"
+          weight={500}
           testID={testID ? `${testID}-label` : undefined}
         >
           {label}
@@ -111,6 +112,8 @@ export const Input = forwardRef<NTextInput, NInputProps>((props, ref) => {
       {hint && (
         <Typography
           className={styles.hint()}
+          color="body"
+          weight={500}
           testID={testID ? `${testID}-hint` : undefined}
         >
           {hint}

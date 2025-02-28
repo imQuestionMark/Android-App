@@ -101,7 +101,7 @@ export default function Verification() {
               onPress={handleSubmit((data) => handleLogin(data))}
             >
               {isPending && <ActivityIndicator color="white" />}
-              <ButtonText className="capitalize">VERIFY OTP</ButtonText>
+              <ButtonText className="uppercase">VERIFY OTP</ButtonText>
             </Button>
 
             <View>

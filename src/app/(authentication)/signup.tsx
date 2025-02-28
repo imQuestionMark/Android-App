@@ -17,10 +17,10 @@ import { Button, ButtonText } from '@/components/ui/button';
 export default function Signup() {
   const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
-      firstName: 'test1',
-      lastName: 'test2',
-      emailAddress: '19uca004+test@gmail.com',
-      phone: '9008007001',
+      firstName: '',
+      lastName: '',
+      emailAddress: '',
+      phone: '',
     },
     resolver: zodResolver(SignUpInputschema),
   });
@@ -81,41 +81,46 @@ export default function Signup() {
                     keyboardType="numeric"
                     placeholder="9876543210"
                     label="Enter your phone number"
+                    maxLength={10}
                   />
                 </View>
               </View>
 
               {/* Footer */}
-              <View className="mt-6">
-                {/* Submit Button */}
-                <Button
-                  size="lg"
-                  isDisabled={isPending}
-                  onPress={handleSubmit((data) => handleLogin(data))}
-                >
-                  {isPending && <ActivityIndicator color={'white'} />}
-                  <ButtonText>Send OTP</ButtonText>
-                </Button>
 
-                <View className="">
+              <View className="mb-[60px]">
+                <View className="mb-[24px] gap-2">
+                  <Button
+                    size="lg"
+                    isDisabled={isPending}
+                    onPress={handleSubmit((data) => handleLogin(data))}
+                  >
+                    {isPending && <ActivityIndicator color={'white'} />}
+                    <ButtonText>Send OTP</ButtonText>
+                  </Button>
+
                   <View className="flex flex-row items-center justify-center gap-2">
                     <Typography
-                      className="text-gray-500 text-center leading-[30px]"
                       weight={500}
+                      className="text-[13px]"
+                      color="body"
                     >
-                      If you already have an account?
+                      If you don't have an account?
                     </Typography>
 
                     <Link replace href={{ pathname: '/login' }}>
-                      <Typography color="primary" weight={500}>
-                        Login
+                      <Typography
+                        weight={500}
+                        color="primary"
+                        className="text-[13px] capitalize"
+                      >
+                        login
                       </Typography>
                     </Link>
                   </View>
-
-                  <TermsandConditions />
                 </View>
-                {/*  */}
+
+                <TermsandConditions />
               </View>
             </View>
           </View>

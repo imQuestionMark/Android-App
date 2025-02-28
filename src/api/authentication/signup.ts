@@ -15,14 +15,12 @@ export const SignUpInputschema = z.object({
     .string({ required_error: 'LastName is required' })
     .min(3, 'Minimum 3 characters')
     .max(16, 'Maximum 16 characters'),
-  emailAddress: z.string().min(1, 'Email is required').email(),
-  phone: z.coerce
-    .number({
-      required_error: 'Phone no. is required.',
-      message: 'Must be only numbers',
-    })
-    .min(10, 'Phone number must be 10 digits')
-    .transform(String),
+  emailAddress: z.string({ required_error: 'Email is required' }).email(),
+  phone: z
+    .string({ required_error: 'Phone no. is required' })
+    .regex(/^(?:\+91|91)?[6-9]\d{9}$/, {
+      message: 'Invalid phone number',
+    }),
 });
 
 export type Variables = z.infer<typeof SignUpInputschema>;

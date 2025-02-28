@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
 import { Link } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
@@ -19,14 +20,30 @@ import {
 } from '@/components/ui';
 
 export default function Signin() {
-  const { control, handleSubmit } = useForm<Variables>({
+  const { control, handleSubmit, setError, setFocus } = useForm<Variables>({
     defaultValues: {
-      identifier: '19uca004@gmail.com',
+      identifier: '',
     },
     resolver: zodResolver(loginInputSchema),
   });
 
-  const { mutate: handleLogin, isPending } = useLoginMutation();
+  const handleServerError = (error: Error) => {
+    if (
+      error instanceof AxiosError &&
+      error.response &&
+      error.response.status === 403
+    ) {
+      setError('identifier', {
+        type: 'serverError',
+        message: error.response?.data.message,
+      });
+      setFocus('identifier');
+    }
+  };
+
+  const { mutate: handleLogin, isPending } = useLoginMutation({
+    onError: handleServerError,
+  });
 
   return (
     <GradientView>
@@ -76,9 +93,9 @@ export default function Signin() {
                   <Typography
                     weight={500}
                     color="primary"
-                    className="text-[13px]"
+                    className="text-[13px] capitalize"
                   >
-                    SignUp
+                    signup
                   </Typography>
                 </Link>
               </View>
