@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -11,15 +12,16 @@ import {
 } from '@/api/authentication/signup';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
+import { PhoneInput } from '@/components/signup/phone-input';
 import { ControlledInput, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 
 export default function Signup() {
   const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      emailAddress: '',
+      firstName: 'test1',
+      lastName: 'test2',
+      emailAddress: '19uca004+test@gmail.com',
       phone: '',
     },
     resolver: zodResolver(SignUpInputschema),
@@ -71,6 +73,10 @@ export default function Signup() {
                     placeholder="Enter your mail id"
                     hint="we will send you the 4 digit verification code"
                   />
+                </View>
+
+                <View className="mt-4">
+                  <PhoneInput control={control} />
                 </View>
 
                 {/* Phone Number */}
