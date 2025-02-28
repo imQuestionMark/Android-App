@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { type Control, useController, useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
@@ -18,8 +19,9 @@ import { ErrorMessage } from '@/components/ui/error-message';
 
 const DEFAULT_TIMEOUT = 60;
 
+// @TODO Optimize unnecessary re-rendering of entire page due to timer.
 export default function Verification() {
-  const { control, handleSubmit } = useForm<Variables>({
+  const { control, handleSubmit, setError, setFocus } = useForm<Variables>({
     defaultValues: {
       otp: '',
     },
@@ -50,8 +52,25 @@ export default function Verification() {
     setIsResendAvailable(false);
   };
 
-  const { mutate: handleLogin, isPending } = useOtpMutation();
+  const handleServerError = (error: Error) => {
+    if (
+      error instanceof AxiosError &&
+      error.response &&
+      error.response.status === 403
+    ) {
+      setError('otp', {
+        type: 'serverError',
+        message: error.response?.data.message,
+      });
+      setFocus('otp');
+    }
+  };
+
+  const { mutate: handleLogin, isPending } = useOtpMutation({
+    onError: handleServerError,
+  });
   const { mutate: handleResend } = resendOtpMutation();
+
   return (
     <GradientView className="">
       <KeyboardAwareScrollView contentContainerClassName="grow">
