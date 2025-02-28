@@ -1,12 +1,13 @@
 import { type FieldError } from 'react-hook-form';
-import { Text } from 'react-native';
+
+import { Typography } from './text';
 
 export const ErrorMessage = ({ error }: { error?: FieldError }) => {
   return (
     error && (
-      <Text className="mt-2 font-poppins-bold text-sm text-red-500">
+      <Typography weight={600} color="error" className="mt-2 text-sm ">
         {error.message}
-      </Text>
+      </Typography>
     )
   );
 };

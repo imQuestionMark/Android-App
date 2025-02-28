@@ -1,16 +1,22 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+
+import { Typography } from '../ui';
 
 export const TermsandConditions = () => {
   return (
     <View className="flex-row items-center justify-center gap-1.5">
-      <Text className="font-poppins text-black">You agree to the</Text>
-      <Text className="font-poppins text-primary underline">
+      <Typography weight={400} color="main" className="text-[12px]">
+        You agree to the
+      </Typography>
+      <Typography weight={400} color="primary" className="text-[12px]">
         terms & conditions
-      </Text>
-      <Text className="font-poppins">&</Text>
-      <Text className="font-poppins text-primary underline">
+      </Typography>
+      <Typography weight={400} color="main" className="text-[12px]">
+        &
+      </Typography>
+      <Typography weight={400} color="primary" className="text-[12px]">
         privacy policy
-      </Text>
+      </Typography>
     </View>
   );
 };

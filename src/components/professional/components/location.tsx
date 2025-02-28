@@ -1,12 +1,14 @@
 import { useController } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 
+import { Typography } from '@/components/ui';
+
+import { ErrorMessage } from '../../ui/error-message';
 import { locations } from '../constants';
 import { CustomItem } from '../custom-item';
 import { styles } from '../styles';
 import type { ProfessionalControl } from '../types';
-import { ErrorMessage } from './error-message';
 
 type LocationProps = ProfessionalControl & {};
 
@@ -25,9 +27,9 @@ export const Location = ({ control }: LocationProps) => {
 
   return (
     <View className="mb-5">
-      <Text className="mb-4 font-poppins text-[16px] font-medium">
+      <Typography weight={500} className="mb-4 text-[16px] ">
         Preferred Location
-      </Text>
+      </Typography>
       <MultiSelect
         value={value}
         activeColor=""

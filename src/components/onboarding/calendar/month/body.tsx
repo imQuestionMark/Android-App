@@ -1,6 +1,8 @@
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { tv } from 'tailwind-variants';
+
+import { Typography } from '@/components/ui';
 
 const _MONTHS = [
   'January',
@@ -39,7 +41,9 @@ export const MonthBody = ({
             toggleMonthModal();
           }}
         >
-          <Text className={text({ active: idx === activeMonth })}>{month}</Text>
+          <Typography className={text({ active: idx === activeMonth })}>
+            {month}
+          </Typography>
         </Pressable>
       ))}
     </View>
@@ -49,8 +53,8 @@ export const MonthBody = ({
 const monthBodyStyles = tv({
   slots: {
     container: 'flex-row flex-wrap justify-center gap-x-4 gap-y-6',
-    button: 'min-w-[100px] rounded-md bg-transparent font-poppins',
-    text: 'text-center font-poppins text-[14px] font-normal leading-[35.2px] text-gray-700',
+    button: 'min-w-[100px] rounded-md bg-transparent font-poppins-regular',
+    text: 'text-gray-700 text-center font-poppins-regular text-[14px] font-normal leading-[35.2px]',
   },
   variants: {
     active: {

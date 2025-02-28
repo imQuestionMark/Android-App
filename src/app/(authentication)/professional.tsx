@@ -4,7 +4,7 @@ import {
   type SubmitHandler,
   useForm,
 } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import GradientView from '@/components/onboarding/gradient-view';
@@ -21,6 +21,7 @@ import {
   type ProfessionalFormData,
   professionalFormSchema,
 } from '@/components/professional/schema';
+import { Typography } from '@/components/ui';
 
 const Professional = () => {
   const { control, handleSubmit } = useForm<ProfessionalFormData>({
@@ -53,9 +54,9 @@ const Professional = () => {
       <KeyboardAwareScrollView contentContainerClassName="grow">
         <View className="m-4 flex-1 justify-between">
           <View className="">
-            <Text className="font-poppins-semibold text-2xl">
+            <Typography weight={600} className="text-[24px]">
               Job preference
-            </Text>
+            </Typography>
 
             <View className="mt-6">
               <Role control={control} />

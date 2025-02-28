@@ -1,18 +1,18 @@
-import * as React from 'react';
-import type {
-  Control,
-  FieldError,
-  FieldValues,
-  Path,
-  RegisterOptions,
+import { forwardRef, useCallback, useMemo, useState } from 'react';
+import {
+  type Control,
+  type FieldError,
+  type FieldValues,
+  type Path,
+  type RegisterOptions,
+  useController,
 } from 'react-hook-form';
-import { useController } from 'react-hook-form';
 import type { TextInputProps } from 'react-native';
 import { I18nManager, StyleSheet, View } from 'react-native';
 import { TextInput as NTextInput } from 'react-native';
 import { tv } from 'tailwind-variants';
 
-import { ErrorMessage } from '../professional/components/error-message';
+import { ErrorMessage } from './error-message';
 import { Typography } from './text';
 
 const inputTv = tv({
@@ -72,21 +72,21 @@ interface ControlledInputProps<T extends FieldValues>
   extends InputControllerType<T>,
     NInputProps {}
 
-export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
+export const Input = forwardRef<NTextInput, NInputProps>((props, ref) => {
   const { label, error, testID, hint, ...inputProps } = props;
-  const [isFocussed, setIsFocussed] = React.useState(false);
+  const [isFocussed, setIsFocussed] = useState(false);
 
-  const onBlur = React.useCallback(() => {
+  const onBlur = useCallback(() => {
     console.log('Input Blurred');
     setIsFocussed(false);
   }, []);
 
-  const onFocus = React.useCallback(() => {
+  const onFocus = useCallback(() => {
     console.log('Input focussed');
     setIsFocussed(true);
   }, []);
 
-  const styles = React.useMemo(
+  const styles = useMemo(
     () =>
       inputTv({
         error: Boolean(error),

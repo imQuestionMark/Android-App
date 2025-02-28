@@ -32,11 +32,15 @@ const textStyles = tv({
       900: 'font-poppins-black',
     },
   },
+  defaultVariants: {
+    weight: 400,
+    color: 'body',
+  },
 });
 
 type TextVariants = VariantProps<typeof textStyles>;
 
-type TypographyProps = TextProps &
+export type TypographyProps = TextProps &
   TextVariants & {
     children: React.ReactNode;
     className?: string;

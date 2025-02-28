@@ -1,7 +1,9 @@
-import { Pressable, Text } from 'react-native';
+import { Pressable } from 'react-native';
 import { type DateData } from 'react-native-calendars';
 import { type BasicDayProps } from 'react-native-calendars/src/calendar/day/basic';
 import { tv } from 'tailwind-variants';
+
+import { Typography } from '@/components/ui';
 
 type CustomDayProps = BasicDayProps & {
   date?: DateData;
@@ -60,7 +62,9 @@ export const _renderDay = (props: CustomDayProps) => {
       accessibilityLabel={accessibilityLabel}
       className={base({ state, className: marking?.selectedColor })}
     >
-      <Text className={dayText({ state: isSelected })}>{date?.day}</Text>
+      <Typography className={dayText({ state: isSelected })}>
+        {date?.day}
+      </Typography>
       {/* {marking && (
         <View className="absolute bottom-0.5 size-2 rounded-full bg-purple-800" />
       )} */}

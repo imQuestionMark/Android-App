@@ -32,10 +32,10 @@ export default function Signup() {
         <KeyboardAwareScrollView contentContainerClassName="grow">
           <View className="z-10 m-4 grow">
             <View className="flex-row gap-2">
-              <Typography weight={600} color="main" className="text-[32px]">
+              <Typography weight={700} color="main" className="text-[32px]">
                 Welcome
               </Typography>
-              <Typography weight={600} color="primary" className="text-[32px]">
+              <Typography weight={700} color="primary" className="text-[32px]">
                 Onboard!
               </Typography>
             </View>
@@ -100,7 +100,7 @@ export default function Signup() {
                 <View className="">
                   <View className="flex flex-row items-center justify-center gap-2">
                     <Typography
-                      className="text-center leading-[30px] text-gray-500"
+                      className="text-gray-500 text-center leading-[30px]"
                       weight={500}
                     >
                       If you already have an account?

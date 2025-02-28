@@ -1,12 +1,14 @@
 import React from 'react';
 import { createContext, useContext } from 'react';
-import { Pressable, type PressableProps, Text, View } from 'react-native';
+import { Pressable, type PressableProps, type Text, View } from 'react-native';
 import { tv, type VariantProps } from 'tailwind-variants';
+
+import { Typography, type TypographyProps } from './text';
 
 const buttonStyles = tv({
   slots: {
     base: 'flex-row items-center justify-center gap-2 rounded-md',
-    text: 'text-center font-poppins',
+    text: 'text-center font-poppins-regular',
     iconContainer: 'shrink-0',
   },
   variants: {
@@ -15,12 +17,8 @@ const buttonStyles = tv({
         base: 'bg-primary',
         text: 'text-white',
       },
-      secondary: {
-        base: 'bg-gray-200',
-        text: 'text-gray-900',
-      },
       outline: {
-        base: 'border border-primary',
+        base: 'border border-primary bg-white',
         text: 'text-primary',
       },
       ghost: {
@@ -35,7 +33,7 @@ const buttonStyles = tv({
       },
       lg: {
         base: 'p-5',
-        text: 'text-lg font-semibold',
+        text: 'font-poppins-semibold text-lg',
       },
       icon: {
         base: 'size-10',
@@ -97,22 +95,17 @@ const Button = React.forwardRef<
   );
 });
 
-type ButtonTextProps = {
-  children: React.ReactNode;
-  className?: string;
-};
-
 const ButtonText = React.forwardRef<
   React.ElementRef<typeof Text>,
-  ButtonTextProps
->(({ className, children }, ref) => {
+  TypographyProps
+>(({ className, children, ...props }, ref) => {
   const { variant, size } = useContext(ButtonContext);
   const { text } = buttonStyles({ variant, size });
 
   return (
-    <Text ref={ref} className={text({ className })}>
+    <Typography ref={ref} className={text({ className })} {...props}>
       {children}
-    </Text>
+    </Typography>
   );
 });
 

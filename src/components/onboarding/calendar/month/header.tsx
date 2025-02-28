@@ -1,7 +1,8 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react-native';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { tv } from 'tailwind-variants';
 
+import { Typography } from '@/components/ui';
 import { black } from '@/components/ui/colors';
 
 type TMonthHeader = {
@@ -30,7 +31,7 @@ export const MonthHeader = ({
           toggleYearModal();
         }}
       >
-        <Text className={yearText()}>{year}</Text>
+        <Typography className={yearText()}>{year}</Typography>
       </Pressable>
 
       <Pressable onPress={addYear} className={arrowbutton()}>
@@ -43,8 +44,8 @@ export const MonthHeader = ({
 const monthHeaderStyles = tv({
   slots: {
     container: 'mb-4 flex-row items-center justify-between',
-    arrowbutton: 'rounded-md bg-gray-200 p-2',
-    yearText: 'mx-4 text-lg font-semibold text-gray-700',
+    arrowbutton: 'bg-gray-200 rounded-md p-2',
+    yearText: 'text-gray-700 mx-4 font-poppins-semibold text-lg',
   },
 });
 

@@ -6,7 +6,7 @@ export const dropdownStyles = tv({
     trigger: 'h-[50px] rounded-lg border border-white bg-white px-2',
     triggerText: 'text-base text-black',
     itemContainer: 'flex-row items-center gap-3 p-4',
-    itemIcon: 'rounded-xl border-[3px] border-gray-300 bg-white',
+    itemIcon: 'border-gray-300 rounded-xl border-[3px] bg-white',
     itemIconCheck: '',
     itemText: 'text-black',
   },
