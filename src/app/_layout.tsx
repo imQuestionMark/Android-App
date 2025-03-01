@@ -54,7 +54,7 @@ export default function RootLayout() {
       } finally {
         // @INFO - This is for development only
         if (__DEV__) {
-          // router.navigate({ pathname: '/login' });
+          router.navigate({ pathname: '/professional' });
         }
         await SplashScreen.hideAsync();
       }
