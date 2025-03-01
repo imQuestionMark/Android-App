@@ -9,10 +9,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        poppins: ['Poppins'],
         'poppins-thin': ['Poppins-Thin'],
         'poppins-extralight': ['Poppins-ExtraLight'],
         'poppins-light': ['Poppins-Light'],
+        'poppins-regular': ['Poppins-Regular'],
         'poppins-medium': ['Poppins-Medium'],
         'poppins-semibold': ['Poppins-SemiBold'],
         'poppins-bold': ['Poppins-Bold'],
@@ -22,20 +22,4 @@ module.exports = {
       colors,
     },
   },
-  plugins: [
-    function ({ addUtilities }) {
-      const newUtilities = {
-        '.font-poppins-thin': { fontWeight: '100' },
-        '.font-poppins-extralight': { fontWeight: '200' },
-        '.font-poppins-light': { fontWeight: '300' },
-        '.font-poppins': { fontWeight: '400' },
-        '.font-poppins-medium': { fontWeight: '500' },
-        '.font-poppins-semibold': { fontWeight: '600' },
-        '.font-poppins-bold': { fontWeight: '700' },
-        '.font-poppins-extrabold': { fontWeight: '800' },
-        '.font-poppins-black': { fontWeight: '900' },
-      };
-      addUtilities(newUtilities);
-    },
-  ],
 };

@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
-import { Text } from 'react-native';
 
 import GradientView from '@/components/onboarding/gradient-view';
+import { Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 import { signOut } from '@/lib/auth';
 
@@ -13,7 +13,7 @@ const Home = () => {
 
   return (
     <GradientView>
-      <Text>Home</Text>
+      <Typography>Home</Typography>
       <Button onPress={handleSignout}>
         <ButtonText>Sign out</ButtonText>
       </Button>

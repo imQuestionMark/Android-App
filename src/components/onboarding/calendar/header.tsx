@@ -1,4 +1,6 @@
-import { Pressable, Text } from 'react-native';
+import { Pressable } from 'react-native';
+
+import { Typography } from '@/components/ui';
 const XDate = require('xdate');
 
 type THeader = {
@@ -11,9 +13,13 @@ export const CalendarHeader = ({ date, toggleMonthModal }: THeader) => {
   const title = formattedDate.toString('MMMM yyyy');
   return (
     <Pressable hitSlop={25} onPress={toggleMonthModal}>
-      <Text className="border-b text-center font-poppins text-base font-bold leading-[19px] text-[#161616] ">
+      <Typography
+        weight={700}
+        color="main"
+        className="border-b text-center text-base leading-[19px] "
+      >
         {title}
-      </Text>
+      </Typography>
     </Pressable>
   );
 };

@@ -1,17 +1,21 @@
 import { Link, Stack } from 'expo-router';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+
+import { Typography } from '@/components/ui';
 
 export default function NotFoundScreen() {
   return (
     <>
       <Stack.Screen options={{ title: 'Oops!' }} />
       <View className="flex-1 items-center justify-center p-4">
-        <Text className="mb-4 text-2xl font-bold">
+        <Typography weight={600} className="mb-4 text-2xl ">
           This screen doesn't exist. Mic testing
-        </Text>
+        </Typography>
 
         <Link replace className="mt-4" href={{ pathname: '/' }}>
-          <Text className="text-blue-500 underline">Go to home screen!</Text>
+          <Typography color="primary" className="underline">
+            Go to home screen!
+          </Typography>
         </Link>
       </View>
     </>

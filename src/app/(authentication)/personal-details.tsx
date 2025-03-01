@@ -3,19 +3,14 @@ import { router } from 'expo-router';
 import { CalendarDays } from 'lucide-react-native';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Modal,
-  Pressable,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { Modal, Pressable, TouchableWithoutFeedback, View } from 'react-native';
 import { z } from 'zod';
 
 import { ControlledCalendar } from '@/components/onboarding/calendar';
 import GradientView from '@/components/onboarding/gradient-view';
 import BottomNav from '@/components/personal-details/bottom-nav';
 import { Nationality } from '@/components/personal-details/nationality';
+import { Typography } from '@/components/ui';
 import { useOnboardingStore } from '@/lib/store/onboarding';
 import { usePersonalStore } from '@/lib/store/personal-details';
 
@@ -74,33 +69,49 @@ export default function PersonalDetails() {
         <View id="main">
           <View>
             <View className="flex-row gap-x-2">
-              <Text className="font-poppins-semibold text-[32px] leading-[48px] text-[#161616]">
+              <Typography
+                weight={600}
+                color="main"
+                className="text-[32px] leading-[48px] "
+              >
                 Hi
-              </Text>
-              <Text className="font-poppins-semibold text-[32px] leading-[48px] text-primary">
+              </Typography>
+              <Typography
+                weight={600}
+                color="primary"
+                className="text-[32px] leading-[48px]"
+              >
                 Swetha
-              </Text>
+              </Typography>
             </View>
 
-            <Text className="font-poppins-medium text-[20px]  text-[#5A5A5A]">
+            <Typography weight={500} color="body" className="text-[20px]">
               Enter Details
-            </Text>
+            </Typography>
           </View>
 
           <View className="mt-6">
-            <Text className="font-poppins-medium text-[20px] leading-6 text-[#161616]">
+            <Typography
+              weight={500}
+              color="main"
+              className=" text-[20px] leading-[24px]"
+            >
               Enter Your D.O.B
-            </Text>
+            </Typography>
 
             {/* @TODO: Fix max width based on dimensions */}
             <Pressable
               onPress={toggleCalendarModal}
-              className="relative mt-3 max-w-64 flex-row items-center gap-4 rounded-md bg-white px-7 "
+              className="mt-3 max-w-64 flex-row items-center gap-4 rounded-md bg-white px-7 "
             >
               <CalendarDays color="#5A5A5A" />
-              <Text className="py-[10px] font-poppins text-[16px] text-black">
+              <Typography
+                weight={400}
+                color="body"
+                className=" py-[10px] text-[16px]"
+              >
                 {dob || 'dd/mm/yyyy'}
-              </Text>
+              </Typography>
             </Pressable>
 
             <Modal
@@ -122,9 +133,9 @@ export default function PersonalDetails() {
           </View>
 
           <View className="mt-6">
-            <Text className="  font-poppins-medium text-[20px] font-medium text-[#161616]">
+            <Typography weight={500} color="main" className=" text-[20px] ">
               Enter your Nationality
-            </Text>
+            </Typography>
           </View>
 
           <Nationality control={control} />

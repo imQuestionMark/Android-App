@@ -3,9 +3,8 @@ import { toast } from 'sonner-native';
 import { ZodError } from 'zod';
 
 const getAxiosErrorMessage = (error: AxiosError) => {
-  if (error.response) return extractError(error?.response?.data).trimEnd();
+  // if (error.response) return extractError(error?.response?.data).trimEnd();
 
-  // default return
   return error.message;
 };
 
@@ -24,7 +23,8 @@ export const showError = (error: Error) => {
     console.warn('🏹🏹🏹 Zod Validation Error');
     description = getZodErrorMessage(error);
   }
-  console.log(error);
+
+  console.warn(error);
 
   toast.error('Error', {
     description,

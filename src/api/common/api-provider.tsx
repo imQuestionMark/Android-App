@@ -7,19 +7,17 @@ import {
 } from '@tanstack/react-query';
 import { type ReactNode } from 'react';
 
-import { showError } from '@/components/ui';
-
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError(error) {
       console.log('Global Query Error Handling');
-      showError(error);
+      console.log(error);
     },
   }),
   mutationCache: new MutationCache({
     onError(error) {
       console.log('Global Mutation Error Handling');
-      showError(error);
+      console.log(error);
     },
   }),
 });

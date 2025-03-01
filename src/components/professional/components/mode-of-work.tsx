@@ -1,12 +1,14 @@
 import { useController } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 
+import { Typography } from '@/components/ui';
+
+import { ErrorMessage } from '../../ui/error-message';
 import { mode } from '../constants';
 import { CustomItem } from '../custom-item';
 import { styles } from '../styles';
 import type { ProfessionalControl } from '../types';
-import { ErrorMessage } from './error-message';
 
 type MoWProps = ProfessionalControl & {};
 
@@ -23,9 +25,9 @@ export const ModeOfWork = ({ control }: MoWProps) => {
 
   return (
     <View className="mb-5">
-      <Text className="mb-4 font-poppins text-[16px] font-medium">
+      <Typography weight={500} className="mb-4  text-[16px]">
         Preferred(Mode of work)
-      </Text>
+      </Typography>
       <MultiSelect
         data={mode}
         value={value}

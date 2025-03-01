@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { AxiosError } from 'axios';
+import React, { useEffect, useState } from 'react';
 import { type Control, useController, useForm } from 'react-hook-form';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { OtpInput } from 'react-native-otp-entry';
 
@@ -12,13 +13,15 @@ import {
   type Variables,
 } from '@/api/authentication/verification';
 import GradientView from '@/components/onboarding/gradient-view';
-import { ErrorMessage } from '@/components/professional/components/error-message';
+import { colors, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
+import { ErrorMessage } from '@/components/ui/error-message';
 
 const DEFAULT_TIMEOUT = 60;
 
+// @TODO Optimize unnecessary re-rendering of entire page due to timer.
 export default function Verification() {
-  const { control, handleSubmit } = useForm<Variables>({
+  const { control, handleSubmit, setError, setFocus } = useForm<Variables>({
     defaultValues: {
       otp: '',
     },
@@ -49,8 +52,25 @@ export default function Verification() {
     setIsResendAvailable(false);
   };
 
-  const { mutate: handleLogin, isPending } = useOtpMutation();
+  const handleServerError = (error: Error) => {
+    if (
+      error instanceof AxiosError &&
+      error.response &&
+      error.response.status === 403
+    ) {
+      setError('otp', {
+        type: 'serverError',
+        message: error.response?.data.message,
+      });
+      setFocus('otp');
+    }
+  };
+
+  const { mutate: handleLogin, isPending } = useOtpMutation({
+    onError: handleServerError,
+  });
   const { mutate: handleResend } = resendOtpMutation();
+
   return (
     <GradientView className="">
       <KeyboardAwareScrollView contentContainerClassName="grow">
@@ -59,21 +79,33 @@ export default function Verification() {
           <View className="flex gap-4">
             <View className="">
               <View className="mb-3.5 flex-row gap-2">
-                <Text className="font-poppins-extrabold text-[32px] text-black">
+                <Typography weight={700} color="main" className="text-[32px]">
                   Welcome
-                </Text>
-                <Text className="font-poppins-extrabold text-[32px] text-primary">
+                </Typography>
+                <Typography
+                  weight={700}
+                  color="primary"
+                  className="text-[32px]"
+                >
                   Onboard!
-                </Text>
+                </Typography>
               </View>
 
               <View className="">
-                <Text className="font-poppins-bold text-[20px] text-black ">
+                <Typography
+                  weight={600}
+                  color="main"
+                  className="font-poppins-bold text-[20px] text-black "
+                >
                   Verify your account
-                </Text>
-                <Text className="font-poppins-semibold text-[12px]">
+                </Typography>
+                <Typography
+                  weight={500}
+                  color="body"
+                  className="font-poppins-semibold text-[12px]"
+                >
                   OTP send to your email address. Please enter
-                </Text>
+                </Typography>
               </View>
             </View>
 
@@ -88,14 +120,14 @@ export default function Verification() {
               onPress={handleSubmit((data) => handleLogin(data))}
             >
               {isPending && <ActivityIndicator color="white" />}
-              <ButtonText>Send OTP</ButtonText>
+              <ButtonText className="uppercase">VERIFY OTP</ButtonText>
             </Button>
 
             <View>
               <View className="mt-1 flex flex-row justify-center">
-                <Text className="text-md font-poppins-medium text-[#161616]">
+                <Typography weight={500} color="main" className="text-md">
                   Didn't receive OTP?
-                </Text>
+                </Typography>
 
                 <Button
                   variant="ghost"
@@ -104,7 +136,7 @@ export default function Verification() {
                   disabled={!isResendAvailable}
                 >
                   <ButtonText
-                    className={`text-md font-poppins-medium underline ${!isResendAvailable ? 'text-gray-500' : 'text-primary'}`}
+                    className={`text-md font-poppins-medium underline ${!isResendAvailable ? 'text-main' : 'text-primary'}`}
                   >
                     Resend Code
                   </ButtonText>
@@ -112,9 +144,9 @@ export default function Verification() {
               </View>
               <View className="flex-row justify-center">
                 {!isResendAvailable && (
-                  <Text className="font-poppins-extrabold text-sm text-[#161616]">
+                  <Typography weight={800} color="main" className="text-sm ">
                     Resend code in {countdown} sec
-                  </Text>
+                  </Typography>
                 )}
               </View>
             </View>
@@ -135,16 +167,16 @@ const _THEME = {
     height: 52,
     width: 52,
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
     borderWidth: 2,
     borderColor: '#00000038',
   },
   focusedPinCodeContainerStyle: {
     borderWidth: 2,
-    borderColor: '#0400D1',
+    borderColor: colors.primary,
   },
   focusStickStyle: {
-    borderColor: '#0400D1',
+    borderColor: colors.primary,
     borderWidth: 1,
     height: 20,
   },

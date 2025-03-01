@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
 import { Link } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import {
@@ -11,18 +12,38 @@ import {
 } from '@/api/authentication/login';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
-import { ControlledInput } from '@/components/ui';
-import { Button, ButtonText } from '@/components/ui/button';
+import {
+  Button,
+  ButtonText,
+  ControlledInput,
+  Typography,
+} from '@/components/ui';
 
 export default function Signin() {
-  const { control, handleSubmit } = useForm<Variables>({
+  const { control, handleSubmit, setError, setFocus } = useForm<Variables>({
     defaultValues: {
-      identifier: '19uca004@gmail.com',
+      identifier: '',
     },
     resolver: zodResolver(loginInputSchema),
   });
 
-  const { mutate: handleLogin, isPending } = useLoginMutation();
+  const handleServerError = (error: Error) => {
+    if (
+      error instanceof AxiosError &&
+      error.response &&
+      error.response.status === 403
+    ) {
+      setError('identifier', {
+        type: 'serverError',
+        message: error.response?.data.message,
+      });
+      setFocus('identifier');
+    }
+  };
+
+  const { mutate: handleLogin, isPending } = useLoginMutation({
+    onError: handleServerError,
+  });
 
   return (
     <GradientView>
@@ -30,13 +51,13 @@ export default function Signin() {
         <View className="m-4 flex-1 justify-between ">
           <View className="">
             <View className="mb-3.5 flex-row gap-2">
-              <Text className="font-poppins-bold text-[32px] text-primary">
+              <Typography weight={700} color="primary" className="text-[32px]">
                 Sign
-              </Text>
+              </Typography>
 
-              <Text className="font-poppins-bold text-[32px] text-[#161616]">
+              <Typography weight={700} color="main" className="text-[32px] ">
                 in
-              </Text>
+              </Typography>
             </View>
 
             <View>
@@ -50,31 +71,37 @@ export default function Signin() {
               />
             </View>
           </View>
-          <View>
-            <Button
-              size="lg"
-              isDisabled={isPending}
-              onPress={handleSubmit((data) => handleLogin(data))}
-            >
-              {isPending && <ActivityIndicator color={'white'} />}
-              <ButtonText>Send OTP</ButtonText>
-            </Button>
 
-            <View className="">
+          {/* @REVIEW REQUIRED */}
+          <View className="mb-[60px]">
+            <View className="mb-[24px] gap-2">
+              <Button
+                size="lg"
+                isDisabled={isPending}
+                onPress={handleSubmit((data) => handleLogin(data))}
+              >
+                {isPending && <ActivityIndicator color={'white'} />}
+                <ButtonText>Send OTP</ButtonText>
+              </Button>
+
               <View className="flex flex-row items-center justify-center gap-2">
-                <Text className="text-center font-poppins-medium text-gray-500 ">
-                  If you already have an account?
-                </Text>
+                <Typography weight={500} className="text-[13px]" color="body">
+                  If you don't have an account?
+                </Typography>
 
                 <Link replace href={{ pathname: '/signup' }}>
-                  <Text className="font-poppins-medium text-primary">
-                    SignUp
-                  </Text>
+                  <Typography
+                    weight={500}
+                    color="primary"
+                    className="text-[13px] capitalize"
+                  >
+                    signup
+                  </Typography>
                 </Link>
               </View>
-
-              <TermsandConditions />
             </View>
+
+            <TermsandConditions />
           </View>
         </View>
       </KeyboardAwareScrollView>

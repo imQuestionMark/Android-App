@@ -71,15 +71,7 @@ module.exports = {
     'perfectionist/sort-imports': 'off',
     'perfectionist/sort-objects': 'off',
     'perfectionist/sort-modules': 'off',
-    'perfectionist/sort-jsx-props': [
-      'error',
-      {
-        type: 'line-length',
-        order: 'asc',
-        fallbackSort: { type: 'unsorted' },
-        ignoreCase: true,
-      },
-    ],
+    'perfectionist/sort-jsx-props': 'off',
     '@typescript-eslint/comma-dangle': 'off', // Avoid conflict rule between Eslint and Prettier
     '@typescript-eslint/consistent-type-imports': [
       'warn',

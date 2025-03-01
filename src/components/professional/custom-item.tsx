@@ -1,6 +1,7 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
+import { Typography } from '../ui';
 import { dropdownStyles } from './styles';
 
 const { itemContainer, itemIcon, itemIconCheck, itemText } = dropdownStyles();
@@ -25,7 +26,7 @@ export const CustomItem = ({
           </Svg>
         </View>
 
-        <Text className={itemText({ selected })}>{data.label}</Text>
+        <Typography className={itemText({ selected })}>{data.label}</Typography>
       </View>
     );
   }

@@ -1,12 +1,16 @@
+import { useMemo } from 'react';
 import { useController } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 
-import { locations } from '../constants';
+import { queryClient } from '@/api';
+import { useLocations } from '@/api/professional/use-locations';
+import { Typography } from '@/components/ui';
+
+import { ErrorMessage } from '../../ui/error-message';
 import { CustomItem } from '../custom-item';
 import { styles } from '../styles';
 import type { ProfessionalControl } from '../types';
-import { ErrorMessage } from './error-message';
 
 type LocationProps = ProfessionalControl & {};
 
@@ -19,25 +23,41 @@ export const Location = ({ control }: LocationProps) => {
     control,
   });
 
-  const locationPlaceholder = value.length
-    ? value.join(', ')
-    : 'Select Location';
+  const data = queryClient.getQueryData(useLocations.getKey());
+
+  const dropdownData = useMemo(() => {
+    if (!data || !data.items) return [];
+    return data.items;
+  }, [data]);
+
+  const placeholderText = () => {
+    if (value.length) {
+      const mappedLabels = value.map((id) => getLabel(id));
+      return mappedLabels.join(', ');
+    } else {
+      return 'Select Designation';
+    }
+  };
+
+  const getLabel = (id: string) => {
+    return dropdownData.find((items) => items.id === id)?.label;
+  };
 
   return (
     <View className="mb-5">
-      <Text className="mb-4 font-poppins text-[16px] font-medium">
+      <Typography weight={500} className="mb-4 text-[16px] ">
         Preferred Location
-      </Text>
+      </Typography>
       <MultiSelect
         value={value}
         activeColor=""
-        data={locations}
         labelField="label"
-        valueField="value"
+        valueField="id"
+        data={dropdownData}
         onChange={onChange}
         visibleSelectedItem={false}
         pressableStyle={styles.dropdown}
-        placeholder={locationPlaceholder}
+        placeholder={placeholderText()}
         containerStyle={styles.containerStyles}
         selectedTextProps={{ numberOfLines: 1 }}
         selectedTextStyle={styles.selectedTextStyle}

@@ -2,6 +2,11 @@ module.exports = {
   white: '#ffffff',
   black: '#000000',
   primary: '#0400D1',
+  main: '#161616',
+  body: '#5A5A5A',
+  green: '#4CAF50',
+  error: '#EE2F23',
+  gray: '#808080',
   charcoal: {
     50: '#F2F2F2',
     100: '#E5E5E5',

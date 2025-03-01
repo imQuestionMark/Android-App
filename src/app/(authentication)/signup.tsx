@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import {
@@ -11,7 +12,8 @@ import {
 } from '@/api/authentication/signup';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
-import { ControlledInput } from '@/components/ui';
+import { PhoneInput } from '@/components/signup/phone-input';
+import { ControlledInput, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 
 export default function Signup() {
@@ -20,7 +22,7 @@ export default function Signup() {
       firstName: 'test1',
       lastName: 'test2',
       emailAddress: '19uca004+test@gmail.com',
-      phone: '9008007001',
+      phone: '',
     },
     resolver: zodResolver(SignUpInputschema),
   });
@@ -32,14 +34,16 @@ export default function Signup() {
         <KeyboardAwareScrollView contentContainerClassName="grow">
           <View className="z-10 m-4 grow">
             <View className="flex-row gap-2">
-              <Text className="text-[32px] font-bold text-black">Welcome</Text>
-              <Text className="text-[32px] font-bold text-primary">
+              <Typography weight={700} color="main" className="text-[32px]">
+                Welcome
+              </Typography>
+              <Typography weight={700} color="primary" className="text-[32px]">
                 Onboard!
-              </Text>
+              </Typography>
             </View>
 
             <View className="grow justify-between">
-              <View className="">
+              <View>
                 {/* First Name */}
                 <View className="mt-4">
                   <ControlledInput
@@ -71,44 +75,51 @@ export default function Signup() {
                   />
                 </View>
 
+                <View className="mt-4">
+                  <PhoneInput control={control} />
+                </View>
+
                 {/* Phone Number */}
                 <View className="mt-4">
-                  <ControlledInput
-                    name="phone"
-                    control={control}
-                    keyboardType="numeric"
-                    placeholder="9876543210"
-                    label="Enter your phone number"
-                  />
+                  <PhoneInput control={control} />
                 </View>
               </View>
 
               {/* Footer */}
-              <View className="mt-6">
-                {/* Submit Button */}
-                <Button
-                  size="lg"
-                  isDisabled={isPending}
-                  onPress={handleSubmit((data) => handleLogin(data))}
-                >
-                  {isPending && <ActivityIndicator color={'white'} />}
-                  <ButtonText>Send OTP</ButtonText>
-                </Button>
 
-                <View className="">
+              <View className="mb-[60px]">
+                <View className="mb-[24px] gap-2">
+                  <Button
+                    size="lg"
+                    isDisabled={isPending}
+                    onPress={handleSubmit((data) => handleLogin(data))}
+                  >
+                    {isPending && <ActivityIndicator color={'white'} />}
+                    <ButtonText>Send OTP</ButtonText>
+                  </Button>
+
                   <View className="flex flex-row items-center justify-center gap-2">
-                    <Text className="text-center font-poppins-medium leading-[30px] text-gray-500">
-                      If you already have an account?
-                    </Text>
+                    <Typography
+                      weight={500}
+                      className="text-[13px]"
+                      color="body"
+                    >
+                      If you don't have an account?
+                    </Typography>
 
                     <Link replace href={{ pathname: '/login' }}>
-                      <Text className="font-medium text-primary">Login</Text>
+                      <Typography
+                        weight={500}
+                        color="primary"
+                        className="text-[13px] capitalize"
+                      >
+                        login
+                      </Typography>
                     </Link>
                   </View>
-
-                  <TermsandConditions />
                 </View>
-                {/*  */}
+
+                <TermsandConditions />
               </View>
             </View>
           </View>

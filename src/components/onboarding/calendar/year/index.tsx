@@ -2,11 +2,12 @@ import {
   FlatList,
   Modal,
   Pressable,
-  Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { tv } from 'tailwind-variants';
+
+import { Typography } from '@/components/ui';
 
 const _YEARS = Array.from(
   { length: 50 },
@@ -53,9 +54,11 @@ export const YearModal = ({
                       active: item === currentYear,
                     })}
                   >
-                    <Text className={text({ active: item === currentYear })}>
+                    <Typography
+                      className={text({ active: item === currentYear })}
+                    >
                       {item}
-                    </Text>
+                    </Typography>
                   </Pressable>
                 )}
               />
@@ -72,7 +75,7 @@ const yearModalStyles = tv({
     container: 'max-w-[500px] flex-1 items-stretch justify-center p-5',
     innerWrapper: 'h-[357px] items-stretch rounded-lg bg-white p-5',
     button: 'bg-white py-4',
-    text: 'text-center text-base text-gray-700',
+    text: 'text-gray-700 text-center text-base',
   },
   variants: {
     active: {
