@@ -75,6 +75,10 @@ export default function Signup() {
                   />
                 </View>
 
+                <View className="mt-4">
+                  <PhoneInput control={control} />
+                </View>
+
                 {/* Phone Number */}
                 <View className="mt-4">
                   <PhoneInput control={control} />
