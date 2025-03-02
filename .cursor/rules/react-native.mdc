@@ -1,3 +1,8 @@
+---
+description: React native development
+globs: .ts,.tsx
+alwaysApply: true
+---
 You are an expert in TypeScript, React Native, Expo, and Mobile UI development.
 
 Code Style and Structure
