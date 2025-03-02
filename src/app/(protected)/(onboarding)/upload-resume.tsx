@@ -1,56 +1,100 @@
 import { Image } from 'expo-image';
 import React from 'react';
 import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Typography } from '@/components/ui';
-import { Button, ButtonText } from '@/components/ui/button';
+import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
+import { CirclePause, CircleX } from 'lucide-react-native';
 
 export default function UploadResume() {
   return (
-    <View className=" flex-1 items-center justify-center gap-6 bg-white px-6">
-      <View className="w-3/4 items-center px-[35px]">
+    <SafeAreaView className="grow gap-6 bg-white p-3">
+      <View className="items-center px-[35px]">
         <Image
           className="h-[301px] w-[360px]"
           source={require('assets/resume.png')}
         />
       </View>
 
-      <View className=" h-[60px]  w-full justify-center gap-[2px]">
+      <View className="justify-center gap-[2px]">
         <Typography
-          weight-700
-          className=" text-left text-lg leading-[26px] text-main"
+          weight={700}
+          className=" text-[18px] leading-[26px] text-main"
         >
           Upload Existing Resume
         </Typography>
-        <Typography className="font-poppins-regular text-sm leading-4 text-[#929497]">
+        <Typography className="text-[14px] leading-[16px] text-[#929497]">
           Add your resume here, and you can upload up to 5 MB max
         </Typography>
       </View>
-      <View className=" h-[186px]  w-full items-center justify-center gap-3 rounded-lg border-2 border-dashed border-[#1849D6] p-6">
+
+      <View className="items-center justify-center gap-3 rounded-lg border-2 border-dashed border-[#1849D6] p-6">
         <Image className="size-[42px]" source={require('assets/upload.png')} />
-        <View className="h-[84px] w-full gap-2">
-          <Typography className="items-center justify-center text-center font-poppins-regular text-sm leading-5">
+
+        <View className="gap-2">
+          <Typography className="items-center justify-center text-center text-[14px]">
             Drag your file(s) to start uploading
           </Typography>
+
           <View className="flex-row items-center justify-center">
-            <View className="h-px w-20  bg-[#E7E7E7]" />
-            <Typography className="mx-1 font-poppins-regular text-xs text-[#6D6D6D]">
-              {' '}
-              OR{' '}
-            </Typography>
-            <View className="h-px w-20 bg-[#E7E7E7]" />
+            <View className="h-[1px] w-20 bg-[#E7E7E7]" />
+            <Typography className="mx-1 text-xs text-[#6D6D6D]">OR</Typography>
+            <View className="h-[1px] w-20 bg-[#E7E7E7]" />
           </View>
-          <View className="items-center justify-center">
-            <Button className="h-[30px] w-24  rounded-lg border border-[#1849D6] bg-white">
-              <ButtonText className="font-poppins-semibold text-xs text-[#1849D6]">
+
+          <View className="items-center">
+            <Button variant="outline" className="px-3 py-[6px]">
+              <ButtonText weight={600} color="primary" className="text-[12px]">
                 Browse files
               </ButtonText>
             </Button>
           </View>
         </View>
       </View>
-      <View></View>
-      <View></View>
-    </View>
+
+      <View className="border border-[#E7E7E7] rounded-xl p-4 gap-2">
+        <View className="flex-row items-center">
+          <View className="grow">
+            <Typography
+              weight={600}
+              className="text-[14px] leading-[26px] text-main"
+            >
+              Uploading...
+            </Typography>
+            <View className="flex-row gap-2">
+              <Typography className="text-[14px] leading-[26px] text-main">
+                65%
+              </Typography>
+              <Typography className="text-[14px] leading-[26px] text-main">
+                •
+              </Typography>
+              <Typography className="text-[14px] leading-[26px] text-main">
+                30 seconds remaining
+              </Typography>
+            </View>
+          </View>
+
+          <View className="flex-row gap-1">
+            <Button variant="ghost" size="icon" className="size-[24px]">
+              <ButtonIcon>
+                <CirclePause size={20} color="gray" />
+              </ButtonIcon>
+            </Button>
+
+            <Button variant="ghost" size="icon" className="size-[24px]">
+              <ButtonIcon>
+                <CircleX size={20} color="red" />
+              </ButtonIcon>
+            </Button>
+          </View>
+        </View>
+
+        <View>
+          <View className="h-3 rounded-xl bg-body/10 " />
+          <View className="h-3 w-3/4  rounded-xl bg-primary absolute" />
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }
