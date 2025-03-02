@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui';
 
 import { Typography } from '../components/ui/text';
+import Step from '@/components/ui/step';
 
 const Test = () => {
   return (
@@ -37,6 +38,12 @@ const Test = () => {
           <Typography type="placeholder" color="primary">
             Placeholder Primary
           </Typography>
+        </View>
+
+        <View className="flex-row gap-1">
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <Step key={idx} active={idx % 2 === 0} />
+          ))}
         </View>
 
         <View>
