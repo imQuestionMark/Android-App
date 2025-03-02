@@ -5,7 +5,7 @@ import { View } from 'react-native';
 import { Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 
-export default function uploadResume() {
+export default function UploadResume() {
   return (
     <View className=" flex-1 items-center justify-center gap-6 bg-white px-6">
       <View className="w-3/4 items-center px-[35px]">

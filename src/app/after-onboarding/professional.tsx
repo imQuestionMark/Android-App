@@ -5,7 +5,7 @@ import { Text, View } from 'react-native';
 import GradientView from '@/components/onboarding/gradient-view';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
 
-export default function proesstional() {
+export default function Professional() {
   return (
     <GradientView className="items-center justify-center px-4">
       <View className="flex h-[340px] w-[398px] items-center justify-center gap-6 rounded-3xl bg-white px-10 py-7">
@@ -14,10 +14,10 @@ export default function proesstional() {
             className="size-[78px]"
             source={require('assets/profile.png')}
           />
-          <Text className="text-center font-poppins-bold text-[20px] text-[#161616]">
+          <Text className="text-center font-poppins-bold text-[20px] text-main">
             Account Created🎉
           </Text>
-          <Text className="font-poppins-regular text-[#929497]text-center text-[12px]">
+          <Text className="text-[#929497]text-center font-poppins-regular text-[12px]">
             Need to create your wall to complete the profile
           </Text>
         </View>

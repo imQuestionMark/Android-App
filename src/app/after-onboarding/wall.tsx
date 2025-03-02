@@ -5,7 +5,7 @@ import { FlatList } from 'react-native-gesture-handler';
 
 import { Button, ButtonIcon, ButtonText, Typography } from '@/components/ui';
 
-export default function wall() {
+export default function Wall() {
   const walls = [
     {
       id: 1,
