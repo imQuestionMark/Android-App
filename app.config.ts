@@ -97,6 +97,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     'expo-secure-store',
     ['app-icon-badge', appIconBadgeConfig],
     ['react-native-edge-to-edge'],
+    'expo-document-picker',
   ],
   extra: {
     ...ClientEnv,
