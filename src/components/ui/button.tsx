@@ -27,10 +27,6 @@ const buttonStyles = tv({
       },
     },
     size: {
-      md: {
-        base: 'h-9 px-3',
-        text: 'text-sm',
-      },
       lg: {
         base: 'p-5',
         text: 'font-poppins-semibold text-lg',
@@ -47,7 +43,7 @@ const buttonStyles = tv({
   },
   defaultVariants: {
     variant: 'primary',
-    size: 'md',
+    size: 'lg',
   },
 });
 
