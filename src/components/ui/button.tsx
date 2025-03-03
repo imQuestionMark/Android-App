@@ -28,7 +28,7 @@ const buttonStyles = tv({
     },
     size: {
       lg: {
-        base: 'p-5',
+        base: '',
         text: 'font-poppins-semibold text-lg',
       },
       icon: {
