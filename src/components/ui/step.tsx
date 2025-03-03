@@ -29,10 +29,10 @@ const Step = ({ active = false }: { active?: boolean }) => {
 
   useEffect(() => {
     width.value = withTiming(active ? 100 : 0, {
-      duration: 250,
+      duration: 500,
       easing: Easing.inOut(Easing.quad),
     });
-  }, [active]);
+  }, [active, width]);
 
   return (
     <View className={stepTv()}>
