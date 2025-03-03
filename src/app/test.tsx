@@ -4,11 +4,19 @@ import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, ButtonIcon, ButtonText } from '@/components/ui';
+import Step from '@/components/ui/step';
+import { useStepper } from '@/lib/hooks/use-stepper';
 
 import { Typography } from '../components/ui/text';
-import Step from '@/components/ui/step';
+
+const TOTAL_STEPS = 8;
 
 const Test = () => {
+  const { goToNext, goToPrevious, isFirstStep, isLastStep, currentStep } =
+    useStepper({
+      totalSteps: TOTAL_STEPS,
+    });
+
   return (
     <SafeAreaView className="m-5 grow">
       <ScrollView>
@@ -40,10 +48,26 @@ const Test = () => {
           </Typography>
         </View>
 
-        <View className="flex-row gap-1">
-          {Array.from({ length: 4 }).map((_, idx) => (
-            <Step key={idx} active={idx % 2 === 0} />
-          ))}
+        <View className="gap-3">
+          <View className="flex-row justify-between">
+            <Button
+              variant="outline"
+              onPress={goToPrevious}
+              disabled={isFirstStep}
+            >
+              <ButtonText>Back</ButtonText>
+            </Button>
+
+            <Button variant="outline" onPress={goToNext} disabled={isLastStep}>
+              <ButtonText>Next</ButtonText>
+            </Button>
+          </View>
+
+          <View className="flex-row gap-1">
+            {Array.from({ length: TOTAL_STEPS }).map((_, idx) => (
+              <Step key={idx} active={currentStep >= idx} />
+            ))}
+          </View>
         </View>
 
         <View>

@@ -1,13 +1,19 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { View } from 'react-native';
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { tv } from 'tailwind-variants';
 
 const stepTv = tv({
   base: 'h-[2px] grow rounded-xl',
   variants: {
     active: {
-      false: 'bg-[#0400D14D]',
       true: 'bg-primary',
+      false: 'bg-[#0400D14D]',
     },
   },
   defaultVariants: {
@@ -16,16 +22,26 @@ const stepTv = tv({
 });
 
 const Step = ({ active = false }: { active?: boolean }) => {
+  const width = useSharedValue(0);
+  const animatedStyle = useAnimatedStyle(() => ({
+    width: `${width.value}%`,
+  }));
+
+  useEffect(() => {
+    width.value = withTiming(active ? 100 : 0, {
+      duration: 250,
+      easing: Easing.inOut(Easing.quad),
+    });
+  }, [active]);
+
   return (
-    <View className={stepTv({ active })}>
-      <View
+    <View className={stepTv()}>
+      <Animated.View
         className={stepTv({
-          active: true,
-          className: 'absolute h-full rounded-xl',
+          active,
+          className: 'absolute',
         })}
-        style={{
-          width: active ? '100%' : '0%',
-        }}
+        style={animatedStyle}
       />
     </View>
   );
