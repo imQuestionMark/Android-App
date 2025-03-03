@@ -12,7 +12,7 @@ const walls = [
     title: 'CV for Itern',
     date: 'Mar 20, 2024',
     status: 'Active',
-    badgeColor: 'bg-green-500',
+    badgeColor: 'bg-green',
   },
   {
     id: 2,
@@ -186,7 +186,7 @@ const WallCustomItem = ({ item }: WallCustomItemProps) => {
               Modified {item.date}
             </Typography>
           </View>
-          <View className={`rounded-md ${item.badgeColor} px-2 py-1`}>
+          <View className={`rounded-md ${item.badgeColor} bg-green-400 px-2 py-1`}>
             <Typography className="text-xs text-white">
               {item.status}
             </Typography>
