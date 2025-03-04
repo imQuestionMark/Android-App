@@ -1,6 +1,6 @@
 import { CalendarDays } from 'lucide-react-native';
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { Dimensions, PixelRatio, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, ButtonIcon, ButtonText } from '@/components/ui';
@@ -16,6 +16,8 @@ const Test = () => {
     useStepper({
       totalSteps: TOTAL_STEPS,
     });
+
+  const { width, height } = Dimensions.get('window');
 
   return (
     <SafeAreaView className="m-5 grow">
@@ -71,14 +73,18 @@ const Test = () => {
         </View>
 
         <View>
-          <Typography weight={100} className="text-[36px]">
-            The quick brown fox
+          <Typography
+            weight={100}
+            className="text-4xl"
+            allowFontScaling={false}
+          >
+            The quick brown fox {PixelRatio.get()}
           </Typography>
-          <Typography weight={200} className="text-[36px]">
-            The quick brown fox
+          <Typography weight={200} className="text-4xl">
+            The quick brown fox {PixelRatio.getFontScale()}
           </Typography>
           <Typography weight={300} className="text-[36px]">
-            The quick brown fox
+            The quick brown fox {PixelRatio.getPixelSizeForLayoutSize(10)}
           </Typography>
           <Typography weight={400} className="text-[36px]">
             The quick brown fox
