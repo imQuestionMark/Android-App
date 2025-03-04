@@ -43,18 +43,19 @@ export default function RootLayout() {
         const inProtectedGroup = segments[0] === '(protected)';
 
         if (!isAuthenticated && inProtectedGroup) {
-          router.replace('/(authentication)/login');
+          // router.replace('/(authentication)/login');
+          router.navigate({ pathname: '/stepper/one' });
         } else if (isAuthenticated && inAuthGroup) {
           router.replace('/(protected)/home');
         } else if (!segments.length) {
           router.replace(
-            isAuthenticated ? '/(protected)/home' : '/(authentication)/login'
+            isAuthenticated ? '/(protected)/home' : '/stepper/one'
           );
         }
       } finally {
         // @INFO - This is for development only
         if (__DEV__) {
-          router.navigate({ pathname: '/test' });
+          // router.navigate({ pathname: '/_sitemap' });
         }
         await SplashScreen.hideAsync();
       }
@@ -68,6 +69,7 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(authentication)" />
         <Stack.Screen name="(protected)" />
+        <Stack.Screen name="stepper" />
       </Stack>
     </Providers>
   );

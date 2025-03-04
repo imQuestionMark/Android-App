@@ -9,7 +9,7 @@ import Animated, {
 import { tv } from 'tailwind-variants';
 
 const stepTv = tv({
-  base: 'h-[2px] grow rounded-xl',
+  base: 'h-[12px] grow rounded-xl',
   variants: {
     active: {
       true: 'bg-primary',
