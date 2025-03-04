@@ -35,5 +35,6 @@
   },
   "tailwindCSS.experimental.classRegex": [
     ["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
-  ]
+  ],
+  "tailwindCSS.rootFontSize": 14
 }
