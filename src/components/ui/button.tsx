@@ -8,7 +8,7 @@ import { Typography, type TypographyProps } from './text';
 const buttonStyles = tv({
   slots: {
     base: 'flex-row items-center justify-center gap-2 rounded-md',
-    text: 'text-center font-poppins-regular',
+    text: 'text-center',
     iconContainer: 'shrink-0',
   },
   variants: {
@@ -44,7 +44,7 @@ const buttonStyles = tv({
       },
       lg: {
         base: 'h-11 px-6',
-        text: 'font-poppins-semibold text-lg',
+        text: 'text-lg',
       },
       xl: {
         base: 'h-12 px-7',
