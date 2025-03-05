@@ -124,7 +124,7 @@ const ActiveWall = () => {
 
 const CreateWall = () => {
   return (
-    <View className="border-secondary gap-3 rounded-lg border-2 border-dashed p-4">
+    <View className="gap-3 rounded-lg border-2 border-dashed border-secondary p-4">
       <View>
         <Typography weight={700} className="text-lg text-[#0B0B0B]">
           Create Wall
@@ -186,7 +186,9 @@ const WallCustomItem = ({ item }: WallCustomItemProps) => {
               Modified {item.date}
             </Typography>
           </View>
-          <View className={`rounded-md ${item.badgeColor} bg-green-400 px-2 py-1`}>
+          <View
+            className={`rounded-md ${item.badgeColor} bg-green-400 px-2 py-1`}
+          >
             <Typography className="text-xs text-white">
               {item.status}
             </Typography>

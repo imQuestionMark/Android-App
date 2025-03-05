@@ -1,10 +1,10 @@
 import { Slot, useRouter } from 'expo-router';
+import React from 'react';
 import { Button, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Step from '@/components/ui/step';
 import { useStepper } from '@/lib/hooks/use-stepper';
-import React from 'react';
 
 // Define step routes as const for type safety
 const STEP_ROUTES = {
@@ -17,7 +17,6 @@ const STEP_ROUTES = {
 } as const;
 
 type StepKeys = keyof typeof STEP_ROUTES;
-type StepRoutes = (typeof STEP_ROUTES)[StepKeys];
 
 const TOTAL_STEPS = Object.keys(STEP_ROUTES).length;
 
@@ -40,7 +39,7 @@ export default function StepperLayout() {
   };
 
   return (
-    <SafeAreaView className="bg-white grow">
+    <SafeAreaView className="grow bg-white">
       <View className="px-4">
         <StepperHeader
           isFirstStep={isFirstStep}
@@ -58,12 +57,12 @@ export default function StepperLayout() {
 }
 
 interface StepperHeaderProps {
+  currentStep: number;
   isFirstStep: boolean;
   isLastStep: boolean;
-  currentStep: number;
-  totalSteps: number;
   onNext: () => void;
   onPrevious: () => void;
+  totalSteps: number;
 }
 
 const StepperHeader = React.memo(function StepperHeader({
