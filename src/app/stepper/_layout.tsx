@@ -1,10 +1,13 @@
 import { Slot, useRouter } from 'expo-router';
+import React, { useState } from 'react';
 import { Button, View } from 'react-native';
+import { Calendar as RNCalendar } from 'react-native-calendars';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { _renderArrows } from '@/components/onboarding/calendar/arrows';
+import { Typography } from '@/components/ui';
 import Step from '@/components/ui/step';
 import { useStepper } from '@/lib/hooks/use-stepper';
-import React from 'react';
 
 // Define step routes as const for type safety
 const STEP_ROUTES = {
@@ -17,11 +20,12 @@ const STEP_ROUTES = {
 } as const;
 
 type StepKeys = keyof typeof STEP_ROUTES;
-type StepRoutes = (typeof STEP_ROUTES)[StepKeys];
 
 const TOTAL_STEPS = Object.keys(STEP_ROUTES).length;
 
 export default function StepperLayout() {
+  const [selected, setSelected] = useState('');
+
   const router = useRouter();
   const { goToNext, goToPrevious, isFirstStep, isLastStep, currentStep } =
     useStepper({
@@ -39,8 +43,20 @@ export default function StepperLayout() {
     router.back();
   };
 
+  const vacation = {
+    key: 'vacation',
+    color: 'black',
+    selectedDotColor: 'black',
+  };
+  const massage = {
+    key: 'massage',
+    color: 'yellow',
+    selectedDotColor: 'yellow',
+  };
+  const workout = { key: 'workout', color: 'green' };
+
   return (
-    <SafeAreaView className="bg-white grow">
+    <SafeAreaView className="grow bg-yellow-600">
       <View className="px-4">
         <StepperHeader
           isFirstStep={isFirstStep}
@@ -52,18 +68,42 @@ export default function StepperLayout() {
         />
 
         <Slot />
+        <RNCalendar
+          hideExtraDays
+          enableSwipeMonths
+          onDayPress={(day) => {
+            console.log('OnDayPress:', day);
+            setSelected(day.dateString);
+          }}
+          current="2002-05-03"
+          markingType="multi-dot"
+          markedDates={{
+            [selected]: {
+              selected: true,
+              selectedColor: 'blue',
+              marked: true,
+              dotColor: 'red',
+              activeOpacity: 0,
+              dots: [vacation, massage, workout],
+            },
+          }}
+          style={{ borderRadius: 6, backgroundColor: 'pink' }}
+          // dayComponent={(data) => _renderDay(data)}
+          // customHeaderTitle={<Typography>Hello world</Typography>}
+          renderArrow={(direction: string) => _renderArrows(direction)}
+        />
       </View>
     </SafeAreaView>
   );
 }
 
 interface StepperHeaderProps {
+  currentStep: number;
   isFirstStep: boolean;
   isLastStep: boolean;
-  currentStep: number;
-  totalSteps: number;
   onNext: () => void;
   onPrevious: () => void;
+  totalSteps: number;
 }
 
 const StepperHeader = React.memo(function StepperHeader({
