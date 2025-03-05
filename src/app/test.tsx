@@ -1,4 +1,4 @@
-import { CalendarDays } from 'lucide-react-native';
+import { CalendarDays, CirclePlus } from 'lucide-react-native';
 import React from 'react';
 import { PixelRatio, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -103,25 +103,39 @@ const Test = () => {
         </View>
 
         <View className="m-4 items-center gap-4" id="button-variants">
-          {/* Default Variant */}
-          <Button variant="solid" size="lg" className="">
+          {/* Default Variant variant="solid" size="lg" */}
+          <Button>
             <CalendarDays className="text-white" size={18} />
             <ButtonText weight={100} className="">
               Solid LG
             </ButtonText>
           </Button>
 
-          <Button variant="outline" size="lg" className="">
+          <Button size="2xl" className="h-[51px] gap-3">
+            <CirclePlus className="text-white" size={22} />
+            <ButtonText
+              weight={500}
+              className="text-[16px]"
+              style={{
+                lineHeight: 27.2,
+              }}
+            >
+              Create New Resume
+            </ButtonText>
+            {/* <View className="absolute h-[2px] w-full bg-red-600" /> */}
+          </Button>
+
+          <Button variant="outline" size="lg">
             <CalendarDays className="text-primary" size={18} />
             <ButtonText weight={100} className="">
-              Solid LG
+              Outline LG
             </ButtonText>
           </Button>
 
           <Button variant="ghost" size="lg" className="">
             <CalendarDays className="text-primary" size={18} />
             <ButtonText weight={100} className="">
-              Solid LG
+              Ghost LG
             </ButtonText>
           </Button>
 
