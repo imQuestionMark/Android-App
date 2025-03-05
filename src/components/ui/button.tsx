@@ -13,7 +13,7 @@ const buttonStyles = tv({
   },
   variants: {
     variant: {
-      primary: {
+      solid: {
         base: 'bg-primary',
         text: 'text-white',
       },
@@ -25,14 +25,34 @@ const buttonStyles = tv({
         base: 'bg-transparent',
         text: 'text-primary',
       },
+      icon: {
+        base: 'size-10 rounded-full border border-primary p-0',
+      },
     },
     size: {
+      xs: {
+        base: 'h-8 px-3.5',
+        text: 'text-xs',
+      },
+      sm: {
+        base: 'h-9 px-4',
+        text: 'text-sm',
+      },
+      md: {
+        base: 'h-10 px-5',
+        text: 'text-md',
+      },
       lg: {
-        base: '',
+        base: 'h-11 px-6',
         text: 'font-poppins-semibold text-lg',
       },
-      icon: {
-        base: 'size-10',
+      xl: {
+        base: 'h-12 px-7',
+        text: 'text-xl',
+      },
+      '2xl': {
+        base: 'h-[60px] px-9',
+        text: 'text-2xl',
       },
     },
     isDisabled: {
@@ -41,8 +61,17 @@ const buttonStyles = tv({
       },
     },
   },
+  compoundVariants: [
+    {
+      variant: 'icon',
+      size: ['xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      class: {
+        base: 'size-10 rounded-full border border-primary p-0',
+      },
+    },
+  ],
   defaultVariants: {
-    variant: 'primary',
+    variant: 'solid',
     size: 'lg',
   },
 });

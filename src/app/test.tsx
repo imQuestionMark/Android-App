@@ -1,13 +1,11 @@
 import { CalendarDays } from 'lucide-react-native';
 import React from 'react';
-import { Dimensions, PixelRatio, ScrollView, View } from 'react-native';
+import { PixelRatio, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Button, ButtonIcon, ButtonText } from '@/components/ui';
+import { Button, ButtonText, Typography } from '@/components/ui';
 import Step from '@/components/ui/step';
 import { useStepper } from '@/lib/hooks/use-stepper';
-
-import { Typography } from '../components/ui/text';
 
 const TOTAL_STEPS = 8;
 
@@ -17,12 +15,10 @@ const Test = () => {
       totalSteps: TOTAL_STEPS,
     });
 
-  const { width, height } = Dimensions.get('window');
-
   return (
-    <SafeAreaView className="m-5 grow">
+    <SafeAreaView className="m-5 grow bg-white">
       <ScrollView>
-        <View>
+        <View id="text-variants">
           <Typography type="heading" className="text-error">
             Heading
           </Typography>
@@ -50,7 +46,7 @@ const Test = () => {
           </Typography>
         </View>
 
-        <View className="gap-3">
+        <View className="gap-3" id="stepper">
           <View className="flex-row justify-between">
             <Button
               variant="outline"
@@ -72,7 +68,7 @@ const Test = () => {
           </View>
         </View>
 
-        <View>
+        <View id="typography-variants">
           <Typography
             weight={100}
             className="text-4xl"
@@ -106,71 +102,31 @@ const Test = () => {
           </Typography>
         </View>
 
-        <View className="gap-4">
-          <Button className="items-stretch">
-            <View className="flex justify-center ">
-              <CalendarDays className="w-8 text-white" />
-            </View>
-            <ButtonText weight={100} className="text-[36px] text-white">
-              Hello world
+        <View className="m-4 items-center gap-4" id="button-variants">
+          {/* Default Variant */}
+          <Button variant="solid" size="lg" className="">
+            <CalendarDays className="text-white" size={18} />
+            <ButtonText weight={100} className="">
+              Solid LG
             </ButtonText>
           </Button>
 
-          <Button>
-            <ButtonIcon>
-              <CalendarDays className="w-8 text-white" />
-            </ButtonIcon>
-            <ButtonText weight={400} className="text-[26px] text-white">
-              Hello world
+          <Button variant="outline" size="lg" className="">
+            <CalendarDays className="text-primary" size={18} />
+            <ButtonText weight={100} className="">
+              Solid LG
             </ButtonText>
           </Button>
 
-          <Button className="items-center">
-            <View className="flex-row items-center gap-3">
-              <CalendarDays className="w-8 text-white" />
-              <ButtonText
-                weight={100}
-                className="text-[36px] text-white"
-                style={{
-                  includeFontPadding: false,
-                }}
-              >
-                žHello world
-              </ButtonText>
-            </View>
-          </Button>
-
-          <Button>
-            <ButtonIcon>
-              <CalendarDays className="w-8 text-white" />
-            </ButtonIcon>
-            <ButtonText weight={400} className="text-[26px] text-white">
-              Hello world
+          <Button variant="ghost" size="lg" className="">
+            <CalendarDays className="text-primary" size={18} />
+            <ButtonText weight={100} className="">
+              Solid LG
             </ButtonText>
           </Button>
 
-          <Button>
-            <ButtonText weight={900} className="text-[36px] text-white">
-              The quick fox
-            </ButtonText>
-          </Button>
-
-          <Button>
-            <ButtonText weight={500} className="text-[26px] text-white">
-              The quick fox
-            </ButtonText>
-          </Button>
-
-          <Button>
-            <ButtonText weight={600} className="text-[14px] text-white">
-              The quick fox
-            </ButtonText>
-          </Button>
-
-          <Button>
-            <ButtonText weight={500} className="text-[20px] text-white">
-              The quick fox
-            </ButtonText>
+          <Button variant="icon" size="lg" className="p-0">
+            <CalendarDays className="text-primary" size={18} />
           </Button>
         </View>
       </ScrollView>
