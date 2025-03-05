@@ -3,10 +3,11 @@ import '../../global.css';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
 import { router, Stack, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Toaster } from 'sonner-native';
@@ -36,33 +37,55 @@ export default function RootLayout() {
   const isAuthenticated = authStatus === 'authenticated';
   const segments = useSegments();
 
+  const [fontsLoaded] = useFonts(
+    Platform.OS === 'web'
+      ? {
+          'Poppins-Black': require('../../assets/fonts/Poppins-Black.ttf'),
+          'Poppins-Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
+          'Poppins-ExtraBold': require('../../assets/fonts/Poppins-ExtraBold.ttf'),
+          'Poppins-ExtraLight': require('../../assets/fonts/Poppins-ExtraLight.ttf'),
+          'Poppins-Light': require('../../assets/fonts/Poppins-Light.ttf'),
+          'Poppins-Medium': require('../../assets/fonts/Poppins-Medium.ttf'),
+          'Poppins-Regular': require('../../assets/fonts/Poppins-Regular.ttf'),
+          'Poppins-SemiBold': require('../../assets/fonts/Poppins-SemiBold.ttf'),
+          'Poppins-Thin': require('../../assets/fonts/Poppins-Thin.ttf'),
+        }
+      : {}
+  );
+
+
   useEffect(() => {
+    if (!fontsLoaded) return;
+
     const bootstrapAsync = async () => {
       try {
-        const inAuthGroup = segments[0] === '(authentication)';
-        const inProtectedGroup = segments[0] === '(protected)';
-
-        if (!isAuthenticated && inProtectedGroup) {
-          // router.replace('/(authentication)/login');
-          router.navigate({ pathname: '/stepper/one' });
-        } else if (isAuthenticated && inAuthGroup) {
-          router.replace('/(protected)/home');
-        } else if (!segments.length) {
-          router.replace(
-            isAuthenticated ? '/(protected)/home' : '/stepper/one'
-          );
-        }
+        // const inAuthGroup = segments[0] === '(authentication)';
+        // const inProtectedGroup = segments[0] === '(protected)';
+        // if (!isAuthenticated && inProtectedGroup) {
+        //   // router.replace('/(authentication)/login');
+        //   router.navigate({ pathname: '/stepper/one' });
+        // } else if (isAuthenticated && inAuthGroup) {
+        //   router.replace('/(protected)/home');
+        // } else if (!segments.length) {
+        //   router.replace(
+        //     isAuthenticated ? '/(protected)/home' : '/stepper/one'
+        //   );
+        // }
       } finally {
         // @INFO - This is for development only
         if (__DEV__) {
-          // router.navigate({ pathname: '/_sitemap' });
+          router.navigate({ pathname: '/test' });
         }
-        await SplashScreen.hideAsync();
+        // Only hide splash screen if fonts are loaded (for web)
+        if (fontsLoaded) {
+          await SplashScreen.hideAsync();
+        }
       }
     };
 
     bootstrapAsync();
-  }, [isAuthenticated, segments]);
+  }, [isAuthenticated, segments, fontsLoaded]);
+
 
   return (
     <Providers>
