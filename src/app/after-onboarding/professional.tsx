@@ -1,54 +1,44 @@
-/* eslint-disable react/jsx-no-undef */
 import { Image } from 'expo-image';
-import { Text, View } from 'react-native';
+import { CirclePlus, Upload } from 'lucide-react-native';
+import { View } from 'react-native';
 
 import GradientView from '@/components/onboarding/gradient-view';
-import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
+import { Typography } from '@/components/ui';
+import { Button, ButtonText } from '@/components/ui/button';
 
 export default function Professional() {
   return (
-    <GradientView className="items-center justify-center px-4">
-      <View className="flex h-[340px] w-[398px] items-center justify-center gap-6 rounded-3xl bg-white px-10 py-7">
-        <View className="mb- h-[146px] w-[318px] items-center justify-center gap-3">
+    <GradientView className="mx-[16px] items-center justify-center">
+      <View className=" w-full gap-6 rounded-3xl bg-white px-10 py-7">
+        <View className="items-center justify-center gap-3">
           <Image
             className="size-[78px]"
             source={require('assets/profile.png')}
           />
-          <Text className="text-center font-poppins-bold text-[20px] text-main">
-            Account Created🎉
-          </Text>
-          <Text className="text-[#929497]text-center font-poppins-regular text-[12px]">
+          <Typography
+            weight={700}
+            className="text-center text-[20px] text-main"
+          >
+            Account Created 🎉
+          </Typography>
+          <Typography weight={400} className="text-[12px] text-[#929497]">
             Need to create your wall to complete the profile
-          </Text>
+          </Typography>
         </View>
-        <View className="w-[318px]h-[112px] gap-2.5">
-          <Button className="flex h-[51px] w-[318px] items-center justify-center ">
-            <View className="flex-row items-center px-3">
-              <ButtonIcon>
-                <Image
-                  contentFit="contain"
-                  className="mr-[10px] size-6"
-                  source={require('assets/Frame.png')}
-                />
-              </ButtonIcon>
-              <ButtonText className="font-poppins-medium text-base text-[#EBEBFF]">
-                Create New Resume
-              </ButtonText>
-            </View>
+
+        <View className="gap-[10px]">
+          <Button size="lg" className=" h-[51px] gap-[10px] ">
+            <CirclePlus size={24} color="white" />
+            <ButtonText weight={500} className="text-[16px] text-[#EBEBFF]">
+              Create New Resume
+            </ButtonText>
           </Button>
-          <Button className=" border-1 flex h-[51px] w-[318px] border-primary bg-[#EBEBFF]">
-            <View className=" flex-row items-center px-3">
-              <ButtonIcon>
-                <Image
-                  contentFit="contain"
-                  className="mr-[10px] size-6"
-                  source={require('assets/upload-1.png')}
-                />
-              </ButtonIcon>
-              <ButtonText className="font-poppins-medium text-base text-primary">
-                Upload Existing Resume
-              </ButtonText>
-            </View>
+
+          <Button variant="outline" className="h-[51px] gap-[10px] ">
+            <Upload size={24} color="#2800C9" />
+            <ButtonText weight={500} className="text-[16px] text-primary">
+              Upload Existing Resume
+            </ButtonText>
           </Button>
         </View>
       </View>

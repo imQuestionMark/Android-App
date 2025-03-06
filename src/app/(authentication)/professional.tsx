@@ -54,7 +54,7 @@ const Professional = () => {
       <KeyboardAwareScrollView contentContainerClassName="grow">
         <View className="m-4 flex-1 justify-between">
           <View className="">
-            <Typography weight={600} className="text-[24px]">
+            <Typography weight={600} color="main" className="text-[24px]">
               Job preference
             </Typography>
 

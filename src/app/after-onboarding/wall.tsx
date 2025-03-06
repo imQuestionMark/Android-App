@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { CirclePlus, Download, Upload } from 'lucide-react-native';
 import React from 'react';
 import { View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
@@ -103,17 +104,14 @@ const ActiveWall = () => {
           </View>
         </View>
 
-        <View className="flex-row items-center gap-x-3">
-          <Button className="h-[40px] flex-1 flex-row rounded bg-white p-2">
+        <View className="flex-row gap-x-3">
+          <Button className="h-[40px] flex-1 flex-row rounded bg-white">
             <Image source={require('assets/share.png')} className="size-4" />
             <ButtonText className="text-primary">Share</ButtonText>
           </Button>
 
-          <Button className="roun h-[40px] flex-1 flex-row border-[0.5px] border-white bg-[#2800C9]">
-            <Image
-              source={require('assets/download.png')}
-              className="size-4 "
-            />
+          <Button className="h-[40px] flex-1 flex-row rounded border-[0.5px] border-white bg-[#2800C9]">
+            <Download size={16} color="white" />
             <ButtonText>Download</ButtonText>
           </Button>
         </View>
@@ -131,22 +129,26 @@ const CreateWall = () => {
         </Typography>
       </View>
       <View>
-        <Typography weight={400} className="text-sm text-[#6D6D6D]">
+        <Typography weight={400} className="text-base text-[#6D6D6D]">
           Craft a standout resume to showcase your skills and strengths.
         </Typography>
       </View>
 
       <View className=" flex-row gap-x-[10px]">
-        <Button className=" h-[46px] flex-1 bg-[#2800C9] p-2">
-          <Image source={require('assets/Frame.png')} className="size-4" />
-          <ButtonText className="text-white">Create New</ButtonText>
+        <Button className=" h-[46px] flex-1 gap-3 bg-[#2800C9] ">
+          <CirclePlus size={20} color="white" />
+          <ButtonText weight={500} className="text-base text-white">
+            Create New
+          </ButtonText>
         </Button>
         <Button
           variant="outline"
-          className="h-[46px] flex-1 border-blue-700 p-2"
+          className="h-[46px] flex-1 gap-3 border-blue-700 "
         >
-          <Image source={require('assets/upload-1.png')} className="size-4" />
-          <ButtonText className="text-primary">Upload Resume</ButtonText>
+          <Upload size={20} color="#2800C9" />
+          <ButtonText weight={500} color="primary" className="text-base">
+            Upload Resume
+          </ButtonText>
         </Button>
       </View>
     </View>

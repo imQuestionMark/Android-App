@@ -4,7 +4,7 @@ import '../../global.css';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { router, Stack, useSegments } from 'expo-router';
+import { Stack, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { Platform, StyleSheet } from 'react-native';
@@ -53,7 +53,6 @@ export default function RootLayout() {
       : {}
   );
 
-
   useEffect(() => {
     if (!fontsLoaded) return;
 
@@ -73,9 +72,9 @@ export default function RootLayout() {
         // }
       } finally {
         // @INFO - This is for development only
-        if (__DEV__) {
-          router.navigate({ pathname: '/test' });
-        }
+        // if (__DEV__) {
+        // router.navigate({ pathname: '/personal-details' });
+        // }
         // Only hide splash screen if fonts are loaded (for web)
         if (fontsLoaded) {
           await SplashScreen.hideAsync();
@@ -85,7 +84,6 @@ export default function RootLayout() {
 
     bootstrapAsync();
   }, [isAuthenticated, segments, fontsLoaded]);
-
 
   return (
     <Providers>

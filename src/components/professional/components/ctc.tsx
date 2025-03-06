@@ -9,7 +9,7 @@ type CTCProps = ProfessionalControl & {};
 export const CTC = ({ control }: CTCProps) => {
   return (
     <View className="mb-5">
-      <Typography weight={500} className="mb-4 text-[16px]">
+      <Typography weight={500} color="main" className="mb-4 text-[16px]">
         Current CTC
       </Typography>
       <ControlledInput

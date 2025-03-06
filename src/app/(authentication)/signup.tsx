@@ -91,12 +91,14 @@ export default function Signup() {
               <View className="mb-[60px]">
                 <View className="mb-[24px] gap-2">
                   <Button
-                    size="lg"
+                    size="2xl"
                     isDisabled={isPending}
                     onPress={handleSubmit((data) => handleLogin(data))}
                   >
                     {isPending && <ActivityIndicator color={'white'} />}
-                    <ButtonText>Send OTP</ButtonText>
+                    <ButtonText weight={500} className="text-[18px]">
+                      Send OTP
+                    </ButtonText>
                   </Button>
 
                   <View className="flex flex-row items-center justify-center gap-2">

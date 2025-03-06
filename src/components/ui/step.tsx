@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
   Easing,
@@ -9,7 +9,7 @@ import Animated, {
 import { tv } from 'tailwind-variants';
 
 const stepTv = tv({
-  base: 'h-[12px] grow rounded-xl',
+  base: 'h-[2px] grow rounded-xl',
   variants: {
     active: {
       true: 'bg-primary',
@@ -21,7 +21,7 @@ const stepTv = tv({
   },
 });
 
-const Step = ({ active = false }: { active?: boolean }) => {
+const Step = memo(({ active = false }: { active?: boolean }) => {
   const width = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => ({
     width: `${width.value}%`,
@@ -45,6 +45,6 @@ const Step = ({ active = false }: { active?: boolean }) => {
       />
     </View>
   );
-};
+});
 
 export default Step;

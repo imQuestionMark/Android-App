@@ -50,17 +50,13 @@ const UploadProgress = ({
       </View>
 
       <View className="flex-row gap-1">
-        <Button variant="icon" className="size-7 border-none" onPress={onPause}>
+        <Button variant="icon" className="size-7 border-0" onPress={onPause}>
           <ButtonIcon>
             <CirclePause size={20} color={'gray'} />
           </ButtonIcon>
         </Button>
 
-        <Button
-          variant="icon"
-          className="size-7 border-none"
-          onPress={onCancel}
-        >
+        <Button variant="icon" className="size-7 border-0" onPress={onCancel}>
           <ButtonIcon>
             <CircleX size={20} color={'red'} />
           </ButtonIcon>
@@ -95,8 +91,13 @@ const UploadZone = ({ onUpload }: UploadZoneProps) => (
       </View>
 
       <View className="items-center">
-        <Button variant="outline" className="px-3 py-[6px]" onPress={onUpload}>
-          <ButtonText weight={600} color="primary" className="text-[12px]">
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-[8px] border-secondary px-[12px]"
+          onPress={onUpload}
+        >
+          <ButtonText weight={600} className="text-[12px] text-secondary">
             Browse files
           </ButtonText>
         </Button>

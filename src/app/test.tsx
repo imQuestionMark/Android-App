@@ -49,14 +49,20 @@ const Test = () => {
         <View className="gap-3" id="stepper">
           <View className="flex-row justify-between">
             <Button
-              variant="outline"
+              variant="ghost"
               onPress={goToPrevious}
               disabled={isFirstStep}
+              className="px-0"
             >
               <ButtonText>Back</ButtonText>
             </Button>
 
-            <Button variant="outline" onPress={goToNext} disabled={isLastStep}>
+            <Button
+              variant="ghost"
+              onPress={goToNext}
+              disabled={isLastStep}
+              className="px-0"
+            >
               <ButtonText>Next</ButtonText>
             </Button>
           </View>

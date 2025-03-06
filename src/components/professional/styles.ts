@@ -41,4 +41,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: Platform.OS === 'ios' ? -96 : 4,
   },
+  placeholder: {
+    color: '#5A5A5A',
+  },
 });

@@ -96,37 +96,41 @@ export default function Verification() {
           {/* Footer */}
           <View>
             <Button
-              size="lg"
+              size="2xl"
               isDisabled={isPending}
               onPress={handleSubmit((data) => handleLogin(data))}
             >
               {isPending && <ActivityIndicator color="white" />}
-              <ButtonText className="uppercase">VERIFY OTP</ButtonText>
+              <ButtonText weight={500} className="text-[18px] uppercase">
+                verify otp
+              </ButtonText>
             </Button>
 
-            <View>
-              <View className="mt-1 flex flex-row justify-center">
-                <Typography weight={500} color="main" className="text-md">
+            <View className="mb-[60px]">
+              <View className="mb-6  flex flex-row items-center justify-center">
+                <Typography weight={500} color="main" className="text-base">
                   Didn't receive OTP?
                 </Typography>
 
                 <Button
-                  variant="ghost"
-                  className="size-auto"
+                  variant="link"
+                  className="px-3"
                   onPress={handleResendOtp}
                   disabled={!isResendAvailable}
                 >
                   <ButtonText
-                    className={`text-md font-poppins-medium underline ${!isResendAvailable ? 'text-main' : 'text-primary'}`}
+                    className={`text-base underline ${!isResendAvailable ? 'text-main' : 'text-primary'}`}
+                    weight={600}
                   >
                     Resend Code
                   </ButtonText>
                 </Button>
               </View>
+
               <View className="flex-row justify-center">
                 {!isResendAvailable && (
                   <Typography weight={800} color="main" className="text-sm ">
-                    Resend code in {countdown} sec
+                    Resend code in 00:{countdown}
                   </Typography>
                 )}
               </View>

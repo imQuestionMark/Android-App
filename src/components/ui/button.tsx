@@ -25,6 +25,10 @@ const buttonStyles = tv({
         base: 'bg-transparent',
         text: 'text-primary',
       },
+      link: {
+        base: 'size-auto',
+        text: 'text-primary',
+      },
       icon: {
         base: 'size-10 rounded-full border border-primary p-0',
       },
@@ -47,7 +51,7 @@ const buttonStyles = tv({
         text: 'text-lg',
       },
       xl: {
-        base: 'h-12 px-7',
+        base: 'h-[51px] px-7',
         text: 'text-xl',
       },
       '2xl': {
@@ -65,7 +69,7 @@ const buttonStyles = tv({
     {
       variant: 'icon',
       size: ['xs', 'sm', 'md', 'lg', 'xl', '2xl'],
-      class: {
+      className: {
         base: 'size-10 rounded-full border border-primary p-0',
       },
     },

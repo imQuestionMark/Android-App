@@ -25,7 +25,7 @@ export const ModeOfWork = ({ control }: MoWProps) => {
 
   return (
     <View className="mb-5">
-      <Typography weight={500} className="mb-4  text-[16px]">
+      <Typography weight={500} color='main' className="mb-4  text-[16px]">
         Preferred(Mode of work)
       </Typography>
       <MultiSelect
@@ -41,6 +41,7 @@ export const ModeOfWork = ({ control }: MoWProps) => {
         containerStyle={styles.containerStyles}
         selectedTextProps={{ numberOfLines: 1 }}
         selectedTextStyle={styles.selectedTextStyle}
+        placeholderStyle={styles.placeholder}
         renderItem={(data, selected) => (
           <CustomItem data={data} selected={selected} />
         )}
