@@ -1,15 +1,14 @@
-import { forwardRef, useCallback, useMemo, useState } from 'react';
+import React, { forwardRef, useCallback, useState } from 'react';
+import { type FieldError } from 'react-hook-form';
 import {
   type Control,
-  type FieldError,
   type FieldValues,
   type Path,
-  type RegisterOptions,
   useController,
 } from 'react-hook-form';
-import type { TextInputProps } from 'react-native';
+import type { TextInputProps as RNTextInputProps } from 'react-native';
 import { I18nManager, StyleSheet, View } from 'react-native';
-import { TextInput as NTextInput } from 'react-native';
+import { TextInput as RNTextInput } from 'react-native';
 import { tv } from 'tailwind-variants';
 
 import { ErrorMessage } from './error-message';
@@ -17,10 +16,9 @@ import { Typography } from './text';
 
 const inputTv = tv({
   slots: {
-    container: 'mb-2',
-    label: 'mb-2 text-[16px]',
+    label: 'mb-4 text-[16px]',
     input: 'h-[50px] rounded-md bg-white px-4 text-[16px] opacity-100',
-    hint: 'mb-2 text-[12px]',
+    hint: 'mb-4 text-[12px]',
   },
 
   variants: {
@@ -36,7 +34,7 @@ const inputTv = tv({
     },
     disabled: {
       true: {
-        input: '',
+        input: 'opacity-50',
       },
     },
   },
@@ -47,85 +45,66 @@ const inputTv = tv({
   },
 });
 
-export interface NInputProps extends TextInputProps {
+export type InputProps = RNTextInputProps & {
   disabled?: boolean;
   error?: FieldError;
   hint?: string;
+  hintClassName?: string;
+  inputClassName?: string;
   label?: string;
-}
-
-type TRule<T extends FieldValues> =
-  | Omit<
-      RegisterOptions<T>,
-      'disabled' | 'setValueAs' | 'valueAsDate' | 'valueAsNumber'
-    >
-  | undefined;
-
-export type RuleType<T extends FieldValues> = { [name in keyof T]: TRule<T> };
-export type InputControllerType<T extends FieldValues> = {
-  control: Control<T>;
-  name: Path<T>;
-  rules?: RuleType<T>;
+  labelClassName?: string;
 };
 
-interface ControlledInputProps<T extends FieldValues>
-  extends InputControllerType<T>,
-    NInputProps {}
+type InputLabelProps = Pick<InputProps, 'label' | 'testID'> & {
+  className?: string;
+};
 
-export const Input = forwardRef<NTextInput, NInputProps>((props, ref) => {
-  const { label, error, testID, hint, ...inputProps } = props;
+type InputHintProps = Pick<InputProps, 'hint' | 'testID'> & {
+  className?: string;
+};
+
+export const Input = forwardRef<RNTextInput, InputProps>((props, ref) => {
+  const {
+    label,
+    error,
+    testID,
+    hint,
+    labelClassName,
+    inputClassName,
+    hintClassName,
+    ...inputProps
+  } = props;
   const [isFocussed, setIsFocussed] = useState(false);
 
-  const onBlur = useCallback(() => {
-    console.log('Input Blurred');
-    setIsFocussed(false);
-  }, []);
+  const onBlur = useCallback(() => setIsFocussed(false), []);
+  const onFocus = useCallback(() => setIsFocussed(true), []);
 
-  const onFocus = useCallback(() => {
-    console.log('Input focussed');
-    setIsFocussed(true);
-  }, []);
-
-  const styles = useMemo(
-    () =>
-      inputTv({
-        error: Boolean(error),
-        focused: isFocussed,
-        disabled: Boolean(props.disabled),
-      }),
-    [error, isFocussed, props.disabled]
-  );
+  const styles = inputTv({
+    error: Boolean(error),
+    focused: isFocussed,
+    disabled: Boolean(props.disabled),
+  });
 
   return (
-    <View className={styles.container()}>
-      {label && (
-        <Typography
-          className={styles.label()}
-          color="main"
-          weight={500}
-          testID={testID ? `${testID}-label` : undefined}
-        >
-          {label}
-        </Typography>
-      )}
+    <View>
+      <InputLabel
+        label={label}
+        testID={testID}
+        className={styles.label({ className: labelClassName })}
+      />
 
-      {hint && (
-        <Typography
-          className={styles.hint()}
-          color="body"
-          weight={500}
-          testID={testID ? `${testID}-hint` : undefined}
-        >
-          {hint}
-        </Typography>
-      )}
+      <InputHint
+        hint={hint}
+        testID={testID}
+        className={styles.hint({ className: hintClassName })}
+      />
 
-      <NTextInput
+      <RNTextInput
+        {...inputProps}
         ref={ref}
         testID={testID}
-        className={styles.input()}
+        className={styles.input({ className: inputClassName })}
         placeholderClassName="text-body"
-        {...inputProps}
         onBlur={onBlur}
         onFocus={onFocus}
         style={StyleSheet.flatten([
@@ -140,22 +119,63 @@ export const Input = forwardRef<NTextInput, NInputProps>((props, ref) => {
   );
 });
 
-// only used with react-hook-form
+const InputLabel = ({ label, testID, className }: InputLabelProps) => {
+  return (
+    <>
+      {label && (
+        <Typography
+          color="main"
+          weight={500}
+          className={className}
+          testID={testID ? `${testID}-label` : undefined}
+        >
+          {label}
+        </Typography>
+      )}
+    </>
+  );
+};
+
+const InputHint = ({ hint, className, testID }: InputHintProps) => {
+  if (!hint) return null;
+
+  return (
+    <Typography
+      color="body"
+      weight={500}
+      className={className}
+      testID={testID ? `${testID}-hint` : undefined}
+    >
+      {hint}
+    </Typography>
+  );
+};
+
+// Only for usage with react-hook-form
+
+type ControlledInputProps<T extends FieldValues> = InputProps & {
+  control: Control<T>;
+  name: Path<T>;
+};
+
 export function ControlledInput<T extends FieldValues>(
   props: ControlledInputProps<T>
 ) {
-  const { name, control, rules, ...inputProps } = props;
+  const { name, control, ...inputProps } = props;
 
-  const { field, fieldState } = useController({ control, name, rules });
+  const {
+    field: { ref, value, onBlur, onChange },
+    fieldState: { error },
+  } = useController({ control, name });
+
   return (
     <Input
-      ref={field.ref}
-      autoCapitalize="none"
-      onChangeText={field.onChange}
-      value={(field.value as string) || ''}
       {...inputProps}
-      onBlur={field.onBlur}
-      error={fieldState.error}
+      ref={ref}
+      value={value}
+      error={error}
+      onBlur={onBlur}
+      onChangeText={onChange}
     />
   );
 }
