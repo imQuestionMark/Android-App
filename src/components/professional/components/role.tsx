@@ -25,6 +25,8 @@ export const Role = ({ control }: RoleProps) => {
     ? value.join(', ')
     : 'Select Designation';
 
+  console.log(value.length);
+
   return (
     <View>
       <Typography weight={500} color="main" className="mb-4 text-[16px] ">
@@ -44,7 +46,9 @@ export const Role = ({ control }: RoleProps) => {
         containerStyle={styles.containerStyles}
         selectedTextProps={{ numberOfLines: 1 }}
         selectedTextStyle={styles.selectedTextStyle}
-        placeholderStyle={styles.placeholder}
+        placeholderStyle={
+          value.length > 0 ? styles.selectedText : styles.placeholder
+        }
         renderItem={(data, selected) => (
           <CustomItem data={data} selected={selected} />
         )}

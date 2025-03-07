@@ -44,4 +44,7 @@ export const styles = StyleSheet.create({
   placeholder: {
     color: '#5A5A5A',
   },
+  selectedText: {
+    color: '#161616',
+  },
 });

@@ -105,6 +105,7 @@ export const Input = forwardRef<RNTextInput, InputProps>((props, ref) => {
         testID={testID}
         className={styles.input({ className: inputClassName })}
         placeholderClassName="text-body"
+        placeholderTextColor="#5A5A5A"
         onBlur={onBlur}
         onFocus={onFocus}
         style={StyleSheet.flatten([

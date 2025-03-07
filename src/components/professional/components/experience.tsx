@@ -36,7 +36,9 @@ export const Experience = ({ control }: ExperienceProps) => {
         pressableStyle={styles.dropdown}
         containerStyle={styles.containerStyles}
         onChange={(item) => onChange(item.value)}
-        placeholderStyle={styles.placeholder}
+        placeholderStyle={
+          value.length > 0 ? styles.selectedText : styles.placeholder
+        }
         selectedTextStyle={styles.selectedTextStyle}
         renderItem={(data, selected) => (
           <CustomItem data={data} selected={selected} />

@@ -41,7 +41,9 @@ export const Location = ({ control }: LocationProps) => {
         pressableStyle={styles.dropdown}
         placeholder={locationPlaceholder}
         containerStyle={styles.containerStyles}
-        placeholderStyle={styles.placeholder}
+        placeholderStyle={
+          value.length > 0 ? styles.selectedText : styles.placeholder
+        }
         selectedTextProps={{ numberOfLines: 1 }}
         selectedTextStyle={styles.selectedTextStyle}
         renderItem={(data, selected) => (

@@ -41,7 +41,9 @@ export const ModeOfWork = ({ control }: MoWProps) => {
         containerStyle={styles.containerStyles}
         selectedTextProps={{ numberOfLines: 1 }}
         selectedTextStyle={styles.selectedTextStyle}
-        placeholderStyle={styles.placeholder}
+        placeholderStyle={
+          value.length > 0 ? styles.selectedText : styles.placeholder
+        }
         renderItem={(data, selected) => (
           <CustomItem data={data} selected={selected} />
         )}
