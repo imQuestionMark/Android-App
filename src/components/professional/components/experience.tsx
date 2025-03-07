@@ -22,7 +22,7 @@ export const Experience = ({ control }: ExperienceProps) => {
   });
 
   return (
-    <View className="mb-5">
+    <View>
       <Typography weight={500} color="main" className="mb-4 text-[16px]">
         Experience
       </Typography>

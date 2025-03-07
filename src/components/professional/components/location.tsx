@@ -26,7 +26,7 @@ export const Location = ({ control }: LocationProps) => {
     : 'Select Location';
 
   return (
-    <View className="mb-5">
+    <View>
       <Typography weight={500} color="main" className="mb-4 text-[16px] ">
         Preferred Location
       </Typography>

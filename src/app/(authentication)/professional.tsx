@@ -23,17 +23,20 @@ import {
 } from '@/components/professional/schema';
 import { Typography } from '@/components/ui';
 
+const DEFAULT_VALUES: ProfessionalFormData = {
+  roles: [],
+  experience: 1,
+  locations: [],
+  workModes: [],
+  currentCTC: '',
+  expectedCTC: '',
+};
+
 const Professional = () => {
   const { control, handleSubmit } = useForm<ProfessionalFormData>({
-    resolver: zodResolver(professionalFormSchema),
-    defaultValues: {
-      roles: [],
-      locations: [],
-      workModes: [],
-      currentCTC: '',
-      expectedCTC: '',
-    },
     shouldFocusError: false,
+    defaultValues: DEFAULT_VALUES,
+    resolver: zodResolver(professionalFormSchema),
   });
 
   const onSubmit: SubmitHandler<ProfessionalFormData> = (data) => {
@@ -58,7 +61,7 @@ const Professional = () => {
               Job preference
             </Typography>
 
-            <View className="mt-6">
+            <View className="mt-6 gap-5">
               <Role control={control} />
               <Experience control={control} />
               <Location control={control} />
