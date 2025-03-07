@@ -5,7 +5,11 @@ export const professionalFormSchema = z
     roles: z.array(z.string()).min(1, 'Select at least one role'),
     locations: z.array(z.string()).min(1, 'Select at least one location'),
     workModes: z.array(z.string()).min(1, 'Select at least one work mode'),
-    experience: z.coerce.number(),
+    experience: z.coerce
+      .string({
+        required_error: 'Experience is required.',
+      })
+      .min(1, 'Experience is required.'),
     currentCTC: z.coerce
       .number({
         required_error: 'Current CTC is required.',
@@ -21,9 +25,9 @@ export const professionalFormSchema = z
       .positive('Expected CTC must be greater than 0')
       .transform(String),
   })
-  .refine(
-    (data) => Number(data.expectedCTC) > Number(data.currentCTC),
-    'Expected CTC must be greater than current CTC'
-  );
+  .refine((data) => Number(data.expectedCTC) > Number(data.currentCTC), {
+    message: 'Expected CTC must be greater than current CTC',
+    path: ['expectedCTC'],
+  });
 
 export type ProfessionalFormData = z.infer<typeof professionalFormSchema>;

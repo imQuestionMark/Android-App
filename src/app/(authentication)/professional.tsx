@@ -25,11 +25,11 @@ import { Typography } from '@/components/ui';
 
 const DEFAULT_VALUES: ProfessionalFormData = {
   roles: [],
-  experience: 1,
   locations: [],
   workModes: [],
   currentCTC: '',
   expectedCTC: '',
+  experience: '',
 };
 
 const Professional = () => {
