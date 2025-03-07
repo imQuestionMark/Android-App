@@ -106,8 +106,14 @@ export const Input = forwardRef<RNTextInput, InputProps>((props, ref) => {
         className={styles.input({ className: inputClassName })}
         placeholderClassName="text-body"
         placeholderTextColor="#5A5A5A"
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onBlur={(e) => {
+          onBlur();
+          inputProps.onBlur?.(e);
+        }}
+        onFocus={(e) => {
+          onFocus();
+          inputProps.onFocus?.(e);
+        }}
         style={StyleSheet.flatten([
           { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
           { textAlign: I18nManager.isRTL ? 'right' : 'left' },
@@ -162,10 +168,10 @@ type ControlledInputProps<T extends FieldValues> = InputProps & {
 export function ControlledInput<T extends FieldValues>(
   props: ControlledInputProps<T>
 ) {
-  const { name, control, ...inputProps } = props;
+  const { name, control, onBlur, onChangeText, ...inputProps } = props;
 
   const {
-    field: { ref, value, onBlur, onChange },
+    field: { ref, value, onBlur: rhfOnBlur, onChange },
     fieldState: { error },
   } = useController({ control, name });
 
@@ -175,8 +181,14 @@ export function ControlledInput<T extends FieldValues>(
       ref={ref}
       value={value}
       error={error}
-      onBlur={onBlur}
-      onChangeText={onChange}
+      onBlur={(e) => {
+        rhfOnBlur();
+        if (onBlur) onBlur(e); // Call custom onBlur if provided
+      }}
+      onChangeText={(text) => {
+        onChange(text);
+        if (onChangeText) onChangeText(text); // Call custom onChangeText if provided
+      }}
     />
   );
 }

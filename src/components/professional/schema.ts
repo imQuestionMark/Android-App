@@ -10,19 +10,27 @@ export const professionalFormSchema = z
         required_error: 'Experience is required.',
       })
       .min(1, 'Experience is required.'),
-    currentCTC: z.coerce
-      .number({
-        required_error: 'Current CTC is required.',
-        invalid_type_error: 'Current CTC must be a valid number.',
-      })
-      .positive('Current CTC must be greater than 0')
+    currentCTC: z
+      .preprocess(
+        (val) => Number(String(val).replace(/\D/g, '') || 0),
+        z
+          .number({
+            required_error: 'Current CTC is required.',
+            invalid_type_error: 'Current CTC must be a valid number.',
+          })
+          .positive('Current CTC must be positive')
+      )
       .transform(String),
-    expectedCTC: z.coerce
-      .number({
-        required_error: 'Expected CTC is required.',
-        invalid_type_error: 'Expected CTC must be a valid number.',
-      })
-      .positive('Expected CTC must be greater than 0')
+    expectedCTC: z
+      .preprocess(
+        (val) => Number(String(val).replace(/\D/g, '') || 0),
+        z
+          .number({
+            required_error: 'Expected CTC is required.',
+            invalid_type_error: 'Expected CTC must be a valid number.',
+          })
+          .positive('Expected CTC must be positive')
+      )
       .transform(String),
   })
   .refine((data) => Number(data.expectedCTC) > Number(data.currentCTC), {

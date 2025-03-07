@@ -33,8 +33,9 @@ const DEFAULT_VALUES: ProfessionalFormData = {
 };
 
 const Professional = () => {
-  const { control, handleSubmit } = useForm<ProfessionalFormData>({
+  const { control, handleSubmit, setValue } = useForm<ProfessionalFormData>({
     shouldFocusError: false,
+    mode: 'all',
     defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(professionalFormSchema),
   });
@@ -66,8 +67,8 @@ const Professional = () => {
               <Experience control={control} />
               <Location control={control} />
               <ModeOfWork control={control} />
-              <CTC control={control} />
-              <ExpCTC control={control} />
+              <CTC control={control} setValue={setValue} />
+              <ExpCTC control={control} setValue={setValue} />
             </View>
           </View>
 
