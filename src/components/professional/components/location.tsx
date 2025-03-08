@@ -44,8 +44,8 @@ export const Location = ({ control }: LocationProps) => {
   };
 
   return (
-    <View className="mb-5">
-      <Typography weight={500} className="mb-4 text-[16px] ">
+    <View>
+      <Typography weight={500} color="main" className="mb-4 text-[16px] ">
         Preferred Location
       </Typography>
       <MultiSelect
@@ -59,6 +59,9 @@ export const Location = ({ control }: LocationProps) => {
         pressableStyle={styles.dropdown}
         placeholder={placeholderText()}
         containerStyle={styles.containerStyles}
+        placeholderStyle={
+          value.length > 0 ? styles.selectedText : styles.placeholder
+        }
         selectedTextProps={{ numberOfLines: 1 }}
         selectedTextStyle={styles.selectedTextStyle}
         renderItem={(data, selected) => (

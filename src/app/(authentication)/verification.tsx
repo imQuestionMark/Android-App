@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AxiosError } from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { type Control, useController, useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -16,17 +15,28 @@ import GradientView from '@/components/onboarding/gradient-view';
 import { colors, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/error-message';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useAuth } from '@/lib/store/auth-store';
+import { devLog } from '@/lib/utils';
+import { AxiosError } from 'axios';
 
 const DEFAULT_TIMEOUT = 60;
+
+const DEFAULT_VALUES: Variables = {
+  otp: '',
+};
 
 // @TODO Optimize unnecessary re-rendering of entire page due to timer.
 export default function Verification() {
   const { control, handleSubmit, setError, setFocus } = useForm<Variables>({
-    defaultValues: {
-      otp: '',
-    },
+    defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(OTPInputSchema),
   });
+  const router = useRouter();
+  const { entryPoint } = useLocalSearchParams();
+  const authStore = useAuth();
+
+  devLog('🚀🚀🚀 ~ Verification ~ params:', entryPoint);
 
   const [countdown, setCountdown] = useState(DEFAULT_TIMEOUT);
   const [isResendAvailable, setIsResendAvailable] = useState(false);
@@ -43,11 +53,8 @@ export default function Verification() {
     return () => clearInterval(interval);
   }, [countdown]);
 
-  const handleResendOtp = () => {
-    // @TODO Import userId frome expo-secure-store
-    const userId = '67b365cfc73d9fe54c790711';
-
-    handleResend({ userId });
+  const handleResendOtp = async () => {
+    handleResend();
     setCountdown(DEFAULT_TIMEOUT);
     setIsResendAvailable(false);
   };
@@ -68,7 +75,22 @@ export default function Verification() {
 
   const { mutate: handleLogin, isPending } = useOtpMutation({
     onError: handleServerError,
+    onSuccess: async (data) => {
+      devLog('inside onSuccess callback', data);
+      await authStore.signIn(data.data.token);
+
+      if (entryPoint.includes('signup')) {
+        devLog('Redirecting to signup flow');
+        return router.replace({ pathname: '/personal-details' });
+      }
+
+      if (entryPoint.includes('login')) {
+        devLog('Redirecting to login flow');
+        return router.replace({ pathname: '/after-onboarding/wall' });
+      }
+    },
   });
+
   const { mutate: handleResend } = resendOtpMutation();
 
   return (
@@ -115,37 +137,43 @@ export default function Verification() {
           {/* Footer */}
           <View>
             <Button
-              size="lg"
+              size="2xl"
               isDisabled={isPending}
-              onPress={handleSubmit((data) => handleLogin(data))}
+              onPress={handleSubmit((data) => {
+                handleLogin(data);
+              })}
             >
               {isPending && <ActivityIndicator color="white" />}
-              <ButtonText className="uppercase">VERIFY OTP</ButtonText>
+              <ButtonText weight={500} className="text-[18px] uppercase">
+                verify otp
+              </ButtonText>
             </Button>
 
-            <View>
-              <View className="mt-1 flex flex-row justify-center">
-                <Typography weight={500} color="main" className="text-md">
+            <View className="mb-[60px]">
+              <View className="mb-6  flex flex-row items-center justify-center">
+                <Typography weight={500} color="main" className="text-base">
                   Didn't receive OTP?
                 </Typography>
 
                 <Button
-                  variant="ghost"
-                  className="size-auto"
+                  variant="link"
+                  className="px-3"
                   onPress={handleResendOtp}
                   disabled={!isResendAvailable}
                 >
                   <ButtonText
-                    className={`text-md font-poppins-medium underline ${!isResendAvailable ? 'text-main' : 'text-primary'}`}
+                    className={`text-base underline ${!isResendAvailable ? 'text-main' : 'text-primary'}`}
+                    weight={600}
                   >
                     Resend Code
                   </ButtonText>
                 </Button>
               </View>
+
               <View className="flex-row justify-center">
                 {!isResendAvailable && (
                   <Typography weight={800} color="main" className="text-sm ">
-                    Resend code in {countdown} sec
+                    Resend code in 00:{countdown}
                   </Typography>
                 )}
               </View>

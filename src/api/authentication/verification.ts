@@ -2,7 +2,8 @@ import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
 import { z } from 'zod';
 
-import { signIn } from '@/lib/auth';
+import { signIn } from '@/lib/store/auth-store';
+import { getUserID } from '@/lib/store/user-store';
 import { API_ROUTES } from '@/routes/api-routes';
 
 import { client } from '../common';
@@ -26,7 +27,10 @@ type Response = z.infer<typeof OTPResponseSchema>;
 
 const validOtp = async (data: Variables) => {
   // import userID from expo-secure-store:
-  const userId = '67b365cfc73d9fe54c790711';
+  const userId = await getUserID();
+
+  console.log('🚀🚀🚀 ~ validOtp ~ userId:', userId);
+
   const response = await client.post(API_ROUTES.VALIDATE_OTP, {
     ...data,
     userId,
@@ -36,10 +40,4 @@ const validOtp = async (data: Variables) => {
 
 export const useOtpMutation = createMutation<Response, Variables, Error>({
   mutationFn: validOtp,
-  onSuccess: (data) => {
-    console.log('OTP Validation successful:', data);
-    // @INFO Save the token in expo-secure-store.
-    signIn(data.data.token);
-    router.replace({ pathname: '/(protected)/home' });
-  },
 });

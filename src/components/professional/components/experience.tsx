@@ -22,8 +22,8 @@ export const Experience = ({ control }: ExperienceProps) => {
   });
 
   return (
-    <View className="mb-5">
-      <Typography weight={500} className="mb-4 text-[16px]">
+    <View>
+      <Typography weight={500} color="main" className="mb-4 text-[16px]">
         Experience
       </Typography>
       <Dropdown
@@ -36,6 +36,9 @@ export const Experience = ({ control }: ExperienceProps) => {
         pressableStyle={styles.dropdown}
         containerStyle={styles.containerStyles}
         onChange={(item) => onChange(item.value)}
+        placeholderStyle={
+          value.length > 0 ? styles.selectedText : styles.placeholder
+        }
         selectedTextStyle={styles.selectedTextStyle}
         renderItem={(data, selected) => (
           <CustomItem data={data} selected={selected} />

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
-import { Link } from 'expo-router';
+import { Link, usePathname, useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -18,12 +18,20 @@ import {
   ControlledInput,
   Typography,
 } from '@/components/ui';
+import { devLog } from '@/lib/utils';
+import { useUserStore } from '@/lib/store/user-store';
+
+const DEFAULT_VALUES: Variables = {
+  identifier: '19uca004+when@gmail.com',
+};
 
 export default function Signin() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const userStore = useUserStore();
+
   const { control, handleSubmit, setError, setFocus } = useForm<Variables>({
-    defaultValues: {
-      identifier: '',
-    },
+    defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(loginInputSchema),
   });
 
@@ -43,6 +51,14 @@ export default function Signin() {
 
   const { mutate: handleLogin, isPending } = useLoginMutation({
     onError: handleServerError,
+    onSuccess: async (data) => {
+      devLog('Valid email:', data);
+      await userStore.saveUserID(data.data.id);
+      router.replace({
+        pathname: '/verification',
+        params: { entryPoint: pathname },
+      });
+    },
   });
 
   return (
@@ -76,12 +92,14 @@ export default function Signin() {
           <View className="mb-[60px]">
             <View className="mb-[24px] gap-2">
               <Button
-                size="lg"
+                size="2xl"
                 isDisabled={isPending}
                 onPress={handleSubmit((data) => handleLogin(data))}
               >
                 {isPending && <ActivityIndicator color={'white'} />}
-                <ButtonText>Send OTP</ButtonText>
+                <ButtonText weight={500} className="text-[18px]">
+                  Send OTP
+                </ButtonText>
               </Button>
 
               <View className="flex flex-row items-center justify-center gap-2">

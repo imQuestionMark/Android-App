@@ -44,6 +44,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       light: './assets/icons/ios-light.png',
       tinted: './assets/icons/ios-tinted.png',
     },
+    buildNumber: '1',
   },
   experiments: {
     typedRoutes: true,
@@ -55,6 +56,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#2800C9',
     },
     package: Env.PACKAGE,
+    versionCode: 1,
   },
   web: {
     favicon: './assets/icons/adaptive-icon.png',
@@ -95,6 +97,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     'expo-secure-store',
     ['app-icon-badge', appIconBadgeConfig],
     ['react-native-edge-to-edge'],
+    'expo-document-picker',
   ],
   extra: {
     ...ClientEnv,

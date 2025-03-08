@@ -23,18 +23,15 @@ TypeScript Usage
 
 Syntax and Formatting
 
-- Use the "function" keyword for pure functions.
 - Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements.
 - Use declarative JSX.
 - Use Prettier for consistent code formatting.
 
 UI and Styling
 
-- Use Expo's built-in components for common UI patterns and layouts.
-- Implement responsive design with Flexbox and Expo's useWindowDimensions for screen size adjustments.
-- Use styled-components or Tailwind CSS for component styling.
-- Implement dark mode support using Expo's useColorScheme.
-- Ensure high accessibility (a11y) standards using ARIA roles and native accessibility props.
+- Use components from app/components
+- Implement responsive design with Flexbox.
+- Use nativewind v4 (Tailwind CSS) for component styling.
 - Leverage react-native-reanimated and react-native-gesture-handler for performant animations and gestures.
 
 Safe Area Management
@@ -46,11 +43,10 @@ Safe Area Management
 
 Performance Optimization
 
-- Minimize the use of useState and useEffect; prefer context and reducers for state management.
+- Minimize the use of useState and useEffect; prefer context and zustand for state management.
 - Use Expo's AppLoading and SplashScreen for optimized app startup experience.
 - Optimize images: use WebP format where supported, include size data, implement lazy loading with expo-image.
 - Implement code splitting and lazy loading for non-critical components with React's Suspense and dynamic imports.
-- Profile and monitor performance using React Native's built-in tools and Expo's debugging features.
 - Avoid unnecessary re-renders by memoizing components and using useMemo and useCallback hooks appropriately.
 
 Navigation
@@ -61,9 +57,9 @@ Navigation
 
 State Management
 
-- Use React Context and useReducer for managing global state.
-- Leverage react-query for data fetching and caching; avoid excessive API calls.
-- For complex state management, consider using Zustand or Redux Toolkit.
+- Use React Context and zustand for managing global state.
+- Leverage react-query via react-query-kit for data fetching and caching; avoid excessive API calls.
+- For complex state management, consider using Zustand.
 - Handle URL search parameters using libraries like expo-linking.
 
 Error Handling and Validation
@@ -87,7 +83,7 @@ Testing
 Security
 
 - Sanitize user inputs to prevent XSS attacks.
-- Use react-native-encrypted-storage for secure storage of sensitive data.
+- Use expo-secure-store for secure storage of sensitive data.
 - Ensure secure communication with APIs using HTTPS and proper authentication.
 - Use Expo's Security guidelines to protect your app: https://docs.expo.dev/guides/security/
 
@@ -99,12 +95,9 @@ Internationalization (i18n)
 
 Key Conventions
 
-1. Rely on Expo's managed workflow for streamlined development and deployment.
 2. Prioritize Mobile Web Vitals (Load Time, Jank, and Responsiveness).
 3. Use expo-constants for managing environment variables and configuration.
 4. Use expo-permissions to handle device permissions gracefully.
-5. Implement expo-updates for over-the-air (OTA) updates.
-6. Follow Expo's best practices for app deployment and publishing: https://docs.expo.dev/distribution/introduction/
 7. Ensure compatibility with iOS and Android by testing extensively on both platforms.
 
 API Documentation

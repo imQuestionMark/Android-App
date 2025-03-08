@@ -11,16 +11,16 @@ import GradientView from '@/components/onboarding/gradient-view';
 import BottomNav from '@/components/personal-details/bottom-nav';
 import { Nationality } from '@/components/personal-details/nationality';
 import { Typography } from '@/components/ui';
-import { useOnboardingStore } from '@/lib/store/onboarding';
 import { usePersonalStore } from '@/lib/store/personal-details';
+import { useUserStore } from '@/lib/store/user-store';
+import { useAuth } from '@/lib/store/auth-store';
+import { devLog } from '@/lib/utils';
 
 const personalDetailsSchema = z.object({
   nationality: z.string({ required_error: 'Nationality must be selected' }),
   DOB: z
     .string({ required_error: 'Date of Birth is required' })
     .date('Invalid Date received'),
-  // address: z.string(),
-  // gender: z.enum(['M', 'F']),
 });
 
 export type PersonalDetailsProps = z.infer<typeof personalDetailsSchema>;
@@ -29,15 +29,17 @@ type TDateofBirth = z.infer<typeof personalDetailsSchema>;
 
 export default function PersonalDetails() {
   const [showCalendarModal, setShowCalendarModal] = useState(false);
-  const { updateCurrentPage, updateStatus } = useOnboardingStore();
+  const updateOnboarding = useAuth((state) => state.updateOnboarding);
+
   const { dob } = usePersonalStore();
+  const preUserData = useUserStore();
 
   const { control, handleSubmit } = useForm<TDateofBirth>({
-    // defaultValues: {
-    //   DOB: dob,
-    //   nationality: '',
-    // },
     shouldFocusError: false,
+    defaultValues: {
+      nationality: '4',
+      DOB: '2002-05-03',
+    },
     resolver: zodResolver(personalDetailsSchema),
   });
 
@@ -45,13 +47,12 @@ export default function PersonalDetails() {
   const hideCalendarModal = () => setShowCalendarModal(false);
 
   const goToNext = () => {
-    console.log('Confirm clicked');
+    devLog('Confirm clicked');
     handleSubmit(
       (data) => {
-        console.log('Form data valid:', data);
-        updateCurrentPage(1);
-        updateStatus('pending');
-        router.push({ pathname: '/(authentication)/professional' });
+        devLog('Form data valid:', data);
+        updateOnboarding(2);
+        router.push({ pathname: '/professional-details' });
       },
       (errors) => {
         console.error(
@@ -60,7 +61,6 @@ export default function PersonalDetails() {
         );
       }
     )();
-    // submit to API. onSuccess callback --> updateCurrentPage(1) --> router.push('/profressional)
   };
 
   return (
@@ -81,7 +81,7 @@ export default function PersonalDetails() {
                 color="primary"
                 className="text-[32px] leading-[48px]"
               >
-                Swetha
+                {preUserData.firstName}
               </Typography>
             </View>
 

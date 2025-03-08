@@ -5,22 +5,19 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider } from '@react-navigation/native';
 import { router, Stack, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Toaster } from 'sonner-native';
 
 import { APIProvider } from '@/api';
-import { hydrateAuth, useAuth } from '@/lib/auth';
 import { loadSelectedTheme } from '@/lib/hooks';
+import { hydrateAuth, useAuth } from '@/lib/store/auth-store';
 import { useThemeConfig } from '@/lib/use-theme-config';
+import { devLog } from '@/lib/utils';
 
 export { ErrorBoundary } from 'expo-router';
-
-// export const unstable_settings = {
-//   initialRouteName: '(app)',
-// };
 
 hydrateAuth();
 loadSelectedTheme();
@@ -32,30 +29,59 @@ SplashScreen.setOptions({
 });
 
 export default function RootLayout() {
-  const authStatus = useAuth.use.status();
+  const authStatus = useAuth((state) => state.status);
+  const onboardingStep = useAuth((state) => state.onboardingStep);
+
   const isAuthenticated = authStatus === 'authenticated';
+  const hasCompletedOnboarding = onboardingStep === 9999;
   const segments = useSegments();
 
   useEffect(() => {
+    console.log('🔄 useEffect Triggered:', {
+      isAuthenticated,
+      segments,
+    });
+
     const bootstrapAsync = async () => {
       try {
         const inAuthGroup = segments[0] === '(authentication)';
         const inProtectedGroup = segments[0] === '(protected)';
+        const needsOnboarding = isAuthenticated && !hasCompletedOnboarding;
+
+        console.log('🔍 Auth Group:', inAuthGroup);
+        console.log('🔍 Protected Group:', inProtectedGroup);
+        console.log('📝 Needs Onboarding:', needsOnboarding);
 
         if (!isAuthenticated && inProtectedGroup) {
-          router.replace('/(authentication)/login');
-        } else if (isAuthenticated && inAuthGroup) {
-          router.replace('/(protected)/home');
-        } else if (!segments.length) {
-          router.replace(
-            isAuthenticated ? '/(protected)/home' : '/(authentication)/login'
+          devLog('🚫 Not authenticated. Redirecting to login.');
+          return router.replace('/(authentication)/login');
+        }
+
+        if (isAuthenticated && needsOnboarding) {
+          devLog('🚀 Authenticated but onboarding pending.');
+          if (onboardingStep === 2) {
+            return router.replace({ pathname: '/professional-details' });
+          } else {
+            return router.replace({ pathname: '/personal-details' });
+          }
+        }
+
+        if (isAuthenticated && inAuthGroup) {
+          devLog('✅ Authenticated in auth group → Redirecting to wall.');
+          return router.replace({ pathname: '/after-onboarding/wall' });
+        }
+
+        if (!segments.length) {
+          devLog('🏠 No segments --> Redirecting based on auth status.');
+          return router.replace(
+            isAuthenticated ? '/after-onboarding/wall' : '/login'
           );
         }
       } finally {
         // @INFO - This is for development only
-        if (__DEV__) {
-          router.navigate({ pathname: '/professional' });
-        }
+        // if (__DEV__) {
+        // router.navigate({ pathname: '/personal-details' });
+        // }
         await SplashScreen.hideAsync();
       }
     };
@@ -68,6 +94,7 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(authentication)" />
         <Stack.Screen name="(protected)" />
+        <Stack.Screen name="stepper" />
       </Stack>
     </Providers>
   );

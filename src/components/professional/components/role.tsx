@@ -44,8 +44,8 @@ export const Role = ({ control }: RoleProps) => {
   };
 
   return (
-    <View className="mb-5">
-      <Typography weight={500} className=" mb-4 text-[16px] ">
+    <View>
+      <Typography weight={500} color="main" className="mb-4 text-[16px] ">
         Select Your Role
       </Typography>
       <MultiSelect
@@ -62,6 +62,9 @@ export const Role = ({ control }: RoleProps) => {
         containerStyle={styles.containerStyles}
         selectedTextProps={{ numberOfLines: 1 }}
         selectedTextStyle={styles.selectedTextStyle}
+        placeholderStyle={
+          value.length > 0 ? styles.selectedText : styles.placeholder
+        }
         renderItem={(data, selected) => (
           <CustomItem data={data} selected={selected} />
         )}

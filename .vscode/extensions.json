@@ -3,14 +3,22 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "yoavbls.pretty-ts-errors",
-    "mikestead.dotenv",
-    "eamodio.gitlens",
-    "streetsidesoftware.code-spell-checker",
     "formulahendry.auto-close-tag",
     "formulahendry.auto-rename-tag",
     "bradlc.vscode-tailwindcss",
-    "lokalise.i18n-ally",
-    "wesbos.theme-cobalt2",
-    "ChakrounAnas.turbo-console-log"
+    "ChakrounAnas.turbo-console-log",
+    "aaron-bond.better-comments",
+    "bladnman.auto-align",
+    "christian-kohler.path-intellisense",
+    "dominicvonk.parameter-hints",
+    "dsznajder.es7-react-js-snippets",
+    "ellreka.tailwindcss-highlight",
+    "kamikillerto.vscode-colorize",
+    "kisstkondoros.vscode-gutter-preview",
+    "lakshits11.monokai-pirokai",
+    "mhutchie.git-graph",
+    "oderwat.indent-rainbow",
+    "pomber.git-file-history",
+    "vscode-icons-team.vscode-icons"
   ]
 }

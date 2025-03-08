@@ -2,7 +2,20 @@
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
   "search.exclude": {
-    "yarn.lock": true
+    "**/patches/**": true,
+    "**/android/**": true,
+    "**/ios/**": true,
+    "**/*.yml": true,
+    "pnpm-lock.yaml": true,
+    "**/*.mdc": true,
+    "**/*.lock": true
+  },
+  "editor.cursorWidth": 4,
+  "editor.cursorStyle": "line",
+  "workbench.colorCustomizations": {
+    "editorCursor.foreground": "#FF5733",
+    "terminalCursor.foreground": "#12da0b",
+    "terminal.background": "#000000"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
@@ -20,15 +33,8 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[astro]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "astro-build.astro-vscode"
-  },
-  "cSpell.words": ["Flashlist", "Lato"],
-  "i18n-ally.localesPaths": ["src/translations/"],
-  "i18n-ally.keystyle": "nested",
-  "i18n-ally.disabled": false, // make sure to disable i18n-ally in your global setting and only enable it for such projects
   "tailwindCSS.experimental.classRegex": [
     ["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
-  ]
+  ],
+  "tailwindCSS.rootFontSize": 14
 }

@@ -5,25 +5,37 @@ export const professionalFormSchema = z
     roles: z.array(z.string()).min(1, 'Select at least one role'),
     locations: z.array(z.string()).min(1, 'Select at least one location'),
     workModes: z.array(z.string()).min(1, 'Select at least one work mode'),
-    experience: z.coerce.number(),
-    currentCTC: z.coerce
-      .number({
-        required_error: 'Current CTC is required.',
-        invalid_type_error: 'Current CTC must be a valid number.',
+    experience: z.coerce
+      .string({
+        required_error: 'Experience is required.',
       })
-      .positive('Current CTC must be greater than 0')
+      .min(1, 'Experience is required.'),
+    currentCTC: z
+      .preprocess(
+        (val) => Number(String(val).replace(/\D/g, '') || 0),
+        z
+          .number({
+            required_error: 'Current CTC is required.',
+            invalid_type_error: 'Current CTC must be a valid number.',
+          })
+          .positive('Current CTC must be positive')
+      )
       .transform(String),
-    expectedCTC: z.coerce
-      .number({
-        required_error: 'Expected CTC is required.',
-        invalid_type_error: 'Expected CTC must be a valid number.',
-      })
-      .positive('Expected CTC must be greater than 0')
+    expectedCTC: z
+      .preprocess(
+        (val) => Number(String(val).replace(/\D/g, '') || 0),
+        z
+          .number({
+            required_error: 'Expected CTC is required.',
+            invalid_type_error: 'Expected CTC must be a valid number.',
+          })
+          .positive('Expected CTC must be positive')
+      )
       .transform(String),
   })
-  .refine(
-    (data) => Number(data.expectedCTC) > Number(data.currentCTC),
-    'Expected CTC must be greater than current CTC'
-  );
+  .refine((data) => Number(data.expectedCTC) > Number(data.currentCTC), {
+    message: 'Expected CTC must be greater than current CTC',
+    path: ['expectedCTC'],
+  });
 
 export type ProfessionalFormData = z.infer<typeof professionalFormSchema>;
