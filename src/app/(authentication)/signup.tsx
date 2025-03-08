@@ -17,9 +17,9 @@ import { useUserStore } from '@/lib/store/user-store';
 import { devLog } from '@/lib/utils';
 
 const DEFAULT_VALUES: Variables = {
-  firstName: 'When',
+  firstName: 'Eminem',
   lastName: 'Gone',
-  emailAddress: '19uca004+when@gmail.com',
+  emailAddress: '19uca004+emma@gmail.com',
   phone: '9080706050',
 };
 

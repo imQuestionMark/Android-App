@@ -28,12 +28,14 @@ export default function Professional() {
         </View>
 
         <View className="gap-[10px]">
-          <Button size="lg" className=" h-[51px] gap-[10px] ">
-            <CirclePlus size={24} color="white" />
-            <ButtonText weight={500} className="text-[16px] text-[#EBEBFF]">
-              Create New Resume
-            </ButtonText>
-          </Button>
+          <Link href={{ pathname: '/after-onboarding/wall' }} asChild>
+            <Button size="lg" className=" h-[51px] gap-[10px] ">
+              <CirclePlus size={24} color="white" />
+              <ButtonText weight={500} className="text-[16px] text-[#EBEBFF]">
+                Create New Resume
+              </ButtonText>
+            </Button>
+          </Link>
 
           <Link href={{ pathname: '/upload-resume' }} asChild>
             <Button variant="outline" className="h-[51px] gap-[10px]">

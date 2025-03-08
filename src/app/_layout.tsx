@@ -77,13 +77,12 @@ export default function RootLayout() {
             isAuthenticated ? '/after-onboarding/wall' : '/login'
           );
         }
-
-        await SplashScreen.hideAsync();
       } finally {
         // @INFO - This is for development only
         // if (__DEV__) {
         // router.navigate({ pathname: '/personal-details' });
         // }
+        await SplashScreen.hideAsync();
       }
     };
 

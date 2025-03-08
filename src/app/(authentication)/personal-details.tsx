@@ -36,6 +36,10 @@ export default function PersonalDetails() {
 
   const { control, handleSubmit } = useForm<TDateofBirth>({
     shouldFocusError: false,
+    defaultValues: {
+      nationality: '4',
+      DOB: '2002-05-03',
+    },
     resolver: zodResolver(personalDetailsSchema),
   });
 
