@@ -1,12 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  type SubmitErrorHandler,
-  type SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import { View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { useQueries } from '@tanstack/react-query';
+import {  useForm } from 'react-hook-form';
+import { ActivityIndicator, View } from 'react-native';
+import { useJobs } from '@/api/professional/use-jobs';
+import { useLocations } from '@/api/professional/use-locations';
 import GradientView from '@/components/onboarding/gradient-view';
 import BottomNav from '@/components/personal-details/bottom-nav';
 import {
@@ -46,20 +45,43 @@ const Professional = () => {
   const router = useRouter();
   console.log({ params });
 
-  const onSubmit: SubmitHandler<ProfessionalFormData> = async (data) => {
-    devLog('Form data valid:', data);
-    await updateOnboarding(9999);
-    router.replace({ pathname: '/after-onboarding/professional' });
-  };
+  const results = useQueries({
+    queries: [useJobs.getOptions(), useLocations.getOptions()],
+  });
 
-  const onError: SubmitErrorHandler<ProfessionalFormData> = (error) => {
-    console.warn(JSON.stringify(error, null, 2));
-  };
+  const isLoading = results.some((query) => query.isLoading);
+  const isError = results.some((query) => query.isError);
 
   const handlePress = () => {
     console.log('handleButtonPresss');
-    handleSubmit(onSubmit, onError)();
+    handleSubmit(
+      async (data) => {
+        console.log(data);
+        devLog('Form data valid:', data);
+        await updateOnboarding(9999);
+        router.replace({ pathname: '/after-onboarding/professional' });
+      },
+      (error) => {
+        console.warn(JSON.stringify(error, null, 2));
+      }
+    )();
   };
+
+  if (isLoading) {
+    return (
+      <GradientView className="grow items-center justify-center">
+        <ActivityIndicator />
+      </GradientView>
+    );
+  }
+
+  if (isError) {
+    return (
+      <GradientView>
+        <Typography>Something went wrong</Typography>;
+      </GradientView>
+    );
+  }
 
   return (
     <GradientView>
