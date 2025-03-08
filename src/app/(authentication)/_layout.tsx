@@ -28,7 +28,7 @@ export default function AuthLayout() {
         }}
       />
       <Stack.Screen
-        name="professional"
+        name="professional-details"
         options={{
           title: 'Professional Details',
         }}

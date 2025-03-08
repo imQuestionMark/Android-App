@@ -5,6 +5,7 @@ import { View } from 'react-native';
 import GradientView from '@/components/onboarding/gradient-view';
 import { Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
+import { Link } from 'expo-router';
 
 export default function Professional() {
   return (
@@ -34,12 +35,14 @@ export default function Professional() {
             </ButtonText>
           </Button>
 
-          <Button variant="outline" className="h-[51px] gap-[10px] ">
-            <Upload size={24} color="#2800C9" />
-            <ButtonText weight={500} className="text-[16px] text-primary">
-              Upload Existing Resume
-            </ButtonText>
-          </Button>
+          <Link href={{ pathname: '/upload-resume' }} asChild>
+            <Button variant="outline" className="h-[51px] gap-[10px]">
+              <Upload size={24} color="#2800C9" />
+              <ButtonText weight={500} className="text-[16px] text-primary">
+                Upload Existing Resume
+              </ButtonText>
+            </Button>
+          </Link>
         </View>
       </View>
     </GradientView>

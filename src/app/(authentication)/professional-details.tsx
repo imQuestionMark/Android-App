@@ -22,26 +22,34 @@ import {
   professionalFormSchema,
 } from '@/components/professional/schema';
 import { Typography } from '@/components/ui';
+import { useAuth } from '@/lib/store/auth-store';
+import { devLog } from '@/lib/utils';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 const DEFAULT_VALUES: ProfessionalFormData = {
   roles: [],
   locations: [],
   workModes: [],
-  currentCTC: '',
-  expectedCTC: '',
+  currentCTC: '1',
+  expectedCTC: '2',
   experience: '',
 };
 
 const Professional = () => {
   const { control, handleSubmit, setValue } = useForm<ProfessionalFormData>({
     shouldFocusError: false,
-    mode: 'all',
     defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(professionalFormSchema),
   });
+  const updateOnboarding = useAuth((state) => state.updateOnboarding);
+  const params = useLocalSearchParams();
+  const router = useRouter();
+  console.log({ params });
 
-  const onSubmit: SubmitHandler<ProfessionalFormData> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<ProfessionalFormData> = async (data) => {
+    devLog('Form data valid:', data);
+    await updateOnboarding(9999);
+    router.replace({ pathname: '/after-onboarding/professional' });
   };
 
   const onError: SubmitErrorHandler<ProfessionalFormData> = (error) => {

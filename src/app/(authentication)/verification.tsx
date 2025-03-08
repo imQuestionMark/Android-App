@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { type Control, useController, useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -15,17 +15,26 @@ import GradientView from '@/components/onboarding/gradient-view';
 import { colors, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/error-message';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useAuth } from '@/lib/store/auth-store';
+import { devLog } from '@/lib/utils';
 
-const DEFAULT_TIMEOUT = 30;
+const DEFAULT_TIMEOUT = 0;
+
+const DEFAULT_VALUES: Variables = {
+  otp: '',
+};
 
 export default function Verification() {
   const { control, handleSubmit } = useForm<Variables>({
-    defaultValues: {
-      otp: '',
-    },
+    defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(OTPInputSchema),
   });
-  // const router = useRouter();
+  const router = useRouter();
+  const { entryPoint } = useLocalSearchParams();
+  const authStore = useAuth();
+
+  devLog('🚀🚀🚀 ~ Verification ~ params:', entryPoint);
 
   const [countdown, setCountdown] = useState(DEFAULT_TIMEOUT);
   const [isResendAvailable, setIsResendAvailable] = useState(false);
@@ -49,10 +58,22 @@ export default function Verification() {
   };
 
   const { mutate: handleLogin, isPending } = useOtpMutation({
-    // onSuccess: () => {
-    // router.replace({ pathname: '/(protected)/home' });
-    // },
+    onSuccess: async (data) => {
+      devLog('inside onSuccess callback', data);
+      await authStore.signIn(data.data.token);
+
+      if (entryPoint.includes('signup')) {
+        devLog('Redirecting to signup flow');
+        return router.replace({ pathname: '/personal-details' });
+      }
+
+      if (entryPoint.includes('login')) {
+        devLog('Redirecting to login flow');
+        return router.replace({ pathname: '/after-onboarding/wall' });
+      }
+    },
   });
+
   const { mutate: handleResend } = resendOtpMutation();
   return (
     <GradientView className="">

@@ -40,10 +40,4 @@ const validOtp = async (data: Variables) => {
 
 export const useOtpMutation = createMutation<Response, Variables, Error>({
   mutationFn: validOtp,
-  onSuccess: async (data) => {
-    console.log('OTP Validation successful:', data);
-    // @INFO Saving the token in expo-secure-store.
-    await signIn(data.data.token);
-    router.replace({ pathname: '/after-onboarding/wall' });
-  },
 });

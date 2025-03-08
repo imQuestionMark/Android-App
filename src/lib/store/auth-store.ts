@@ -1,79 +1,130 @@
-import { deleteItemAsync, getItemAsync, setItemAsync } from 'expo-secure-store';
 import { create } from 'zustand';
 
 import { showError } from '@/components/ui';
-
 import { createSelectors, devLog } from '../utils';
+import {
+  getItem,
+  setItem,
+  setItemSecurely,
+  removeItemSecurely,
+  getItemSecurely,
+} from '../storage';
 
-const TOKEN_KEY = 'GRID_TOKEN';
+const _TOKEN_KEY = 'GRID_TOKEN';
+const _ONBOARDING_STEP_KEY = 'GRID_ONBOARDING_STEP';
+const _ONBOARDING_COMPLETED = 99999;
+const _ONBOARDING_UNSTARTED = -1;
 
-export type AuthStatus = 'authenticated' | 'idle' | 'unauthenticated';
+const handleError = (error: unknown, msg: string) => {
+  return showError(error instanceof Error ? error : new Error(msg));
+};
 
 type AuthState = {
   hydrate: () => Promise<void>;
   signIn: (token: string) => Promise<void>;
   signOut: () => Promise<void>;
-  status: AuthStatus;
+
+  updateOnboarding: (step: number) => Promise<void>;
+  completeOnboarding: () => Promise<void>;
+  resetOnboarding: () => Promise<void>;
+
+  status: 'authenticated' | 'idle' | 'unauthenticated';
   token: null | string;
+  onboardingStep: number; // Tracks progress (-1 = not started, 9999 = completed)
 };
 
-const secureStore = {
-  get: () => getItemAsync(TOKEN_KEY),
-  set: (token: string) => setItemAsync(TOKEN_KEY, token),
-  remove: () => deleteItemAsync(TOKEN_KEY),
-} as const;
-
-const _useAuthStore = create<AuthState>((set, get) => ({
+const _auth = create<AuthState>((set, get) => ({
   status: 'idle',
   token: null,
-  userID: null,
+  onboardingStep: _ONBOARDING_UNSTARTED,
 
   signIn: async (token: string) => {
     try {
-      await secureStore.set(token);
       devLog('Sign In Token:', token);
+
+      await setItemSecurely(_TOKEN_KEY, token);
       set({ status: 'authenticated', token });
-    } catch (error) {
-      showError(
-        error instanceof Error ? error : new Error('Failed to sign in')
-      );
+    } catch (e) {
+      handleError(e, 'Failed to sign in');
       get().signOut();
     }
   },
 
   signOut: async () => {
     try {
-      await secureStore.remove();
-      devLog('Signing out', '');
-      set({ status: 'unauthenticated', token: null });
-    } catch (error) {
-      showError(
-        error instanceof Error ? error : new Error('Failed to sign out')
-      );
+      await removeItemSecurely(_TOKEN_KEY);
+      get().resetOnboarding();
+      devLog('Signing out');
+    } catch (e) {
+      handleError(e, 'Failed to sign out');
+    } finally {
       set({ status: 'unauthenticated', token: null });
     }
   },
 
   hydrate: async () => {
     try {
-      const token = await secureStore.get();
-      devLog('Hydrating:', token);
+      const token = await getItemSecurely(_TOKEN_KEY);
+      const storedStep = getItem<number>(_ONBOARDING_STEP_KEY);
+      const onboardingStep =
+        storedStep !== null && storedStep !== undefined
+          ? storedStep
+          : _ONBOARDING_UNSTARTED;
 
+      devLog('Hydrating:', { token, onboardingStep });
       if (!token) return get().signOut();
 
-      await get().signIn(token);
-    } catch (error) {
-      showError(
-        error instanceof Error ? error : new Error('Failed to restore session')
-      );
+      set({ token, onboardingStep, status: 'authenticated' });
+
+      // await get().signIn(token);
+      // await get().updateOnboarding(onboardingStep);
+    } catch (e) {
+      handleError(e, 'Failed to restore session');
       get().signOut();
+    }
+  },
+
+  updateOnboarding: async (step: number) => {
+    try {
+      devLog(`Onboarding step updated: ${step}`);
+
+      await setItem(_ONBOARDING_STEP_KEY, step);
+      set({ onboardingStep: step });
+    } catch (e) {
+      handleError(e, 'Failed to update onboarding step');
+    }
+  },
+
+  resetOnboarding: async () => {
+    try {
+      devLog('Onboarding progress reset to unSTARTED');
+
+      await setItem(_ONBOARDING_STEP_KEY, _ONBOARDING_UNSTARTED);
+      set({ onboardingStep: _ONBOARDING_UNSTARTED });
+    } catch (e) {
+      handleError(e, 'Failed to reset onboarding progress');
+    }
+  },
+
+  completeOnboarding: async () => {
+    try {
+      await setItem(_ONBOARDING_STEP_KEY, _ONBOARDING_COMPLETED);
+      devLog('Onboarding completed');
+      set({ onboardingStep: _ONBOARDING_COMPLETED });
+    } catch (e) {
+      handleError(e, 'Failed to complete onboarding');
     }
   },
 }));
 
-export const useAuth = createSelectors(_useAuthStore);
+export const useAuth = createSelectors(_auth);
 
-// @INFO use this only when you need to access these methods outside of React components.
-export const signOut = () => _useAuthStore.getState().signOut();
-export const signIn = (token: string) => _useAuthStore.getState().signIn(token);
-export const hydrateAuth = () => _useAuthStore.getState().hydrate();
+// @INFO use these only when needed outside of React components.
+export const signOut = () => _auth.getState().signOut();
+export const signIn = (token: string) => _auth.getState().signIn(token);
+export const hydrateAuth = () => _auth.getState().hydrate();
+
+export const updateOnboarding = (step: number) =>
+  _auth.getState().updateOnboarding(step);
+export const resetOnboarding = () => _auth.getState().resetOnboarding();
+export const completeOnboarding = () => _auth.getState().completeOnboarding();
