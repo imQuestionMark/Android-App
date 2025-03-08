@@ -2,9 +2,12 @@ import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
 import { z } from 'zod';
 
+import { saveFirstName, saveUserID } from '@/lib/store/user-store';
 import { API_ROUTES } from '@/routes/api-routes';
 
 import { client } from '../common';
+
+const _DANGEROUS_INTERNAL_TENANT_ID = 'uCp1eujFVA';
 
 export const SignUpInputschema = z.object({
   firstName: z
@@ -28,19 +31,29 @@ export type Variables = z.infer<typeof SignUpInputschema>;
 const SignUpResponseschema = z.object({
   status: z.number(),
   message: z.string(),
-  id: z.string(),
+  data: z.object({
+    id: z.string(),
+  }),
 });
 
 type Response = z.infer<typeof SignUpResponseschema>;
 
+// @TODO Refactor using promise.all to run this in parallel.
 const submitForm = async (data: Variables) => {
-  const response = await client.post(API_ROUTES.SIGNUP, data);
+  await saveFirstName(data.firstName);
+  const response = await client.post(API_ROUTES.SIGNUP, data, {
+    headers: {
+      tenant_id: _DANGEROUS_INTERNAL_TENANT_ID,
+    },
+  });
   return SignUpResponseschema.parse(response.data);
 };
 
 export const useSignUpMutation = createMutation<Response, Variables, Error>({
   mutationFn: submitForm,
-  onSuccess: () => {
-    router.replace({ pathname: '/(authentication)/personal-details' });
+  onSuccess: async (data) => {
+    // @INFO Saving the userID in expo-secure-store.
+    await saveUserID(data.data.id);
+    router.replace({ pathname: '/(authentication)/verification' });
   },
 });
