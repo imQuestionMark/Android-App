@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
 import { z } from 'zod';
 
+import { saveUserID } from '@/lib/store/user-store';
 import { API_ROUTES } from '@/routes/api-routes';
 
 import { client } from '../common';
@@ -31,8 +32,9 @@ const submitForm = async (data: Variables) => {
 export const useLoginMutation = createMutation<Response, Variables, Error>({
   mutationFn: submitForm,
   onSuccess: (data) => {
-    console.log('Login successful:', data);
-    // @TODO Save the userID in expo-secure-store.
+    console.log('Valid email:', data);
+    // @INFO Saving the userID in expo-secure-store.
+    saveUserID(data.data.id);
     router.replace({ pathname: '/verification' });
   },
 });
