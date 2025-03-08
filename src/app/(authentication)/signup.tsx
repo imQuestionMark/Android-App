@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'expo-router';
+import { Link, router, usePathname, useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -13,6 +13,8 @@ import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
+import { useUserStore } from '@/lib/store/user-store';
+import { devLog } from '@/lib/utils';
 
 const DEFAULT_VALUES: Variables = {
   firstName: 'When',
@@ -22,7 +24,21 @@ const DEFAULT_VALUES: Variables = {
 };
 
 export default function Signup() {
-  const { mutate: handleRegister, isPending } = useSignUpMutation();
+  const router = useRouter();
+  const pathname = usePathname();
+  const userStore = useUserStore();
+
+  const { mutate: handleRegister, isPending } = useSignUpMutation({
+    onSuccess: async (data) => {
+      devLog('Sign up success, otp is sent for verification', data);
+      // @INFO Saving the userID in expo-secure-store.
+      await userStore.saveUserID(data.data.id);
+      router.replace({
+        pathname: '/verification',
+        params: { entryPoint: pathname },
+      });
+    },
+  });
 
   const { control, handleSubmit } = useForm<Variables>({
     defaultValues: DEFAULT_VALUES,

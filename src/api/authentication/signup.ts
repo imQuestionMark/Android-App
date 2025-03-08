@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
 import { z } from 'zod';
 
@@ -6,7 +5,6 @@ import { saveFirstName, saveUserID } from '@/lib/store/user-store';
 import { API_ROUTES } from '@/routes/api-routes';
 
 import { client } from '../common';
-import { devLog } from '@/lib/utils';
 
 const _DANGEROUS_INTERNAL_TENANT_ID = 'uCp1eujFVA';
 
@@ -55,13 +53,4 @@ const signupRequest = async (data: Variables) => {
 
 export const useSignUpMutation = createMutation<Response, Variables, Error>({
   mutationFn: signupRequest,
-  onSuccess: async (data) => {
-    devLog('Sign up success, otp is sent for verification', data);
-    // @INFO Saving the userID in expo-secure-store.
-    await saveUserID(data.data.id);
-    router.replace({
-      pathname: '/verification',
-      params: { entryPoint: 'signup' },
-    });
-  },
 });

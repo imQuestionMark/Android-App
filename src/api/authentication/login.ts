@@ -1,12 +1,9 @@
-import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
 import { z } from 'zod';
 
-import { saveUserID } from '@/lib/store/user-store';
 import { API_ROUTES } from '@/routes/api-routes';
 
 import { client } from '../common';
-import { devLog } from '@/lib/utils';
 
 export const loginInputSchema = z.object({
   identifier: z
@@ -33,13 +30,4 @@ const loginRequest = async (data: Variables) => {
 
 export const useLoginMutation = createMutation<Response, Variables, Error>({
   mutationFn: loginRequest,
-  onSuccess: async (data) => {
-    devLog('Valid email:', data);
-    // @INFO Saving the userID in expo-secure-store.
-    await saveUserID(data.data.id);
-    router.replace({
-      pathname: '/verification',
-      params: { entryPoint: 'login' },
-    });
-  },
 });
