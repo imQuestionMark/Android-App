@@ -44,6 +44,6 @@ export const useOtpMutation = createMutation<Response, Variables, Error>({
     console.log('OTP Validation successful:', data);
     // @INFO Saving the token in expo-secure-store.
     await signIn(data.data.token);
-    router.replace({ pathname: '/(protected)/home' });
+    router.replace({ pathname: '/after-onboarding/wall' });
   },
 });

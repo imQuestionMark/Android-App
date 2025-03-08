@@ -9,13 +9,13 @@ const TOKEN_KEY = 'GRID_TOKEN';
 
 export type AuthStatus = 'authenticated' | 'idle' | 'unauthenticated';
 
-interface AuthState {
+type AuthState = {
   hydrate: () => Promise<void>;
   signIn: (token: string) => Promise<void>;
   signOut: () => Promise<void>;
   status: AuthStatus;
   token: null | string;
-}
+};
 
 const secureStore = {
   get: () => getItemAsync(TOKEN_KEY),
@@ -26,6 +26,7 @@ const secureStore = {
 const _useAuthStore = create<AuthState>((set, get) => ({
   status: 'idle',
   token: null,
+  userID: null,
 
   signIn: async (token: string) => {
     try {

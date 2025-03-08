@@ -13,6 +13,7 @@ import { Nationality } from '@/components/personal-details/nationality';
 import { Typography } from '@/components/ui';
 import { useOnboardingStore } from '@/lib/store/onboarding';
 import { usePersonalStore } from '@/lib/store/personal-details';
+import { useUserStore } from '@/lib/store/user-store';
 
 const personalDetailsSchema = z.object({
   nationality: z.string({ required_error: 'Nationality must be selected' }),
@@ -31,6 +32,7 @@ export default function PersonalDetails() {
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const { updateCurrentPage, updateStatus } = useOnboardingStore();
   const { dob } = usePersonalStore();
+  const preUserData = useUserStore();
 
   const { control, handleSubmit } = useForm<TDateofBirth>({
     // defaultValues: {
@@ -81,7 +83,7 @@ export default function PersonalDetails() {
                 color="primary"
                 className="text-[32px] leading-[48px]"
               >
-                Swetha
+                {preUserData.firstName}
               </Typography>
             </View>
 

@@ -49,9 +49,9 @@ export default function Verification() {
   };
 
   const { mutate: handleLogin, isPending } = useOtpMutation({
-    onSuccess: () => {
-      // router.replace({ pathname: '/(protected)/home' });
-    },
+    // onSuccess: () => {
+    // router.replace({ pathname: '/(protected)/home' });
+    // },
   });
   const { mutate: handleResend } = resendOtpMutation();
   return (

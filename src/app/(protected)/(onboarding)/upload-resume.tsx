@@ -184,7 +184,7 @@ export default function UploadResume() {
 
       <UploadZone onUpload={handleUpload} />
 
-      {!isUploading && (
+      {isUploading && (
         <UploadProgress
           progress={uploadProgress}
           timeRemaining={timeRemaining}

@@ -4,7 +4,7 @@ import '../../global.css';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack, useSegments } from 'expo-router';
+import { router, Stack, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { Platform, StyleSheet } from 'react-native';
@@ -13,8 +13,8 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Toaster } from 'sonner-native';
 
 import { APIProvider } from '@/api';
-import { hydrateAuth, useAuth } from '@/lib/auth';
 import { loadSelectedTheme } from '@/lib/hooks';
+import { hydrateAuth, useAuth } from '@/lib/store/auth-store';
 import { useThemeConfig } from '@/lib/use-theme-config';
 
 export { ErrorBoundary } from 'expo-router';
@@ -58,23 +58,25 @@ export default function RootLayout() {
 
     const bootstrapAsync = async () => {
       try {
-        // const inAuthGroup = segments[0] === '(authentication)';
-        // const inProtectedGroup = segments[0] === '(protected)';
-        // if (!isAuthenticated && inProtectedGroup) {
-        //   // router.replace('/(authentication)/login');
-        //   router.navigate({ pathname: '/stepper/one' });
-        // } else if (isAuthenticated && inAuthGroup) {
-        //   router.replace('/(protected)/home');
-        // } else if (!segments.length) {
-        //   router.replace(
-        //     isAuthenticated ? '/(protected)/home' : '/stepper/one'
-        //   );
-        // }
+        const inAuthGroup = segments[0] === '(authentication)';
+        const inProtectedGroup = segments[0] === '(protected)';
+
+        if (!isAuthenticated && inProtectedGroup) {
+          router.replace('/(authentication)/login');
+        } else if (isAuthenticated && inAuthGroup) {
+          router.replace({ pathname: '/after-onboarding/wall' });
+        } else if (!segments.length) {
+          router.replace(
+            isAuthenticated
+              ? '/after-onboarding/wall'
+              : '/(authentication)/login'
+          );
+        }
       } finally {
         // @INFO - This is for development only
-        // if (__DEV__) {
-        // router.navigate({ pathname: '/personal-details' });
-        // }
+        if (__DEV__) {
+          // router.navigate({ pathname: '/personal-details' });
+        }
         // Only hide splash screen if fonts are loaded (for web)
         if (fontsLoaded) {
           await SplashScreen.hideAsync();

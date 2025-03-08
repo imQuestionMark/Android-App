@@ -17,10 +17,10 @@ import { Button, ButtonText } from '@/components/ui/button';
 export default function Signup() {
   const { control, handleSubmit } = useForm<Variables>({
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      emailAddress: '',
-      phone: '',
+      firstName: 'When',
+      lastName: 'Gone',
+      emailAddress: '19uca004+when@gmail.com',
+      phone: '9080706050',
     },
     resolver: zodResolver(SignUpInputschema),
   });
@@ -69,6 +69,8 @@ export default function Signup() {
                     name="emailAddress"
                     label="Enter your mail id"
                     placeholder="Enter your mail id"
+                    labelClassName="mb-2"
+                    hintClassName="mb-2"
                     hint="we will send you the 4 digit verification code"
                   />
                 </View>
@@ -88,7 +90,7 @@ export default function Signup() {
 
               {/* Footer */}
 
-              <View className="mb-[60px]">
+              <View className="mb-[60px] mt-[25px]">
                 <View className="mb-[24px] gap-2">
                   <Button
                     size="2xl"

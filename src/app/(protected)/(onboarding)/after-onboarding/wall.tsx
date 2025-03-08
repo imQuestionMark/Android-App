@@ -1,4 +1,6 @@
 import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { CirclePlus, Download, Upload } from 'lucide-react-native';
 import React from 'react';
 import { View } from 'react-native';
@@ -6,6 +8,8 @@ import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, ButtonIcon, ButtonText, Typography } from '@/components/ui';
+import { signOut } from '@/lib/store/auth-store';
+import { removeFirstName, removeUserID } from '@/lib/store/user-store';
 
 const walls = [
   {
@@ -32,6 +36,15 @@ const walls = [
 ];
 
 export default function Wall() {
+  const router = useRouter();
+
+  const handleSignout = () => {
+    router.replace({ pathname: '/' });
+    signOut();
+    removeFirstName();
+    removeUserID();
+  };
+
   return (
     <SafeAreaView>
       <View className="bg-gray-100 mt-4 gap-[25px] p-4">
@@ -39,7 +52,12 @@ export default function Wall() {
         <ActiveWall />
         <CreateWall />
         <RecentWall />
+
+        <Button onPress={handleSignout}>
+          <ButtonText>Sign out</ButtonText>
+        </Button>
       </View>
+      <StatusBar animated style="dark" />
     </SafeAreaView>
   );
 }
@@ -121,6 +139,12 @@ const ActiveWall = () => {
 };
 
 const CreateWall = () => {
+  const router = useRouter();
+
+  const redirectToUploadPage = () => {
+    router.push({ pathname: '/upload-resume' });
+  };
+
   return (
     <View className="gap-3 rounded-lg border-2 border-dashed border-secondary p-4">
       <View>
@@ -141,8 +165,10 @@ const CreateWall = () => {
             Create New
           </ButtonText>
         </Button>
+
         <Button
           variant="outline"
+          onPress={redirectToUploadPage}
           className="h-[46px] flex-1 gap-3 border-blue-700 "
         >
           <Upload size={20} color="#2800C9" />
