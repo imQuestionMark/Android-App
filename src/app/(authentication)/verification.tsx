@@ -16,7 +16,7 @@ import { colors, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/error-message';
 
-const DEFAULT_TIMEOUT = 60;
+const DEFAULT_TIMEOUT = 30;
 
 export default function Verification() {
   const { control, handleSubmit } = useForm<Variables>({
@@ -25,6 +25,7 @@ export default function Verification() {
     },
     resolver: zodResolver(OTPInputSchema),
   });
+  // const router = useRouter();
 
   const [countdown, setCountdown] = useState(DEFAULT_TIMEOUT);
   const [isResendAvailable, setIsResendAvailable] = useState(false);
@@ -41,16 +42,17 @@ export default function Verification() {
     return () => clearInterval(interval);
   }, [countdown]);
 
-  const handleResendOtp = () => {
-    // @TODO Import userId frome expo-secure-store
-    const userId = '67b365cfc73d9fe54c790711';
-
-    handleResend({ userId });
+  const handleResendOtp = async () => {
+    handleResend();
     setCountdown(DEFAULT_TIMEOUT);
     setIsResendAvailable(false);
   };
 
-  const { mutate: handleLogin, isPending } = useOtpMutation();
+  const { mutate: handleLogin, isPending } = useOtpMutation({
+    onSuccess: () => {
+      // router.replace({ pathname: '/(protected)/home' });
+    },
+  });
   const { mutate: handleResend } = resendOtpMutation();
   return (
     <GradientView className="">
@@ -98,7 +100,9 @@ export default function Verification() {
             <Button
               size="2xl"
               isDisabled={isPending}
-              onPress={handleSubmit((data) => handleLogin(data))}
+              onPress={handleSubmit((data) => {
+                handleLogin(data);
+              })}
             >
               {isPending && <ActivityIndicator color="white" />}
               <ButtonText weight={500} className="text-[18px] uppercase">
