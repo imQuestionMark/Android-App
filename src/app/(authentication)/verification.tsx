@@ -18,15 +18,17 @@ import { ErrorMessage } from '@/components/ui/error-message';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useAuth } from '@/lib/store/auth-store';
 import { devLog } from '@/lib/utils';
+import { AxiosError } from 'axios';
 
-const DEFAULT_TIMEOUT = 0;
+const DEFAULT_TIMEOUT = 60;
 
 const DEFAULT_VALUES: Variables = {
   otp: '',
 };
 
+// @TODO Optimize unnecessary re-rendering of entire page due to timer.
 export default function Verification() {
-  const { control, handleSubmit } = useForm<Variables>({
+  const { control, handleSubmit, setError, setFocus } = useForm<Variables>({
     defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(OTPInputSchema),
   });
@@ -57,7 +59,22 @@ export default function Verification() {
     setIsResendAvailable(false);
   };
 
+  const handleServerError = (error: Error) => {
+    if (
+      error instanceof AxiosError &&
+      error.response &&
+      error.response.status === 403
+    ) {
+      setError('otp', {
+        type: 'serverError',
+        message: error.response?.data.message,
+      });
+      setFocus('otp');
+    }
+  };
+
   const { mutate: handleLogin, isPending } = useOtpMutation({
+    onError: handleServerError,
     onSuccess: async (data) => {
       devLog('inside onSuccess callback', data);
       await authStore.signIn(data.data.token);
@@ -75,6 +92,7 @@ export default function Verification() {
   });
 
   const { mutate: handleResend } = resendOtpMutation();
+
   return (
     <GradientView className="">
       <KeyboardAwareScrollView contentContainerClassName="grow">

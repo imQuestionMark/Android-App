@@ -11,6 +11,7 @@ import {
 } from '@/api/authentication/signup';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
+import { PhoneInput } from '@/components/signup/phone-input';
 import { ControlledInput, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 import { useUserStore } from '@/lib/store/user-store';

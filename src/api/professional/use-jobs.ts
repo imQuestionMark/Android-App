@@ -26,4 +26,5 @@ const fetchJobs = async () => {
 export const useJobs = createQuery<Response, Variables, AxiosError>({
   queryKey: ['jobs'],
   fetcher: fetchJobs,
+  retry: false,
 });

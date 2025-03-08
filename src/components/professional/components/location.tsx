@@ -1,11 +1,13 @@
+import { useMemo } from 'react';
 import { useController } from 'react-hook-form';
 import { View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 
+import { queryClient } from '@/api';
+import { useLocations } from '@/api/professional/use-locations';
 import { Typography } from '@/components/ui';
 
 import { ErrorMessage } from '../../ui/error-message';
-import { locations } from '../constants';
 import { CustomItem } from '../custom-item';
 import { styles } from '../styles';
 import type { ProfessionalControl } from '../types';
@@ -21,9 +23,25 @@ export const Location = ({ control }: LocationProps) => {
     control,
   });
 
-  const locationPlaceholder = value.length
-    ? value.join(', ')
-    : 'Select Location';
+  const data = queryClient.getQueryData(useLocations.getKey());
+
+  const dropdownData = useMemo(() => {
+    if (!data || !data.items) return [];
+    return data.items;
+  }, [data]);
+
+  const placeholderText = () => {
+    if (value.length) {
+      const mappedLabels = value.map((id) => getLabel(id));
+      return mappedLabels.join(', ');
+    } else {
+      return 'Select Designation';
+    }
+  };
+
+  const getLabel = (id: string) => {
+    return dropdownData.find((items) => items.id === id)?.label;
+  };
 
   return (
     <View>
@@ -33,13 +51,13 @@ export const Location = ({ control }: LocationProps) => {
       <MultiSelect
         value={value}
         activeColor=""
-        data={locations}
         labelField="label"
-        valueField="value"
+        valueField="id"
+        data={dropdownData}
         onChange={onChange}
         visibleSelectedItem={false}
         pressableStyle={styles.dropdown}
-        placeholder={locationPlaceholder}
+        placeholder={placeholderText()}
         containerStyle={styles.containerStyles}
         placeholderStyle={
           value.length > 0 ? styles.selectedText : styles.placeholder
