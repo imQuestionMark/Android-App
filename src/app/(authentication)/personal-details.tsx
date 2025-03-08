@@ -53,7 +53,7 @@ export default function PersonalDetails() {
         console.log('Form data valid:', data);
         updateCurrentPage(1);
         updateStatus('pending');
-        router.push({ pathname: '/(authentication)/professional' });
+        router.push({ pathname: '/professional-details' });
       },
       (errors) => {
         console.error(
