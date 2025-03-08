@@ -19,11 +19,13 @@ import {
   Typography,
 } from '@/components/ui';
 
+const DEFAULT_VALUES: Variables = {
+  identifier: '19uca004+when@gmail.com',
+};
+
 export default function Signin() {
   const { control, handleSubmit, setError, setFocus } = useForm<Variables>({
-    defaultValues: {
-      identifier: '19uca004+when@gmail.com',
-    },
+    defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(loginInputSchema),
   });
 

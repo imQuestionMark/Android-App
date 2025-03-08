@@ -14,23 +14,27 @@ import { TermsandConditions } from '@/components/onboarding/terms-text';
 import { ControlledInput, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 
+const DEFAULT_VALUES: Variables = {
+  firstName: 'When',
+  lastName: 'Gone',
+  emailAddress: '19uca004+when@gmail.com',
+  phone: '9080706050',
+};
+
 export default function Signup() {
+  const { mutate: handleRegister, isPending } = useSignUpMutation();
+
   const { control, handleSubmit } = useForm<Variables>({
-    defaultValues: {
-      firstName: 'When',
-      lastName: 'Gone',
-      emailAddress: '19uca004+when@gmail.com',
-      phone: '9080706050',
-    },
+    defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(SignUpInputschema),
   });
 
-  const { mutate: handleLogin, isPending } = useSignUpMutation();
   return (
     <>
       <GradientView>
         <KeyboardAwareScrollView contentContainerClassName="grow">
-          <View className="z-10 m-4 grow">
+          <View className="m-4 grow">
+            {/* Title */}
             <View className="flex-row gap-2">
               <Typography weight={700} color="main" className="text-[32px]">
                 Welcome
@@ -41,63 +45,50 @@ export default function Signup() {
             </View>
 
             <View className="grow justify-between">
-              <View>
-                {/* First Name */}
-                <View className="mt-4">
-                  <ControlledInput
-                    name="firstName"
-                    control={control}
-                    label="Enter your first name"
-                    placeholder="Enter your first name"
-                  />
-                </View>
+              <View className="gap-4 mt-4">
+                <ControlledInput
+                  name="firstName"
+                  control={control}
+                  label="Enter your first name"
+                  placeholder="Enter your first name"
+                />
 
-                {/* Last Name */}
-                <View className="mt-4">
-                  <ControlledInput
-                    name="lastName"
-                    control={control}
-                    label="Enter your last name"
-                    placeholder="Enter your last name"
-                  />
-                </View>
+                <ControlledInput
+                  name="lastName"
+                  control={control}
+                  label="Enter your last name"
+                  placeholder="Enter your last name"
+                />
 
-                {/* Email  */}
-                <View className="mt-4">
-                  <ControlledInput
-                    control={control}
-                    name="emailAddress"
-                    label="Enter your mail id"
-                    placeholder="Enter your mail id"
-                    labelClassName="mb-2"
-                    hintClassName="mb-2"
-                    hint="we will send you the 4 digit verification code"
-                  />
-                </View>
+                <ControlledInput
+                  control={control}
+                  name="emailAddress"
+                  label="Enter your mail id"
+                  placeholder="Enter your mail id"
+                  labelClassName="mb-2"
+                  hintClassName="mb-2"
+                  hint="we will send you the 4 digit verification code"
+                />
 
-                {/* Phone Number */}
-                <View className="mt-4">
-                  <ControlledInput
-                    name="phone"
-                    control={control}
-                    keyboardType="numeric"
-                    placeholder="9876543210"
-                    label="Enter your phone number"
-                    maxLength={10}
-                  />
-                </View>
+                <ControlledInput
+                  name="phone"
+                  control={control}
+                  keyboardType="numeric"
+                  placeholder="9876543210"
+                  label="Enter your phone number"
+                  maxLength={10}
+                />
               </View>
 
               {/* Footer */}
-
               <View className="mb-[60px] mt-[25px]">
                 <View className="mb-[24px] gap-2">
                   <Button
                     size="2xl"
                     isDisabled={isPending}
-                    onPress={handleSubmit((data) => handleLogin(data))}
+                    onPress={handleSubmit((data) => handleRegister(data))}
                   >
-                    {isPending && <ActivityIndicator color={'white'} />}
+                    {isPending && <ActivityIndicator color="white" />}
                     <ButtonText weight={500} className="text-[18px]">
                       Send OTP
                     </ButtonText>
