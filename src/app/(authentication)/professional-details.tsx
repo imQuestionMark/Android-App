@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useQueries } from '@tanstack/react-query';
-import {  useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
 import { useJobs } from '@/api/professional/use-jobs';
 import { useLocations } from '@/api/professional/use-locations';
@@ -26,12 +26,12 @@ import { devLog } from '@/lib/utils';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 const DEFAULT_VALUES: ProfessionalFormData = {
-  roles: [],
-  locations: [],
-  workModes: [],
+  roles: ['66e617457cde7fde2db67a91', '66e825fb212be8a319daccb5'],
+  locations: ['67792d6d0854c9f5c628669c'],
+  workModes: ['Hybrid'],
   currentCTC: '1',
   expectedCTC: '2',
-  experience: '',
+  experience: '1 Year',
 };
 
 const Professional = () => {
@@ -56,7 +56,7 @@ const Professional = () => {
     console.log('handleButtonPresss');
     handleSubmit(
       async (data) => {
-        console.log(data);
+        devLog('Handle Submit professional', data);
         devLog('Form data valid:', data);
         await updateOnboarding(9999);
         router.replace({ pathname: '/after-onboarding/professional' });

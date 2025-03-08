@@ -63,7 +63,7 @@ export const Role = ({ control }: RoleProps) => {
         selectedTextProps={{ numberOfLines: 1 }}
         selectedTextStyle={styles.selectedTextStyle}
         placeholderStyle={
-          value.length > 0 ? styles.selectedText : styles.placeholder
+          field.value.length > 0 ? styles.selectedText : styles.placeholder
         }
         renderItem={(data, selected) => (
           <CustomItem data={data} selected={selected} />

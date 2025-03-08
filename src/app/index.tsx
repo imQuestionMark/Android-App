@@ -1,9 +1,9 @@
-import { Redirect } from 'expo-router';
+import { Stack } from 'expo-router';
 
 const Index = () => {
   return (
     <>
-      <Redirect href={{ pathname: '/professional' }} />
+      <Stack />
     </>
   );
 };

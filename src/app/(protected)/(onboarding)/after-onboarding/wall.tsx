@@ -47,7 +47,7 @@ export default function Wall() {
 
   return (
     <SafeAreaView>
-      <View className="bg-gray-100 mt-4 gap-[25px] p-4">
+      <View className="bg-white mt-4 gap-[25px] p-4">
         {/* Active Wall */}
         <ActiveWall />
         <CreateWall />
