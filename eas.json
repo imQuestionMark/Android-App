@@ -40,6 +40,15 @@
         "FLIPPER_DISABLE": "1"
       }
     },
+    "arm-only-local": {
+      "android": {
+        "buildType": "apk",
+        "distribution": "internal",
+        "gradleCommand": ":app:assembleRelease -PsupportedAbis=armeabi-v7a,arm64-v8a",
+        "withoutCredentials": true,
+        "applicationArchivePath": "app-release.apk"
+      }
+    },
     "development": {
       "developmentClient": true,
       "distribution": "internal",
@@ -69,8 +78,5 @@
         "EXPO_NO_DOTENV": "1"
       }
     }
-  },
-  "submit": {
-    "production": {}
   }
 }
