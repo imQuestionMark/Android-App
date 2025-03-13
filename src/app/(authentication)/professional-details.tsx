@@ -1,7 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueries } from '@tanstack/react-query';
+import { useNavigation, useRouter } from 'expo-router';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { ActivityIndicator, Platform, Pressable, View } from 'react-native';
+import { ActivityIndicator, BackHandler, Platform, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import { useJobs } from '@/api/professional/use-jobs';
@@ -21,10 +23,8 @@ import {
   professionalFormSchema,
 } from '@/components/professional/schema';
 import { Button, ButtonText, Typography } from '@/components/ui';
-import { updateOnboarding, useAuth } from '@/lib/store/auth-store';
+import { useAuth } from '@/lib/store/auth-store';
 import { devLog } from '@/lib/utils';
-import { useNavigation } from 'expo-router';
-import { useEffect } from 'react';
 
 const DEFAULT_VALUES: ProfessionalFormData = {
   roles: ['66e617457cde7fde2db67a91', '66e825fb212be8a319daccb5'],
@@ -41,8 +41,10 @@ const Professional = () => {
     defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(professionalFormSchema),
   });
+
   const updateOnboarding = useAuth((state) => state.updateOnboarding);
   const navigation = useNavigation();
+  const router = useRouter();
 
   const results = useQueries({
     queries: [useJobs.getOptions(), useLocations.getOptions()],
@@ -62,7 +64,17 @@ const Professional = () => {
         </Button>
       ),
     });
-  }, [navigation]);
+  }, [navigation, updateOnboarding]);
+
+  useEffect(() => {
+    const onBackPress = () => {
+      updateOnboarding(1);
+      router.back();
+      return true;
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  }, [router, updateOnboarding]);
 
   const isLoading = results.some((query) => query.isLoading);
   const isError = results.some((query) => query.isError);

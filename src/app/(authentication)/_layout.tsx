@@ -1,41 +1,29 @@
 import { Stack } from 'expo-router';
 
 export default function AuthLayout() {
+  // const canGoBack = useNavigationState((state) => state.routes.length > 1);
+  // const navState = useNavigationState((state) => state);
+
+  // devLog('🚀🚀🚀 ~ AuthLayout ~ navState:', navState);
+
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name="login"
-        options={{
-          title: 'Login',
-        }}
-      />
-      <Stack.Screen
-        name="signup"
-        options={{
-          title: 'Sign Up',
-        }}
-      />
-      <Stack.Screen
-        name="verification"
-        options={{
-          title: 'Verify OTP',
-        }}
-      />
+      <Stack.Screen name="login" />
+      <Stack.Screen name="signup" />
+      <Stack.Screen name="verification" />
       <Stack.Screen
         name="personal-details"
         options={{
-          title: 'Personal Details',
-          headerShown: true,
+          title: '',
           headerTransparent: true,
         }}
       />
       <Stack.Screen
         name="professional-details"
         options={{
-          title: 'Professional Details',
+          title: '',
           headerShown: true,
           headerTransparent: true,
-          
         }}
       />
     </Stack>
