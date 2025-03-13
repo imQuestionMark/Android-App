@@ -20,7 +20,7 @@ export async function getItemSecurely(key: string) {
   return await getItemAsync(key);
 }
 
-export async function setItemSecurely<T>(key: string, value: string) {
+export async function setItemSecurely(key: string, value: string) {
   await setItemAsync(key, value);
 }
 

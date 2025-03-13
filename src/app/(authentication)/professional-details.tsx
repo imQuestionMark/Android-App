@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useQueries } from '@tanstack/react-query';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+
 import { useJobs } from '@/api/professional/use-jobs';
 import { useLocations } from '@/api/professional/use-locations';
 import GradientView from '@/components/onboarding/gradient-view';
@@ -23,7 +24,6 @@ import {
 import { Typography } from '@/components/ui';
 import { useAuth } from '@/lib/store/auth-store';
 import { devLog } from '@/lib/utils';
-import { useLocalSearchParams, useRouter } from 'expo-router';
 
 const DEFAULT_VALUES: ProfessionalFormData = {
   roles: ['66e617457cde7fde2db67a91', '66e825fb212be8a319daccb5'],

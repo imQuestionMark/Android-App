@@ -1,14 +1,15 @@
 import { create } from 'zustand';
 
 import { showError } from '@/components/ui';
-import { createSelectors, devLog } from '../utils';
+
 import {
   getItem,
+  getItemSecurely,
+  removeItemSecurely,
   setItem,
   setItemSecurely,
-  removeItemSecurely,
-  getItemSecurely,
 } from '../storage';
+import { createSelectors, devLog } from '../utils';
 
 const _TOKEN_KEY = 'GRID_TOKEN';
 const _ONBOARDING_STEP_KEY = 'GRID_ONBOARDING_STEP';
@@ -20,17 +21,17 @@ const handleError = (error: unknown, msg: string) => {
 };
 
 type AuthState = {
+  completeOnboarding: () => Promise<void>;
   hydrate: () => Promise<void>;
+  onboardingStep: number; // Tracks progress (-1 = not started, 9999 = completed)
+
+  resetOnboarding: () => Promise<void>;
   signIn: (token: string) => Promise<void>;
   signOut: () => Promise<void>;
 
-  updateOnboarding: (step: number) => Promise<void>;
-  completeOnboarding: () => Promise<void>;
-  resetOnboarding: () => Promise<void>;
-
   status: 'authenticated' | 'idle' | 'unauthenticated';
   token: null | string;
-  onboardingStep: number; // Tracks progress (-1 = not started, 9999 = completed)
+  updateOnboarding: (step: number) => Promise<void>;
 };
 
 const _auth = create<AuthState>((set, get) => ({

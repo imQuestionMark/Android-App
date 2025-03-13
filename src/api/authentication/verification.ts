@@ -1,8 +1,6 @@
-import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
 import { z } from 'zod';
 
-import { signIn } from '@/lib/store/auth-store';
 import { getUserID } from '@/lib/store/user-store';
 import { API_ROUTES } from '@/routes/api-routes';
 

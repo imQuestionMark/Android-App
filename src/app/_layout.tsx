@@ -32,17 +32,13 @@ export default function RootLayout() {
   const authStatus = useAuth((state) => state.status);
   const onboardingStep = useAuth((state) => state.onboardingStep);
 
-  const isAuthenticated = authStatus === 'authenticated';
-  const hasCompletedOnboarding = onboardingStep === 9999;
   const segments = useSegments();
 
   useEffect(() => {
-    console.log('🔄 useEffect Triggered:', {
-      isAuthenticated,
-      segments,
-    });
-
     const bootstrapAsync = async () => {
+      const isAuthenticated = authStatus === 'authenticated';
+      const hasCompletedOnboarding = onboardingStep === 9999;
+
       try {
         const inAuthGroup = segments[0] === '(authentication)';
         const inProtectedGroup = segments[0] === '(protected)';
@@ -87,7 +83,7 @@ export default function RootLayout() {
     };
 
     bootstrapAsync();
-  }, [isAuthenticated, segments]);
+  }, [authStatus, onboardingStep, segments]);
 
   return (
     <Providers>

@@ -1,7 +1,7 @@
 import { createMutation } from 'react-query-kit';
 import { z } from 'zod';
 
-import { saveFirstName, saveUserID } from '@/lib/store/user-store';
+import { saveFirstName } from '@/lib/store/user-store';
 import { API_ROUTES } from '@/routes/api-routes';
 
 import { client } from '../common';

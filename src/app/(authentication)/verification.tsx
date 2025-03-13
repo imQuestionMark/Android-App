@@ -1,4 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { type Control, useController, useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
@@ -15,10 +17,8 @@ import GradientView from '@/components/onboarding/gradient-view';
 import { colors, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/error-message';
-import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useAuth } from '@/lib/store/auth-store';
 import { devLog } from '@/lib/utils';
-import { AxiosError } from 'axios';
 
 const DEFAULT_TIMEOUT = 60;
 

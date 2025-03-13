@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, router, usePathname, useRouter } from 'expo-router';
+import { Link, usePathname, useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -11,7 +11,6 @@ import {
 } from '@/api/authentication/signup';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
-import { PhoneInput } from '@/components/signup/phone-input';
 import { ControlledInput, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 import { useUserStore } from '@/lib/store/user-store';
@@ -62,7 +61,7 @@ export default function Signup() {
             </View>
 
             <View className="grow justify-between">
-              <View className="gap-4 mt-4">
+              <View className="mt-4 gap-4">
                 <ControlledInput
                   name="firstName"
                   control={control}

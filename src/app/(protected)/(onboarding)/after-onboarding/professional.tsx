@@ -1,11 +1,11 @@
 import { Image } from 'expo-image';
+import { Link } from 'expo-router';
 import { CirclePlus, Upload } from 'lucide-react-native';
 import { View } from 'react-native';
 
 import GradientView from '@/components/onboarding/gradient-view';
 import { Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
-import { Link } from 'expo-router';
 
 export default function Professional() {
   return (

@@ -11,9 +11,9 @@ import GradientView from '@/components/onboarding/gradient-view';
 import BottomNav from '@/components/personal-details/bottom-nav';
 import { Nationality } from '@/components/personal-details/nationality';
 import { Typography } from '@/components/ui';
+import { useAuth } from '@/lib/store/auth-store';
 import { usePersonalStore } from '@/lib/store/personal-details';
 import { useUserStore } from '@/lib/store/user-store';
-import { useAuth } from '@/lib/store/auth-store';
 import { devLog } from '@/lib/utils';
 
 const personalDetailsSchema = z.object({

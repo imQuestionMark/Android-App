@@ -18,8 +18,8 @@ import {
   ControlledInput,
   Typography,
 } from '@/components/ui';
-import { devLog } from '@/lib/utils';
 import { useUserStore } from '@/lib/store/user-store';
+import { devLog } from '@/lib/utils';
 
 const DEFAULT_VALUES: Variables = {
   identifier: '19uca004+when@gmail.com',
