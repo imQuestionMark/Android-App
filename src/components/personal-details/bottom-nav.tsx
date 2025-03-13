@@ -4,9 +4,15 @@ import { useOnboardingStore } from '@/lib/store/onboarding';
 
 import { Button, ButtonText } from '../ui/button';
 import Step from '../ui/step';
+import { useAuth } from '@/lib/store/auth-store';
 
 const BottomNav = ({ onPress }: { onPress?: () => void }) => {
-  const { totalPages, currentPage } = useOnboardingStore();
+  const { currentPage } = useOnboardingStore();
+  const onboardingStep = useAuth((state) => state.onboardingStep);
+
+  console.log('🚀🚀🚀 ~ onboardingStep:', onboardingStep);
+
+  const totalPages = 2;
 
   return (
     <View>
@@ -25,7 +31,9 @@ const BottomNav = ({ onPress }: { onPress?: () => void }) => {
 
       <View className="flex-row justify-between gap-4">
         {Array.from({ length: totalPages }).map((_, idx) => {
-          return <Step key={idx} active={currentPage >= idx} />;
+          const isActive = onboardingStep === idx + 1;
+          const isCompleted = onboardingStep > idx + 1;
+          return <Step key={idx} active={isActive} completed={isCompleted} />;
         })}
       </View>
     </View>

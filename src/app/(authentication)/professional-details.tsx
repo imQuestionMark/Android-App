@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueries } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { ActivityIndicator, Platform, View } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import { useJobs } from '@/api/professional/use-jobs';
@@ -20,9 +20,11 @@ import {
   type ProfessionalFormData,
   professionalFormSchema,
 } from '@/components/professional/schema';
-import { Typography } from '@/components/ui';
-import { useAuth } from '@/lib/store/auth-store';
+import { Button, ButtonText, Typography } from '@/components/ui';
+import { updateOnboarding, useAuth } from '@/lib/store/auth-store';
 import { devLog } from '@/lib/utils';
+import { useNavigation } from 'expo-router';
+import { useEffect } from 'react';
 
 const DEFAULT_VALUES: ProfessionalFormData = {
   roles: ['66e617457cde7fde2db67a91', '66e825fb212be8a319daccb5'],
@@ -40,10 +42,27 @@ const Professional = () => {
     resolver: zodResolver(professionalFormSchema),
   });
   const updateOnboarding = useAuth((state) => state.updateOnboarding);
+  const navigation = useNavigation();
 
   const results = useQueries({
     queries: [useJobs.getOptions(), useLocations.getOptions()],
   });
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <Button
+          onPress={() => {
+            updateOnboarding(1);
+            navigation.goBack();
+          }}
+          className="p-2"
+        >
+          <ButtonText>BACK</ButtonText>
+        </Button>
+      ),
+    });
+  }, [navigation]);
 
   const isLoading = results.some((query) => query.isLoading);
   const isError = results.some((query) => query.isError);

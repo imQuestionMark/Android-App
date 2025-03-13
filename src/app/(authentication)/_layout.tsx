@@ -25,12 +25,17 @@ export default function AuthLayout() {
         name="personal-details"
         options={{
           title: 'Personal Details',
+          headerShown: true,
+          headerTransparent: true,
         }}
       />
       <Stack.Screen
         name="professional-details"
         options={{
           title: 'Professional Details',
+          headerShown: true,
+          headerTransparent: true,
+          
         }}
       />
     </Stack>

@@ -21,24 +21,34 @@ const stepTv = tv({
   },
 });
 
-const Step = memo(({ active = false }: { active?: boolean }) => {
+type IStepProps = {
+  active?: boolean;
+  completed?: boolean;
+};
+
+const Step = memo(({ active = false, completed = false }: IStepProps) => {
   const width = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => ({
     width: `${width.value}%`,
   }));
 
   useEffect(() => {
-    width.value = withTiming(active ? 100 : 0, {
-      duration: 500,
-      easing: Easing.inOut(Easing.quad),
-    });
+    if (completed) {
+      width.value = 100;
+      return;
+    } else {
+      width.value = withTiming(active ? 100 : 0, {
+        duration: 500,
+        easing: Easing.inOut(Easing.quad),
+      });
+    }
   }, [active, width]);
 
   return (
     <View className={stepTv()}>
       <Animated.View
         className={stepTv({
-          active,
+          active: active || completed,
           className: 'absolute',
         })}
         style={animatedStyle}
