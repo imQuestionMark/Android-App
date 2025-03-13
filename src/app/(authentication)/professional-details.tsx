@@ -1,8 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueries } from '@tanstack/react-query';
-import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, Platform, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import { useJobs } from '@/api/professional/use-jobs';
@@ -41,9 +40,6 @@ const Professional = () => {
     resolver: zodResolver(professionalFormSchema),
   });
   const updateOnboarding = useAuth((state) => state.updateOnboarding);
-  const params = useLocalSearchParams();
-  const router = useRouter();
-  console.log({ params });
 
   const results = useQueries({
     queries: [useJobs.getOptions(), useLocations.getOptions()],
@@ -57,9 +53,7 @@ const Professional = () => {
     handleSubmit(
       async (data) => {
         devLog('Handle Submit professional', data);
-        devLog('Form data valid:', data);
         await updateOnboarding(9999);
-        router.replace({ pathname: '/after-onboarding/professional' });
       },
       (error) => {
         console.warn(JSON.stringify(error, null, 2));
@@ -83,11 +77,13 @@ const Professional = () => {
     );
   }
 
+  const Container = Platform.OS === 'web' ? View : KeyboardAwareScrollView;
+
   return (
     <GradientView>
-      <KeyboardAwareScrollView contentContainerClassName="grow">
-        <View className="m-4 flex-1 justify-between">
-          <View className="">
+      <Container contentContainerClassName="grow" className="flex-1">
+        <View className="m-4 grow justify-between">
+          <View className="grow">
             <Typography weight={600} color="main" className="text-[24px]">
               Job preference
             </Typography>
@@ -104,7 +100,7 @@ const Professional = () => {
 
           <BottomNav onPress={handlePress} />
         </View>
-      </KeyboardAwareScrollView>
+      </Container>
     </GradientView>
   );
 };
