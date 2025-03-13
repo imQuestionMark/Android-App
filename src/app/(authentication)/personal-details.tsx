@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { CalendarDays } from 'lucide-react-native';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -42,6 +42,7 @@ export default function PersonalDetails() {
     },
     resolver: zodResolver(personalDetailsSchema),
   });
+  const router = useRouter();
 
   const toggleCalendarModal = () => setShowCalendarModal((p) => !p);
   const hideCalendarModal = () => setShowCalendarModal(false);
