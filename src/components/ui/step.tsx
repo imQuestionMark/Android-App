@@ -42,7 +42,7 @@ const Step = memo(({ active = false, completed = false }: IStepProps) => {
         easing: Easing.inOut(Easing.quad),
       });
     }
-  }, [active, width]);
+  }, [active, completed, width]);
 
   return (
     <View className={stepTv()}>
