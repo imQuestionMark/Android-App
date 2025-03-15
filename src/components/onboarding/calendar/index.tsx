@@ -7,7 +7,7 @@ import {
   type MarkedDates,
 } from 'react-native-calendars/src/types';
 
-import { type PersonalDetailsProps } from '@/app/(authentication)/personal-details';
+import { type PersonalDetailsProps } from '@/app/(authentication)/(onboarding)/personal-details';
 import { usePersonalStore } from '@/lib/store/personal-details';
 
 import { _renderArrows } from './arrows';
