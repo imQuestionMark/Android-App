@@ -33,6 +33,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
   updates: {
+    enabled: false,
     fallbackToCacheTimeout: 0,
   },
   assetBundlePatterns: ['**/*'],

@@ -1,18 +1,18 @@
+import * as DocumentPicker from 'expo-document-picker';
 import { Image } from 'expo-image';
+import { CirclePause, CircleX } from 'lucide-react-native';
 import React, { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as DocumentPicker from 'expo-document-picker';
 
 import { Typography } from '@/components/ui';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
-import { CirclePause, CircleX } from 'lucide-react-native';
 
 type UploadProgressProps = {
+  onCancel: () => void;
+  onPause: () => void;
   progress: number;
   timeRemaining: number;
-  onPause: () => void;
-  onCancel: () => void;
 };
 
 type UploadZoneProps = {
@@ -25,7 +25,7 @@ const UploadProgress = ({
   onPause,
   onCancel,
 }: UploadProgressProps) => (
-  <View className="border border-[#E7E7E7] rounded-xl p-4 gap-2">
+  <View className="gap-2 rounded-xl border border-[#E7E7E7] p-4">
     <View className="flex-row items-center">
       <View className="grow">
         <Typography
@@ -50,23 +50,13 @@ const UploadProgress = ({
       </View>
 
       <View className="flex-row gap-1">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-[24px]"
-          onPress={onPause}
-        >
+        <Button variant="icon" className="size-7 border-0" onPress={onPause}>
           <ButtonIcon>
             <CirclePause size={20} color={'gray'} />
           </ButtonIcon>
         </Button>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-[24px]"
-          onPress={onCancel}
-        >
+        <Button variant="icon" className="size-7 border-0" onPress={onCancel}>
           <ButtonIcon>
             <CircleX size={20} color={'red'} />
           </ButtonIcon>
@@ -76,7 +66,7 @@ const UploadProgress = ({
 
     <View className="h-3 rounded-xl bg-body/10">
       <View
-        className="h-3 rounded-xl bg-primary absolute"
+        className="absolute h-3 rounded-xl bg-primary"
         style={{
           width: `${progress}%`,
         }}
@@ -86,7 +76,7 @@ const UploadProgress = ({
 );
 
 const UploadZone = ({ onUpload }: UploadZoneProps) => (
-  <View className="items-center justify-center gap-3 rounded-lg border-2 border-dashed border-[#1849D6] p-6">
+  <View className="items-center justify-center gap-3 rounded-lg border-2 border-dashed border-secondary p-6">
     <Image className="size-[42px]" source={require('assets/upload.png')} />
 
     <View className="gap-2">
@@ -95,14 +85,19 @@ const UploadZone = ({ onUpload }: UploadZoneProps) => (
       </Typography>
 
       <View className="flex-row items-center justify-center gap-2">
-        <View className="h-[1px] w-20 bg-[#E7E7E7]" />
+        <View className="h-px w-20 bg-[#E7E7E7]" />
         <Typography className="mx-1 text-xs text-[#6D6D6D]">OR</Typography>
-        <View className="h-[1px] w-20 bg-[#E7E7E7]" />
+        <View className="h-px w-20 bg-[#E7E7E7]" />
       </View>
 
       <View className="items-center">
-        <Button variant="outline" className="px-3 py-[6px]" onPress={onUpload}>
-          <ButtonText weight={600} color="primary" className="text-[12px]">
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-[8px] border-secondary px-[12px]"
+          onPress={onUpload}
+        >
+          <ButtonText weight={600} className="text-[12px] text-secondary">
             Browse files
           </ButtonText>
         </Button>

@@ -24,6 +24,7 @@
     "build:development:ios": "cross-env APP_ENV=development EXPO_NO_DOTENV=1 eas build --profile development --platform ios",
     "build:development:android": "cross-env APP_ENV=development EXPO_NO_DOTENV=1 eas build --profile development --platform android ",
     "build:staging:ios": "cross-env APP_ENV=staging EXPO_NO_DOTENV=1 eas build --profile staging --platform ios",
+    "build:staging:test": "cross-env APP_ENV=staging EXPO_NO_DOTENV=1 eas build --platform android --profile arm-only-local --local",
     "build:staging:android": "cross-env APP_ENV=staging EXPO_NO_DOTENV=1 eas build --profile staging --platform android ",
     "build:production:ios": "cross-env APP_ENV=production EXPO_NO_DOTENV=1 eas build --profile production --platform ios",
     "build:production:android": "cross-env APP_ENV=production EXPO_NO_DOTENV=1 eas build --profile production --platform android ",

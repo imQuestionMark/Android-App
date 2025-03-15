@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import { createMutation } from 'react-query-kit';
 import { z } from 'zod';
 
@@ -15,24 +14,20 @@ export const loginInputSchema = z.object({
 export type Variables = z.infer<typeof loginInputSchema>;
 
 const loginResponseSchema = z.object({
+  status: z.number(),
+  message: z.string({ required_error: 'Message is missing in the Response' }),
   data: z.object({
     id: z.string({ required_error: 'ID is missing in the Response' }),
   }),
-  message: z.string({ required_error: 'Message is missing in the Response' }),
 });
 
 type Response = z.infer<typeof loginResponseSchema>;
 
-const submitForm = async (data: Variables) => {
+const loginRequest = async (data: Variables) => {
   const response = await client.post(API_ROUTES.LOGIN, data);
   return loginResponseSchema.parse(response.data);
 };
 
 export const useLoginMutation = createMutation<Response, Variables, Error>({
-  mutationFn: submitForm,
-  onSuccess: (data) => {
-    console.log('Login successful:', data);
-    // @TODO Save the userID in expo-secure-store.
-    router.replace({ pathname: '/verification' });
-  },
+  mutationFn: loginRequest,
 });

@@ -1,10 +1,15 @@
 import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { CirclePlus, Download, Upload } from 'lucide-react-native';
 import React from 'react';
 import { View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, ButtonIcon, ButtonText, Typography } from '@/components/ui';
+import { signOut } from '@/lib/store/auth-store';
+import { removeFirstName, removeUserID } from '@/lib/store/user-store';
 
 const walls = [
   {
@@ -31,14 +36,28 @@ const walls = [
 ];
 
 export default function Wall() {
+  const router = useRouter();
+
+  const handleSignout = () => {
+    router.replace({ pathname: '/' });
+    signOut();
+    removeFirstName();
+    removeUserID();
+  };
+
   return (
     <SafeAreaView>
-      <View className="bg-gray-100 mt-4 gap-[25px] p-4">
+      <View className="mt-4 gap-[25px] bg-white p-4">
         {/* Active Wall */}
         <ActiveWall />
         <CreateWall />
         <RecentWall />
+
+        <Button onPress={handleSignout}>
+          <ButtonText>Sign out</ButtonText>
+        </Button>
       </View>
+      <StatusBar animated style="dark" />
     </SafeAreaView>
   );
 }
@@ -103,17 +122,14 @@ const ActiveWall = () => {
           </View>
         </View>
 
-        <View className="flex-row items-center gap-x-3">
-          <Button className="h-[40px] flex-1 flex-row rounded bg-white p-2">
+        <View className="flex-row gap-x-3">
+          <Button className="h-[40px] flex-1 flex-row rounded bg-white">
             <Image source={require('assets/share.png')} className="size-4" />
             <ButtonText className="text-primary">Share</ButtonText>
           </Button>
 
-          <Button className="roun h-[40px] flex-1 flex-row border-[0.5px] border-white bg-[#2800C9]">
-            <Image
-              source={require('assets/download.png')}
-              className="size-4 "
-            />
+          <Button className="h-[40px] flex-1 flex-row rounded border-[0.5px] border-white bg-[#2800C9]">
+            <Download size={16} color="white" />
             <ButtonText>Download</ButtonText>
           </Button>
         </View>
@@ -123,30 +139,42 @@ const ActiveWall = () => {
 };
 
 const CreateWall = () => {
+  const router = useRouter();
+
+  const redirectToUploadPage = () => {
+    router.push({ pathname: '/upload-resume' });
+  };
+
   return (
-    <View className="border-secondary gap-3 rounded-lg border-2 border-dashed p-4">
+    <View className="gap-3 rounded-lg border-2 border-dashed border-secondary p-4">
       <View>
         <Typography weight={700} className="text-lg text-[#0B0B0B]">
           Create Wall
         </Typography>
       </View>
       <View>
-        <Typography weight={400} className="text-sm text-[#6D6D6D]">
+        <Typography weight={400} className="text-base text-[#6D6D6D]">
           Craft a standout resume to showcase your skills and strengths.
         </Typography>
       </View>
 
       <View className=" flex-row gap-x-[10px]">
-        <Button className=" h-[46px] flex-1 bg-[#2800C9] p-2">
-          <Image source={require('assets/Frame.png')} className="size-4" />
-          <ButtonText className="text-white">Create New</ButtonText>
+        <Button className=" h-[46px] flex-1 gap-3 bg-[#2800C9] ">
+          <CirclePlus size={20} color="white" />
+          <ButtonText weight={500} className="text-base text-white">
+            Create New
+          </ButtonText>
         </Button>
+
         <Button
           variant="outline"
-          className="h-[46px] flex-1 border-blue-700 p-2"
+          onPress={redirectToUploadPage}
+          className="h-[46px] flex-1 gap-3 border-blue-700 "
         >
-          <Image source={require('assets/upload-1.png')} className="size-4" />
-          <ButtonText className="text-primary">Upload Resume</ButtonText>
+          <Upload size={20} color="#2800C9" />
+          <ButtonText weight={500} color="primary" className="text-base">
+            Upload Resume
+          </ButtonText>
         </Button>
       </View>
     </View>
@@ -186,7 +214,9 @@ const WallCustomItem = ({ item }: WallCustomItemProps) => {
               Modified {item.date}
             </Typography>
           </View>
-          <View className={`rounded-md ${item.badgeColor} bg-green-400 px-2 py-1`}>
+          <View
+            className={`rounded-md ${item.badgeColor} bg-green-400 px-2 py-1`}
+          >
             <Typography className="text-xs text-white">
               {item.status}
             </Typography>

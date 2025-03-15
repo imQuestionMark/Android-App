@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
   Easing,
@@ -9,7 +9,7 @@ import Animated, {
 import { tv } from 'tailwind-variants';
 
 const stepTv = tv({
-  base: 'h-[2px] grow rounded-xl',
+  base: 'h-[20px] grow rounded-xl',
   variants: {
     active: {
       true: 'bg-primary',
@@ -21,30 +21,40 @@ const stepTv = tv({
   },
 });
 
-const Step = ({ active = false }: { active?: boolean }) => {
+type IStepProps = {
+  active?: boolean;
+  completed?: boolean;
+};
+
+const Step = memo(({ active = false, completed = false }: IStepProps) => {
   const width = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => ({
     width: `${width.value}%`,
   }));
 
   useEffect(() => {
-    width.value = withTiming(active ? 100 : 0, {
-      duration: 500,
-      easing: Easing.inOut(Easing.quad),
-    });
-  }, [active, width]);
+    if (completed) {
+      width.value = 100;
+      return;
+    } else {
+      width.value = withTiming(active ? 100 : 0, {
+        duration: 500,
+        easing: Easing.inOut(Easing.quad),
+      });
+    }
+  }, [active, completed, width]);
 
   return (
     <View className={stepTv()}>
       <Animated.View
         className={stepTv({
-          active,
+          active: active || completed,
           className: 'absolute',
         })}
         style={animatedStyle}
       />
     </View>
   );
-};
+});
 
 export default Step;

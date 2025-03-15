@@ -1,45 +1,39 @@
 import { View } from 'react-native';
-import { tv } from 'tailwind-variants';
 
 import { useOnboardingStore } from '@/lib/store/onboarding';
 
 import { Button, ButtonText } from '../ui/button';
-
-const bottomNavStyles = tv({
-  slots: {
-    barContainer: 'flex-row justify-between gap-4',
-    bar: 'h-1 grow rounded-xl bg-[#C9C9C9]',
-  },
-  variants: {
-    active: {
-      true: {
-        bar: 'bg-primary',
-      },
-    },
-  },
-});
-
-const { bar, barContainer } = bottomNavStyles();
+import Step from '../ui/step';
+import { useAuth } from '@/lib/store/auth-store';
 
 const BottomNav = ({ onPress }: { onPress?: () => void }) => {
-  const { totalPages, currentPage } = useOnboardingStore();
-  const pages = new Array(totalPages).fill(0);
+  const { currentPage } = useOnboardingStore();
+  const onboardingStep = useAuth((state) => state.onboardingStep);
+
+  console.log('🚀🚀🚀 ~ onboardingStep:', onboardingStep);
+
+  const totalPages = 2;
 
   return (
     <View>
       <View className="flex items-end">
-        <Button size="lg" variant="ghost" onPress={onPress}>
-          <ButtonText className="font-poppins-medium text-[20px]">
+        <Button
+          size="lg"
+          variant="link"
+          className="mb-8 px-0"
+          onPress={onPress}
+        >
+          <ButtonText weight={500} className="text-[20px]">
             Confirm
           </ButtonText>
         </Button>
       </View>
 
-      <View className={barContainer()}>
-        {pages.map((_, idx) => {
-          return (
-            <View key={idx} className={bar({ active: currentPage >= idx })} />
-          );
+      <View className="flex-row justify-between gap-4">
+        {Array.from({ length: totalPages }).map((_, idx) => {
+          const isActive = onboardingStep === idx + 1;
+          const isCompleted = onboardingStep > idx + 1;
+          return <Step key={idx} active={isActive} completed={isCompleted} />;
         })}
       </View>
     </View>
