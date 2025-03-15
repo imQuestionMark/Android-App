@@ -1,9 +1,9 @@
 import { type UseFormSetValue, useWatch } from 'react-hook-form';
 
+import { type ProfessionalFormData } from '@/api/authentication/professional-details';
 import { ControlledInput } from '@/components/ui';
 
-import { type ProfessionalFormData } from '../schema';
-import type { ProfessionalControl } from '../types';
+import { type ProfessionalControl } from '../types';
 
 type CTCProps = ProfessionalControl & {
   setValue: UseFormSetValue<ProfessionalFormData>;

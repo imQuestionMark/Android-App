@@ -2,7 +2,7 @@ import { type Control, useController } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import { SelectCountry } from 'react-native-element-dropdown';
 
-import { type PersonalDetailsProps } from '@/app/(authentication)/(onboarding)/personal-details';
+import { type PersonalDetailsProps } from '@/api/authentication/personal-details';
 
 const local_data = [
   {

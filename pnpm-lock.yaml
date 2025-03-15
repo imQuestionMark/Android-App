@@ -175,6 +175,9 @@ importers:
       zustand:
         specifier: 4.5.5
         version: 4.5.5(@types/react@18.3.12)(react@18.3.1)
+      zustand-slices:
+        specifier: ^0.4.0
+        version: 0.4.0(react@18.3.1)(zustand@4.5.5(@types/react@18.3.12)(react@18.3.1))
     devDependencies:
       '@babel/core':
         specifier: 7.26.0
@@ -7870,6 +7873,16 @@ packages:
 
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+
+  zustand-slices@0.4.0:
+    resolution: {integrity: sha512-Hs+JJc6wIFWwzefe/RLeGuWQgE3ZHQubLRaWyeJ3fFIKrM4gl2VeRZEunbIA33R5ashZyRbZ36ZrPybEUL+yJA==}
+    peerDependencies:
+      immer: '>=9.0.6'
+      react: '>=18.0.0'
+      zustand: '>=4.0.0'
+    peerDependenciesMeta:
+      immer:
+        optional: true
 
   zustand@4.5.5:
     resolution: {integrity: sha512-+0PALYNJNgK6hldkgDq2vLrw5f6g/jCInz52n9RTpropGgeAf/ioFUCdtsjCqu4gNhW9D01rUQBROoRjdzyn2Q==}
@@ -17287,6 +17300,11 @@ snapshots:
       zod: 3.23.8
 
   zod@3.23.8: {}
+
+  zustand-slices@0.4.0(react@18.3.1)(zustand@4.5.5(@types/react@18.3.12)(react@18.3.1)):
+    dependencies:
+      react: 18.3.1
+      zustand: 4.5.5(@types/react@18.3.12)(react@18.3.1)
 
   zustand@4.5.5(@types/react@18.3.12)(react@18.3.1):
     dependencies:

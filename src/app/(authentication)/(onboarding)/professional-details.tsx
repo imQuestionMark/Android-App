@@ -1,15 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueries } from '@tanstack/react-query';
 import { useNavigation, useRouter } from 'expo-router';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, BackHandler, Platform, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
+import {
+  type ProfessionalFormData,
+  professionalFormSchema,
+} from '@/api/authentication/professional-details';
 import { useJobs } from '@/api/professional/use-jobs';
 import { useLocations } from '@/api/professional/use-locations';
-import GradientView from '@/components/onboarding/gradient-view';
-import BottomNav from '@/components/personal-details/bottom-nav';
 import {
   CTC,
   ExpCTC,
@@ -18,11 +20,8 @@ import {
   ModeOfWork,
   Role,
 } from '@/components/professional/components';
-import {
-  type ProfessionalFormData,
-  professionalFormSchema,
-} from '@/components/professional/schema';
 import { Button, ButtonText, Typography } from '@/components/ui';
+import useAppStore from '@/lib/store';
 import { useAuth } from '@/lib/store/auth-store';
 import { devLog } from '@/lib/utils';
 
@@ -79,7 +78,10 @@ const Professional = () => {
   const isLoading = results.some((query) => query.isLoading);
   const isError = results.some((query) => query.isError);
 
-  const handlePress = () => {
+  const setHandler = useAppStore.getState().setHandler;
+  const resetHandler = useAppStore.getState().resetHandler;
+
+  const handlePress = useCallback(() => {
     console.log('handleButtonPresss');
     handleSubmit(
       async (data) => {
@@ -90,49 +92,51 @@ const Professional = () => {
         console.warn(JSON.stringify(error, null, 2));
       }
     )();
-  };
+  }, [handleSubmit, updateOnboarding]);
+
+  useEffect(() => {
+    setHandler(handlePress);
+
+    return () => resetHandler();
+  }, [handlePress, resetHandler, setHandler]);
 
   if (isLoading) {
     return (
-      <GradientView className="grow items-center justify-center">
+      <View className="grow items-center justify-center">
         <ActivityIndicator />
-      </GradientView>
+      </View>
     );
   }
 
   if (isError) {
     return (
-      <GradientView>
-        <Typography>Something went wrong</Typography>;
-      </GradientView>
+      <View className="grow items-center justify-center">
+        <Typography>Something went wrong</Typography>
+      </View>
     );
   }
 
   const Container = Platform.OS === 'web' ? View : KeyboardAwareScrollView;
 
   return (
-    <GradientView>
-      <Container contentContainerClassName="grow" className="flex-1">
-        <View className="m-4 grow justify-between">
-          <View className="grow">
-            <Typography weight={600} color="main" className="text-[24px]">
-              Job preference
-            </Typography>
+    <Container contentContainerClassName="grow" className="grow">
+      <View className="grow justify-between">
+        <View className="grow">
+          <Typography weight={600} color="main" className="text-[24px]">
+            Job preference
+          </Typography>
 
-            <View className="mt-6 gap-5">
-              <Role control={control} />
-              <Experience control={control} />
-              <Location control={control} />
-              <ModeOfWork control={control} />
-              <CTC control={control} setValue={setValue} />
-              <ExpCTC control={control} setValue={setValue} />
-            </View>
+          <View className="mt-6 gap-5">
+            <Role control={control} />
+            <Experience control={control} />
+            <Location control={control} />
+            <ModeOfWork control={control} />
+            <CTC control={control} setValue={setValue} />
+            <ExpCTC control={control} setValue={setValue} />
           </View>
-
-          <BottomNav onPress={handlePress} />
         </View>
-      </Container>
-    </GradientView>
+      </View>
+    </Container>
   );
 };
 
