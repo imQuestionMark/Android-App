@@ -1,6 +1,6 @@
 <h1 align="center">
   <img alt="logo" src="./assets/icon.png" width="124px" style="border-radius:10px"/><br/>
-Mobile App </h1>
+Mobile App grid</h1>
 
 > This Project is based on [Obytes starter](https://starter.obytes.com)
 
