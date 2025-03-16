@@ -24,9 +24,7 @@ const OTPResponseSchema = z.object({
 type Response = z.infer<typeof OTPResponseSchema>;
 
 const validOtp = async (data: Variables) => {
-  // import userID from expo-secure-store:
   const userId = await getUserID();
-
   console.log('🚀🚀🚀 ~ validOtp ~ userId:', userId);
 
   const response = await client.post(API_ROUTES.VALIDATE_OTP, {

@@ -12,7 +12,7 @@ export const professionalFormSchema = z
       .min(1, 'Experience is required.'),
     currentCTC: z
       .preprocess(
-        (val) => Number(String(val).replace(/\D/g, '') || 0),
+        (val) => Number(String(val).replace(/\D/g, '')),
         z
           .number({
             required_error: 'Current CTC is required.',
@@ -23,7 +23,7 @@ export const professionalFormSchema = z
       .transform(String),
     expectedCTC: z
       .preprocess(
-        (val) => Number(String(val).replace(/\D/g, '') || 0),
+        (val) => Number(String(val).replace(/\D/g, '')),
         z
           .number({
             required_error: 'Expected CTC is required.',
