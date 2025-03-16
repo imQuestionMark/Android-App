@@ -1,4 +1,3 @@
-// Import  global CSS file
 import '../../global.css';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
@@ -12,6 +11,10 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Toaster } from 'sonner-native';
 
 import { APIProvider } from '@/api';
+import {
+  _ONBOARDING_COMPLETED,
+  _ONBOARDING_UNSTARTED,
+} from '@/lib/store/auth.v2.slice';
 import { useThemeConfig } from '@/lib/use-theme-config';
 import { devLog } from '@/lib/utils';
 
@@ -31,12 +34,17 @@ export default function RootLayout() {
   const authStatus = useBoundStore((state) => state.status);
   const onboardingStep = useBoundStore((state) => state.onboardingStep);
 
+  console.log('🚀🚀🚀 ~ RootLayout ~ onboardingStep:', onboardingStep);
+
+  const incrementOnboarding = useBoundStore((s) => s.incrementOnboarding);
+
   const segments = useSegments();
 
   useEffect(() => {
     const bootstrapAsync = async () => {
       const isAuthenticated = authStatus === 'authenticated';
-      const hasCompletedOnboarding = onboardingStep === 9999;
+      const hasCompletedOnboarding = onboardingStep === _ONBOARDING_COMPLETED;
+      const hasNotStartedOnboarding = onboardingStep === _ONBOARDING_UNSTARTED;
 
       try {
         const inAuthGroup = segments[0] === '(authentication)';
@@ -54,10 +62,17 @@ export default function RootLayout() {
 
         if (isAuthenticated && needsOnboarding) {
           devLog('🚀 Authenticated but onboarding pending.');
-          if (onboardingStep === 2) {
-            return router.replace({ pathname: '/professional-details' });
-          } else {
+
+          if (hasNotStartedOnboarding) {
+            incrementOnboarding();
+          }
+
+          if (onboardingStep === 0) {
             return router.replace({ pathname: '/personal-details' });
+          }
+
+          if (onboardingStep === 1) {
+            return router.replace({ pathname: '/professional-details' });
           }
         }
 
@@ -91,7 +106,6 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(authentication)" />
         <Stack.Screen name="(protected)" />
-        <Stack.Screen name="stepper" />
       </Stack>
     </Providers>
   );
