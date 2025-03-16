@@ -12,10 +12,6 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Toaster } from 'sonner-native';
 
 import { APIProvider } from '@/api';
-import {
-  _ONBOARDING_COMPLETED,
-  _ONBOARDING_UNSTARTED,
-} from '@/lib/store/auth.v2.slice';
 import { useThemeConfig } from '@/lib/use-theme-config';
 import { devLog } from '@/lib/utils';
 
@@ -43,9 +39,10 @@ export default function RootLayout() {
 
   useEffect(() => {
     const bootstrapAsync = async () => {
-      const isAuthenticated = authStatus === 'authenticated';
-      const hasCompletedOnboarding = onboardingStep === _ONBOARDING_COMPLETED;
-      const hasNotStartedOnboarding = onboardingStep === _ONBOARDING_UNSTARTED;
+      // const isAuthenticated = authStatus === 'authenticated';
+      const isAuthenticated = true;
+      const hasCompletedOnboarding = true;
+      const hasNotStartedOnboarding = false;
 
       try {
         const inAuthGroup = segments[0] === '(authentication)';
@@ -88,11 +85,9 @@ export default function RootLayout() {
         }
       } finally {
         // @INFO - This is for development only
-        // if (__DEV__) {
-        //   router.navigate({
-        //     pathname: '/home',
-        //   });
-        // }
+        if (__DEV__) {
+          // router.navigate({ pathname: '/home' });
+        }
         await SplashScreen.hideAsync();
       }
     };
