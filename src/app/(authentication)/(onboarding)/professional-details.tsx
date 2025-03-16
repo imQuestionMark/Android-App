@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueries } from '@tanstack/react-query';
 import { useNavigation, useRouter } from 'expo-router';
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, BackHandler, Platform, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -21,8 +21,7 @@ import {
   Role,
 } from '@/components/professional/components';
 import { Button, ButtonText, Typography } from '@/components/ui';
-import useAppStore from '@/lib/store';
-import { useAuth } from '@/lib/store/auth-store';
+import useBoundStore from '@/lib/store';
 import { devLog } from '@/lib/utils';
 
 const DEFAULT_VALUES: ProfessionalFormData = {
@@ -35,15 +34,18 @@ const DEFAULT_VALUES: ProfessionalFormData = {
 };
 
 const Professional = () => {
+  const navigation = useNavigation();
+  const router = useRouter();
+
   const { control, handleSubmit, setValue } = useForm<ProfessionalFormData>({
     shouldFocusError: false,
     defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(professionalFormSchema),
   });
 
-  const updateOnboarding = useAuth((state) => state.updateOnboarding);
-  const navigation = useNavigation();
-  const router = useRouter();
+  const updateOnboarding = useBoundStore((state) => state.updateOnboarding);
+  const setHandler = useBoundStore((state) => state.setHandler);
+  const resetHandler = useBoundStore((state) => state.resetHandler);
 
   const results = useQueries({
     queries: [useJobs.getOptions(), useLocations.getOptions()],
@@ -77,9 +79,6 @@ const Professional = () => {
 
   const isLoading = results.some((query) => query.isLoading);
   const isError = results.some((query) => query.isError);
-
-  const setHandler = useAppStore.getState().setHandler;
-  const resetHandler = useAppStore.getState().resetHandler;
 
   const handlePress = useCallback(() => {
     console.log('handleButtonPresss');

@@ -1,18 +1,14 @@
 import { View } from 'react-native';
 
-import { useOnboardingStore } from '@/lib/store/onboarding';
+import useBoundStore from '@/lib/store';
 
 import { Button, ButtonText } from '../ui/button';
 import Step from '../ui/step';
-import { useAuth } from '@/lib/store/auth-store';
 
 const BottomNav = ({ onPress }: { onPress?: () => void }) => {
-  const { currentPage } = useOnboardingStore();
-  const onboardingStep = useAuth((state) => state.onboardingStep);
-
+  const onboardingStep = useBoundStore((state) => state.onboardingStep);
+  const length = useBoundStore((state) => state.totalSteps);
   console.log('🚀🚀🚀 ~ onboardingStep:', onboardingStep);
-
-  const totalPages = 2;
 
   return (
     <View>
@@ -30,7 +26,7 @@ const BottomNav = ({ onPress }: { onPress?: () => void }) => {
       </View>
 
       <View className="flex-row justify-between gap-4">
-        {Array.from({ length: totalPages }).map((_, idx) => {
+        {Array.from({ length }).map((_, idx) => {
           const isActive = onboardingStep === idx + 1;
           const isCompleted = onboardingStep > idx + 1;
           return <Step key={idx} active={isActive} completed={isCompleted} />;

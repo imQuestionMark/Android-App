@@ -8,7 +8,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, ButtonIcon, ButtonText, Typography } from '@/components/ui';
-import { signOut } from '@/lib/store/auth-store';
+import useBoundStore from '@/lib/store';
 import { removeFirstName, removeUserID } from '@/lib/store/user-store';
 
 const walls = [
@@ -37,6 +37,7 @@ const walls = [
 
 export default function Wall() {
   const router = useRouter();
+  const signOut = useBoundStore((state) => state.signOut);
 
   const handleSignout = () => {
     router.replace({ pathname: '/' });

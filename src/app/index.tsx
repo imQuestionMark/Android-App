@@ -1,9 +1,7 @@
-import { useAuth } from '@/lib/store/auth-store';
-import { Redirect, router, Stack } from 'expo-router';
-import { useEffect } from 'react';
+import { Stack } from 'expo-router';
 
 const Index = () => {
-  // const updateOnboarding = useAuth((state) => state.updateOnboarding);
+  // const updateOnboarding = useBoundStore((state) => state.updateOnboarding);
 
   // useEffect(() => {
   //   updateOnboarding(1);

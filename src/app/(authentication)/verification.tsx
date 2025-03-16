@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { type Control, useController, useForm } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
@@ -17,7 +17,7 @@ import GradientView from '@/components/onboarding/gradient-view';
 import { colors, Typography } from '@/components/ui';
 import { Button, ButtonText } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/error-message';
-import { useAuth } from '@/lib/store/auth-store';
+import useBoundStore from '@/lib/store';
 import { devLog } from '@/lib/utils';
 
 const DEFAULT_TIMEOUT = 60;
@@ -32,9 +32,8 @@ export default function Verification() {
     defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(OTPInputSchema),
   });
-  const router = useRouter();
   const { entryPoint } = useLocalSearchParams();
-  const authStore = useAuth();
+  const signIn = useBoundStore((state) => state.signIn);
 
   devLog('🚀🚀🚀 ~ Verification ~ params:', entryPoint);
 
@@ -77,17 +76,7 @@ export default function Verification() {
     onError: handleServerError,
     onSuccess: async (data) => {
       devLog('inside onSuccess callback', data);
-      await authStore.signIn(data.data.token);
-
-      if (entryPoint.includes('signup')) {
-        devLog('Redirecting to signup flow');
-        return router.replace({ pathname: '/personal-details' });
-      }
-
-      if (entryPoint.includes('login')) {
-        devLog('Redirecting to login flow');
-        return router.replace({ pathname: '/after-onboarding/wall' });
-      }
+      await signIn(data.data.token);
     },
   });
 

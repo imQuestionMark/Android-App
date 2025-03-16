@@ -39,5 +39,14 @@
   "tailwindCSS.rootFontSize": 14,
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.snippetSuggestions": "none",
+  // "editor.suggest.showKeywords": false,
+  "editor.suggest.showSnippets": false,
+  "editor.suggestSelection": "recentlyUsedByPrefix",
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
   }
 }

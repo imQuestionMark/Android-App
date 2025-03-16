@@ -12,37 +12,40 @@ import {
 import { ControlledCalendar } from '@/components/onboarding/calendar';
 import { Nationality } from '@/components/personal-details/nationality';
 import { Typography } from '@/components/ui';
-import useAppStore from '@/lib/store';
-import { useAuth } from '@/lib/store/auth-store';
 import { usePersonalStore } from '@/lib/store/personal-details';
 import { useUserStore } from '@/lib/store/user-store';
 import { devLog } from '@/lib/utils';
 
-export default function PersonalDetails() {
-  const [showCalendarModal, setShowCalendarModal] = useState(false);
-  const updateOnboarding = useAuth((state) => state.updateOnboarding);
+import useBoundStore from '../../../lib/store/index';
 
-  const { dob } = usePersonalStore();
-  const preUserData = useUserStore();
+const DEFAULT_VALUES = {
+  nationality: '4',
+  DOB: '2002-05-03',
+};
+
+export default function PersonalDetails() {
+  const router = useRouter();
 
   const { control, handleSubmit } = useForm<PersonalDetailsProps>({
     shouldFocusError: false,
-    defaultValues: {
-      nationality: '4',
-      DOB: '2002-05-03',
-    },
+    defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(personalDetailsSchema),
   });
-  const router = useRouter();
+
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
+
+  const dob = usePersonalStore((state) => state.dob);
+  const firstName = useUserStore((state) => state.firstName);
+
+  const updateOnboarding = useBoundStore((state) => state.updateOnboarding);
+  const setHandler = useBoundStore((state) => state.setHandler);
+  const resetHandler = useBoundStore((state) => state.resetHandler);
 
   const toggleCalendarModal = () => setShowCalendarModal((p) => !p);
   const hideCalendarModal = () => setShowCalendarModal(false);
 
-  const setHandler = useAppStore.getState().setHandler;
-  const resetHandler = useAppStore.getState().resetHandler;
-
   const goToNext = useCallback(() => {
-    devLog('Confirm clicked');
+    devLog('Personal details confirm clicked');
     handleSubmit(
       (data) => {
         devLog('Form data valid:', data);
@@ -81,7 +84,7 @@ export default function PersonalDetails() {
               color="primary"
               className="text-[32px] leading-[48px]"
             >
-              {preUserData.firstName}
+              {firstName}
             </Typography>
           </View>
 

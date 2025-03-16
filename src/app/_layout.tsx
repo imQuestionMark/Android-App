@@ -12,15 +12,14 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Toaster } from 'sonner-native';
 
 import { APIProvider } from '@/api';
-import { loadSelectedTheme } from '@/lib/hooks';
-import { hydrateAuth, useAuth } from '@/lib/store/auth-store';
 import { useThemeConfig } from '@/lib/use-theme-config';
 import { devLog } from '@/lib/utils';
+
+import useBoundStore, { hydrateAuth } from '../lib/store/index';
 
 export { ErrorBoundary } from 'expo-router';
 
 hydrateAuth();
-loadSelectedTheme();
 
 SplashScreen.preventAutoHideAsync();
 SplashScreen.setOptions({
@@ -29,8 +28,8 @@ SplashScreen.setOptions({
 });
 
 export default function RootLayout() {
-  const authStatus = useAuth((state) => state.status);
-  const onboardingStep = useAuth((state) => state.onboardingStep);
+  const authStatus = useBoundStore((state) => state.status);
+  const onboardingStep = useBoundStore((state) => state.onboardingStep);
 
   const segments = useSegments();
 

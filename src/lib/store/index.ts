@@ -1,8 +1,19 @@
 import { create } from 'zustand';
-import { withSlices } from 'zustand-slices';
+import { devtools } from 'zustand/middleware';
 
-import bottomNavSlice from './bottom-nav.slice';
+import { createAuthSlice } from './auth.v2.slice';
+import createBottomNavSlice from './bottom-nav.v2.slice';
 
-const useAppStore = create(withSlices(bottomNavSlice));
+type SharedStore = ReturnType<typeof createAuthSlice> &
+  ReturnType<typeof createBottomNavSlice>;
 
-export default useAppStore;
+const useBoundStore = create<SharedStore>()(
+  devtools((...a) => ({
+    ...createBottomNavSlice(...a),
+    ...createAuthSlice(...a),
+  }))
+);
+
+export default useBoundStore;
+
+export const hydrateAuth = () => useBoundStore.getState().hydrate();

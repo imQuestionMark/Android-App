@@ -2,10 +2,11 @@ import { Slot } from 'expo-router';
 
 import GradientView from '@/components/onboarding/gradient-view';
 import BottomNav from '@/components/personal-details/bottom-nav';
-import useAppStore from '@/lib/store';
+
+import useBoundStore from '../../../lib/store/index';
 
 const OnboardingLayout = () => {
-  const handler = useAppStore((state) => state.bottomNav.handler);
+  const handler = useBoundStore((state) => state.handler);
 
   return (
     <>

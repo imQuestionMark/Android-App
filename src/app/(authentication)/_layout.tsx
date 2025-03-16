@@ -1,11 +1,6 @@
 import { Stack } from 'expo-router';
 
 export default function AuthLayout() {
-  // const canGoBack = useNavigationState((state) => state.routes.length > 1);
-  // const navState = useNavigationState((state) => state);
-
-  // devLog('🚀🚀🚀 ~ AuthLayout ~ navState:', navState);
-
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="login" />
