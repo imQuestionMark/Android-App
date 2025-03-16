@@ -1,6 +1,5 @@
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import { CirclePlus, Download, Upload } from 'lucide-react-native';
 import React from 'react';
 import { View } from 'react-native';
@@ -47,9 +46,8 @@ export default function Wall() {
   };
 
   return (
-    <SafeAreaView>
-      <View className="mt-4 gap-[25px] bg-white p-4">
-        {/* Active Wall */}
+    <SafeAreaView className="grow bg-white">
+      <View className="mt-4 gap-[25px] p-4">
         <ActiveWall />
         <CreateWall />
         <RecentWall />
@@ -58,7 +56,6 @@ export default function Wall() {
           <ButtonText>Sign out</ButtonText>
         </Button>
       </View>
-      <StatusBar animated style="dark" />
     </SafeAreaView>
   );
 }

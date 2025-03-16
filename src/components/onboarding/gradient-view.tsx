@@ -1,6 +1,5 @@
 import { useHeaderHeight } from '@react-navigation/elements';
 import { LinearGradient } from 'expo-linear-gradient';
-import { StatusBar } from 'expo-status-bar';
 import React, { type ReactNode } from 'react';
 import { Platform, type StyleProp, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -39,7 +38,6 @@ export default function GradientView({
         {children}
         <Hashtag className="absolute bottom-[-40] right-0 z-[-1]" />
       </SafeAreaView>
-      <StatusBar animated style="dark" />
     </LinearGradient>
   );
 }

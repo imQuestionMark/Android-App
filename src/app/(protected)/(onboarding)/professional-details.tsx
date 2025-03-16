@@ -43,7 +43,8 @@ const Professional = () => {
     resolver: zodResolver(professionalFormSchema),
   });
 
-  const updateOnboarding = useBoundStore((state) => state.updateOnboarding);
+  const completeOnboarding = useBoundStore((state) => state.completeOnboarding);
+  const decrementOnboarding = useBoundStore((s) => s.decrementOnboarding);
   const setHandler = useBoundStore((state) => state.setHandler);
   const resetHandler = useBoundStore((state) => state.resetHandler);
 
@@ -56,7 +57,7 @@ const Professional = () => {
       headerLeft: () => (
         <Button
           onPress={() => {
-            updateOnboarding(1);
+            decrementOnboarding();
             navigation.goBack();
           }}
           className="p-2"
@@ -64,18 +65,19 @@ const Professional = () => {
           <ButtonText>BACK</ButtonText>
         </Button>
       ),
+      headerShown: true,
     });
-  }, [navigation, updateOnboarding]);
+  }, [navigation, decrementOnboarding]);
 
   useEffect(() => {
     const onBackPress = () => {
-      updateOnboarding(1);
-      router.back();
+      decrementOnboarding();
+      router.replace('/personal-details');
       return true;
     };
 
     BackHandler.addEventListener('hardwareBackPress', onBackPress);
-  }, [router, updateOnboarding]);
+  }, [router, decrementOnboarding]);
 
   const isLoading = results.some((query) => query.isLoading);
   const isError = results.some((query) => query.isError);
@@ -83,15 +85,15 @@ const Professional = () => {
   const handlePress = useCallback(() => {
     console.log('handleButtonPresss');
     handleSubmit(
-      async (data) => {
+      (data) => {
         devLog('Handle Submit professional', data);
-        await updateOnboarding(9999);
+        completeOnboarding();
       },
       (error) => {
         console.warn(JSON.stringify(error, null, 2));
       }
     )();
-  }, [handleSubmit, updateOnboarding]);
+  }, [handleSubmit, completeOnboarding]);
 
   useEffect(() => {
     setHandler(handlePress);
@@ -118,24 +120,26 @@ const Professional = () => {
   const Container = Platform.OS === 'web' ? View : KeyboardAwareScrollView;
 
   return (
-    <Container contentContainerClassName="grow" className="grow">
-      <View className="grow justify-between">
-        <View className="grow">
-          <Typography weight={600} color="main" className="text-[24px]">
-            Job preference
-          </Typography>
+    <>
+      <Container contentContainerClassName="grow" className="grow">
+        <View className="grow justify-between">
+          <View className="grow">
+            <Typography weight={600} color="main" className="text-[24px]">
+              Job preference
+            </Typography>
 
-          <View className="mt-6 gap-5">
-            <Role control={control} />
-            <Experience control={control} />
-            <Location control={control} />
-            <ModeOfWork control={control} />
-            <CTC control={control} setValue={setValue} />
-            <ExpCTC control={control} setValue={setValue} />
+            <View className="mt-6 gap-5">
+              <Role control={control} />
+              <Experience control={control} />
+              <Location control={control} />
+              <ModeOfWork control={control} />
+              <CTC control={control} setValue={setValue} />
+              <ExpCTC control={control} setValue={setValue} />
+            </View>
           </View>
         </View>
-      </View>
-    </Container>
+      </Container>
+    </>
   );
 };
 

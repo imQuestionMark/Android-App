@@ -37,19 +37,19 @@ export default function PersonalDetails() {
   const dob = usePersonalStore((state) => state.dob);
   const firstName = useUserStore((state) => state.firstName);
 
-  const updateOnboarding = useBoundStore((state) => state.updateOnboarding);
+  const incrementOnboarding = useBoundStore((s) => s.incrementOnboarding);
+  const updateOnboarding = useBoundStore((s) => s.updateOnboarding);
   const setHandler = useBoundStore((state) => state.setHandler);
   const resetHandler = useBoundStore((state) => state.resetHandler);
 
   const toggleCalendarModal = () => setShowCalendarModal((p) => !p);
   const hideCalendarModal = () => setShowCalendarModal(false);
 
-  const goToNext = useCallback(() => {
-    devLog('Personal details confirm clicked');
+  const handleConfirm = useCallback(() => {
     handleSubmit(
       (data) => {
         devLog('Form data valid:', data);
-        updateOnboarding(2);
+        incrementOnboarding();
         router.push({ pathname: '/professional-details' });
       },
       (errors) => {
@@ -59,13 +59,13 @@ export default function PersonalDetails() {
         );
       }
     )();
-  }, [handleSubmit, router, updateOnboarding]);
+  }, [handleSubmit, router, incrementOnboarding]);
 
   useEffect(() => {
-    setHandler(goToNext);
+    setHandler(handleConfirm);
 
     return () => resetHandler();
-  }, [goToNext, resetHandler, setHandler]);
+  }, [handleConfirm, resetHandler, setHandler, updateOnboarding]);
 
   return (
     <View className="flex grow justify-between">

@@ -8,7 +8,7 @@ import Step from '../ui/step';
 const BottomNav = ({ onPress }: { onPress?: () => void }) => {
   const onboardingStep = useBoundStore((state) => state.onboardingStep);
   const length = useBoundStore((state) => state.totalSteps);
-  console.log('🚀🚀🚀 ~ onboardingStep:', onboardingStep);
+  console.log('✌️ ~ onboardingStep:', onboardingStep);
 
   return (
     <View>
@@ -27,8 +27,8 @@ const BottomNav = ({ onPress }: { onPress?: () => void }) => {
 
       <View className="flex-row justify-between gap-4">
         {Array.from({ length }).map((_, idx) => {
-          const isActive = onboardingStep === idx + 1;
-          const isCompleted = onboardingStep > idx + 1;
+          const isActive = onboardingStep === idx;
+          const isCompleted = onboardingStep > idx;
           return <Step key={idx} active={isActive} completed={isCompleted} />;
         })}
       </View>

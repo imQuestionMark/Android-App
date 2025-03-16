@@ -28,7 +28,12 @@ export default function Professional() {
         </View>
 
         <View className="gap-[10px]">
-          <Link href={{ pathname: '/after-onboarding/wall' }} asChild>
+          <Link
+            href={{
+              pathname: '/home',
+            }}
+            asChild
+          >
             <Button size="lg" className=" h-[51px] gap-[10px] ">
               <CirclePlus size={24} color="white" />
               <ButtonText weight={500} className="text-[16px] text-[#EBEBFF]">

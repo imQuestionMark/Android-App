@@ -1,7 +1,5 @@
 import { type StateCreator } from 'zustand';
 
-import { showError } from '@/components/ui';
-
 import {
   getItem,
   getItemSecurely,
@@ -13,12 +11,8 @@ import { devLog } from '../utils';
 
 const _TOKEN_KEY = 'GRID_TOKEN';
 const _ONBOARDING_STEP_KEY = 'GRID_ONBOARDING_STEP';
-const _ONBOARDING_COMPLETED = 99999;
-const _ONBOARDING_UNSTARTED = -1;
-
-const handleError = (error: unknown, msg: string) => {
-  return showError(error instanceof Error ? error : new Error(msg));
-};
+export const _ONBOARDING_COMPLETED = 9999;
+export const _ONBOARDING_UNSTARTED = -1;
 
 type AuthState = {
   onboardingStep: number; // Tracks progress (-1 = not started, 9999 = completed)
@@ -58,7 +52,6 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
       await setItemSecurely(_TOKEN_KEY, token);
       set({ status: 'authenticated', token });
     } catch (e) {
-      handleError(e, 'Failed to sign in');
       get().signOut();
       throw e;
     }
@@ -70,7 +63,6 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
       get().resetOnboarding();
       devLog('Signing out');
     } catch (e) {
-      handleError(e, 'Failed to sign out');
       throw e;
     } finally {
       set({ status: 'unauthenticated', token: null });
@@ -91,7 +83,6 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
 
       set({ token, onboardingStep, status: 'authenticated' });
     } catch (e) {
-      handleError(e, 'Failed to restore session');
       get().signOut();
       throw e;
     }
@@ -108,7 +99,6 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
       setItem(_ONBOARDING_STEP_KEY, newStep);
       set({ onboardingStep: newStep });
     } catch (e) {
-      handleError(e, 'Failed to decrement onboarding step');
       throw e;
     }
   },
@@ -124,7 +114,6 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
       setItem(_ONBOARDING_STEP_KEY, newStep);
       set({ onboardingStep: newStep });
     } catch (e) {
-      handleError(e, 'Failed to increment onboarding step');
       throw e;
     }
   },
@@ -136,7 +125,6 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
       setItem(_ONBOARDING_STEP_KEY, step);
       set({ onboardingStep: step });
     } catch (e) {
-      handleError(e, 'Failed to update onboarding step');
       throw e;
     }
   },
@@ -148,7 +136,7 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
       setItem(_ONBOARDING_STEP_KEY, _ONBOARDING_UNSTARTED);
       set({ onboardingStep: _ONBOARDING_UNSTARTED });
     } catch (e) {
-      handleError(e, 'Failed to reset onboarding progress');
+      throw e;
     }
   },
 
@@ -158,7 +146,7 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
       devLog('Onboarding completed');
       set({ onboardingStep: _ONBOARDING_COMPLETED });
     } catch (e) {
-      handleError(e, 'Failed to complete onboarding');
+      throw e;
     }
   },
 });
