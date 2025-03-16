@@ -97,7 +97,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     'expo-router',
     'expo-secure-store',
     ['app-icon-badge', appIconBadgeConfig],
-    ['react-native-edge-to-edge'],
+    [
+      'react-native-edge-to-edge',
+      {
+        android: {
+          // parentTheme: 'Light',
+          // enforceNavigationBarContrast: false,
+        },
+      },
+    ],
     'expo-document-picker',
   ],
   extra: {

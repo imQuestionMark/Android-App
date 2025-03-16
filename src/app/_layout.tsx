@@ -4,8 +4,9 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider } from '@react-navigation/native';
 import { router, Stack, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
+import { SystemBars } from 'react-native-edge-to-edge';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Toaster } from 'sonner-native';
@@ -78,28 +79,26 @@ export default function RootLayout() {
 
         if (isAuthenticated && inAuthGroup) {
           devLog('✅ Authenticated in auth group → Redirecting to wall.');
-          return router.replace({ pathname: '/after-onboarding/wall' });
+          return router.replace({ pathname: '/home' });
         }
 
         if (!segments.length) {
           devLog('🏠 No segments --> Redirecting based on auth status.');
-          return router.replace(
-            isAuthenticated ? '/after-onboarding/wall' : '/login'
-          );
+          return router.replace(isAuthenticated ? '/home' : '/login');
         }
       } finally {
         // @INFO - This is for development only
-        if (__DEV__) {
-          // router.navigate({
-          //   pathname: '/after-onboarding/(basic-informations)/education',
-          // });
-        }
+        // if (__DEV__) {
+        //   router.navigate({
+        //     pathname: '/home',
+        //   });
+        // }
         await SplashScreen.hideAsync();
       }
     };
 
     bootstrapAsync();
-  }, [authStatus, onboardingStep, segments]);
+  }, [authStatus, incrementOnboarding, onboardingStep, segments]);
 
   return (
     <Providers>
@@ -107,6 +106,7 @@ export default function RootLayout() {
         <Stack.Screen name="(authentication)" />
         <Stack.Screen name="(protected)" />
       </Stack>
+      <SystemBars style="dark" />
     </Providers>
   );
 }
@@ -114,11 +114,12 @@ export default function RootLayout() {
 function Providers({ children }: { children: React.ReactNode }) {
   const theme = useThemeConfig();
   return (
-    <GestureHandlerRootView
-      style={styles.container}
-      // className={theme.dark ? `dark` : undefined} //disable dark mode
-    >
-      <KeyboardProvider>
+    <GestureHandlerRootView style={styles.container}>
+      <KeyboardProvider
+        navigationBarTranslucent
+        statusBarTranslucent
+        preserveEdgeToEdge
+      >
         <ThemeProvider value={theme}>
           <APIProvider>
             <BottomSheetModalProvider>
