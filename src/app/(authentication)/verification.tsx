@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
-import { useLocalSearchParams } from 'expo-router';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { type Control, useController, useForm } from 'react-hook-form';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, Platform, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { OtpInput } from 'react-native-otp-entry';
 
@@ -32,10 +32,7 @@ export default function Verification() {
     defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(OTPInputSchema),
   });
-  const { entryPoint } = useLocalSearchParams();
   const signIn = useBoundStore((state) => state.signIn);
-
-  devLog('🚀🚀🚀 ~ Verification ~ params:', entryPoint);
 
   const [countdown, setCountdown] = useState(DEFAULT_TIMEOUT);
   const [isResendAvailable, setIsResendAvailable] = useState(false);
@@ -82,9 +79,11 @@ export default function Verification() {
 
   const { mutate: handleResend } = resendOtpMutation();
 
+  const Container = Platform.OS === 'web' ? View : KeyboardAwareScrollView;
+
   return (
     <GradientView className="">
-      <KeyboardAwareScrollView contentContainerClassName="grow">
+      <Container contentContainerClassName="grow" className="grow">
         <View className="m-4 flex-1 justify-between">
           {/* Title */}
           <View className="flex gap-4">
@@ -169,7 +168,7 @@ export default function Verification() {
             </View>
           </View>
         </View>
-      </KeyboardAwareScrollView>
+      </Container>
     </GradientView>
   );
 }

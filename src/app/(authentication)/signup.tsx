@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, usePathname, useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, Platform, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import {
@@ -25,17 +26,14 @@ const DEFAULT_VALUES: Variables = {
 
 export default function Signup() {
   const router = useRouter();
-  const pathname = usePathname();
-  const userStore = useUserStore();
+  const saveUserID = useUserStore((s) => s.saveUserID);
 
   const { mutate: handleRegister, isPending } = useSignUpMutation({
     onSuccess: async (data) => {
       devLog('Sign up success, otp is sent for verification', data);
-      // @INFO Saving the userID in expo-secure-store.
-      await userStore.saveUserID(data.data.id);
+      await saveUserID(data.data.id);
       router.replace({
         pathname: '/verification',
-        params: { entryPoint: pathname },
       });
     },
   });
@@ -45,10 +43,12 @@ export default function Signup() {
     resolver: zodResolver(SignUpInputschema),
   });
 
+  const Container = Platform.OS === 'web' ? View : KeyboardAwareScrollView;
+
   return (
     <>
       <GradientView>
-        <KeyboardAwareScrollView contentContainerClassName="grow">
+        <Container contentContainerClassName="grow" className="grow">
           <View className="m-4 grow">
             {/* Title */}
             <View className="flex-row gap-2">
@@ -135,7 +135,7 @@ export default function Signup() {
               </View>
             </View>
           </View>
-        </KeyboardAwareScrollView>
+        </Container>
       </GradientView>
     </>
   );

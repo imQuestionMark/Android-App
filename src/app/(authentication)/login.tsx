@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
-import { Link, usePathname, useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, Platform, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import {
@@ -27,7 +28,6 @@ const DEFAULT_VALUES: Variables = {
 
 export default function Signin() {
   const router = useRouter();
-  const pathname = usePathname();
   const userStore = useUserStore();
 
   const { control, handleSubmit, setError, setFocus } = useForm<Variables>({
@@ -56,14 +56,15 @@ export default function Signin() {
       await userStore.saveUserID(data.data.id);
       router.replace({
         pathname: '/verification',
-        params: { entryPoint: pathname },
       });
     },
   });
 
+  const Container = Platform.OS === 'web' ? View : KeyboardAwareScrollView;
+
   return (
     <GradientView>
-      <KeyboardAwareScrollView contentContainerClassName="grow">
+      <Container contentContainerClassName="grow" className="grow">
         <View className="m-4 flex-1 justify-between ">
           <View className="">
             <View className="mb-3.5 flex-row gap-2">
@@ -122,7 +123,7 @@ export default function Signin() {
             <TermsandConditions />
           </View>
         </View>
-      </KeyboardAwareScrollView>
+      </Container>
     </GradientView>
   );
 }
