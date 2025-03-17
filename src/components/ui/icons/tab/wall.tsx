@@ -1,41 +1,71 @@
-import type { SvgProps } from 'react-native-svg';
-import Svg, { ClipPath, Defs, G, Path, Rect } from 'react-native-svg';
+import { Filter } from 'lucide-react-native';
+import {
+  ClipPath,
+  Defs,
+  FeBlend,
+  FeColorMatrix,
+  FeComposite,
+  FeFlood,
+  FeGaussianBlur,
+  FeOffset,
+  G,
+  Path,
+  Rect,
+  Svg,
+  type SvgProps,
+} from 'react-native-svg';
 
-const Home = ({ color, fill, ...props }: SvgProps) => {
+const Wall = ({ fill, ...props }: SvgProps) => {
   return (
     <>
-      <Svg width="17" height="16" color={color} fill={fill} {...props}>
-        <G clipPath="url(#clip0_3145_703)">
+      <Svg width="40" height="34" viewBox="0 0 40 34" fill="none">
+        <G clipPath="url(#clip0_3158_721)" filter="url(#filter0_d_3158_721)">
           <Path
-            d="M3 6.625V14C3 14.1326 3.05268 14.2598 3.14645 14.3536C3.24021 14.4473 3.36739 14.5 3.5 14.5H6.5V10.25C6.5 10.0511 6.57902 9.86032 6.71967 9.71967C6.86032 9.57902 7.05109 9.5 7.25 9.5H9.75C9.94891 9.5 10.1397 9.57902 10.2803 9.71967C10.421 9.86032 10.5 10.0511 10.5 10.25V14.5H13.5C13.6326 14.5 13.7598 14.4473 13.8536 14.3536C13.9473 14.2598 14 14.1326 14 14V6.625"
-            fill={color}
+            d="M21.1875 11.5H35.4375V7C35.4375 6.73478 35.3124 6.48043 35.0897 6.2929C34.867 6.10536 34.5649 6 34.25 6H21.1875V11.5Z"
+            fill="white"
           />
+          <Path d="M35.4375 13.5H28.3125V19H35.4375V13.5Z" fill="white" />
+          <Path d="M25.9375 13.5H14.0625V19H25.9375V13.5Z" fill="white" />
+          <Path d="M11.6875 13.5H4.5625V19H11.6875V13.5Z" fill="white" />
           <Path
-            d="M3 6.625V14C3 14.1326 3.05268 14.2598 3.14645 14.3536C3.24021 14.4473 3.36739 14.5 3.5 14.5H6.5V10.25C6.5 10.0511 6.57902 9.86032 6.71967 9.71967C6.86032 9.57902 7.05109 9.5 7.25 9.5H9.75C9.94891 9.5 10.1397 9.57902 10.2803 9.71967C10.421 9.86032 10.5 10.0511 10.5 10.25V14.5H13.5C13.6326 14.5 13.7598 14.4473 13.8536 14.3536C13.9473 14.2598 14 14.1326 14 14V6.625"
-            stroke={color}
-            strokeWidth="1"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <Path
-            d="M15.5 7.99994L8.84031 1.62494C8.68406 1.45994 8.31875 1.45807 8.15969 1.62494L1.5 7.99994M13 5.59369V1.99994H11.5V4.15619"
-            fill={color}
-          />
-          <Path
-            d="M15.5 7.99994L8.84031 1.62494C8.68406 1.45994 8.31875 1.45807 8.15969 1.62494L1.5 7.99994M13 5.59369V1.99994H11.5V4.15619"
-            stroke={color}
-            strokeWidth="1"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            d="M21.1875 21V26H34.25C34.5649 26 34.867 25.8946 35.0897 25.7071C35.3124 25.5196 35.4375 25.2652 35.4375 25V21H21.1875ZM18.8125 11.5V6H5.75C5.43506 6 5.13301 6.10536 4.91031 6.2929C4.68762 6.48043 4.5625 6.73478 4.5625 7V11.5H18.8125ZM18.8125 21H4.5625V25C4.5625 25.2652 4.68762 25.5196 4.91031 25.7071C5.13301 25.8946 5.43506 26 5.75 26H18.8125V21Z"
+            fill="white"
           />
         </G>
         <Defs>
-          <ClipPath id="clip0_3145_703">
+          <Filter id="filter0_d_3158_721" x="-3" y="0" width="46" height="40">
+            <FeFlood floodOpacity="0" result="BackgroundImageFix" />
+            <FeColorMatrix
+              in="SourceAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+              result="hardAlpha"
+            />
+            <FeOffset dy="4" />
+            <FeGaussianBlur stdDeviation="2" />
+            <FeComposite in2="hardAlpha" operator="out" />
+            <FeColorMatrix
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+            />
+            <FeBlend
+              mode="normal"
+              in2="BackgroundImageFix"
+              result="effect1_dropShadow_3158_721"
+            />
+            <FeBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="effect1_dropShadow_3158_721"
+              result="shape"
+            />
+          </Filter>
+          <ClipPath id="clip0_3158_721">
             <Rect
-              width="16"
-              height="16"
+              width="38"
+              height="32"
               fill="white"
-              transform="translate(0.5)"
+              transform="translate(1)"
             />
           </ClipPath>
         </Defs>
@@ -44,4 +74,4 @@ const Home = ({ color, fill, ...props }: SvgProps) => {
   );
 };
 
-export default Home;
+export default Wall;
