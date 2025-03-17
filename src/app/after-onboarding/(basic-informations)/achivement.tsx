@@ -10,6 +10,7 @@ import {
   Modal,
   Pressable,
   SafeAreaView,
+  TextInput,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -26,13 +27,13 @@ import {
 } from '@/components/ui';
 
 export default function Achivement() {
-  const { control, watch, setValue } = useForm<AchivementFormData>({
+  const { control } = useForm<AchivementFormData>({
     defaultValues: {
-      skill: [
+      achivement: [
         {
-          skill: '',
-          exp: '',
-          proficiency: '',
+          title: '',
+          desc: '',
+          attachment: '',
         },
       ],
     },
@@ -41,20 +42,20 @@ export default function Achivement() {
 
   const { fields, append, remove, update } = useFieldArray({
     control,
-    name: 'skill',
+    name: 'achivement',
   });
 
   const [showModal, setShowModal] = useState(false);
   const [isFlatListView, setIsFlatListView] = useState(false);
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
 
-  // Modal form for adding new skill
+  // Modal form for adding new achivement
   const modalForm = useForm({
     defaultValues: {
-      addSkill: {
-        skill: '',
-        exp: '',
-        proficiency: '',
+      addAchivement: {
+        title: '',
+        desc: '',
+        attachment: '',
       },
     },
   });
@@ -62,15 +63,19 @@ export default function Achivement() {
   const handleAddAchivement = () => {
     console.log();
     const modalData = modalForm.getValues();
-    const skillData = modalData.addSkill || modalData;
-    if (!skillData.skill || !skillData.exp || !skillData.proficiency) {
+    const achivementData = modalData.addAchivement || modalData;
+    if (
+      !achivementData.title ||
+      !achivementData.desc ||
+      !achivementData.attachment
+    ) {
       return;
     }
 
     const formattedData = {
-      skill: skillData.skill,
-      exp: skillData.exp,
-      proficiency: skillData.proficiency,
+      title: achivementData.title,
+      desc: achivementData.desc,
+      attachment: achivementData.attachment,
     };
 
     if (editingIndex !== null) {
@@ -85,60 +90,71 @@ export default function Achivement() {
     modalForm.reset();
   };
 
-  const options = ['Beginner', 'Intermediate', 'Expert'];
-
   return (
     <SafeAreaView>
       {/* <KeyboardAwareScrollView contentContainerClassName="grow"> */}
 
       <View className="mt-7 gap-4 px-4">
         {!isFlatListView ? (
-          fields.map((field, index) => {
-            const proficiency = watch(`skill.${index}.proficiency`);
-            return (
-              <View key={field.id} className="gap-4">
-                <ControlledInput
-                  name={`skill.${index}.skill`}
-                  control={control}
-                  label="Institution Name"
-                  labelClassName="text-[14px] text-[#0B0B0B]"
-                  inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8 "
-                />
-                <ControlledInput
-                  name={`skill.${index}.exp`}
-                  control={control}
-                  label="Field of Study"
-                  labelClassName="text-[14px] text-[#0B0B0B]"
-                  inputClassName="border border-[#0000001A] pr-10 h-[48px]rounded-8"
-                />
+          fields.map((field, index) => (
+            <View key={field.id} className="gap-4">
+              <ControlledInput
+                name={`achivement.${index}.title`}
+                control={control}
+                label="Achivement Title"
+                labelClassName="text-[14px] text-[#0B0B0B]"
+                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8 "
+              />
+              <Typography
+                weight={500}
+                className="mb-1 text-[14px] text-[#0B0B0B]"
+              >
+                Description
+              </Typography>
+              <Controller
+                control={control}
+                name={`achivement.${index}.desc`}
+                render={({ field: { onChange, value } }) => {
+                  const wordCount = value
+                    ? value.split(/\s+/).filter(Boolean).length
+                    : 0;
+                  const isLimitExceeded = wordCount > 150;
 
-                <View className="flex-row justify-between px-[12px] py-[8px]">
-                  {options.map((level) => (
-                    <Controller
-                      key={level}
-                      control={control}
-                      name={`skill.${index}.proficiency`}
-                      render={({ field: { onChange } }) => (
-                        <Pressable
-                          onPress={() => {
-                            onChange(level);
-                            setValue(`skill.${index}.proficiency`, level);
-                          }}
-                          className={`rounded-lg px-4 py-2 ${
-                            proficiency === level
-                              ? 'bg-blue-500'
-                              : 'bg-gray-300'
-                          }`}
-                        >
-                          <Typography>{level}</Typography>
-                        </Pressable>
-                      )}
-                    />
-                  ))}
-                </View>
+                  return (
+                    <View>
+                      <TextInput
+                        className="text-gray-800 mb-1 rounded-lg border border-[#0000001A] p-3 text-base"
+                        multiline
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                      <Typography
+                        weight={400}
+                        className={`text-[14px] ${isLimitExceeded ? 'text-red-500' : 'text-[#6D6D6D]'}`}
+                      >
+                        Maximum 150 words
+                      </Typography>
+                    </View>
+                  );
+                }}
+              />
+
+              <Typography className="text-[14px] text-[#0B0B0B]" weight={500}>
+                Achivement Attachments
+              </Typography>
+              <View className="flex-x-4  flex-row">
+                <Button className="rounded-8 h-[40px] border border-[#0000001A] bg-white px-[12px] py-[8px]">
+                  <ButtonText className="text-[14px] text-body" weight={400}>
+                    Add Link
+                  </ButtonText>
+                  <Image
+                    source={require('assets/addlink.svg')}
+                    className="size-[16px]"
+                  />
+                </Button>
               </View>
-            );
-          })
+            </View>
+          ))
         ) : (
           <SafeAreaView>
             <FlatList
@@ -150,10 +166,7 @@ export default function Achivement() {
                     {/* Left Section: Institute Name & Year */}
                     <View className="flex-1">
                       <Typography weight={600} color="body" className="text-lg">
-                        {item.skill}
-                      </Typography>
-                      <Typography color="body" weight={400} type="subtext">
-                        {item.proficiency}
+                        {item.title}
                       </Typography>
                     </View>
 
@@ -163,10 +176,10 @@ export default function Achivement() {
                       <Pressable
                         onPress={() => {
                           modalForm.reset({
-                            addSkill: {
-                              skill: item.skill || '',
-                              exp: item.exp || '',
-                              proficiency: item.proficiency || '',
+                            addAchivement: {
+                              title: item.title || '',
+                              desc: item.desc || '',
+                              attachment: item.attachment || '',
                             },
                           });
                           setEditingIndex(index);
@@ -211,7 +224,7 @@ export default function Achivement() {
         >
           <Image source={require('assets/add.svg')} className="size-[24px]" />
           <ButtonText className="font-poppins-regular text-[14px] text-primary">
-            Add Achivement
+            Add Achivements
           </ButtonText>
         </Button>
       </View>
@@ -234,37 +247,59 @@ export default function Achivement() {
 
               {/* Modal Form */}
               <ControlledInput
-                name="addSkill.skill"
+                name="addAchivement.title"
                 control={modalForm.control}
-                label="Institution Name"
+                label="Achivement Title"
                 labelClassName="text-[14px] text-[#0B0B0B]"
                 inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
               />
-              <ControlledInput
-                name="addSkill.exp"
-                control={modalForm.control}
-                label="Field of Study"
-                labelClassName="text-[14px] text-[#0B0B0B]"
-                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
+              <Typography
+                weight={500}
+                className="mb-1 text-[14px] text-[#0B0B0B]"
+              >
+                Description
+              </Typography>
+              <Controller
+                control={control}
+                name="addAchivement.desc"
+                render={({ field: { onChange, value } }) => {
+                  const wordCount = value
+                    ? value.split(/\s+/).filter(Boolean).length
+                    : 0;
+                  const isLimitExceeded = wordCount > 150;
+
+                  return (
+                    <View>
+                      <TextInput
+                        className="text-gray-800 mb-1 rounded-lg border border-[#0000001A] p-3 text-base"
+                        multiline
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                      <Typography
+                        weight={400}
+                        className={`text-[14px] ${isLimitExceeded ? 'text-red-500' : 'text-[#6D6D6D]'}`}
+                      >
+                        Maximum 150 words
+                      </Typography>
+                    </View>
+                  );
+                }}
               />
 
-              <View className="flex-row justify-between p-4">
-                {options.map((level) => (
-                  <Controller
-                    key={level}
-                    control={modalForm.control}
-                    name="addSkill.proficiency"
-                    render={({ field: { onChange, value } }) => (
-                      <Pressable
-                        onPress={() => onChange(level)}
-                        className={`rounded-lg px-4 py-2 ${value === level ? 'bg-blue-500' : 'bg-gray-300'}`}
-                      >
-                        {' '}
-                        <Typography>{level}</Typography>
-                      </Pressable>
-                    )}
+              <Typography className="text-[14px] text-[#0B0B0B]" weight={500}>
+                Achivement Attachments
+              </Typography>
+              <View className="flex-x-4  flex-row">
+                <Button className="rounded-8 h-[40px] border border-[#0000001A] bg-white px-[12px] py-[8px]">
+                  <ButtonText className="text-[14px] text-body" weight={400}>
+                    Add Link
+                  </ButtonText>
+                  <Image
+                    source={require('assets/addlink.svg')}
+                    className="size-[16px]"
                   />
-                ))}
+                </Button>
               </View>
 
               {/* Buttons Row */}
