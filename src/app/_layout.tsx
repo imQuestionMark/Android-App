@@ -17,6 +17,7 @@ import {
   _ONBOARDING_UNSTARTED,
 } from '@/lib/store/auth.v2.slice';
 import { useThemeConfig } from '@/lib/use-theme-config';
+import { devLog } from '@/lib/utils';
 
 import useBoundStore, { hydrateAuth } from '../lib/store/index';
 
@@ -52,49 +53,48 @@ export default function RootLayout() {
       const hasNotStartedOnboarding = onboardingStep === _ONBOARDING_UNSTARTED;
 
       try {
-        // const inAuthGroup = segments[0] === '(authentication)';
-        // const inProtectedGroup = segments[0] === '(protected)';
-        // const needsOnboarding = isAuthenticated && !hasCompletedOnboarding;
+        const inAuthGroup = segments[0] === '(authentication)';
+        const inProtectedGroup = segments[0] === '(protected)';
+        const needsOnboarding = isAuthenticated && !hasCompletedOnboarding;
 
-        // console.log('🔍 Auth Group:', inAuthGroup);
-        // console.log('🔍 Protected Group:', inProtectedGroup);
-        // console.log('📝 Needs Onboarding:', needsOnboarding);
+        console.log('🔍 Auth Group:', inAuthGroup);
+        console.log('🔍 Protected Group:', inProtectedGroup);
+        console.log('📝 Needs Onboarding:', needsOnboarding);
 
-        // if (!isAuthenticated && inProtectedGroup) {
-        //   devLog('🚫 Not authenticated. Redirecting to login.');
-        //   return router.replace('/(authentication)/login');
-        // }
+        if (!isAuthenticated && inProtectedGroup) {
+          devLog('🚫 Not authenticated. Redirecting to login.');
+          return router.replace('/(authentication)/login');
+        }
 
-        // if (isAuthenticated && needsOnboarding) {
-        //   devLog('🚀 Authenticated but onboarding pending.');
+        if (isAuthenticated && needsOnboarding) {
+          devLog('🚀 Authenticated but onboarding pending.');
 
-        //   if (hasNotStartedOnboarding) {
-        //     incrementOnboarding();
-        //   }
+          if (hasNotStartedOnboarding) {
+            incrementOnboarding();
+          }
 
-        //   if (onboardingStep === 0) {
-        //     return router.replace({ pathname: '/personal-details' });
-        //   }
+          if (onboardingStep === 0) {
+            return router.replace({ pathname: '/personal-details' });
+          }
 
-        //   if (onboardingStep === 1) {
-        //     return router.replace({ pathname: '/professional-details' });
-        //   }
-        // }
+          if (onboardingStep === 1) {
+            return router.replace({ pathname: '/professional-details' });
+          }
+        }
 
-        // if (isAuthenticated && inAuthGroup) {
-        //   devLog('✅ Authenticated in auth group → Redirecting to wall.');
-        //   return router.replace({ pathname: '/home' });
-        // }
+        if (isAuthenticated && inAuthGroup) {
+          devLog('✅ Authenticated in auth group → Redirecting to wall.');
+          return router.replace({ pathname: '/home' });
+        }
 
-        // if (!segments.length) {
-        //   devLog('🏠 No segments --> Redirecting based on auth status.');
-        //   return router.replace(isAuthenticated ? '/home' : '/login');
-        // }
-        router.navigate({ pathname: '/wall' });
+        if (!segments.length) {
+          devLog('🏠 No segments --> Redirecting based on auth status.');
+          return router.replace(isAuthenticated ? '/home' : '/login');
+        }
       } finally {
         // @INFO - This is for development only
         if (__DEV__) {
-          router.navigate({ pathname: '/wall' });
+          // router.navigate({ pathname: '/wall' });
         }
         await SplashScreen.hideAsync();
       }
