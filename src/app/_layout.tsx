@@ -55,7 +55,7 @@ export default function RootLayout() {
         // @INFO - This is for development only
         if (__DEV__) {
           router.navigate({
-            pathname: '/after-onboarding/(basic-informations)/education',
+            pathname: '/after-onboarding/(basic-informations)/skills',
           });
         }
         await SplashScreen.hideAsync();
