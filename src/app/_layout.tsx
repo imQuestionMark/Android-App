@@ -12,6 +12,10 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Toaster } from 'sonner-native';
 
 import { APIProvider } from '@/api';
+import {
+  _ONBOARDING_COMPLETED,
+  _ONBOARDING_UNSTARTED,
+} from '@/lib/store/auth.v2.slice';
 import { useThemeConfig } from '@/lib/use-theme-config';
 import { devLog } from '@/lib/utils';
 
@@ -37,12 +41,16 @@ export default function RootLayout() {
 
   const segments = useSegments();
 
+  console.log('🚀🚀🚀 ~ RootLayout ~ segments:', segments);
+
   useEffect(() => {
     const bootstrapAsync = async () => {
-      // const isAuthenticated = authStatus === 'authenticated';
-      const isAuthenticated = true;
-      const hasCompletedOnboarding = true;
-      const hasNotStartedOnboarding = false;
+      // const isAuthenticated = true;
+      // const hasCompletedOnboarding = true;
+      // const hasNotStartedOnboarding = false;
+      const isAuthenticated = authStatus === 'authenticated';
+      const hasCompletedOnboarding = onboardingStep === _ONBOARDING_COMPLETED;
+      const hasNotStartedOnboarding = onboardingStep === _ONBOARDING_UNSTARTED;
 
       try {
         const inAuthGroup = segments[0] === '(authentication)';
