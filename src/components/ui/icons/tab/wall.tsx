@@ -1,24 +1,9 @@
-import { Filter } from 'lucide-react-native';
-import {
-  ClipPath,
-  Defs,
-  FeBlend,
-  FeColorMatrix,
-  FeComposite,
-  FeFlood,
-  FeGaussianBlur,
-  FeOffset,
-  G,
-  Path,
-  Rect,
-  Svg,
-  type SvgProps,
-} from 'react-native-svg';
+import { G, Path, Svg, type SvgProps } from 'react-native-svg';
 
-const Wall = ({ fill, ...props }: SvgProps) => {
+const Wall = ({ ...props }: SvgProps) => {
   return (
     <>
-      <Svg width="40" height="34" viewBox="0 0 40 34" fill="none">
+      <Svg width="40" height="34" viewBox="0 0 40 34" fill="none" {...props}>
         <G clipPath="url(#clip0_3158_721)" filter="url(#filter0_d_3158_721)">
           <Path
             d="M21.1875 11.5H35.4375V7C35.4375 6.73478 35.3124 6.48043 35.0897 6.2929C34.867 6.10536 34.5649 6 34.25 6H21.1875V11.5Z"
@@ -32,43 +17,6 @@ const Wall = ({ fill, ...props }: SvgProps) => {
             fill="white"
           />
         </G>
-        <Defs>
-          <Filter id="filter0_d_3158_721" x="-3" y="0" width="46" height="40">
-            <FeFlood floodOpacity="0" result="BackgroundImageFix" />
-            <FeColorMatrix
-              in="SourceAlpha"
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-              result="hardAlpha"
-            />
-            <FeOffset dy="4" />
-            <FeGaussianBlur stdDeviation="2" />
-            <FeComposite in2="hardAlpha" operator="out" />
-            <FeColorMatrix
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-            />
-            <FeBlend
-              mode="normal"
-              in2="BackgroundImageFix"
-              result="effect1_dropShadow_3158_721"
-            />
-            <FeBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="effect1_dropShadow_3158_721"
-              result="shape"
-            />
-          </Filter>
-          <ClipPath id="clip0_3158_721">
-            <Rect
-              width="38"
-              height="32"
-              fill="white"
-              transform="translate(1)"
-            />
-          </ClipPath>
-        </Defs>
       </Svg>
     </>
   );

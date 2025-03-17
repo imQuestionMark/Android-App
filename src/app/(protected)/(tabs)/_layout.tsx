@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import { Pressable, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Typography } from '@/components/ui';
 import Home from '@/components/ui/icons/tab/home';
@@ -9,6 +10,10 @@ import Reach from '@/components/ui/icons/tab/reach';
 import Wall from '@/components/ui/icons/tab/wall';
 
 export default function TabLayout() {
+  const { bottom } = useSafeAreaInsets();
+
+  console.log('🚀🚀🚀 ~ TabLayout ~ insets:', bottom);
+
   return (
     <Tabs
       screenOptions={{
@@ -17,17 +22,15 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: '#fff',
           borderTopWidth: 0,
-          // position: 'absolute', // android hack`
           boxShadow: '0px -1px 4px 0px rgba(200,199,255,1);',
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10,
+          position: 'absolute',
+          height: 70 + bottom / 2,
         },
         tabBarLabelStyle: {
           fontFamily: 'Poppins-SemiBold',
           fontSize: 10,
-        },
-        tabBarItemStyle: {
-          // backgroundColor: 'orange',
         },
         tabBarButton(props) {
           return (
@@ -76,7 +79,7 @@ export default function TabLayout() {
             );
           },
           tabBarItemStyle: {
-            marginTop: -15,
+            marginTop: -10,
           },
           tabBarLabelStyle: {
             fontFamily: 'Poppins-SemiBold',
