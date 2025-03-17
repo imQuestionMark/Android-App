@@ -1,9 +1,10 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import { Pressable, View } from 'react-native';
 
 import { Typography } from '@/components/ui';
 import Home from '@/components/ui/icons/tab/home';
+import Notification from '@/components/ui/icons/tab/notifications';
+import Profile from '@/components/ui/icons/tab/profile';
 import Reach from '@/components/ui/icons/tab/reach';
 import Wall from '@/components/ui/icons/tab/wall';
 
@@ -37,12 +38,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
-            <Home
-              width={16}
-              height={16}
-              color={color}
-              fill={focused ? color : 'white'}
-            />
+            <Home color={color} fill={focused ? color : 'white'} />
           ),
         }}
       />
@@ -90,8 +86,8 @@ export default function TabLayout() {
         name="notifications"
         options={{
           title: 'Notifications',
-          tabBarIcon: ({ color }) => (
-            <FontAwesome size={16} name="sticky-note" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <Notification color={color} fill={focused ? color : 'white'} />
           ),
         }}
       />
@@ -99,8 +95,8 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => (
-            <FontAwesome size={16} name="user" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <Profile color={color} fill={focused ? color : 'white'} />
           ),
         }}
       />
