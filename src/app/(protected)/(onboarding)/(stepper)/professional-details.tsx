@@ -88,12 +88,13 @@ const Professional = () => {
       (data) => {
         devLog('Handle Submit professional', data);
         completeOnboarding();
+        router.replace({ pathname: '/welcome' });
       },
       (error) => {
         console.warn(JSON.stringify(error, null, 2));
       }
     )();
-  }, [handleSubmit, completeOnboarding]);
+  }, [handleSubmit, completeOnboarding, router]);
 
   useEffect(() => {
     setHandler(handlePress);

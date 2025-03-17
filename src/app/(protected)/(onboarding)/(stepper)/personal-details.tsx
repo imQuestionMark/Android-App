@@ -12,11 +12,10 @@ import {
 import { ControlledCalendar } from '@/components/onboarding/calendar';
 import { Nationality } from '@/components/personal-details/nationality';
 import { Typography } from '@/components/ui';
+import useBoundStore from '@/lib/store/index';
 import { usePersonalStore } from '@/lib/store/personal-details';
 import { useUserStore } from '@/lib/store/user-store';
 import { devLog } from '@/lib/utils';
-
-import useBoundStore from '../../../lib/store/index';
 
 const DEFAULT_VALUES = {
   nationality: '4',
