@@ -20,13 +20,17 @@ export default function TabLayout() {
         tabBarActiveTintColor: '#0400D1',
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: 'white',
           borderTopWidth: 0,
           boxShadow: '0px -1px 4px 0px rgba(200,199,255,1);',
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10,
-          position: 'absolute',
-          height: 70 + bottom / 2,
+          // position: 'absolute',
+        },
+        tabBarItemStyle: {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
         },
         tabBarLabelStyle: {
           fontFamily: 'Poppins-SemiBold',
@@ -38,6 +42,7 @@ export default function TabLayout() {
           );
         },
       }}
+      safeAreaInsets={{ bottom: bottom + 10 }}
     >
       <Tabs.Screen
         name="home"

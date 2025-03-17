@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { CirclePlus, Download, Upload } from 'lucide-react-native';
 import React from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -46,8 +46,8 @@ export default function Wall() {
   };
 
   return (
-    <SafeAreaView className="grow bg-white">
-      <View className="mt-4 gap-[25px] p-4">
+    <SafeAreaView edges={['left', 'top', 'right']} className="grow bg-white">
+      <ScrollView contentContainerClassName="p-4 pb-24 gap-[25px]">
         <ActiveWall />
         <CreateWall />
         <RecentWall />
@@ -55,7 +55,7 @@ export default function Wall() {
         <Button onPress={handleSignout}>
           <ButtonText>Sign out</ButtonText>
         </Button>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
