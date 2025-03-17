@@ -17,7 +17,7 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: '#fff',
           borderTopWidth: 0,
-          position: 'absolute', // android hack
+          // position: 'absolute', // android hack`
           boxShadow: '0px -1px 4px 0px rgba(200,199,255,1);',
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10,
@@ -25,6 +25,9 @@ export default function TabLayout() {
         tabBarLabelStyle: {
           fontFamily: 'Poppins-SemiBold',
           fontSize: 10,
+        },
+        tabBarItemStyle: {
+          // backgroundColor: 'orange',
         },
         tabBarButton(props) {
           return (
@@ -73,7 +76,7 @@ export default function TabLayout() {
             );
           },
           tabBarItemStyle: {
-            marginTop: -10,
+            marginTop: -15,
           },
           tabBarLabelStyle: {
             fontFamily: 'Poppins-SemiBold',
