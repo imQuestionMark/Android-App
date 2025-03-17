@@ -17,7 +17,6 @@ import {
   _ONBOARDING_UNSTARTED,
 } from '@/lib/store/auth.v2.slice';
 import { useThemeConfig } from '@/lib/use-theme-config';
-import { devLog } from '@/lib/utils';
 
 import useBoundStore, { hydrateAuth } from '../lib/store/index';
 
@@ -91,6 +90,7 @@ export default function RootLayout() {
         //   devLog('🏠 No segments --> Redirecting based on auth status.');
         //   return router.replace(isAuthenticated ? '/home' : '/login');
         // }
+        router.navigate({ pathname: '/wall' });
       } finally {
         // @INFO - This is for development only
         if (__DEV__) {
