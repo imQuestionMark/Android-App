@@ -1,6 +1,6 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import * as DocumentPicker from 'expo-document-picker';
 import { Image } from 'expo-image';
-import { CirclePause, CircleX } from 'lucide-react-native';
 import React, { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -52,13 +52,13 @@ const UploadProgress = ({
       <View className="flex-row gap-1">
         <Button variant="icon" className="size-7 border-0" onPress={onPause}>
           <ButtonIcon>
-            <CirclePause size={20} color={'gray'} />
+            <Ionicons name="pause-circle-outline" size={20} color="gray" />
           </ButtonIcon>
         </Button>
 
         <Button variant="icon" className="size-7 border-0" onPress={onCancel}>
           <ButtonIcon>
-            <CircleX size={20} color={'red'} />
+            <Ionicons name="stop-circle-outline" size={20} color="red" />
           </ButtonIcon>
         </Button>
       </View>

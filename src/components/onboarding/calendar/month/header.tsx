@@ -1,9 +1,8 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Pressable, View } from 'react-native';
 import { tv } from 'tailwind-variants';
 
 import { Typography } from '@/components/ui';
-import { black } from '@/components/ui/colors';
 
 type TMonthHeader = {
   addYear: () => void;
@@ -21,7 +20,7 @@ export const MonthHeader = ({
   return (
     <View className={container()}>
       <Pressable onPress={subtractYear} className={arrowbutton()}>
-        <ArrowLeft color={black} />
+        <Ionicons name="arrow-back" size={24} color="black" />
       </Pressable>
 
       <Pressable
@@ -35,7 +34,7 @@ export const MonthHeader = ({
       </Pressable>
 
       <Pressable onPress={addYear} className={arrowbutton()}>
-        <ArrowRight color={black} />
+        <Ionicons name="arrow-forward" size={24} color="black" />{' '}
       </Pressable>
     </View>
   );

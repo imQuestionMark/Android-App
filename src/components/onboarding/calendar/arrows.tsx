@@ -1,11 +1,9 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react-native';
-
-import { black } from '@/components/ui/colors';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export const _renderArrows = (direction: string) => {
   return direction === 'left' ? (
-    <ArrowLeft color={black} />
+    <Ionicons name="arrow-back" size={24} color="black" />
   ) : (
-    <ArrowRight color={black} />
+    <Ionicons name="arrow-forward" size={24} color="black" />
   );
 };

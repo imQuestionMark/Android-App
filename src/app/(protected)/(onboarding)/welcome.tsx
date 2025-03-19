@@ -1,6 +1,6 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
-import { CirclePlus, Upload } from 'lucide-react-native';
 import { View } from 'react-native';
 
 import GradientView from '@/components/onboarding/gradient-view';
@@ -35,7 +35,7 @@ export default function Professional() {
             asChild
           >
             <Button size="lg" className=" h-[51px] gap-[10px] ">
-              <CirclePlus size={24} color="white" />
+              <Ionicons name="add-circle-outline" size={24} color="white" />
               <ButtonText weight={500} className="text-[16px] text-[#EBEBFF]">
                 Create New Resume
               </ButtonText>
@@ -44,7 +44,7 @@ export default function Professional() {
 
           <Link href={{ pathname: '/upload-resume' }} asChild>
             <Button variant="outline" className="h-[51px] gap-[10px]">
-              <Upload size={24} color="#2800C9" />
+              <Ionicons name="cloud-upload" size={24} color="#2800C9" />
               <ButtonText weight={500} className="text-[16px] text-primary">
                 Upload Existing Resume
               </ButtonText>

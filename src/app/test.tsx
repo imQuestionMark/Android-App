@@ -1,4 +1,4 @@
-import { CalendarDays, CirclePlus } from 'lucide-react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
 import { PixelRatio, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -111,14 +111,14 @@ const Test = () => {
         <View className="m-4 items-center gap-4" id="button-variants">
           {/* Default Variant variant="solid" size="lg" */}
           <Button>
-            <CalendarDays className="text-white" size={18} />
+            <Ionicons name="calendar-outline" size={18} color="white" />
             <ButtonText weight={100} className="">
               Solid LG
             </ButtonText>
           </Button>
 
           <Button size="2xl" className="h-[51px] gap-3">
-            <CirclePlus className="text-white" size={22} />
+            <Ionicons name="calendar-outline" size={18} color="white" />
             <ButtonText
               weight={500}
               className="text-[16px]"
@@ -132,21 +132,21 @@ const Test = () => {
           </Button>
 
           <Button variant="outline" size="lg">
-            <CalendarDays className="text-primary" size={18} />
+            <Ionicons name="calendar-outline" size={18} color="white" />
             <ButtonText weight={100} className="">
               Outline LG
             </ButtonText>
           </Button>
 
           <Button variant="ghost" size="lg" className="">
-            <CalendarDays className="text-primary" size={18} />
+            <Ionicons name="calendar-outline" size={18} color="white" />
             <ButtonText weight={100} className="">
               Ghost LG
             </ButtonText>
           </Button>
 
           <Button variant="icon" size="lg" className="p-0">
-            <CalendarDays className="text-primary" size={18} />
+            <Ionicons name="calendar-outline" size={18} color="white" />
           </Button>
         </View>
       </ScrollView>

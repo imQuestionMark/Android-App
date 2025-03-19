@@ -1,6 +1,6 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { CirclePlus, Download, Upload } from 'lucide-react-native';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
@@ -122,12 +122,12 @@ const ActiveWall = () => {
 
         <View className="flex-row gap-x-3">
           <Button className="h-[40px] flex-1 flex-row rounded bg-white">
-            <Image source={require('assets/share.png')} className="size-4" />
+            <Ionicons name="arrow-redo-sharp" size={20} color="#2800C9" />
             <ButtonText className="text-primary">Share</ButtonText>
           </Button>
 
           <Button className="h-[40px] flex-1 flex-row rounded border-[0.5px] border-white bg-[#2800C9]">
-            <Download size={16} color="white" />
+            <Ionicons name="download-outline" size={16} color="white" />
             <ButtonText>Download</ButtonText>
           </Button>
         </View>
@@ -158,7 +158,7 @@ const CreateWall = () => {
 
       <View className=" flex-row gap-x-[10px]">
         <Button className=" h-[46px] flex-1 gap-3 bg-[#2800C9] ">
-          <CirclePlus size={20} color="white" />
+          <Ionicons name="add-circle-outline" size={24} color="black" />
           <ButtonText weight={500} className="text-base text-white">
             Create New
           </ButtonText>
@@ -169,7 +169,7 @@ const CreateWall = () => {
           onPress={redirectToUploadPage}
           className="h-[46px] flex-1 gap-3 border-blue-700 "
         >
-          <Upload size={20} color="#2800C9" />
+          <Ionicons name="cloud-upload-outline" size={20} color="#2800C9" />
           <ButtonText weight={500} color="primary" className="text-base">
             Upload Resume
           </ButtonText>

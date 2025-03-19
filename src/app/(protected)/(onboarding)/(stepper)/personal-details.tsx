@@ -1,6 +1,6 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
-import { CalendarDays } from 'lucide-react-native';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Modal, Pressable, TouchableWithoutFeedback, View } from 'react-native';
@@ -106,7 +106,7 @@ export default function PersonalDetails() {
             onPress={toggleCalendarModal}
             className="mt-3 max-w-64 flex-row items-center gap-4 rounded-md bg-white px-7 "
           >
-            <CalendarDays color="#5A5A5A" />
+            <Ionicons name="calendar-outline" size={18} color="#5A5A5A" />
             <Typography
               weight={400}
               color="body"
