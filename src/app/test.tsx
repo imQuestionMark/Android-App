@@ -2,6 +2,7 @@ import { CalendarDays, CirclePlus } from 'lucide-react-native';
 import React from 'react';
 import { PixelRatio, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { Button, ButtonText, Typography } from '@/components/ui';
 import Step from '@/components/ui/step';
@@ -45,6 +46,8 @@ const Test = () => {
             Placeholder Primary
           </Typography>
         </View>
+
+        <CustomMenu />
 
         <View className="gap-3" id="stepper">
           <View className="flex-row justify-between">
@@ -153,5 +156,33 @@ const Test = () => {
     </SafeAreaView>
   );
 };
+
+function CustomMenu() {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <Button>
+          <Typography className="text-white">Zeego me</Typography>
+        </Button>
+      </DropdownMenu.Trigger>
+
+      <DropdownMenu.Content color="pink" style={{ background: 'orange' }}>
+        <DropdownMenu.Item
+          key="item-1"
+          onSelect={() => console.log('item-1 selected')}
+        >
+          <DropdownMenu.ItemTitle>Item Title</DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+
+        <DropdownMenu.Item key="cars">
+          <DropdownMenu.ItemTitle>Cars</DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+
+        <DropdownMenu.Separator />
+        <DropdownMenu.Arrow />
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
 
 export default Test;

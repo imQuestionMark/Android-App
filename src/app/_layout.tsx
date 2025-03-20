@@ -94,7 +94,7 @@ export default function RootLayout() {
       } finally {
         // @INFO - This is for development only
         if (__DEV__) {
-          // router.navigate({ pathname: '/wall' });
+          router.navigate({ pathname: '/test' });
         }
         await SplashScreen.hideAsync();
       }
