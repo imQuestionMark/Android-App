@@ -224,3 +224,11 @@ const WallCustomItem = ({ item }: WallCustomItemProps) => {
     </View>
   );
 };
+
+const CustomMenu = () => {
+  return (
+    <>
+      <></>
+    </>
+  );
+};
