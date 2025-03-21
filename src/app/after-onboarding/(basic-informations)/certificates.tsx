@@ -22,40 +22,32 @@ import {
 } from '@/components/ui';
 
 export default function Certificate() {
-  const {
-    control,
-    getValues,
-    resetField,
-    setValue,
-    trigger,
-    formState: { errors },
-  } = useForm<CertificateFormData>({
-    resolver: zodResolver(CertificateFormSchema),
-    defaultValues: {
-      certificate: [
-        {
-          certificateName: '',
+  const { control, getValues, resetField, setValue, trigger } =
+    useForm<CertificateFormData>({
+      resolver: zodResolver(CertificateFormSchema),
+      defaultValues: {
+        certificate: [
+          {
+            certificateName: '',
+          },
+          {
+            certificateName: '',
+          },
+        ],
+        addCertificate: {
+          certificateName: 'as',
         },
-        {
-          certificateName: '',
-        },
-      ],
-      addCertificate: {
-        certificateName: 'as',
       },
-    },
-    mode: 'all',
-  });
+      mode: 'all',
+    });
 
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'certificate',
   });
 
-  const [isModalVisible, setIsModalVisible] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
-
-  console.log('🚀🚀🚀 ~ Certificate ~ editingIndex:', editingIndex);
 
   const hideModal = () => {
     setIsModalVisible(false);
@@ -66,18 +58,9 @@ export default function Certificate() {
 
   const handleAddOrEditCertificate = async () => {
     const isValid = await trigger('addCertificate');
+    if (!isValid) return;
 
-    if (!isValid) {
-      console.log('Modal validation failed:', errors.addCertificate);
-      return;
-    }
-
-    const modalData = getValues().addCertificate;
-    console.log({ modalData });
-    console.log({ errors });
-
-    const { certificateName } = modalData;
-
+    const { certificateName } = getValues().addCertificate;
     if (!certificateName) return;
 
     const formattedData = {
@@ -272,7 +255,7 @@ const AddCertModal = ({
       animationType="fade"
       onRequestClose={hideModal}
     >
-      <TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={hideModal}>
         <View className="flex-1 items-center justify-center bg-gray/30 px-3">
           <TouchableWithoutFeedback>
             <View className="w-full gap-4 rounded-2xl bg-white p-6 shadow-lg">
