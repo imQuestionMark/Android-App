@@ -21,6 +21,33 @@ import {
   Typography,
 } from '@/components/ui';
 
+type CertificateItemProps = {
+  index: number;
+  name: string;
+  onDelete: () => void;
+  onEdit: () => void;
+};
+
+type CertificateListProps = {
+  fields: FieldArrayWithId<CertificateFormData, 'certificate'>[];
+  onDeletePress: (index: number) => void;
+  onEditPress: (params: { certificateName: string; index: number }) => void;
+};
+
+type DefaultViewProps = {
+  control: Control<CertificateFormData>;
+  fieldID: string;
+  index: number;
+};
+
+type ModalProps = {
+  control: Control<CertificateFormData>;
+  editingIndex: null | number;
+  hideModal: () => void;
+  isModalVisible: boolean;
+  onUpsert: () => Promise<void>;
+};
+
 export default function Certificate() {
   const { control, getValues, resetField, setValue, trigger } =
     useForm<CertificateFormData>({
@@ -34,9 +61,6 @@ export default function Certificate() {
             certificateName: '',
           },
         ],
-        addCertificate: {
-          certificateName: 'as',
-        },
       },
       mode: 'all',
     });
@@ -57,8 +81,13 @@ export default function Certificate() {
   const showModal = () => setIsModalVisible(true);
 
   const handleAddOrEditCertificate = async () => {
-    const isValid = await trigger('addCertificate');
-    if (!isValid) return;
+    const isValid = await trigger('addCertificate.certificateName');
+
+    if (!isValid)
+      return console.log(
+        '🚀🚀🚀 ~ handleAddOrEditCertificate ~ isValid:',
+        isValid
+      );
 
     const { certificateName } = getValues().addCertificate;
     if (!certificateName) return;
@@ -92,11 +121,13 @@ export default function Certificate() {
     remove(index);
   };
 
+  const hasCertificates = fields.length > 1;
+
   return (
     <SafeAreaView className="grow bg-white">
       <View className="mt-7 gap-4 px-4">
-        {fields.length > 1 ? (
-          <CertificateFlatList
+        {hasCertificates ? (
+          <CertificateList
             fields={fields}
             onEditPress={handleEdit}
             onDeletePress={handleDelete}
@@ -107,7 +138,7 @@ export default function Certificate() {
               control={control}
               fieldID={id}
               index={index}
-              key={index}
+              key={id}
             />
           ))
         )}
@@ -128,70 +159,35 @@ export default function Certificate() {
         control={control}
         editingIndex={editingIndex}
         hideModal={hideModal}
-        onPress={handleAddOrEditCertificate}
+        onUpsert={handleAddOrEditCertificate}
         isModalVisible={isModalVisible}
       />
     </SafeAreaView>
   );
 }
 
-const CertificateFlatList = ({
+const CertificateList = ({
   fields,
   onEditPress,
   onDeletePress,
-}: {
-  fields: FieldArrayWithId<CertificateFormData, 'certificate', 'id'>[];
-  onDeletePress: (index: number) => void;
-  onEditPress: ({
-    certificateName,
-    index,
-  }: {
-    certificateName: string;
-    index: number;
-  }) => void;
-}) => {
+}: CertificateListProps) => {
   return (
     <FlatList
       data={fields}
       keyExtractor={(item) => item.id}
+      // @TODO, Refactor
       renderItem={({ item, index }) => (
-        <View className="shadow-gray-200 relative mb-1 rounded-lg bg-white px-4 py-3 shadow-lg">
-          <View className="flex-row items-center justify-between">
-            <View className="flex-1">
-              <Typography weight={600} color="body" className="text-lg">
-                {item.certificateName}
-              </Typography>
-              <Typography color="body" weight={400} type="subtext">
-                issue date
-              </Typography>
-            </View>
-
-            <View className="flex-row gap-1">
-              <Button
-                onPress={() =>
-                  onEditPress({
-                    certificateName: item.certificateName,
-                    index,
-                  })
-                }
-                variant="ghost"
-                className="p-2"
-              >
-                <Ionicons name="pencil" size={15} color="black" />
-              </Button>
-
-              {index !== 0 && (
-                <Button
-                  variant="ghost"
-                  onPress={() => onDeletePress(index)}
-                  className="p-2"
-                >
-                  <Ionicons name="trash-bin" size={15} color="black" />
-                </Button>
-              )}
-            </View>
-          </View>
-        </View>
+        <CertificateListItem
+          index={index}
+          name={item.certificateName}
+          onEdit={() =>
+            onEditPress({
+              certificateName: item.certificateName,
+              index,
+            })
+          }
+          onDelete={() => onDeletePress(index)}
+        />
       )}
       ItemSeparatorComponent={() => (
         <View className="mb-2 h-px w-full shadow-md" />
@@ -200,15 +196,41 @@ const CertificateFlatList = ({
   );
 };
 
-const DefaultView = ({
-  control,
-  fieldID,
+const CertificateListItem = ({
+  name,
+  onEdit,
+  onDelete,
   index,
-}: {
-  control: Control<CertificateFormData>;
-  fieldID: string;
-  index: number;
-}) => {
+}: CertificateItemProps) => {
+  return (
+    <View className="shadow-gray-200 relative mb-1 rounded-lg bg-white px-4 py-3 shadow-lg">
+      <View className="flex-row items-center justify-between">
+        <View className="flex-1">
+          <Typography weight={600} color="body" className="text-lg">
+            {name}
+          </Typography>
+          <Typography color="body" weight={400} type="subtext">
+            issue date
+          </Typography>
+        </View>
+
+        <View className="flex-row gap-1">
+          <Button onPress={onEdit} variant="ghost" className="p-2">
+            <Ionicons name="pencil" size={15} color="black" />
+          </Button>
+
+          {index !== 0 && (
+            <Button variant="ghost" onPress={onDelete} className="p-2">
+              <Ionicons name="trash-bin" size={15} color="black" />
+            </Button>
+          )}
+        </View>
+      </View>
+    </View>
+  );
+};
+
+const DefaultView = ({ control, fieldID, index }: DefaultViewProps) => {
   return (
     <View key={fieldID} className="gap-4">
       <ControlledInput
@@ -223,7 +245,7 @@ const DefaultView = ({
         Certificate Attachments
       </Typography>
 
-      <View className="flex-x-4  flex-row">
+      <View className="flex-row">
         <Button className="rounded-8 h-[40px] border border-[#0000001A] bg-white px-[12px] py-[8px]">
           <ButtonText className="text-[14px] text-body" weight={400}>
             Add Link
@@ -239,15 +261,9 @@ const AddCertModal = ({
   isModalVisible,
   hideModal,
   control,
-  onPress,
+  onUpsert,
   editingIndex,
-}: {
-  control: Control<CertificateFormData>;
-  editingIndex: null | number;
-  hideModal: () => void;
-  isModalVisible: boolean;
-  onPress: () => Promise<void>;
-}) => {
+}: ModalProps) => {
   return (
     <Modal
       transparent
@@ -279,7 +295,7 @@ const AddCertModal = ({
                   <ButtonText className="text-black">Cancel</ButtonText>
                 </Button>
 
-                <Button className="ml-2 flex-1 bg-primary" onPress={onPress}>
+                <Button className="ml-2 flex-1 bg-primary" onPress={onUpsert}>
                   <ButtonText className="text-white">
                     {editingIndex !== null ? 'Edit ' : 'Add'}
                   </ButtonText>
