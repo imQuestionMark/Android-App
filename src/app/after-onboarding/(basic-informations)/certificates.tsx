@@ -1,17 +1,14 @@
-/* eslint-disable max-lines-per-function */
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Image } from 'expo-image';
 import React, { useState } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
 import {
-  FlatList,
-  Keyboard,
-  Modal,
-  Pressable,
-  SafeAreaView,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+  type Control,
+  type FieldArrayWithId,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
+import { FlatList, Modal, TouchableWithoutFeedback, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
   type CertificateFormData,
@@ -25,17 +22,29 @@ import {
 } from '@/components/ui';
 
 export default function Certificate() {
-  const { control } = useForm<CertificateFormData>({
+  const {
+    control,
+    getValues,
+    resetField,
+    setValue,
+    trigger,
+    formState: { errors },
+  } = useForm<CertificateFormData>({
+    resolver: zodResolver(CertificateFormSchema),
     defaultValues: {
       certificate: [
         {
           certificateName: '',
-          issueDate: undefined,
-          certificate: undefined,
+        },
+        {
+          certificateName: '',
         },
       ],
+      addCertificate: {
+        certificateName: 'as',
+      },
     },
-    resolver: zodResolver(CertificateFormSchema),
+    mode: 'all',
   });
 
   const { fields, append, remove, update } = useFieldArray({
@@ -43,217 +52,296 @@ export default function Certificate() {
     name: 'certificate',
   });
 
-  const [showModal, setShowModal] = useState(false);
-  const [isFlatListView, setIsFlatListView] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(true);
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
 
-  // Modal form for adding new experience
-  const modalForm = useForm({
-    defaultValues: {
-      addCertificate: {
-        certificateName: '',
-        issueDate: undefined,
-        certificate: undefined,
-      },
-    },
-  });
+  console.log('🚀🚀🚀 ~ Certificate ~ editingIndex:', editingIndex);
 
-  const handleAddCertificate = () => {
-    const modalData = modalForm.getValues();
-    const certificateData = modalData.addCertificate || modalData;
-    if (
-      !certificateData.certificateName ||
-      !certificateData.issueDate ||
-      !certificateData.certificate
-    ) {
+  const hideModal = () => {
+    setIsModalVisible(false);
+    setEditingIndex(null);
+    resetField('addCertificate');
+  };
+  const showModal = () => setIsModalVisible(true);
+
+  const handleAddOrEditCertificate = async () => {
+    const isValid = await trigger('addCertificate');
+
+    if (!isValid) {
+      console.log('Modal validation failed:', errors.addCertificate);
       return;
     }
 
+    const modalData = getValues().addCertificate;
+    console.log({ modalData });
+    console.log({ errors });
+
+    const { certificateName } = modalData;
+
+    if (!certificateName) return;
+
     const formattedData = {
-      certificateName: certificateData.certificateName,
-      issueDate: certificateData.issueDate,
-      certificate: certificateData.certificate,
+      certificateName,
     };
 
     if (editingIndex !== null) {
       update(editingIndex, formattedData);
-      setEditingIndex(null);
     } else {
       append(formattedData);
-      setIsFlatListView(true);
     }
 
-    setShowModal(false);
-    modalForm.reset();
+    hideModal();
+  };
+
+  const handleEdit = ({
+    certificateName,
+    index,
+  }: {
+    certificateName: string;
+    index: number;
+  }) => {
+    setValue('addCertificate.certificateName', certificateName);
+    setEditingIndex(index);
+    showModal();
+  };
+
+  const handleDelete = (index: number) => {
+    remove(index);
   };
 
   return (
-    <SafeAreaView>
-      {/* <KeyboardAwareScrollView contentContainerClassName="grow"> */}
-      <View className="mt-7 flex-row justify-between">
-        <Button className="bg-white">
-          <ButtonText className="text-primary">Next</ButtonText>
-        </Button>
-        <Typography weight={500} className="text-[#0B0B0B]">
-          Certification
-        </Typography>
-        <Button className="bg-white">
-          <ButtonText className="text-primary">Back</ButtonText>
-        </Button>
-      </View>
-
+    <SafeAreaView className="grow bg-white">
       <View className="mt-7 gap-4 px-4">
-        {!isFlatListView ? (
-          fields.map((field, index) => (
-            <View key={field.id} className="gap-4">
-              <ControlledInput
-                name={`certificate.${index}.certificateName`}
-                control={control}
-                label="Certificate Name"
-                labelClassName="text-[14px] text-[#0B0B0B]"
-                inputClassName="border border-[#0000001A] pr-10 h-[48px]rounded-8"
-              />
-              <Typography className="text-[14px] text-[#0B0B0B]" weight={500}>
-                Certificate Attachments
-              </Typography>
-              <View className="flex-x-4  flex-row">
-                <Button className="rounded-8 h-[40px] border border-[#0000001A] bg-white px-[12px] py-[8px]">
-                  <ButtonText className="text-[14px] text-body" weight={400}>
-                    Add Link
-                  </ButtonText>
-                  <Image
-                    source={require('assets/addlink.svg')}
-                    className="size-[16px]"
-                  />
-                </Button>
-              </View>
-            </View>
-          ))
+        {fields.length > 1 ? (
+          <CertificateFlatList
+            fields={fields}
+            onEditPress={handleEdit}
+            onDeletePress={handleDelete}
+          />
         ) : (
-          <SafeAreaView>
-            <FlatList
-              data={fields}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item, index }) => (
-                <View className="shadow-gray-200 relative mb-1 rounded-lg bg-white px-4 py-3 shadow-lg">
-                  <View className="flex-row items-center justify-between">
-                    <View className="flex-1">
-                      <Typography weight={600} color="body" className="text-lg">
-                        {item.certificateName}
-                      </Typography>
-                      <Typography color="body" weight={400} type="subtext">
-                        issue date {/* {item.issueDate} */}
-                      </Typography>
-                    </View>
-
-                    {/* Right Section: Edit & Delete Buttons */}
-                    <View className="flex-row gap-1">
-                      {/* Edit Button */}
-                      <Pressable
-                        onPress={() => {
-                          modalForm.reset({
-                            addCertificate: {
-                              certificateName: item.certificateName || '',
-                              // issueDate: item.issueDate || '',
-                              // certificate: item.certificate || '',
-                            },
-                          });
-                          setEditingIndex(index);
-                          setShowModal(true);
-                        }}
-                        className="p-2"
-                      >
-                        <Image
-                          source={require('assets/edit.svg')}
-                          className="size-[15px]"
-                        />
-                      </Pressable>
-
-                      {/* Delete Button (Hidden for the first item) */}
-                      {index !== 0 && (
-                        <Pressable
-                          onPress={() => remove(index)}
-                          className="p-2"
-                        >
-                          <Image
-                            source={require('assets/delete.svg')}
-                            className="size-[15px]"
-                          />
-                        </Pressable>
-                      )}
-                    </View>
-                  </View>
-                </View>
-              )}
-              ItemSeparatorComponent={() => (
-                <View className="bg-gray-400 shadow-gray-500 mb-2 h-px w-full shadow-md" />
-              )}
+          fields.map(({ id }, index) => (
+            <DefaultView
+              control={control}
+              fieldID={id}
+              index={index}
+              key={index}
             />
-          </SafeAreaView>
+          ))
         )}
 
-        {/* Add Button - Opens Modal */}
         <Button
           className="mx-[47px] h-[48px] rounded-[12px] border-dashed px-[13.5px]"
           variant="outline"
-          onPress={() => setShowModal(true)}
+          onPress={showModal}
         >
-          <Image source={require('assets/add.svg')} className="size-[24px]" />
-          <ButtonText className="font-poppins-regular text-[14px] text-primary">
+          <Ionicons name="add" size={24} color="black" />
+          <ButtonText weight={400} color="primary" className="text-[14px]">
             Add Certificates
           </ButtonText>
         </Button>
       </View>
-      {/* </KeyboardAwareScrollView> */}
 
-      {/* Modal for Adding New Experience */}
       <Modal
         transparent
-        visible={showModal}
+        visible={isModalVisible}
         animationType="fade"
-        onRequestClose={() => setShowModal(false)}
+        onRequestClose={hideModal}
       >
-        {/* Blur Background */}
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View className="flex-1 items-center justify-center px-3">
-            <View className="w-full gap-4 rounded-2xl bg-white p-6 shadow-lg">
-              <Typography weight={600} className="mb-4 text-lg text-[#0B0B0B]">
-                Add New Certificate
-              </Typography>
-
-              {/* Modal Form */}
-              <ControlledInput
-                name="addCertificate.certificateName"
-                control={modalForm.control}
-                label="Certificate Name"
-                labelClassName="text-[14px] text-[#0B0B0B]"
-                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
-              />
-
-              {/* <Locations control={modalForm.control} /> */}
-
-              {/* Buttons Row */}
-              <View className="mt-4 flex-row justify-between">
-                {/* Cancel Button */}
-                <Button
-                  className="bg-gray-300 mr-2 flex-1 border border-[#0000001A]"
-                  onPress={() => setShowModal(false)}
+        <TouchableWithoutFeedback>
+          <View className="flex-1 items-center justify-center bg-gray/30 px-3">
+            <TouchableWithoutFeedback>
+              <View className="w-full gap-4 rounded-2xl bg-white p-6 shadow-lg">
+                <Typography
+                  weight={600}
+                  className="mb-4 text-lg text-[#0B0B0B]"
                 >
-                  <ButtonText className="text-black">Cancel</ButtonText>
-                </Button>
+                  Add New Certificate
+                </Typography>
 
-                {/* Save Button */}
-                <Button
-                  className="ml-2 flex-1 bg-primary"
-                  onPress={modalForm.handleSubmit(handleAddCertificate)}
-                >
-                  <ButtonText className="text-white">Add</ButtonText>
-                </Button>
+                <ControlledInput
+                  name="addCertificate.certificateName"
+                  control={control}
+                  label="Certificate Name"
+                  labelClassName="text-[14px] text-[#0B0B0B]"
+                  inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
+                />
+
+                <View className="mt-4 flex-row justify-between">
+                  <Button
+                    className="bg-gray-300 mr-2 flex-1 border border-[#0000001A]"
+                    onPress={hideModal}
+                  >
+                    <ButtonText className="text-black">Cancel</ButtonText>
+                  </Button>
+
+                  <Button
+                    className="ml-2 flex-1 bg-primary"
+                    onPress={handleAddOrEditCertificate}
+                  >
+                    <ButtonText className="text-white">
+                      {editingIndex !== null ? 'Edit ' : 'Add'}
+                    </ButtonText>
+                  </Button>
+                </View>
               </View>
-            </View>
+            </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
       </Modal>
     </SafeAreaView>
   );
 }
+
+const CertificateFlatList = ({
+  fields,
+  onEditPress,
+  onDeletePress,
+}: {
+  fields: FieldArrayWithId<CertificateFormData, 'certificate', 'id'>[];
+  onDeletePress: (index: number) => void;
+  onEditPress: ({
+    certificateName,
+    index,
+  }: {
+    certificateName: string;
+    index: number;
+  }) => void;
+}) => {
+  return (
+    <FlatList
+      data={fields}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item, index }) => (
+        <View className="shadow-gray-200 relative mb-1 rounded-lg bg-white px-4 py-3 shadow-lg">
+          <View className="flex-row items-center justify-between">
+            <View className="flex-1">
+              <Typography weight={600} color="body" className="text-lg">
+                {item.certificateName}
+              </Typography>
+              <Typography color="body" weight={400} type="subtext">
+                issue date
+              </Typography>
+            </View>
+
+            <View className="flex-row gap-1">
+              <Button
+                onPress={() =>
+                  onEditPress({
+                    certificateName: item.certificateName,
+                    index,
+                  })
+                }
+                variant="ghost"
+                className="p-2"
+              >
+                <Ionicons name="pencil" size={15} color="black" />
+              </Button>
+
+              {index !== 0 && (
+                <Button
+                  variant="ghost"
+                  onPress={() => onDeletePress(index)}
+                  className="p-2"
+                >
+                  <Ionicons name="trash-bin" size={15} color="black" />
+                </Button>
+              )}
+            </View>
+          </View>
+        </View>
+      )}
+      ItemSeparatorComponent={() => (
+        <View className="mb-2 h-px w-full shadow-md" />
+      )}
+    />
+  );
+};
+
+const DefaultView = ({
+  control,
+  fieldID,
+  index,
+}: {
+  control: Control<CertificateFormData>;
+  fieldID: string;
+  index: number;
+}) => {
+  return (
+    <View key={fieldID} className="gap-4">
+      <ControlledInput
+        name={`certificate.${index}.certificateName`}
+        control={control}
+        label="Certificate Name"
+        labelClassName="text-[14px] text-[#0B0B0B]"
+        inputClassName="border border-[#0000001A] pr-10 h-[48px]rounded-8"
+      />
+
+      <Typography className="text-[14px] text-[#0B0B0B]" weight={500}>
+        Certificate Attachments
+      </Typography>
+
+      <View className="flex-x-4  flex-row">
+        <Button className="rounded-8 h-[40px] border border-[#0000001A] bg-white px-[12px] py-[8px]">
+          <ButtonText className="text-[14px] text-body" weight={400}>
+            Add Link
+          </ButtonText>
+          <Ionicons name="link-sharp" size={16} color="black" />
+        </Button>
+      </View>
+    </View>
+  );
+};
+
+export const AddCertModal = ({
+  showModal,
+  hideModal,
+  control,
+  onPress,
+}: {
+  control: Control<CertificateFormData>;
+  hideModal: () => void;
+  onPress: () => void;
+  showModal: boolean;
+}) => {
+  return (
+    <Modal
+      transparent
+      visible={showModal}
+      animationType="fade"
+      onRequestClose={hideModal}
+    >
+      <TouchableWithoutFeedback onPress={hideModal}>
+        <View className="flex-1 items-center justify-center bg-gray/30 px-3">
+          <TouchableWithoutFeedback>
+            <View className="w-full gap-4 rounded-2xl bg-white p-6 shadow-lg">
+              <Typography weight={600} className="mb-4 text-lg text-[#0B0B0B]">
+                Add New Certificate
+              </Typography>
+
+              <ControlledInput
+                name="addCertificate.certificateName"
+                control={control}
+                label="Certificate Name"
+                labelClassName="text-[14px] text-[#0B0B0B]"
+                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
+              />
+
+              <View className="mt-4 flex-row justify-between">
+                <Button
+                  className="bg-gray-300 mr-2 flex-1 border border-[#0000001A]"
+                  onPress={hideModal}
+                >
+                  <ButtonText className="text-black">Cancel</ButtonText>
+                </Button>
+
+                <Button className="ml-2 flex-1 bg-primary" onPress={onPress}>
+                  <ButtonText className="text-white">Add</ButtonText>
+                </Button>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
+};
