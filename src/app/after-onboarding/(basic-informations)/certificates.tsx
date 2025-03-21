@@ -141,53 +141,13 @@ export default function Certificate() {
         </Button>
       </View>
 
-      <Modal
-        transparent
-        visible={isModalVisible}
-        animationType="fade"
-        onRequestClose={hideModal}
-      >
-        <TouchableWithoutFeedback>
-          <View className="flex-1 items-center justify-center bg-gray/30 px-3">
-            <TouchableWithoutFeedback>
-              <View className="w-full gap-4 rounded-2xl bg-white p-6 shadow-lg">
-                <Typography
-                  weight={600}
-                  className="mb-4 text-lg text-[#0B0B0B]"
-                >
-                  Add New Certificate
-                </Typography>
-
-                <ControlledInput
-                  name="addCertificate.certificateName"
-                  control={control}
-                  label="Certificate Name"
-                  labelClassName="text-[14px] text-[#0B0B0B]"
-                  inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
-                />
-
-                <View className="mt-4 flex-row justify-between">
-                  <Button
-                    className="bg-gray-300 mr-2 flex-1 border border-[#0000001A]"
-                    onPress={hideModal}
-                  >
-                    <ButtonText className="text-black">Cancel</ButtonText>
-                  </Button>
-
-                  <Button
-                    className="ml-2 flex-1 bg-primary"
-                    onPress={handleAddOrEditCertificate}
-                  >
-                    <ButtonText className="text-white">
-                      {editingIndex !== null ? 'Edit ' : 'Add'}
-                    </ButtonText>
-                  </Button>
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
+      <AddCertModal
+        control={control}
+        editingIndex={editingIndex}
+        hideModal={hideModal}
+        onPress={handleAddOrEditCertificate}
+        isModalVisible={isModalVisible}
+      />
     </SafeAreaView>
   );
 }
@@ -292,25 +252,27 @@ const DefaultView = ({
   );
 };
 
-export const AddCertModal = ({
-  showModal,
+const AddCertModal = ({
+  isModalVisible,
   hideModal,
   control,
   onPress,
+  editingIndex,
 }: {
   control: Control<CertificateFormData>;
+  editingIndex: null | number;
   hideModal: () => void;
-  onPress: () => void;
-  showModal: boolean;
+  isModalVisible: boolean;
+  onPress: () => Promise<void>;
 }) => {
   return (
     <Modal
       transparent
-      visible={showModal}
+      visible={isModalVisible}
       animationType="fade"
       onRequestClose={hideModal}
     >
-      <TouchableWithoutFeedback onPress={hideModal}>
+      <TouchableWithoutFeedback>
         <View className="flex-1 items-center justify-center bg-gray/30 px-3">
           <TouchableWithoutFeedback>
             <View className="w-full gap-4 rounded-2xl bg-white p-6 shadow-lg">
@@ -335,7 +297,9 @@ export const AddCertModal = ({
                 </Button>
 
                 <Button className="ml-2 flex-1 bg-primary" onPress={onPress}>
-                  <ButtonText className="text-white">Add</ButtonText>
+                  <ButtonText className="text-white">
+                    {editingIndex !== null ? 'Edit ' : 'Add'}
+                  </ButtonText>
                 </Button>
               </View>
             </View>
