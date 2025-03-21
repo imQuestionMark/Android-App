@@ -34,7 +34,7 @@ export const MonthHeader = ({
       </Pressable>
 
       <Pressable onPress={addYear} className={arrowbutton()}>
-        <Ionicons name="arrow-forward" size={24} color="black" />{' '}
+        <Ionicons name="arrow-forward" size={24} color="black" />
       </Pressable>
     </View>
   );
