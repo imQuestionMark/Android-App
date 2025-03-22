@@ -25,7 +25,6 @@ export default function TabLayout() {
           boxShadow: '0px -1px 4px 0px rgba(200,199,255,1);',
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10,
-          // position: 'absolute',
         },
         tabBarItemStyle: {
           flex: 1,

@@ -2,7 +2,14 @@ import { Stack } from 'expo-router';
 
 export default function ProtectedLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        contentStyle: {
+          backgroundColor: 'white',
+        },
+      }}
+    >
       <Stack.Screen name="(onboarding)" />
     </Stack>
   );
