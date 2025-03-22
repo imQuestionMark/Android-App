@@ -10,7 +10,7 @@ export const ProjectFormSchema = z.object({
       workTo: z.string({ required_error: 'To Year is required' }),
       projectDesc: z.string().min(1, 'Project Description is required'),
       probSolved: z.string().optional(),
-      skills: z.string().min(1, 'Select your skills'),
+      skills: z.string().optional(),
       projectLink: z.string().min(1, 'Project Link is required'),
     })
   ),
@@ -24,7 +24,7 @@ export const ProjectFormSchema = z.object({
       workTo: z.string({ required_error: 'To Year is required' }),
       projectDesc: z.string().min(1, 'Project Description is required'),
       probSolved: z.string().optional(),
-      skills: z.string().min(1, 'Select your skills'),
+      skills: z.string().optional(),
       projectLink: z.string().min(1, 'Project Link is required'),
     })
     .optional(),
