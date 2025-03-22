@@ -1,3 +1,4 @@
+import Feather from '@expo/vector-icons/Feather';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Image } from 'expo-image';
 import { Controller, useForm } from 'react-hook-form';
@@ -9,7 +10,11 @@ import {
   type BasicInfoFormData,
   BasicInfoFormSchema,
 } from '@/components/basic-informations/basic-info/schema';
-import { ControlledInput, Typography } from '@/components/ui';
+import { Button, ControlledInput, Typography } from '@/components/ui';
+
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
 export default function BasicInfo() {
   const {
     control,
@@ -28,12 +33,20 @@ export default function BasicInfo() {
   return (
     <KeyboardAwareScrollView contentContainerClassName="grow bg-white">
       <View className="justify-between gap-4 px-4">
-        <View className="items-center justify-center">
+        <View className="relative m-auto items-center justify-center ">
           <Image
             contentFit="contain"
             className="size-[100px]"
-            source={require('assets/basic-profile.svg')}
+            source={require('assets/basic-profile.png')}
+            placeholder={{ blurhash }}
+            cachePolicy="memory-disk"
           />
+          <Button
+            variant="icon"
+            className="absolute bottom-1 right-1 size-7 border-0 bg-[#E5E5FF]"
+          >
+            <Feather name="edit-2" size={14} color="#0400D1" />
+          </Button>
         </View>
         <ControlledInput
           //className="text-[14px]"

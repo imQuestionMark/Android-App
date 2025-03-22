@@ -155,7 +155,7 @@ const CreateWall = () => {
         <Button
           className=" h-[46px] flex-1 gap-3 bg-[#2800C9]"
           onPress={() => {
-            router.push({ pathname: '/after-onboarding/basic-info' });
+            router.push({ pathname: '/basic-info' });
           }}
         >
           <Ionicons name="add-circle-outline" size={24} color="white" />
