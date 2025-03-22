@@ -1,6 +1,6 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Check } from 'lucide-react-native';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -59,7 +59,9 @@ export default function LanguageSelection() {
             >
               {item}
             </ButtonText>
-            {selectedLanguage === item && <Check size={20} color="#0400D1" />}
+            {selectedLanguage === item && (
+              <Ionicons name="checkmark" size={20} color="#0400D1" />
+            )}
           </Button>
         )}
       />
