@@ -26,7 +26,7 @@ import {
   Typography,
 } from '@/components/ui';
 
-export default function Achivement() {
+export default function Achievement() {
   const { control } = useForm<AchivementFormData>({
     defaultValues: {
       achivement: [
