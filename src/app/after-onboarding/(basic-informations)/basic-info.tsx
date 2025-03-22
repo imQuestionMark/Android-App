@@ -38,7 +38,7 @@ export default function BasicInfo() {
           <Button className="bg-white">
             <ButtonText className="text-primary">Back</ButtonText>
           </Button>
-          <Typography weight={500} className="text-[#0B0B0B]">
+          <Typography weight={500} color="main">
             Basic Info
           </Typography>
           <Button className="bg-white">
