@@ -55,6 +55,20 @@ const BasicStackLayout = () => {
           title: 'Certification',
         }}
       />
+
+      <Stack.Screen
+        name="skills"
+        options={{
+          title: 'Skill',
+        }}
+      />
+
+      <Stack.Screen
+        name="achievement"
+        options={{
+          title: 'Achievements',
+        }}
+      />
     </Stack>
   );
 };
@@ -67,26 +81,25 @@ export const OnboardingHeader = ({
   navigation,
 }: NativeStackHeaderProps) => {
   const currentScreen = route.name as WallScreen;
-  const isLastStep = currentScreen === 'certificates';
-  const { currentStepIndex, screenOrder, setCurrentStep } = useWallStore();
+  const isLastStep = currentScreen === 'achievement';
+  const currentStepIndex = useWallStore((s) => s.currentStepIndex);
+  const setCurrentStep = useWallStore((s) => s.setCurrentStep);
+  const screenOrder = useWallStore((s) => s.screenOrder);
 
   const router = useRouter();
 
   useFocusEffect(
     useCallback(() => {
-      console.log('FIRING USEEFFECT++++');
+      console.log('FIRING USE FOCUS EFFECT++++');
       setCurrentStep(currentScreen);
     }, [currentScreen, setCurrentStep])
   );
 
-  const goBack = () => {
-    navigation.pop();
-  };
+  const goBack = useCallback(() => navigation.pop(), [navigation]);
 
-  const goNext = () => {
-    if (currentScreen === 'certificates') {
-      router.replace({ pathname: '/wall' });
-      return;
+  const goNext = useCallback(() => {
+    if (isLastStep) {
+      return router.replace({ pathname: '/wall' });
     }
 
     const { getNextScreen } = useWallStore.getState();
@@ -96,20 +109,13 @@ export const OnboardingHeader = ({
         pathname: `/(protected)/(after-onboarding)/(basic-informations)/${nextScreen}`,
       });
     }
-  };
-
-  console.log(
-    '💫💫💫 CurrentScreen',
-    currentScreen,
-    'Index:',
-    currentStepIndex
-  );
+  }, [currentScreen, isLastStep, router]);
 
   return (
     <SafeAreaView className="bg-white px-4" edges={['top']}>
       <View className="flex-row items-center justify-between">
         <Button variant="link" className="p-0" onPress={goBack}>
-          <ButtonText className="">Back</ButtonText>
+          <ButtonText>Back</ButtonText>
         </Button>
 
         <Typography weight={500} className="capitalize text-[#0B0B0B]">
@@ -117,7 +123,7 @@ export const OnboardingHeader = ({
         </Typography>
 
         <Button variant="link" className="p-0" onPress={goNext}>
-          <ButtonText className="">{isLastStep ? 'Done' : 'Next'}</ButtonText>
+          <ButtonText>{isLastStep ? 'Done' : 'Next'}</ButtonText>
         </Button>
       </View>
 
@@ -126,8 +132,8 @@ export const OnboardingHeader = ({
           return (
             <Step
               key={index}
-              active={index === currentStepIndex}
-              completed={index < currentStepIndex}
+              active={currentStepIndex === index}
+              completed={currentStepIndex > index}
             />
           );
         })}

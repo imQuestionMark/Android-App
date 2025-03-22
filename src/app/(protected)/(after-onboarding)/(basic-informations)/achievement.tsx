@@ -9,11 +9,11 @@ import {
   Keyboard,
   Modal,
   Pressable,
-  SafeAreaView,
   TextInput,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
   type AchivementFormData,
@@ -91,7 +91,7 @@ export default function Achievement() {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="flex-1 bg-white">
       {/* <KeyboardAwareScrollView contentContainerClassName="grow"> */}
 
       <View className="mt-7 gap-4 px-4">

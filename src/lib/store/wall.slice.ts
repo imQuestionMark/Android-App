@@ -1,12 +1,14 @@
 import { create } from 'zustand';
 
 export type WallScreen =
+  | 'achievement'
   | 'basic-info'
   | 'certificates'
   | 'education'
   | 'experience'
   | 'links'
-  | 'projects';
+  | 'projects'
+  | 'skills';
 
 type WallState = {
   currentStepIndex: number;
@@ -25,14 +27,12 @@ export const useWallStore = create<WallState>((set, get) => ({
     'experience',
     'projects',
     'certificates',
+    'skills',
+    'achievement',
   ],
   setCurrentStep: (screenName) => {
-    console.log('~ setCurrentStep:', screenName);
-
     const screenOrder = get().screenOrder;
     const index = screenOrder.indexOf(screenName);
-
-    console.log(' ~ index:', index);
 
     if (index !== -1) {
       set({ currentStepIndex: index });
