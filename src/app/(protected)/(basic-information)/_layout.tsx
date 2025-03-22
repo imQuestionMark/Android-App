@@ -106,7 +106,7 @@ export const OnboardingHeader = ({
     const nextScreen = getNextScreen(currentScreen);
     if (nextScreen) {
       router.push({
-        pathname: `/(protected)/(basic-informations)/${nextScreen}`,
+        pathname: `/(protected)/(basic-information)/${nextScreen}`,
       });
     }
   }, [currentScreen, isLastStep, router]);
