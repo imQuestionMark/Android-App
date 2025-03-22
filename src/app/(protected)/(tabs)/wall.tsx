@@ -3,7 +3,6 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, ButtonIcon, ButtonText, Typography } from '@/components/ui';
@@ -109,12 +108,8 @@ const ActiveWall = () => {
             </Typography>
           </View>
 
-          <View
-            //className={`rounded-md px-2 py-1 ${isActive ? 'bg-green-500' : 'bg-red-500'}`}
-            className="ml-auto rounded-[4px] bg-[#36B222] px-2 py-1"
-          >
+          <View className="ml-auto rounded-[4px] bg-[#36B222] px-2 py-1">
             <Typography weight={600} className="text-xs text-white">
-              {/* {isActive ? 'Active' : 'Inactive'} */}
               Active
             </Typography>
           </View>
@@ -157,8 +152,13 @@ const CreateWall = () => {
       </View>
 
       <View className=" flex-row gap-x-[10px]">
-        <Button className=" h-[46px] flex-1 gap-3 bg-[#2800C9] ">
-          <Ionicons name="add-circle-outline" size={24} color="black" />
+        <Button
+          className=" h-[46px] flex-1 gap-3 bg-[#2800C9]"
+          onPress={() => {
+            router.push({ pathname: '/after-onboarding/basic-info' });
+          }}
+        >
+          <Ionicons name="add-circle-outline" size={24} color="white" />
           <ButtonText weight={500} className="text-base text-white">
             Create New
           </ButtonText>
@@ -186,14 +186,14 @@ const RecentWall = () => {
         Recent Wall
       </Typography>
 
-      <FlatList
-        data={walls}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <WallCustomItem item={item} />}
-        ItemSeparatorComponent={() => (
-          <View className="bg-gray-300 h-px w-full" />
-        )}
-      />
+      {walls.map((item) => {
+        return (
+          <View key={item.id}>
+            <WallCustomItem item={item} />
+            <View className="bg-gray-300 h-px w-full" />
+          </View>
+        );
+      })}
     </View>
   );
 };

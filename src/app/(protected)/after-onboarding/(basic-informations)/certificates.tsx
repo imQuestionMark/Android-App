@@ -60,6 +60,42 @@ export default function Certificate() {
           {
             certificateName: '',
           },
+          {
+            certificateName: '',
+          },
+          {
+            certificateName: '',
+          },
+          {
+            certificateName: '',
+          },
+          {
+            certificateName: '',
+          },
+          {
+            certificateName: '',
+          },
+          {
+            certificateName: '',
+          },
+          {
+            certificateName: '',
+          },
+          {
+            certificateName: '',
+          },
+          {
+            certificateName: '',
+          },
+          {
+            certificateName: '',
+          },
+          {
+            certificateName: '',
+          },
+          {
+            certificateName: 'last',
+          },
         ],
       },
       mode: 'all',
@@ -124,8 +160,8 @@ export default function Certificate() {
   const hasCertificates = fields.length > 1;
 
   return (
-    <SafeAreaView className="grow bg-white">
-      <View className="mt-7 gap-4 px-4">
+    <SafeAreaView className="grow bg-white" edges={['bottom']}>
+      <View className="flex-1 gap-4 px-4">
         {hasCertificates ? (
           <CertificateList
             fields={fields}
@@ -143,16 +179,18 @@ export default function Certificate() {
           ))
         )}
 
-        <Button
-          className="mx-[47px] h-[48px] rounded-[12px] border-dashed px-[13.5px]"
-          variant="outline"
-          onPress={showModal}
-        >
-          <Ionicons name="add" size={24} color="black" />
-          <ButtonText weight={400} color="primary" className="text-[14px]">
-            Add Certificates
-          </ButtonText>
-        </Button>
+        <View className="grow-0">
+          <Button
+            className="mx-[47px] mb-8 h-[48px] rounded-[12px] border-dashed px-[13.5px]"
+            variant="outline"
+            onPress={showModal}
+          >
+            <Ionicons name="add" size={24} color="black" />
+            <ButtonText weight={400} color="primary" className="text-[14px]">
+              Add Certificates
+            </ButtonText>
+          </Button>
+        </View>
       </View>
 
       <AddCertModal
@@ -174,8 +212,8 @@ const CertificateList = ({
   return (
     <FlatList
       data={fields}
+      className="flex-1"
       keyExtractor={(item) => item.id}
-      // @TODO, Refactor
       renderItem={({ item, index }) => (
         <CertificateListItem
           index={index}
@@ -203,9 +241,9 @@ const CertificateListItem = ({
   index,
 }: CertificateItemProps) => {
   return (
-    <View className="shadow-gray-200 relative mb-1 rounded-lg bg-white px-4 py-3 shadow-lg">
+    <View className="shadow-gray-200 mb-1 rounded-lg bg-white px-4 py-3 shadow-lg">
       <View className="flex-row items-center justify-between">
-        <View className="flex-1">
+        <View className="grow ">
           <Typography weight={600} color="body" className="text-lg">
             {name}
           </Typography>

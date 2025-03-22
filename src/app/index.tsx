@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Redirect, Stack } from 'expo-router';
 
 const Index = () => {
   // const updateOnboarding = useBoundStore((state) => state.updateOnboarding);
@@ -10,7 +10,7 @@ const Index = () => {
   return (
     <>
       <Stack />
-      {/* <Redirect href={{ pathname: '/personal-details' }} /> */}
+      <Redirect href={{ pathname: '/wall' }} />
     </>
   );
 };

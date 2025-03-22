@@ -85,7 +85,7 @@ export default function RootLayout() {
       } finally {
         // @INFO - This is for development only
         if (__DEV__) {
-          router.navigate({ pathname: '/after-onboarding/certificates' });
+          // router.navigate({ pathname: '/after-onboarding/certificates' });
         }
         await SplashScreen.hideAsync();
       }

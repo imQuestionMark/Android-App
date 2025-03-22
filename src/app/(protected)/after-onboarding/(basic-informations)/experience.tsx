@@ -8,16 +8,16 @@ import {
   Keyboard,
   Modal,
   Pressable,
-  SafeAreaView,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Locations } from '@/components/basic-informations/education/components/location';
+import { Locations } from '@/components/basic-informations/experience/components/location';
 import {
-  type EducationFormData,
-  EducationFormSchema,
-} from '@/components/basic-informations/education/schema';
+  type ExperienceFormData,
+  ExperienceFormSchema,
+} from '@/components/basic-informations/experience/schema';
 import {
   Button,
   ButtonText,
@@ -25,64 +25,64 @@ import {
   Typography,
 } from '@/components/ui';
 
-export default function Education() {
-  const { control } = useForm<EducationFormData>({
+export default function Experience() {
+  const { control } = useForm<ExperienceFormData>({
     defaultValues: {
-      education: [
+      experience: [
         {
-          intName: '',
-          FOS: '',
-          startyear: '',
-          endyear: '',
-          GPA: '',
+          currentWorking: '',
+          companyName: '',
+          role: '',
+          joinDate: '',
+          LeaveDate: '',
           locations: '',
         },
       ],
     },
-    resolver: zodResolver(EducationFormSchema),
+    resolver: zodResolver(ExperienceFormSchema),
   });
 
   const { fields, append, remove, update } = useFieldArray({
     control,
-    name: 'education',
+    name: 'experience',
   });
 
   const [showModal, setShowModal] = useState(false);
   const [isFlatListView, setIsFlatListView] = useState(false);
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
 
-  // Modal form for adding new education
+  // Modal form for adding new experience
   const modalForm = useForm({
     defaultValues: {
-      addEducation: {
-        intName: '',
-        FOS: '',
-        startyear: '',
-        endyear: '',
-        GPA: '',
+      addExperience: {
+        currentWorking: '',
+        companyName: '',
+        role: '',
+        joinDate: '',
+        LeaveDate: '',
         locations: '',
       },
     },
   });
 
-  const handleAddEducation = () => {
+  const handleAddExperience = () => {
     const modalData = modalForm.getValues();
-    const educationData = modalData.addEducation || modalData;
+    const experienceData = modalData.addExperience || modalData;
     if (
-      !educationData.intName ||
-      !educationData.startyear ||
-      !educationData.endyear
+      !experienceData.currentWorking ||
+      !experienceData.joinDate ||
+      !experienceData.LeaveDate
     ) {
       return;
     }
 
     const formattedData = {
-      intName: educationData.intName,
-      FOS: educationData.FOS,
-      startyear: educationData.startyear,
-      endyear: educationData.endyear,
-      GPA: educationData.GPA || '',
-      locations: educationData.locations,
+      currentWorking: experienceData.currentWorking,
+      companyName: experienceData.companyName,
+      joinDate: experienceData.joinDate,
+      LeaveDate: experienceData.LeaveDate,
+      role: experienceData.role || '',
+      locations: experienceData.locations,
     };
 
     if (editingIndex !== null) {
@@ -98,65 +98,49 @@ export default function Education() {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="grow bg-white" edges={['bottom']}>
       {/* <KeyboardAwareScrollView contentContainerClassName="grow"> */}
-      <View className="mt-7 flex-row justify-between">
-        <Button className="bg-white">
-          <ButtonText className="text-primary">Next</ButtonText>
-        </Button>
-        <Typography weight={500} className="text-[#0B0B0B]">
-          Education
-        </Typography>
-        <Button className="bg-white">
-          <ButtonText className="text-primary">Back</ButtonText>
-        </Button>
-      </View>
 
-      <View className="mt-7 gap-4 px-4">
+      <View className=" gap-4 px-4">
         {!isFlatListView ? (
           fields.map((field, index) => (
             <View key={field.id} className="gap-4">
               <ControlledInput
-                name={`education.${index}.intName`}
+                name={`experience.${index}.companyName`}
                 control={control}
-                label="Institution Name"
-                labelClassName="text-[14px] text-[#0B0B0B]"
-                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8 "
-              />
-              <ControlledInput
-                name={`education.${index}.FOS`}
-                control={control}
-                label="Field of Study"
+                label="Company Name"
                 labelClassName="text-[14px] text-[#0B0B0B]"
                 inputClassName="border border-[#0000001A] pr-10 h-[48px]rounded-8"
+              />
+
+              <ControlledInput
+                name={`experience.${index}.role`}
+                control={control}
+                label="Job/Role Title"
+                labelClassName="text-[14px] text-[#0B0B0B]"
+                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8"
               />
               <View className="flex-row gap-x-4">
                 <View className="flex-1">
                   <ControlledInput
-                    name={`education.${index}.startyear`}
+                    name={`experience.${index}.joinDate`}
                     control={control}
-                    label="Start Year"
+                    label="Joining Date"
                     labelClassName="text-[14px] text-[#0B0B0B]"
                     inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8"
                   />
                 </View>
                 <View className="flex-1">
                   <ControlledInput
-                    name={`education.${index}.endyear`}
+                    name={`experience.${index}.LeaveDate`}
                     control={control}
-                    label="End Year"
+                    label="Leaving"
                     labelClassName="text-[14px] text-[#0B0B0B]"
                     inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8"
                   />
                 </View>
               </View>
-              <ControlledInput
-                name={`education.${index}.GPA`}
-                control={control}
-                label="GPA/Grade"
-                labelClassName="text-[14px] text-[#0B0B0B]"
-                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8"
-              />
+
               <Locations control={control} />
             </View>
           ))
@@ -171,10 +155,10 @@ export default function Education() {
                     {/* Left Section: Institute Name & Year */}
                     <View className="flex-1">
                       <Typography weight={600} color="body" className="text-lg">
-                        {item.intName}
+                        {item.currentWorking}
                       </Typography>
                       <Typography color="body" weight={400} type="subtext">
-                        {item.startyear} - {item.endyear}
+                        {item.joinDate} - {item.LeaveDate}
                       </Typography>
                     </View>
 
@@ -184,12 +168,12 @@ export default function Education() {
                       <Pressable
                         onPress={() => {
                           modalForm.reset({
-                            addEducation: {
-                              intName: item.intName || '',
-                              FOS: item.FOS || '',
-                              startyear: item.startyear || '',
-                              endyear: item.endyear || '',
-                              GPA: item.GPA || '',
+                            addExperience: {
+                              currentWorking: item.currentWorking || '',
+                              companyName: item.companyName || '',
+                              joinDate: item.joinDate || '',
+                              LeaveDate: item.LeaveDate || '',
+                              role: item.role || '',
                               locations: item.locations || '',
                             },
                           });
@@ -235,13 +219,13 @@ export default function Education() {
         >
           <Image source={require('assets/add.svg')} className="size-[24px]" />
           <ButtonText className="font-poppins-regular text-[14px] text-primary">
-            Add Education
+            Add Experience
           </ButtonText>
         </Button>
       </View>
       {/* </KeyboardAwareScrollView> */}
 
-      {/* Modal for Adding New Education */}
+      {/* Modal for Adding New Experience */}
       <Modal
         transparent
         visible={showModal}
@@ -253,21 +237,21 @@ export default function Education() {
           <View className="flex-1 items-center justify-center px-3">
             <View className="w-full gap-4 rounded-2xl bg-white p-6 shadow-lg">
               <Typography weight={600} className="mb-4 text-lg text-[#0B0B0B]">
-                Add New Education
+                Add New Experience
               </Typography>
 
               {/* Modal Form */}
               <ControlledInput
-                name="addEducation.intName"
+                name="addExperience.currentWorking"
                 control={modalForm.control}
-                label="Institution Name"
+                label="Company Name"
                 labelClassName="text-[14px] text-[#0B0B0B]"
                 inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
               />
               <ControlledInput
-                name="addEducation.FOS"
+                name="addExperience.companyName"
                 control={modalForm.control}
-                label="Field of Study"
+                label="Job/Role Title"
                 labelClassName="text-[14px] text-[#0B0B0B]"
                 inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
               />
@@ -275,30 +259,23 @@ export default function Education() {
               <View className="flex-row gap-x-4">
                 <View className="flex-1">
                   <ControlledInput
-                    name="addEducation.startyear"
+                    name="addExperience.joinDate"
                     control={modalForm.control}
-                    label="Start Year"
+                    label="Joining Date"
                     labelClassName="text-[14px] text-[#0B0B0B]"
                     inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
                   />
                 </View>
                 <View className="flex-1">
                   <ControlledInput
-                    name="addEducation.endyear"
+                    name="addExperience.LeaveDate"
                     control={modalForm.control}
-                    label="End Year"
+                    label="Leaving Date"
                     labelClassName="text-[14px] text-[#0B0B0B]"
                     inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
                   />
                 </View>
               </View>
-              <ControlledInput
-                name="addEducation.GPA"
-                control={modalForm.control}
-                label="GPA/Grade"
-                labelClassName="text-[14px] text-[#0B0B0B]"
-                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
-              />
 
               {/* <Locations control={modalForm.control} /> */}
 
@@ -315,7 +292,7 @@ export default function Education() {
                 {/* Save Button */}
                 <Button
                   className="ml-2 flex-1 bg-primary"
-                  onPress={modalForm.handleSubmit(handleAddEducation)}
+                  onPress={modalForm.handleSubmit(handleAddExperience)}
                 >
                   <ButtonText className="text-white">Add</ButtonText>
                 </Button>

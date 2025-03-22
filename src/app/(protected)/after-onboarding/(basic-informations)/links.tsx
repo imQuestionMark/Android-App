@@ -1,17 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Image } from 'expo-image';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import {
   Alert,
   Keyboard,
   Modal,
   Pressable,
-  SafeAreaView,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
   type LinksFormData,
@@ -55,22 +55,9 @@ export default function Links() {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="grow bg-white" edges={['bottom']}>
       <KeyboardAwareScrollView contentContainerClassName="grow">
-        <View className="mt-7 flex-row justify-between">
-          <Button className="bg-white">
-            <ButtonText className="text-primary">Back</ButtonText>
-          </Button>
-          <Typography weight={500} className="text-[#0B0B0B]">
-            Links
-          </Typography>
-
-          <Button className="bg-white">
-            <ButtonText className="text-primary">Next</ButtonText>
-          </Button>
-        </View>
-
-        <View className="mt-7 justify-between gap-4 px-4">
+        <View className="justify-between gap-4 px-4">
           {fields.map((field, index) => (
             <View key={field.id} className="relative w-full">
               <ControlledInput
