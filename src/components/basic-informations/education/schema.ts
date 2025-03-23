@@ -11,10 +11,11 @@ export const EducationFormSchema = z.object({
       locations: z.string().min(1, 'Select your current location'),
     })
   ),
-  locations: z.string().min(1, 'Select your current location'),
   addEducation: z
     .object({
-      intName: z.string().min(1, 'Institution Name is required'),
+      intName: z
+        .string({ required_error: 'Name is required' })
+        .min(1, 'Institution Name should be greated than 3 characters.'),
       FOS: z.string().min(1, 'Field of Study is required'),
       GPA: z.string().optional(),
       startyear: z.string({ required_error: 'Start Year is required' }),

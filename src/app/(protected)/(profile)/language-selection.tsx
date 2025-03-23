@@ -27,7 +27,7 @@ export default function LanguageSelection() {
   return (
     <SafeAreaView className="flex-1 bg-white px-[16px] pt-4">
       {/* Header */}
-      <View className="mb-4 flex-row items-center p-[16px]">
+      <View className="mb-4 flex-row  p-[16px]">
         <Typography color="main" weight={600} className="ml-3 text-[20px]">
           Language
         </Typography>
@@ -38,7 +38,7 @@ export default function LanguageSelection() {
         <Typography weight={700} className="mb-[16px] text-[22px]">
           Please select
         </Typography>
-        <View className="mb-[16px] w-full self-center border-b border-[#979AA0]" />
+        <View className="mb-[16px] w-full  border-b border-[#979AA0]" />
       </View>
 
       <FlatList
@@ -49,7 +49,7 @@ export default function LanguageSelection() {
           <Button
             variant="ghost"
             onPress={() => setSelectedLanguage(item)}
-            className="gap-x-4"
+            className="justify-between"
           >
             <ButtonText
               weight={selectedLanguage === item ? 700 : 600}
@@ -71,12 +71,12 @@ export default function LanguageSelection() {
         <Button
           className="w-[223px]"
           disabled={!selectedLanguage}
-          onPress={async () => {
+          onPress={() => {
             console.log(' Navigating to Language Selection...');
             console.log(' Current selected language:', selectedLanguage);
 
             router.replace({
-              pathname: '/(profile)/general-preferrence',
+              pathname: '/(protected)/(profile)/general-preference',
               params: { selected: selectedLanguage },
             });
           }}

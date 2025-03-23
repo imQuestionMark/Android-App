@@ -55,12 +55,13 @@ export default function GeneralPreference() {
 
               <Button
                 variant="icon"
+                className="border-0"
                 onPress={() => {
                   console.log('Navigating to Language Selection...');
                   console.log('Current selected language:', selectedLanguage);
 
                   router.push({
-                    pathname: '/(profile)/language-selection',
+                    pathname: '/(protected)/(profile)/language-selection',
                     params: { selected: selectedLanguage },
                   });
                 }}

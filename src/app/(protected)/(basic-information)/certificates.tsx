@@ -214,6 +214,9 @@ const CertificateList = ({
       data={fields}
       className="flex-1"
       keyExtractor={(item) => item.id}
+      showsVerticalScrollIndicator={false}
+      initialNumToRender={10}
+      maxToRenderPerBatch={10}
       renderItem={({ item, index }) => (
         <CertificateListItem
           index={index}

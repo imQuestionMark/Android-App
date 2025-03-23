@@ -1,5 +1,5 @@
 import React from 'react';
-import { useController } from 'react-hook-form';
+import { type Control, type Path, useController } from 'react-hook-form';
 import { View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
@@ -8,16 +8,19 @@ import { styles } from '@/components/basic-informations/basic-info/styles';
 import { locations } from '@/components/professional/constants';
 import { ErrorMessage, Typography } from '@/components/ui';
 
-import { type EducationInfoControl } from '../types';
+import { type EducationFormData } from '../schema';
 
-type LocationProps = EducationInfoControl & {};
+type ControlledLocationProps = {
+  control: Control<EducationFormData>;
+  name: Path<EducationFormData>;
+};
 
-export const Locations = ({ control }: LocationProps) => {
+export const Locations = ({ control, name }: ControlledLocationProps) => {
   const {
     field: { onChange, value },
     fieldState: { error },
   } = useController({
-    name: 'locations',
+    name,
     control,
   });
 

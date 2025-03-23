@@ -6,7 +6,6 @@ import {
   Alert,
   Keyboard,
   Modal,
-  Pressable,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -25,12 +24,13 @@ import {
 } from '@/components/ui';
 
 export default function Links() {
-  const { control } = useForm<LinksFormData>({
+  const { control, resetField, getValues } = useForm<LinksFormData>({
     defaultValues: {
       links: [
         { label: 'LinkedIn', url: '' },
         { label: 'GitHub', url: '' },
       ],
+      newlinks: '',
     },
     resolver: zodResolver(LinksFormSchema),
   });
@@ -40,17 +40,22 @@ export default function Links() {
     name: 'links',
   });
 
-  const [newLabel, setNewLabel] = useState('');
   const [showModal, setShowModal] = useState(false);
 
   const handleAddLink = () => {
+    const newLabel = getValues('newlinks');
     if (!newLabel.trim()) {
       Alert.alert('Error', 'Please enter a label for the new link.');
       return;
     }
 
     append({ label: newLabel, url: '' });
-    setNewLabel('');
+    setShowModal(false);
+    resetField('newlinks');
+  };
+
+  const handleCancel = () => {
+    resetField('newlinks');
     setShowModal(false);
   };
 
@@ -68,22 +73,21 @@ export default function Links() {
                 labelClassName="text-[14px] text-[#0B0B0B]"
                 inputClassName="border border-[#0000001A] pr-10"
               />
-              {/* Show delete button only when input is focused */}
               {index >= 2 && (
-                <Pressable
+                <Button
+                  variant="icon"
                   onPress={() => remove(index)}
-                  className="absolute right-3 top-2/3 -translate-y-1/2 p-2"
+                  className="absolute right-3 top-2/3 -translate-y-1/2 border-0 p-2"
                 >
                   <Image
                     source={require('assets/delete.svg')}
                     className="size-[20px]"
                   />
-                </Pressable>
+                </Button>
               )}
             </View>
           ))}
 
-          {/* Add Button - Opens Modal */}
           <Button
             className="mx-[47px] h-[48px] rounded-[12px] border-dashed px-[13.5px]"
             variant="outline"
@@ -97,14 +101,12 @@ export default function Links() {
         </View>
       </KeyboardAwareScrollView>
 
-      {/* Modal for Adding New Link */}
       <Modal
         transparent
         visible={showModal}
         animationType="fade"
         onRequestClose={() => setShowModal(false)}
       >
-        {/* Blur Background */}
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View className="flex-1 items-center justify-center px-6">
             <View className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg">
@@ -112,27 +114,21 @@ export default function Links() {
                 Add New Link
               </Typography>
 
-              {/* Input for New Link */}
               <ControlledInput
                 name="newlinks"
                 control={control}
-                value={newLabel}
-                onChangeText={setNewLabel}
                 placeholder="Enter label (e.g., Portfolio, Twitter)"
                 inputClassName="border border-[#0000001A]"
               />
 
-              {/* Buttons Row */}
               <View className="mt-4 flex-row justify-between">
-                {/* Cancel Button */}
                 <Button
                   className="bg-gray-300 mr-2 flex-1 border border-[#0000001A]"
-                  onPress={() => setShowModal(false)}
+                  onPress={handleCancel}
                 >
                   <ButtonText className="text-black">Cancel</ButtonText>
                 </Button>
 
-                {/* Save Button */}
                 <Button
                   className="ml-2 flex-1 bg-primary"
                   onPress={handleAddLink}

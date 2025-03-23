@@ -69,7 +69,7 @@ export default function AccountDetails() {
             <Image
               contentFit="contain"
               className="size-[100px]"
-              source={require('assets/basic-profile.svg')}
+              source={require('assets/basic-profile.png')}
             />
           </View>
           <View className="items-center gap-[8px]">

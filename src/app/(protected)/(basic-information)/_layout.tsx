@@ -75,27 +75,35 @@ const BasicStackLayout = () => {
 
 export default BasicStackLayout;
 
-export const OnboardingHeader = ({
-  route,
-  options,
-  navigation,
-}: NativeStackHeaderProps) => {
+const BASE_PATH = '(protected)/(basic-information)';
+
+const OnboardingHeader = ({ route, options }: NativeStackHeaderProps) => {
   const currentScreen = route.name as WallScreen;
   const isLastStep = currentScreen === 'achievement';
   const currentStepIndex = useWallStore((s) => s.currentStepIndex);
   const setCurrentStep = useWallStore((s) => s.setCurrentStep);
   const screenOrder = useWallStore((s) => s.screenOrder);
+  const getPreviousScreen = useWallStore((s) => s.getPreviousScreen);
 
   const router = useRouter();
 
   useFocusEffect(
     useCallback(() => {
-      console.log('FIRING USE FOCUS EFFECT++++');
+      console.log('🏹 FIRING USE FOCUS EFFECT++++');
       setCurrentStep(currentScreen);
     }, [currentScreen, setCurrentStep])
   );
 
-  const goBack = useCallback(() => navigation.pop(), [navigation]);
+  const goBack = () => {
+    const prev = getPreviousScreen(currentScreen);
+    if (prev) {
+      console.log({ prevScreen: prev });
+      router.push({ pathname: `/${BASE_PATH}/${prev}` });
+    } else {
+      console.log('No previous screen found, redirecting to wall');
+      router.replace({ pathname: '/wall' });
+    }
+  };
 
   const goNext = useCallback(() => {
     if (isLastStep) {

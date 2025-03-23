@@ -6,44 +6,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import GradientView from '@/components/onboarding/gradient-view';
 import { Typography } from '@/components/ui';
 
-const ProfileMenuItem = ({
-  title,
-  description,
-  href,
-}: {
-  description: string;
-  href: string;
-  title: string;
-}) => {
-  const router = useRouter();
-
-  const handlePress = () => {
-    router.push({ pathname: href });
-  };
-
-  return (
-    <Pressable onPress={handlePress}>
-      <View className="mb-7 rounded-[15px] bg-white px-7 py-[20px]">
-        <View className="flex-row items-center justify-between">
-          <View className="flex-1 gap-[3px]">
-            <Typography weight={600} color="main" className="text-[18px]">
-              {title}
-            </Typography>
-            <Typography weight={400} className="text-[14px] text-[#596574]">
-              {description}
-            </Typography>
-          </View>
-          <Image
-            contentFit="contain"
-            source={require('assets/profile-push-arrow.svg')}
-            className="mt-[-18px] size-[24px]"
-          />
-        </View>
-      </View>
-    </Pressable>
-  );
-};
-
 const menuItems = [
   {
     id: 'account',
@@ -90,10 +52,58 @@ const menuItems = [
   },
 ];
 
+//  extract the href into a type from all menutitems
+type ProfileMenuItem =
+  | 'account-details'
+  | 'activity'
+  | 'data-privacy'
+  | 'general-preference'
+  | 'notifications'
+  | 'policy'
+  | 'support';
+
+const ProfileMenuItem = ({
+  title,
+  description,
+  href,
+}: {
+  description: string;
+  href: ProfileMenuItem;
+  title: string;
+}) => {
+  const router = useRouter();
+
+  const handlePress = () => {
+    router.push({ pathname: href });
+  };
+
+  return (
+    <Pressable onPress={handlePress}>
+      <View className="mb-7 rounded-[15px] bg-white px-7 py-[20px]">
+        <View className="flex-row items-center justify-between">
+          <View className="flex-1 gap-[3px]">
+            <Typography weight={600} color="main" className="text-[18px]">
+              {title}
+            </Typography>
+            <Typography weight={400} className="text-[14px] text-[#596574]">
+              {description}
+            </Typography>
+          </View>
+          <Image
+            contentFit="contain"
+            source={require('assets/profile-push-arrow.svg')}
+            className="mt-[-18px] size-[24px]"
+          />
+        </View>
+      </View>
+    </Pressable>
+  );
+};
+
 export default function ProfileMain() {
   return (
-    <GradientView>
-      <KeyboardAwareScrollView contentContainerClassName="grow justify-center gap-16 px-[16px]">
+    <GradientView edges={['top', 'left', 'right']}>
+      <KeyboardAwareScrollView contentContainerClassName="grow justify-center bg-red-400 gap-16 px-[16px]">
         <View className="justify-between gap-3">
           <View>
             <Typography weight={600} color="main" className="text-[24px]">
@@ -105,7 +115,7 @@ export default function ProfileMain() {
             <Image
               contentFit="contain"
               className="size-[100px]"
-              source={require('assets/basic-profile.svg')}
+              source={require('assets/basic-profile.png')}
             />
           </View>
 

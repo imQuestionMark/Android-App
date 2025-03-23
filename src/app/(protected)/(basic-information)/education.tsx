@@ -26,11 +26,35 @@ import {
 } from '@/components/ui';
 
 export default function Education() {
-  const { control } = useForm<EducationFormData>({
+  const {
+    control,
+    getValues,
+    reset,
+    resetField,
+    trigger,
+    handleSubmit,
+    formState,
+  } = useForm<EducationFormData>({
     defaultValues: {
       education: [
         {
-          intName: '',
+          intName: '2',
+          FOS: '',
+          startyear: '',
+          endyear: '',
+          GPA: '',
+          locations: '',
+        },
+        {
+          intName: '1',
+          FOS: '',
+          startyear: '',
+          endyear: '',
+          GPA: '',
+          locations: '',
+        },
+        {
+          intName: '3',
           FOS: '',
           startyear: '',
           endyear: '',
@@ -48,59 +72,29 @@ export default function Education() {
   });
 
   const [showModal, setShowModal] = useState(false);
-  const [isFlatListView, setIsFlatListView] = useState(false);
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
 
-  // Modal form for adding new education
-  const modalForm = useForm({
-    defaultValues: {
-      addEducation: {
-        intName: '',
-        FOS: '',
-        startyear: '',
-        endyear: '',
-        GPA: '',
-        locations: '',
-      },
-    },
-  });
-
-  const handleAddEducation = () => {
-    const modalData = modalForm.getValues();
-    const educationData = modalData.addEducation || modalData;
-    if (
-      !educationData.intName ||
-      !educationData.startyear ||
-      !educationData.endyear
-    ) {
-      return;
-    }
-
-    const formattedData = {
-      intName: educationData.intName,
-      FOS: educationData.FOS,
-      startyear: educationData.startyear,
-      endyear: educationData.endyear,
-      GPA: educationData.GPA || '',
-      locations: educationData.locations,
-    };
+  const handleAddEducation = async () => {
+    const educationData = getValues('addEducation');
+    const isValid = await trigger('addEducation');
+    console.log({ educationData });
+    if (educationData === undefined || !isValid) return;
 
     if (editingIndex !== null) {
-      update(editingIndex, formattedData);
+      update(editingIndex, educationData);
       setEditingIndex(null);
     } else {
-      append(formattedData);
-      setIsFlatListView(true);
+      append(educationData);
     }
 
-    setShowModal(false);
-    modalForm.reset();
+    // setShowModal(false);
+    // reset();
   };
+
+  const isFlatListView = fields.length > 1;
 
   return (
     <SafeAreaView className="grow bg-white" edges={['bottom']}>
-      {/* <KeyboardAwareScrollView contentContainerClassName="grow"> */}
-
       <View className=" gap-4 px-4">
         {!isFlatListView ? (
           fields.map((field, index) => (
@@ -146,7 +140,10 @@ export default function Education() {
                 labelClassName="text-[14px] text-[#0B0B0B]"
                 inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8"
               />
-              <Locations control={control} />
+              <Locations
+                control={control}
+                name={`education.${index}.locations`}
+              />
             </View>
           ))
         ) : (
@@ -172,7 +169,7 @@ export default function Education() {
                       {/* Edit Button */}
                       <Pressable
                         onPress={() => {
-                          modalForm.reset({
+                          reset({
                             addEducation: {
                               intName: item.intName || '',
                               FOS: item.FOS || '',
@@ -248,14 +245,14 @@ export default function Education() {
               {/* Modal Form */}
               <ControlledInput
                 name="addEducation.intName"
-                control={modalForm.control}
+                control={control}
                 label="Institution Name"
                 labelClassName="text-[14px] text-[#0B0B0B]"
                 inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
               />
               <ControlledInput
                 name="addEducation.FOS"
-                control={modalForm.control}
+                control={control}
                 label="Field of Study"
                 labelClassName="text-[14px] text-[#0B0B0B]"
                 inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
@@ -265,7 +262,7 @@ export default function Education() {
                 <View className="flex-1">
                   <ControlledInput
                     name="addEducation.startyear"
-                    control={modalForm.control}
+                    control={control}
                     label="Start Year"
                     labelClassName="text-[14px] text-[#0B0B0B]"
                     inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
@@ -274,7 +271,7 @@ export default function Education() {
                 <View className="flex-1">
                   <ControlledInput
                     name="addEducation.endyear"
-                    control={modalForm.control}
+                    control={control}
                     label="End Year"
                     labelClassName="text-[14px] text-[#0B0B0B]"
                     inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
@@ -283,13 +280,13 @@ export default function Education() {
               </View>
               <ControlledInput
                 name="addEducation.GPA"
-                control={modalForm.control}
+                control={control}
                 label="GPA/Grade"
                 labelClassName="text-[14px] text-[#0B0B0B]"
                 inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
               />
 
-              {/* <Locations control={modalForm.control} /> */}
+              <Locations control={control} name="addEducation.locations" />
 
               {/* Buttons Row */}
               <View className="mt-4 flex-row justify-between">
@@ -304,7 +301,7 @@ export default function Education() {
                 {/* Save Button */}
                 <Button
                   className="ml-2 flex-1 bg-primary"
-                  onPress={modalForm.handleSubmit(handleAddEducation)}
+                  onPress={handleAddEducation}
                 >
                   <ButtonText className="text-white">Add</ButtonText>
                 </Button>
