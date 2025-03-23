@@ -22,7 +22,7 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: 'white',
           borderTopWidth: 0,
-          boxShadow: '0px -1px 4px 0px rgba(200,199,255,1);',
+          boxShadow: '0px -1px 4px 0px rgba(200,199,255,1)',
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10,
         },
@@ -70,7 +70,7 @@ export default function TabLayout() {
               <View
                 className="flex size-[90px] items-center justify-center rounded-full bg-white p-2"
                 style={{
-                  boxShadow: '0px -1px 4px 1px rgba(200,199,255,1);',
+                  boxShadow: '0px -1px 4px 1px rgba(200,199,255,1)',
                 }}
               >
                 <View className="size-full items-center justify-center rounded-full  bg-primary ">
