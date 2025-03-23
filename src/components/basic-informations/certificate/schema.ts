@@ -11,6 +11,7 @@ const ACCEPTED_IMAGE_TYPES = [
 const CertBaseSchema = z.object({
   certificateName: z
     .string({ required_error: 'Certificate Name is required' })
+    .trim()
     .min(3, 'Certificate Name should be atleast 3 characters.'),
   // issueDate: z.date({ required_error: 'Issue Date is required' }),
   // certificate: z

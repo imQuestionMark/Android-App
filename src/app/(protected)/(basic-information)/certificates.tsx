@@ -1,6 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
+// import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import {
   type Control,
   type FieldArrayWithId,
@@ -48,20 +49,14 @@ type ModalProps = {
   onUpsert: () => Promise<void>;
 };
 
-export default function Certificate() {
+const Certificate = () => {
   const { control, getValues, resetField, setValue, trigger } =
     useForm<CertificateFormData>({
       resolver: zodResolver(CertificateFormSchema),
       defaultValues: {
         certificate: [
           {
-            certificateName: '',
-          },
-          {
-            certificateName: '',
-          },
-          {
-            certificateName: '',
+            certificateName: 'first',
           },
           {
             certificateName: '',
@@ -97,6 +92,9 @@ export default function Certificate() {
             certificateName: 'last',
           },
         ],
+        addCertificate: {
+          certificateName: '',
+        },
       },
       mode: 'all',
     });
@@ -109,23 +107,24 @@ export default function Certificate() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
 
-  const hideModal = () => {
+  const hasCertificates = fields.length > 1;
+
+  const hideModal = useCallback(() => {
     setIsModalVisible(false);
     setEditingIndex(null);
     resetField('addCertificate');
-  };
-  const showModal = () => setIsModalVisible(true);
+  }, [resetField]);
+
+  const showModal = useCallback(() => setIsModalVisible(true), []);
 
   const handleAddOrEditCertificate = async () => {
     const isValid = await trigger('addCertificate.certificateName');
+    if (!isValid) return;
 
-    if (!isValid)
-      return console.log(
-        '🚀🚀🚀 ~ handleAddOrEditCertificate ~ isValid:',
-        isValid
-      );
+    const value = getValues('addCertificate');
+    if (!value) return;
 
-    const { certificateName } = getValues().addCertificate;
+    const certificateName = value.certificateName;
     if (!certificateName) return;
 
     const formattedData = {
@@ -156,8 +155,6 @@ export default function Certificate() {
   const handleDelete = (index: number) => {
     remove(index);
   };
-
-  const hasCertificates = fields.length > 1;
 
   return (
     <SafeAreaView className="grow bg-white" edges={['bottom']}>
@@ -200,9 +197,11 @@ export default function Certificate() {
         onUpsert={handleAddOrEditCertificate}
         isModalVisible={isModalVisible}
       />
+
+      {/* <DevTool control={control} placement="bottom-left" /> */}
     </SafeAreaView>
   );
-}
+};
 
 const CertificateList = ({
   fields,
@@ -215,8 +214,14 @@ const CertificateList = ({
       className="flex-1"
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}
-      initialNumToRender={10}
-      maxToRenderPerBatch={10}
+      maintainVisibleContentPosition={{
+        minIndexForVisible: 0,
+      }}
+      getItemLayout={(_, index) => ({
+        length: 75,
+        offset: 75 * index,
+        index,
+      })}
       renderItem={({ item, index }) => (
         <CertificateListItem
           index={index}
@@ -230,9 +235,7 @@ const CertificateList = ({
           onDelete={() => onDeletePress(index)}
         />
       )}
-      ItemSeparatorComponent={() => (
-        <View className="mb-2 h-px w-full shadow-md" />
-      )}
+      ItemSeparatorComponent={() => <View className="mb-2 h-px w-full" />}
     />
   );
 };
@@ -244,7 +247,13 @@ const CertificateListItem = ({
   index,
 }: CertificateItemProps) => {
   return (
-    <View className="shadow-gray-200 mb-1 rounded-lg bg-white px-4 py-3 shadow-lg">
+    <View
+      className="border-1 mb-1 ml-4 rounded-lg border-black bg-white px-4 py-3 "
+      // style={{
+      //   boxShadow:
+      //     ' rgba(240, 46, 170, 0.4) -5px 5px, rgba(240, 46, 170, 0.3) -10px 10px, rgba(240, 46, 170, 0.2) -15px 15px, rgba(240, 46, 170, 0.1) -20px 20px, rgba(240, 46, 170, 0.05) -25px 25px',
+      // }}
+    >
       <View className="flex-row items-center justify-between">
         <View className="grow ">
           <Typography weight={600} color="body" className="text-lg">
@@ -271,7 +280,7 @@ const CertificateListItem = ({
   );
 };
 
-const DefaultView = ({ control, fieldID, index }: DefaultViewProps) => {
+const DefaultView = memo(({ control, fieldID, index }: DefaultViewProps) => {
   return (
     <View key={fieldID} className="gap-4">
       <ControlledInput
@@ -296,56 +305,63 @@ const DefaultView = ({ control, fieldID, index }: DefaultViewProps) => {
       </View>
     </View>
   );
-};
+});
 
-const AddCertModal = ({
-  isModalVisible,
-  hideModal,
-  control,
-  onUpsert,
-  editingIndex,
-}: ModalProps) => {
-  return (
-    <Modal
-      transparent
-      visible={isModalVisible}
-      animationType="fade"
-      onRequestClose={hideModal}
-    >
-      <TouchableWithoutFeedback onPress={hideModal}>
-        <View className="flex-1 items-center justify-center bg-gray/30 px-3">
-          <TouchableWithoutFeedback>
-            <View className="w-full gap-4 rounded-2xl bg-white p-6 shadow-lg">
-              <Typography weight={600} className="mb-4 text-lg text-[#0B0B0B]">
-                Add New Certificate
-              </Typography>
-
-              <ControlledInput
-                name="addCertificate.certificateName"
-                control={control}
-                label="Certificate Name"
-                labelClassName="text-[14px] text-[#0B0B0B]"
-                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
-              />
-
-              <View className="mt-4 flex-row justify-between">
-                <Button
-                  className="bg-gray-300 mr-2 flex-1 border border-[#0000001A]"
-                  onPress={hideModal}
+const AddCertModal = memo(
+  ({
+    isModalVisible,
+    hideModal,
+    control,
+    onUpsert,
+    editingIndex,
+  }: ModalProps) => {
+    return (
+      <Modal
+        transparent
+        visible={isModalVisible}
+        animationType="fade"
+        onRequestClose={hideModal}
+      >
+        <TouchableWithoutFeedback onPress={hideModal}>
+          <View className="flex-1 items-center justify-center bg-gray/30 px-3">
+            <TouchableWithoutFeedback>
+              <View className="w-full gap-4 rounded-2xl bg-white p-6 ">
+                <Typography
+                  weight={600}
+                  className="mb-4 text-lg text-[#0B0B0B]"
                 >
-                  <ButtonText className="text-black">Cancel</ButtonText>
-                </Button>
+                  Add New Certificate
+                </Typography>
 
-                <Button className="ml-2 flex-1 bg-primary" onPress={onUpsert}>
-                  <ButtonText className="text-white">
-                    {editingIndex !== null ? 'Edit ' : 'Add'}
-                  </ButtonText>
-                </Button>
+                <ControlledInput
+                  name="addCertificate.certificateName"
+                  control={control}
+                  label="Certificate Name"
+                  labelClassName="text-[14px] text-[#0B0B0B]"
+                  inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
+                />
+
+                <View className="mt-4 flex-row justify-between">
+                  <Button
+                    className="bg-gray-300 mr-2 flex-1 border border-[#0000001A]"
+                    onPress={hideModal}
+                  >
+                    <ButtonText className="text-black">Cancel</ButtonText>
+                  </Button>
+
+                  <Button className="ml-2 flex-1 bg-primary" onPress={onUpsert}>
+                    <ButtonText className="text-white">
+                      {editingIndex !== null ? 'Edit ' : 'Add'}
+                    </ButtonText>
+                  </Button>
+                </View>
               </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
-  );
-};
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
+);
+
+export default memo(Certificate);
