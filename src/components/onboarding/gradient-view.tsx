@@ -2,7 +2,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { type ReactNode } from 'react';
 import { Platform, type StyleProp, type ViewStyle } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { type Edges, SafeAreaView } from 'react-native-safe-area-context';
 import { tv } from 'tailwind-variants';
 
 import { Hashtag } from '@/components/ui/icons/hashtag';
@@ -10,6 +10,7 @@ import { Hashtag } from '@/components/ui/icons/hashtag';
 type TGradientViewProps = {
   children: ReactNode;
   className?: string;
+  edges?: Edges;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -21,6 +22,7 @@ export default function GradientView({
   children,
   className,
   style,
+  edges,
 }: TGradientViewProps) {
   const headerHeight = useHeaderHeight();
   const finalOffset =
@@ -34,6 +36,7 @@ export default function GradientView({
       <SafeAreaView
         className={gradientView({ className })}
         style={[{ paddingTop: finalOffset }, style]}
+        edges={edges}
       >
         {children}
         <Hashtag className="absolute bottom-[-40] right-0 z-[-1]" />
