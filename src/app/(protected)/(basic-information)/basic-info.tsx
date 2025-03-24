@@ -1,119 +1,122 @@
 import Feather from '@expo/vector-icons/Feather';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Image } from 'expo-image';
-import { Controller, useForm } from 'react-hook-form';
-import { TextInput, View } from 'react-native';
+import debounce from 'lodash.debounce';
+import { useCallback, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Locations } from '@/components/basic-informations/basic-info/components/location';
 import {
   type BasicInfoFormData,
   BasicInfoFormSchema,
 } from '@/components/basic-informations/basic-info/schema';
-import { Button, ControlledInput, Typography } from '@/components/ui';
+import { Button, ControlledInput } from '@/components/ui';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 export default function BasicInfo() {
-  const {
-    control,
-    //  handleSubmit
-  } = useForm<BasicInfoFormData>({
+  const { control, trigger, clearErrors } = useForm<BasicInfoFormData>({
     defaultValues: {
       firstName: '',
       lastName: '',
       email: '',
       phoneNo: '',
       locations: '',
-      TBY: '',
+      TBY: `Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself wet`,
     },
     resolver: zodResolver(BasicInfoFormSchema),
   });
+
+  const validation = useCallback(
+    async (text: string) => {
+      console.log('Calling trigger');
+      if (text && text.split(/\s+/).filter(Boolean).length > 150) {
+        await trigger('TBY');
+      } else {
+        clearErrors('TBY');
+      }
+    },
+    [trigger, clearErrors]
+  );
+
+  const debouncedValidation = useMemo(
+    () => debounce(validation, 300),
+    [validation]
+  );
+
   return (
-    <KeyboardAwareScrollView contentContainerClassName="grow bg-white">
-      <View className="justify-between gap-4 px-4">
-        <View className="relative m-auto items-center justify-center ">
-          <Image
-            contentFit="contain"
-            className="size-[100px]"
-            source={require('assets/basic-profile.png')}
-            placeholder={{ blurhash }}
-            cachePolicy="memory-disk"
+    <KeyboardAwareScrollView
+      contentContainerClassName="grow bg-white"
+      bottomOffset={100}
+    >
+      <SafeAreaView className="grow bg-white" edges={['bottom']}>
+        <View className="grow gap-4 px-4">
+          <View className=" mx-auto items-center justify-center ">
+            <Image
+              contentFit="contain"
+              className="size-[100px]"
+              source={require('assets/basic-profile.png')}
+              placeholder={{ blurhash }}
+              cachePolicy="memory-disk"
+            />
+            <Button
+              variant="icon"
+              className="absolute bottom-1 right-1 size-7 border-0 bg-[#E5E5FF]"
+            >
+              <Feather name="edit-2" size={14} color="#0400D1" />
+            </Button>
+          </View>
+
+          <ControlledInput
+            name="firstName"
+            control={control}
+            label="First Name"
+            labelClassName="text-[14px]"
+            inputClassName="border border-[#0000001A]"
           />
-          <Button
-            variant="icon"
-            className="absolute bottom-1 right-1 size-7 border-0 bg-[#E5E5FF]"
-          >
-            <Feather name="edit-2" size={14} color="#0400D1" />
-          </Button>
+
+          <ControlledInput
+            name="lastName"
+            control={control}
+            label="Last Name"
+            labelClassName="text-[14px]"
+            inputClassName="border border-[#0000001A]"
+          />
+
+          <ControlledInput
+            name="firstName"
+            control={control}
+            label="Email"
+            labelClassName="text-[14px]"
+            inputClassName="border border-[#0000001A]"
+          />
+
+          <ControlledInput
+            name="phoneNo"
+            control={control}
+            label="Phone Number"
+            labelClassName="text-[14px]"
+            inputClassName="border border-[#0000001A]"
+          />
+
+          <Locations control={control} />
+
+          <ControlledInput
+            control={control}
+            name="TBY"
+            label="Tell About Yourself"
+            multiline
+            labelClassName="text-[14px]"
+            onChangeText={debouncedValidation}
+            inputClassName="text-gray-800  rounded-lg border border-[#0000001A] bg-white p-3 h-auto text-base"
+            style={{ minHeight: 100, textAlignVertical: 'top' }}
+          />
         </View>
-        <ControlledInput
-          //className="text-[14px]"
-          name="firstName"
-          control={control}
-          label="First Name"
-          labelClassName="text-[14px]"
-          inputClassName="border border-[#0000001A]"
-        />
-
-        <ControlledInput
-          name="lastName"
-          control={control}
-          label="Last Name"
-          labelClassName="text-[14px]"
-          inputClassName="border border-[#0000001A]"
-        />
-
-        <ControlledInput
-          name="firstName"
-          control={control}
-          label="Email"
-          labelClassName="text-[14px]"
-          inputClassName="border border-[#0000001A]"
-        />
-
-        <ControlledInput
-          name="phoneNo"
-          control={control}
-          label="Phone Number"
-          labelClassName="text-[14px]"
-          inputClassName="border border-[#0000001A]"
-        />
-
-        <Locations control={control} />
-
-        <Typography weight={500} className="mb-1 text-[14px] text-[#0B0B0B]">
-          Tell About Yourself
-        </Typography>
-        <Controller
-          control={control}
-          name="TBY"
-          render={({ field: { onChange, value } }) => {
-            const wordCount = value
-              ? value.split(/\s+/).filter(Boolean).length
-              : 0;
-            const isLimitExceeded = wordCount > 150;
-
-            return (
-              <View>
-                <TextInput
-                  className="text-gray-800 mb-1 rounded-lg border border-[#0000001A] p-3 text-base"
-                  multiline
-                  value={value}
-                  onChangeText={onChange}
-                />
-                <Typography
-                  weight={400}
-                  className={`text-[14px] ${isLimitExceeded ? 'text-red-500' : 'text-[#6D6D6D]'}`}
-                >
-                  Maximum 150 words
-                </Typography>
-              </View>
-            );
-          }}
-        />
-      </View>
+      </SafeAreaView>
     </KeyboardAwareScrollView>
   );
 }
