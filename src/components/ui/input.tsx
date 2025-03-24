@@ -171,7 +171,7 @@ export function ControlledInput<T extends FieldValues>(
   const { name, control, onBlur, onChangeText, ...inputProps } = props;
 
   const {
-    field: { ref, value, onBlur: rhfOnBlur, onChange },
+    field: { ref, value, onBlur: rhfOnBlur, onChange: rhfOnChange },
     fieldState: { error },
   } = useController({ control, name });
 
@@ -186,7 +186,7 @@ export function ControlledInput<T extends FieldValues>(
         if (onBlur) onBlur(e); // Call custom onBlur if provided
       }}
       onChangeText={(text) => {
-        onChange(text);
+        rhfOnChange(text);
         if (onChangeText) onChangeText(text); // Call custom onChangeText if provided
       }}
     />
