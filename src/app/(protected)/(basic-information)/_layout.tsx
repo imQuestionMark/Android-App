@@ -112,9 +112,10 @@ export const OnboardingHeader = ({
   const currentScreen = route.name as WallScreen;
   const isLastStep = currentScreen === 'achievement';
   const currentStepIndex = useWallStore((s) => s.currentStepIndex);
-  const setCurrentStep = useWallStore((s) => s.setCurrentStep);
   const screenOrder = useWallStore((s) => s.screenOrder);
-  const getPreviousScreen = useWallStore((s) => s.getPreviousScreen);
+  const { setCurrentStep, getPreviousScreen, getNextScreen } = useWallStore(
+    (s) => s.actions
+  );
 
   const router = useRouter();
 
@@ -141,14 +142,13 @@ export const OnboardingHeader = ({
       return router.replace({ pathname: '/wall' });
     }
 
-    const { getNextScreen } = useWallStore.getState();
     const nextScreen = getNextScreen(currentScreen);
     if (nextScreen) {
       router.push({
         pathname: `/(protected)/(basic-information)/${nextScreen}`,
       });
     }
-  }, [currentScreen, isLastStep, router]);
+  }, [currentScreen, getNextScreen, isLastStep, router]);
 
   const { top } = useSafeAreaInsets();
 

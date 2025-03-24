@@ -8,7 +8,14 @@ import {
   useRouter,
 } from 'expo-router';
 import debounce from 'lodash.debounce';
-import { useCallback, useEffect, useMemo } from 'react';
+import {
+  useCallback,
+  useCallback,
+  useCallback,
+  useEffect,
+  useEffect,
+  useMemo,
+} from 'react';
 import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -19,8 +26,10 @@ import {
   type BasicInfoFormData,
   BasicInfoFormSchema,
 } from '@/components/basic-informations/basic-info/schema';
-import { Button, ButtonText, ControlledInput } from '@/components/ui';
+import { Button, ControlledInput } from '@/components/ui';
 import { useWallStore, type WallScreen } from '@/lib/store/wall.slice';
+
+import { BasicHeaderButton } from '../../../components/basic-informations/header-buttons';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -45,12 +54,10 @@ export default function BasicInfo() {
 
   const currentScreen = pathname.slice(1) as WallScreen;
 
-  console.log('🚀🚀🚀 ~ BasicInfo ~ currentScreen:', currentScreen);
-
   const isLastStep = currentScreen === 'achievement';
-  const setCurrentStep = useWallStore((s) => s.setCurrentStep);
-  const getPreviousScreen = useWallStore((s) => s.getPreviousScreen);
-  const getNextScreen = useWallStore((s) => s.getNextScreen);
+  const { setCurrentStep, getPreviousScreen, getNextScreen } = useWallStore(
+    (s) => s.actions
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -61,45 +68,22 @@ export default function BasicInfo() {
 
   const goBack = useCallback(() => {
     const prev = getPreviousScreen(currentScreen);
-    if (prev) {
-      console.log({ prevScreen: prev });
-      router.push({ pathname: `/${BASE_PATH}/${prev}` });
-    } else {
-      console.log('No previous screen found, redirecting to wall');
-      router.replace({ pathname: '/wall' });
-    }
+    if (prev) return router.push({ pathname: `/${BASE_PATH}/${prev}` });
+
+    router.replace({ pathname: '/wall' });
   }, [currentScreen, getPreviousScreen, router]);
 
   const goNext = useCallback(() => {
-    console.log('Firing Next');
-
-    if (isLastStep) {
-      console.log('🚀🚀🚀 ~ goNext ~ isLastStep:', isLastStep);
-      return router.replace({ pathname: '/wall' });
-    }
+    if (isLastStep) return router.replace({ pathname: '/wall' });
 
     const nextScreen = getNextScreen(currentScreen);
-    if (nextScreen) {
-      console.log('🚀🚀🚀 ~ goNext ~ nextScreen:', nextScreen);
-
-      router.push({
-        pathname: `/(protected)/(basic-information)/${nextScreen}`,
-      });
-    }
+    if (nextScreen) router.push({ pathname: `/${BASE_PATH}/${nextScreen}` });
   }, [currentScreen, getNextScreen, isLastStep, router]);
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => (
-        <Button variant="link" className="px-4">
-          <ButtonText onPress={goBack}>Back</ButtonText>
-        </Button>
-      ),
-      headerRight: () => (
-        <Button variant="link" className="px-4" onPress={goNext}>
-          <ButtonText>Next</ButtonText>
-        </Button>
-      ),
+      headerLeft: () => <BasicHeaderButton label="Back" onPress={goBack} />,
+      headerRight: () => <BasicHeaderButton label="Next" onPress={goNext} />,
     });
   }, [goBack, goNext, navigation]);
 
