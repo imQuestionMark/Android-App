@@ -34,13 +34,13 @@ export default function RootLayout() {
   const authStatus = useBoundStore((state) => state.status);
   const onboardingStep = useBoundStore((state) => state.onboardingStep);
 
-  console.log('🚀🚀🚀 ~ RootLayout ~ onboardingStep:', onboardingStep);
+  // console.log('🚀🚀🚀 ~ RootLayout ~ onboardingStep:', onboardingStep);
 
   const incrementOnboarding = useBoundStore((s) => s.incrementOnboarding);
 
   const segments = useSegments();
 
-  console.log('🚀🚀🚀 ~ RootLayout ~ segments:', segments);
+  // console.log('🚀🚀🚀 ~ RootLayout ~ segments:', segments);
 
   useEffect(() => {
     const bootstrapAsync = async () => {
