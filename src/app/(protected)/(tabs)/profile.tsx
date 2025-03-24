@@ -79,7 +79,12 @@ const ProfileMenuItem = ({
 
   return (
     <Pressable onPress={handlePress}>
-      <View className="mb-7 rounded-[15px] bg-white px-7 py-[20px]">
+      <View
+        className="mb-7 rounded-[15px] bg-white px-7 py-[20px]"
+        style={{
+          boxShadow: 'rgba(100, 100, 111, 0.2) 0px 1px 5px 1px,',
+        }}
+      >
         <View className="flex-row items-center justify-between">
           <View className="flex-1 gap-[3px]">
             <Typography weight={600} color="main" className="text-[18px]">
@@ -103,7 +108,7 @@ const ProfileMenuItem = ({
 export default function ProfileMain() {
   return (
     <GradientView edges={['top', 'left', 'right']}>
-      <KeyboardAwareScrollView contentContainerClassName="grow justify-center bg-red-400 gap-16 px-[16px]">
+      <KeyboardAwareScrollView contentContainerClassName="grow justify-center gap-16 px-[16px]">
         <View className="justify-between gap-3">
           <View>
             <Typography weight={600} color="main" className="text-[24px]">

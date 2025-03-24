@@ -235,11 +235,11 @@ const CertificateList = ({
           onDelete={() => onDeletePress(index)}
         />
       )}
-      ItemSeparatorComponent={() => <View className="mb-2 h-px w-full" />}
+      ItemSeparatorComponent={() => <View className="mb-6 h-px w-full" />}
     />
   );
 };
-
+// box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 const CertificateListItem = ({
   name,
   onEdit,
@@ -248,11 +248,10 @@ const CertificateListItem = ({
 }: CertificateItemProps) => {
   return (
     <View
-      className="border-1 mb-1 ml-4 rounded-lg border-black bg-white px-4 py-3 "
-      // style={{
-      //   boxShadow:
-      //     ' rgba(240, 46, 170, 0.4) -5px 5px, rgba(240, 46, 170, 0.3) -10px 10px, rgba(240, 46, 170, 0.2) -15px 15px, rgba(240, 46, 170, 0.1) -20px 20px, rgba(240, 46, 170, 0.05) -25px 25px',
-      // }}
+      className="border-1 mx-3 rounded-lg bg-white px-4 py-3 "
+      style={{
+        boxShadow: 'rgba(100, 100, 111, 0.2) 0px 1px 5px 1px,',
+      }}
     >
       <View className="flex-row items-center justify-between">
         <View className="grow ">

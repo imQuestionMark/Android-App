@@ -2,7 +2,7 @@ import { type NativeStackHeaderProps } from '@react-navigation/native-stack';
 import { Stack, useFocusEffect, useRouter } from 'expo-router';
 import { useCallback } from 'react';
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button, ButtonText, Typography } from '@/components/ui';
 import Step from '@/components/ui/step';
@@ -119,8 +119,10 @@ const OnboardingHeader = ({ route, options }: NativeStackHeaderProps) => {
     }
   }, [currentScreen, isLastStep, router]);
 
+  const { top } = useSafeAreaInsets();
+
   return (
-    <SafeAreaView className="bg-white px-4" edges={['top']}>
+    <View className="bg-white px-4" style={{ paddingTop: top }}>
       <View className="flex-row items-center justify-between">
         <Button variant="link" className="p-0" onPress={goBack}>
           <ButtonText>Back</ButtonText>
@@ -146,6 +148,6 @@ const OnboardingHeader = ({ route, options }: NativeStackHeaderProps) => {
           );
         })}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
