@@ -1,8 +1,14 @@
 import Feather from '@expo/vector-icons/Feather';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Image } from 'expo-image';
+import {
+  useFocusEffect,
+  useNavigation,
+  usePathname,
+  useRouter,
+} from 'expo-router';
 import debounce from 'lodash.debounce';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -13,7 +19,8 @@ import {
   type BasicInfoFormData,
   BasicInfoFormSchema,
 } from '@/components/basic-informations/basic-info/schema';
-import { Button, ControlledInput } from '@/components/ui';
+import { Button, ButtonText, ControlledInput } from '@/components/ui';
+import { useWallStore, type WallScreen } from '@/lib/store/wall.slice';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -30,6 +37,71 @@ export default function BasicInfo() {
     },
     resolver: zodResolver(BasicInfoFormSchema),
   });
+
+  const navigation = useNavigation();
+  const router = useRouter();
+  const pathname = usePathname();
+  const BASE_PATH = '(protected)/(basic-information)';
+
+  const currentScreen = pathname.slice(1) as WallScreen;
+
+  console.log('🚀🚀🚀 ~ BasicInfo ~ currentScreen:', currentScreen);
+
+  const isLastStep = currentScreen === 'achievement';
+  const setCurrentStep = useWallStore((s) => s.setCurrentStep);
+  const getPreviousScreen = useWallStore((s) => s.getPreviousScreen);
+  const getNextScreen = useWallStore((s) => s.getNextScreen);
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log('🏹 FIRING USE FOCUS EFFECT++++');
+      setCurrentStep(currentScreen);
+    }, [currentScreen, setCurrentStep])
+  );
+
+  const goBack = useCallback(() => {
+    const prev = getPreviousScreen(currentScreen);
+    if (prev) {
+      console.log({ prevScreen: prev });
+      router.push({ pathname: `/${BASE_PATH}/${prev}` });
+    } else {
+      console.log('No previous screen found, redirecting to wall');
+      router.replace({ pathname: '/wall' });
+    }
+  }, [currentScreen, getPreviousScreen, router]);
+
+  const goNext = useCallback(() => {
+    console.log('Firing Next');
+
+    if (isLastStep) {
+      console.log('🚀🚀🚀 ~ goNext ~ isLastStep:', isLastStep);
+      return router.replace({ pathname: '/wall' });
+    }
+
+    const nextScreen = getNextScreen(currentScreen);
+    if (nextScreen) {
+      console.log('🚀🚀🚀 ~ goNext ~ nextScreen:', nextScreen);
+
+      router.push({
+        pathname: `/(protected)/(basic-information)/${nextScreen}`,
+      });
+    }
+  }, [currentScreen, getNextScreen, isLastStep, router]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <Button variant="link" className="px-4">
+          <ButtonText onPress={goBack}>Back</ButtonText>
+        </Button>
+      ),
+      headerRight: () => (
+        <Button variant="link" className="px-4" onPress={goNext}>
+          <ButtonText>Next</ButtonText>
+        </Button>
+      ),
+    });
+  }, [goBack, goNext, navigation]);
 
   const validation = useCallback(
     async (text: string) => {
@@ -54,7 +126,7 @@ export default function BasicInfo() {
       bottomOffset={100}
     >
       <SafeAreaView className="grow bg-white" edges={['bottom']}>
-        <View className="grow gap-4 px-4">
+        <View className="grow gap-4">
           <View className=" mx-auto items-center justify-center ">
             <Image
               contentFit="contain"

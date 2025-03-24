@@ -1,6 +1,7 @@
+import { getHeaderTitle, Header } from '@react-navigation/elements';
 import { type NativeStackHeaderProps } from '@react-navigation/native-stack';
 import { Stack, useFocusEffect, useRouter } from 'expo-router';
-import { useCallback } from 'react';
+import React, { type ReactNode, useCallback } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -8,12 +9,39 @@ import { Button, ButtonText, Typography } from '@/components/ui';
 import Step from '@/components/ui/step';
 import { useWallStore, type WallScreen } from '@/lib/store/wall.slice';
 
-const BasicStackLayout = () => {
+const BasicInfoStackLayout = () => {
+  const currentStepIndex = useWallStore((s) => s.currentStepIndex);
+  const screenOrder = useWallStore((s) => s.screenOrder);
+
   return (
     <Stack
       screenOptions={{
-        header: (props) => <OnboardingHeader {...props} />,
+        // header: (props) => <OnboardingHeader {...props} />,
+        headerTitleAlign: 'center',
+        headerShadowVisible: false,
+        headerTitleStyle: {
+          fontSize: 16,
+          color: 'black',
+          fontFamily: 'Poppins-Medium',
+        },
+        header: ({ options, route, back }) => (
+          <Header
+            {...options}
+            back={back}
+            headerStyle={{
+              height: 70,
+            }}
+            title={getHeaderTitle(options, route.name)}
+          />
+        ),
       }}
+      screenLayout={(props) => (
+        <ScreenLayout
+          {...props}
+          currentStepIndex={currentStepIndex}
+          screenOrder={screenOrder}
+        />
+      )}
     >
       <Stack.Screen
         name="basic-info"
@@ -73,11 +101,14 @@ const BasicStackLayout = () => {
   );
 };
 
-export default BasicStackLayout;
+export default BasicInfoStackLayout;
 
 const BASE_PATH = '(protected)/(basic-information)';
 
-const OnboardingHeader = ({ route, options }: NativeStackHeaderProps) => {
+export const OnboardingHeader = ({
+  route,
+  options,
+}: NativeStackHeaderProps) => {
   const currentScreen = route.name as WallScreen;
   const isLastStep = currentScreen === 'achievement';
   const currentStepIndex = useWallStore((s) => s.currentStepIndex);
@@ -148,6 +179,31 @@ const OnboardingHeader = ({ route, options }: NativeStackHeaderProps) => {
           );
         })}
       </View>
+    </View>
+  );
+};
+
+export const ScreenLayout = ({
+  children,
+  currentStepIndex,
+  screenOrder,
+}: {
+  children: ReactNode;
+  currentStepIndex: number;
+  screenOrder: string[];
+}) => {
+  return (
+    <View className="p-4 pt-0">
+      <View className="mb-[16px] flex-row gap-2">
+        {screenOrder.map((_, index) => (
+          <Step
+            key={index}
+            active={currentStepIndex === index}
+            completed={currentStepIndex > index}
+          />
+        ))}
+      </View>
+      {children}
     </View>
   );
 };
