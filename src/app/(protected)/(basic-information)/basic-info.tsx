@@ -8,14 +8,7 @@ import {
   useRouter,
 } from 'expo-router';
 import debounce from 'lodash.debounce';
-import {
-  useCallback,
-  useCallback,
-  useCallback,
-  useEffect,
-  useEffect,
-  useMemo,
-} from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
