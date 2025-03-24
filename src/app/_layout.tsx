@@ -2,13 +2,14 @@ import '../../global.css';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider } from '@react-navigation/native';
-import { router, Stack, useSegments } from 'expo-router';
+import { Stack, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { SystemBars } from 'react-native-edge-to-edge';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Toaster } from 'sonner-native';
 
 import { APIProvider } from '@/api';
@@ -109,26 +110,24 @@ function Providers({ children }: { children: React.ReactNode }) {
   const theme = useThemeConfig();
   return (
     <GestureHandlerRootView style={styles.container}>
-      <KeyboardProvider
-        navigationBarTranslucent
-        statusBarTranslucent
-        preserveEdgeToEdge
-      >
-        <ThemeProvider value={theme}>
-          <APIProvider>
-            <BottomSheetModalProvider>
-              {children}
-              <Toaster
-                invert
-                richColors
-                closeButton
-                duration={4000}
-                position="bottom-center"
-                swipeToDismissDirection="left"
-              />
-            </BottomSheetModalProvider>
-          </APIProvider>
-        </ThemeProvider>
+      <KeyboardProvider preserveEdgeToEdge>
+        <SafeAreaProvider>
+          <ThemeProvider value={theme}>
+            <APIProvider>
+              <BottomSheetModalProvider>
+                {children}
+                <Toaster
+                  invert
+                  richColors
+                  closeButton
+                  duration={4000}
+                  position="bottom-center"
+                  swipeToDismissDirection="left"
+                />
+              </BottomSheetModalProvider>
+            </APIProvider>
+          </ThemeProvider>
+        </SafeAreaProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>
   );

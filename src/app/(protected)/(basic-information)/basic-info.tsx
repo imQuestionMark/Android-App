@@ -12,7 +12,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Locations } from '@/components/basic-informations/basic-info/components/location';
 import {
@@ -96,13 +96,19 @@ export default function BasicInfo() {
     () => debounce(validation, 300),
     [validation]
   );
+  const insets = useSafeAreaInsets();
 
   return (
     <KeyboardAwareScrollView
-      contentContainerClassName="grow bg-white"
+      contentContainerClassName="grow bg-green-200 pb-4"
       bottomOffset={100}
     >
-      <SafeAreaView className="grow bg-white" edges={['bottom']}>
+      <View
+        className="grow bg-orange-200 "
+        style={{
+          paddingBottom: insets.bottom,
+        }}
+      >
         <View className="grow gap-4">
           <View className=" mx-auto items-center justify-center ">
             <Image
@@ -165,7 +171,7 @@ export default function BasicInfo() {
             style={{ minHeight: 100, textAlignVertical: 'top' }}
           />
         </View>
-      </SafeAreaView>
+      </View>
     </KeyboardAwareScrollView>
   );
 }
