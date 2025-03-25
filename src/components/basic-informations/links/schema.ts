@@ -7,7 +7,9 @@ export const LinksFormSchema = z.object({
       url: z.string().url('Invalid URL'),
     })
   ),
-  newlinks: z.string({ required_error: 'Please Enter Label Name' }),
+  newlinks: z
+    .string({ required_error: 'Please Enter Label Name' })
+    .min(3, { message: 'Please Enter Label Name' }),
 });
 
 export type LinksFormData = z.infer<typeof LinksFormSchema>;

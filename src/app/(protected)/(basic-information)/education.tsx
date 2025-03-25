@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Locations } from '@/components/basic-informations/education/components/location';
@@ -235,80 +236,87 @@ export default function Education() {
         onRequestClose={() => setShowModal(false)}
       >
         {/* Blur Background */}
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View className="flex-1 items-center justify-center px-3">
-            <View className="w-full gap-4 rounded-2xl bg-white p-6 shadow-lg">
-              <Typography weight={600} className="mb-4 text-lg text-[#0B0B0B]">
-                Add New Education
-              </Typography>
+        <KeyboardAvoidingView className="flex-1 ">
+          <TouchableWithoutFeedback onPress={() => setShowModal(false)}>
+            <View className="flex-1 items-center justify-center px-3">
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View className="w-full gap-4 rounded-2xl bg-white p-6 shadow-lg">
+                  <Typography
+                    weight={600}
+                    className="mb-4 text-lg text-[#0B0B0B]"
+                  >
+                    Add New Education
+                  </Typography>
 
-              {/* Modal Form */}
-              <ControlledInput
-                name="addEducation.intName"
-                control={control}
-                label="Institution Name"
-                labelClassName="text-[14px] text-[#0B0B0B]"
-                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
-              />
-              <ControlledInput
-                name="addEducation.FOS"
-                control={control}
-                label="Field of Study"
-                labelClassName="text-[14px] text-[#0B0B0B]"
-                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
-              />
-
-              <View className="flex-row gap-x-4">
-                <View className="flex-1">
+                  {/* Modal Form */}
                   <ControlledInput
-                    name="addEducation.startyear"
+                    name="addEducation.intName"
                     control={control}
-                    label="Start Year"
+                    label="Institution Name"
                     labelClassName="text-[14px] text-[#0B0B0B]"
                     inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
                   />
-                </View>
-                <View className="flex-1">
                   <ControlledInput
-                    name="addEducation.endyear"
+                    name="addEducation.FOS"
                     control={control}
-                    label="End Year"
+                    label="Field of Study"
                     labelClassName="text-[14px] text-[#0B0B0B]"
                     inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
                   />
+
+                  <View className="flex-row gap-x-4">
+                    <View className="flex-1">
+                      <ControlledInput
+                        name="addEducation.startyear"
+                        control={control}
+                        label="Start Year"
+                        labelClassName="text-[14px] text-[#0B0B0B]"
+                        inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
+                      />
+                    </View>
+                    <View className="flex-1">
+                      <ControlledInput
+                        name="addEducation.endyear"
+                        control={control}
+                        label="End Year"
+                        labelClassName="text-[14px] text-[#0B0B0B]"
+                        inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
+                      />
+                    </View>
+                  </View>
+                  <ControlledInput
+                    name="addEducation.GPA"
+                    control={control}
+                    label="GPA/Grade"
+                    labelClassName="text-[14px] text-[#0B0B0B]"
+                    inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
+                  />
+
+                  <Locations control={control} name="addEducation.locations" />
+
+                  {/* Buttons Row */}
+                  <View className="mt-4 flex-row justify-between">
+                    {/* Cancel Button */}
+                    <Button
+                      className="bg-gray-300 mr-2 flex-1 border border-[#0000001A]"
+                      onPress={() => setShowModal(false)}
+                    >
+                      <ButtonText className="text-black">Cancel</ButtonText>
+                    </Button>
+
+                    {/* Save Button */}
+                    <Button
+                      className="ml-2 flex-1 bg-primary"
+                      onPress={handleAddEducation}
+                    >
+                      <ButtonText className="text-white">Add</ButtonText>
+                    </Button>
+                  </View>
                 </View>
-              </View>
-              <ControlledInput
-                name="addEducation.GPA"
-                control={control}
-                label="GPA/Grade"
-                labelClassName="text-[14px] text-[#0B0B0B]"
-                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
-              />
-
-              <Locations control={control} name="addEducation.locations" />
-
-              {/* Buttons Row */}
-              <View className="mt-4 flex-row justify-between">
-                {/* Cancel Button */}
-                <Button
-                  className="bg-gray-300 mr-2 flex-1 border border-[#0000001A]"
-                  onPress={() => setShowModal(false)}
-                >
-                  <ButtonText className="text-black">Cancel</ButtonText>
-                </Button>
-
-                {/* Save Button */}
-                <Button
-                  className="ml-2 flex-1 bg-primary"
-                  onPress={handleAddEducation}
-                >
-                  <ButtonText className="text-white">Add</ButtonText>
-                </Button>
-              </View>
+              </TouchableWithoutFeedback>
             </View>
-          </View>
-        </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
   );

@@ -1,21 +1,16 @@
 import { getHeaderTitle, Header } from '@react-navigation/elements';
-import { type NativeStackHeaderProps } from '@react-navigation/native-stack';
-import { Stack, useFocusEffect, useRouter } from 'expo-router';
-import { type ReactNode, useCallback } from 'react';
+import { Stack } from 'expo-router';
+import { type ReactNode } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Button, ButtonText, Typography } from '@/components/ui';
 import Step from '@/components/ui/step';
-import { useWallStore, type WallScreen } from '@/lib/store/wall.slice';
+import { useWallStore } from '@/lib/store/wall.slice';
 
 const BasicInfoStackLayout = () => {
   const currentStepIndex = useWallStore((s) => s.currentStepIndex);
   const screenOrder = useWallStore((s) => s.screenOrder);
   const insets = useSafeAreaInsets();
-
-  console.log('🚀🚀🚀 ~ BasicInfoStackLayout ~ top:', insets.top);
-  console.log('🚀🚀🚀 ~ BasicInfo ~ bottom:', insets.bottom);
 
   const headerHeight = insets.top + 25;
 
@@ -110,82 +105,82 @@ const BasicInfoStackLayout = () => {
 
 export default BasicInfoStackLayout;
 
-const BASE_PATH = '(protected)/(basic-information)';
+// const BASE_PATH = '(protected)/(basic-information)';
 
-const OnboardingHeader = ({ route, options }: NativeStackHeaderProps) => {
-  const currentScreen = route.name as WallScreen;
-  const isLastStep = currentScreen === 'achievement';
-  const currentStepIndex = useWallStore((s) => s.currentStepIndex);
-  const screenOrder = useWallStore((s) => s.screenOrder);
-  const { setCurrentStep, getPreviousScreen, getNextScreen } = useWallStore(
-    (s) => s.actions
-  );
+// const OnboardingHeader = ({ route, options }: NativeStackHeaderProps) => {
+//   const currentScreen = route.name as WallScreen;
+//   const isLastStep = currentScreen === 'achievement';
+//   const currentStepIndex = useWallStore((s) => s.currentStepIndex);
+//   const screenOrder = useWallStore((s) => s.screenOrder);
+//   const { setCurrentStep, getPreviousScreen, getNextScreen } = useWallStore(
+//     (s) => s.actions
+//   );
 
-  const router = useRouter();
+//   const router = useRouter();
 
-  useFocusEffect(
-    useCallback(() => {
-      console.log('🏹 FIRING USE FOCUS EFFECT++++');
-      setCurrentStep(currentScreen);
-    }, [currentScreen, setCurrentStep])
-  );
+//   useFocusEffect(
+//     useCallback(() => {
+//       console.log('🏹 FIRING USE FOCUS EFFECT++++');
+//       setCurrentStep(currentScreen);
+//     }, [currentScreen, setCurrentStep])
+//   );
 
-  const goBack = () => {
-    const prev = getPreviousScreen(currentScreen);
-    if (prev) {
-      console.log({ prevScreen: prev });
-      router.push({ pathname: `/${BASE_PATH}/${prev}` });
-    } else {
-      console.log('No previous screen found, redirecting to wall');
-      router.replace({ pathname: '/wall' });
-    }
-  };
+//   const goBack = () => {
+//     const prev = getPreviousScreen(currentScreen);
+//     if (prev) {
+//       console.log({ prevScreen: prev });
+//       router.push({ pathname: `/${BASE_PATH}/${prev}` });
+//     } else {
+//       console.log('No previous screen found, redirecting to wall');
+//       router.replace({ pathname: '/wall' });
+//     }
+//   };
 
-  const goNext = useCallback(() => {
-    if (isLastStep) {
-      return router.replace({ pathname: '/wall' });
-    }
+//   const goNext = useCallback(() => {
+//     if (isLastStep) {
+//       return router.replace({ pathname: '/wall' });
+//     }
 
-    const nextScreen = getNextScreen(currentScreen);
-    if (nextScreen) {
-      router.push({
-        pathname: `/(protected)/(basic-information)/${nextScreen}`,
-      });
-    }
-  }, [currentScreen, getNextScreen, isLastStep, router]);
+//     const nextScreen = getNextScreen(currentScreen);
+//     if (nextScreen) {
+//       router.push({
+//         pathname: `/(protected)/(basic-information)/${nextScreen}`,
+//       });
+//     }
+//   }, [currentScreen, getNextScreen, isLastStep, router]);
 
-  const { top } = useSafeAreaInsets();
+//   const { top } = useSafeAreaInsets();
 
-  return (
-    <View className="bg-white px-4" style={{ paddingTop: top }}>
-      <View className="flex-row items-center justify-between">
-        <Button variant="link" className="p-0" onPress={goBack}>
-          <ButtonText>Back</ButtonText>
-        </Button>
+//   return (
+//     <View className="bg-white px-4" style={{ paddingTop: top }}>
+//       <View className="flex-row items-center justify-between">
+//         <Button variant="link" className="p-0" onPress={goBack}>
+//           <ButtonText>Back</ButtonText>
+//         </Button>
 
-        <Typography weight={500} className="capitalize text-[#0B0B0B]">
-          {options.title}
-        </Typography>
+//         <Typography weight={500} className="capitalize text-[#0B0B0B]">
+//           {options.title}
+//         </Typography>
 
-        <Button variant="link" className="p-0" onPress={goNext}>
-          <ButtonText>{isLastStep ? 'Done' : 'Next'}</ButtonText>
-        </Button>
-      </View>
+//         <Button variant="link" className="p-0" onPress={goNext}>
+//           <ButtonText>{isLastStep ? 'Done' : 'Next'}</ButtonText>
+//         </Button>
+//       </View>
 
-      <View className="mb-[16px] flex-row gap-2">
-        {screenOrder.map((_, index) => {
-          return (
-            <Step
-              key={index}
-              active={currentStepIndex === index}
-              completed={currentStepIndex > index}
-            />
-          );
-        })}
-      </View>
-    </View>
-  );
-};
+//       <View className="mb-[16px] flex-row gap-2">
+//         {screenOrder.map((_, index) => {
+//           return (
+//             <Step
+//               key={index}
+//               active={currentStepIndex === index}
+//               completed={currentStepIndex > index}
+//             />
+//           );
+//         })}
+//       </View>
+//     </View>
+//   );
+// };
 
 export const CommonLayout = ({
   children,
@@ -197,8 +192,8 @@ export const CommonLayout = ({
   screenOrder: string[];
 }) => {
   return (
-    <View className="flex-1 bg-red-200 px-4">
-      <View className="mb-[16px] flex-row gap-2">
+    <View className="flex-1 px-4">
+      <View className="mb-[16px] mt-2 flex-row gap-2">
         {screenOrder.map((_, index) => (
           <Step
             key={index}

@@ -10,7 +10,7 @@ import {
 import debounce from 'lodash.debounce';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { BackHandler, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -19,49 +19,49 @@ import {
   type BasicInfoFormData,
   BasicInfoFormSchema,
 } from '@/components/basic-informations/basic-info/schema';
+import { BasicHeaderButton } from '@/components/basic-informations/header-buttons';
 import { Button, ControlledInput } from '@/components/ui';
 import { useWallStore, type WallScreen } from '@/lib/store/wall.slice';
-
-import { BasicHeaderButton } from '../../../components/basic-informations/header-buttons';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
+const defaultValues: BasicInfoFormData = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phoneNo: '',
+  locations: '',
+  TBY: `Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself wet`,
+};
+const BASE_PATH = '(protected)/(basic-information)';
+
 export default function BasicInfo() {
   const { control, trigger, clearErrors } = useForm<BasicInfoFormData>({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phoneNo: '',
-      locations: '',
-      TBY: `Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself wet`,
-    },
+    defaultValues,
     resolver: zodResolver(BasicInfoFormSchema),
   });
 
   const navigation = useNavigation();
   const router = useRouter();
   const pathname = usePathname();
-  const BASE_PATH = '(protected)/(basic-information)';
 
   const currentScreen = pathname.slice(1) as WallScreen;
 
   const isLastStep = currentScreen === 'achievement';
   const { setCurrentStep, getPreviousScreen, getNextScreen } = useWallStore(
-    (s) => s.actions
+    (state) => state.actions
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      console.log('🏹 FIRING USE FOCUS EFFECT++++');
-      setCurrentStep(currentScreen);
-    }, [currentScreen, setCurrentStep])
-  );
+  const updateCurrentScreen = useCallback(() => {
+    setCurrentStep(currentScreen);
+  }, [currentScreen, setCurrentStep]);
+
+  useFocusEffect(updateCurrentScreen);
 
   const goBack = useCallback(() => {
     const prev = getPreviousScreen(currentScreen);
-    if (prev) return router.push({ pathname: `/${BASE_PATH}/${prev}` });
+    if (prev) return router.dismissTo({ pathname: `/${BASE_PATH}/${prev}` });
 
     router.replace({ pathname: '/wall' });
   }, [currentScreen, getPreviousScreen, router]);
@@ -73,12 +73,24 @@ export default function BasicInfo() {
     if (nextScreen) router.push({ pathname: `/${BASE_PATH}/${nextScreen}` });
   }, [currentScreen, getNextScreen, isLastStep, router]);
 
+  const backAction = useCallback(() => {
+    console.log('Trapped Back Handler');
+    goBack();
+    return true;
+  }, [goBack]);
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BasicHeaderButton label="Back" onPress={goBack} />,
       headerRight: () => <BasicHeaderButton label="Next" onPress={goNext} />,
     });
-  }, [goBack, goNext, navigation]);
+
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+    };
+  }, [backAction, goBack, goNext, navigation]);
 
   const validation = useCallback(
     async (text: string) => {
@@ -100,11 +112,12 @@ export default function BasicInfo() {
 
   return (
     <KeyboardAwareScrollView
-      contentContainerClassName="grow bg-green-200 pb-4"
+      contentContainerClassName="grow pb-4"
       bottomOffset={100}
+      showsVerticalScrollIndicator={false}
     >
       <View
-        className="grow bg-orange-200 "
+        className="grow"
         style={{
           paddingBottom: insets.bottom,
         }}
