@@ -9,8 +9,6 @@ export default function ProtectedLayout() {
           backgroundColor: 'white',
         },
       }}
-    >
-      <Stack.Screen name="(onboarding)" />
-    </Stack>
+    ></Stack>
   );
 }

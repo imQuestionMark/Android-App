@@ -110,7 +110,7 @@ function Providers({ children }: { children: React.ReactNode }) {
   const theme = useThemeConfig();
   return (
     <GestureHandlerRootView style={styles.container}>
-      <KeyboardProvider preserveEdgeToEdge>
+      <KeyboardProvider>
         <SafeAreaProvider>
           <ThemeProvider value={theme}>
             <APIProvider>
