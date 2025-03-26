@@ -14,6 +14,7 @@ import {
   useForm,
 } from 'react-hook-form';
 import {
+  Alert,
   BackHandler,
   FlatList,
   Modal,
@@ -109,6 +110,58 @@ const defaultValues: CertificateFormData = {
 const BASE_PATH = '(protected)/(basic-information)';
 
 const Certificate = () => {
+  const insets = useSafeAreaInsets();
+
+  const navigation = useNavigation();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const currentScreen = pathname.slice(1) as WallScreen;
+
+  const isLastStep = currentScreen === 'achievement';
+  const { setCurrentStep, getPreviousScreen, getNextScreen } = useWallStore(
+    (state) => state.actions
+  );
+
+  const updateCurrentScreen = useCallback(() => {
+    setCurrentStep(currentScreen);
+  }, [currentScreen, setCurrentStep]);
+
+  useFocusEffect(updateCurrentScreen);
+
+  const goBack = useCallback(() => {
+    const prev = getPreviousScreen(currentScreen);
+    if (prev) return router.dismissTo({ pathname: `/${BASE_PATH}/${prev}` });
+
+    router.replace({ pathname: '/wall' });
+  }, [currentScreen, getPreviousScreen, router]);
+
+  const goNext = useCallback(() => {
+    if (isLastStep) return router.replace({ pathname: '/wall' });
+
+    const nextScreen = getNextScreen(currentScreen);
+    if (nextScreen) router.push({ pathname: `/${BASE_PATH}/${nextScreen}` });
+  }, [currentScreen, getNextScreen, isLastStep, router]);
+
+  const backAction = useCallback(() => {
+    console.log('Trapped Back Handler');
+    goBack();
+    return true;
+  }, [goBack]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <BasicHeaderButton label="Back" onPress={goBack} />,
+      headerRight: () => <BasicHeaderButton label="Next" onPress={goNext} />,
+    });
+
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+    };
+  }, [backAction, goBack, goNext, navigation]);
+
   const { control, getValues, resetField, setValue, trigger } =
     useForm<CertificateFormData>({
       resolver: zodResolver(CertificateFormSchema),
@@ -172,58 +225,6 @@ const Certificate = () => {
   const handleDelete = (index: number) => {
     remove(index);
   };
-
-  const insets = useSafeAreaInsets();
-
-  const navigation = useNavigation();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const currentScreen = pathname.slice(1) as WallScreen;
-
-  const isLastStep = currentScreen === 'achievement';
-  const { setCurrentStep, getPreviousScreen, getNextScreen } = useWallStore(
-    (state) => state.actions
-  );
-
-  const updateCurrentScreen = useCallback(() => {
-    setCurrentStep(currentScreen);
-  }, [currentScreen, setCurrentStep]);
-
-  useFocusEffect(updateCurrentScreen);
-
-  const goBack = useCallback(() => {
-    const prev = getPreviousScreen(currentScreen);
-    if (prev) return router.dismissTo({ pathname: `/${BASE_PATH}/${prev}` });
-
-    router.replace({ pathname: '/wall' });
-  }, [currentScreen, getPreviousScreen, router]);
-
-  const goNext = useCallback(() => {
-    if (isLastStep) return router.replace({ pathname: '/wall' });
-
-    const nextScreen = getNextScreen(currentScreen);
-    if (nextScreen) router.push({ pathname: `/${BASE_PATH}/${nextScreen}` });
-  }, [currentScreen, getNextScreen, isLastStep, router]);
-
-  const backAction = useCallback(() => {
-    console.log('Trapped Back Handler');
-    goBack();
-    return true;
-  }, [goBack]);
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => <BasicHeaderButton label="Back" onPress={goBack} />,
-      headerRight: () => <BasicHeaderButton label="Next" onPress={goNext} />,
-    });
-
-    BackHandler.addEventListener('hardwareBackPress', backAction);
-
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', backAction);
-    };
-  }, [backAction, goBack, goNext, navigation]);
 
   return (
     <View
@@ -314,6 +315,17 @@ const CertificateListItem = ({
   onDelete,
   index,
 }: CertificateItemProps) => {
+  const handleDelete = useCallback(() => {
+    Alert.alert(
+      'Delete Certificate',
+      'Are you sure you want to delete this certificate?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: onDelete },
+      ]
+    );
+  }, [onDelete]);
+
   return (
     <View
       className="mx-[3px] my-1 rounded-lg bg-white px-4 py-3 "
@@ -337,7 +349,7 @@ const CertificateListItem = ({
           </Button>
 
           {index !== 0 && (
-            <Button variant="ghost" onPress={onDelete} className="p-2">
+            <Button variant="ghost" onPress={handleDelete} className="p-2">
               <Ionicons name="trash-bin" size={15} color="black" />
             </Button>
           )}
