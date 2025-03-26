@@ -1,9 +1,16 @@
 /* eslint-disable max-lines-per-function */
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Image } from 'expo-image';
-import { useState } from 'react';
+import {
+  useFocusEffect,
+  useNavigation,
+  usePathname,
+  useRouter,
+} from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
+  BackHandler,
   FlatList,
   Keyboard,
   Modal,
@@ -15,6 +22,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { BasicHeaderButton } from '@/components/basic-informations/header-buttons';
 import { Company } from '@/components/basic-informations/projects/components/company';
 import {
   type ProjectFormData,
@@ -26,8 +34,61 @@ import {
   ControlledInput,
   Typography,
 } from '@/components/ui';
+import { useWallStore, type WallScreen } from '@/lib/store/wall.slice';
+
+const BASE_PATH = '(protected)/(basic-information)';
 
 export default function Project() {
+  const navigation = useNavigation();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const currentScreen = pathname.slice(1) as WallScreen;
+
+  const isLastStep = currentScreen === 'achievement';
+  const { setCurrentStep, getPreviousScreen, getNextScreen } = useWallStore(
+    (state) => state.actions
+  );
+
+  const updateCurrentScreen = useCallback(() => {
+    setCurrentStep(currentScreen);
+  }, [currentScreen, setCurrentStep]);
+
+  useFocusEffect(updateCurrentScreen);
+
+  const goBack = useCallback(() => {
+    const prev = getPreviousScreen(currentScreen);
+    if (prev) return router.dismissTo({ pathname: `/${BASE_PATH}/${prev}` });
+
+    router.replace({ pathname: '/wall' });
+  }, [currentScreen, getPreviousScreen, router]);
+
+  const goNext = useCallback(() => {
+    if (isLastStep) return router.replace({ pathname: '/wall' });
+
+    const nextScreen = getNextScreen(currentScreen);
+    if (nextScreen) router.push({ pathname: `/${BASE_PATH}/${nextScreen}` });
+  }, [currentScreen, getNextScreen, isLastStep, router]);
+
+  const backAction = useCallback(() => {
+    console.log('Trapped Back Handler');
+    goBack();
+    return true;
+  }, [goBack]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <BasicHeaderButton label="Back" onPress={goBack} />,
+      headerRight: () => <BasicHeaderButton label="Next" onPress={goNext} />,
+    });
+
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+    };
+  }, [backAction, goBack, goNext, navigation]);
+
   const { control } = useForm<ProjectFormData>({
     defaultValues: {
       project: [
