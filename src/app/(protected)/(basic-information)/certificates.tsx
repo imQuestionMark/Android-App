@@ -316,7 +316,7 @@ const CertificateListItem = ({
 }: CertificateItemProps) => {
   return (
     <View
-      className="border-1 mx-3 rounded-lg bg-white px-4 py-3 "
+      className="mx-[3px] my-1 rounded-lg bg-white px-4 py-3 "
       style={{
         boxShadow: 'rgba(100, 100, 111, 0.2) 0px 1px 5px 1px,',
       }}
@@ -405,7 +405,7 @@ const AddCertModal = ({
           <TouchableWithoutFeedback>
             <View className="w-full gap-4 rounded-2xl bg-white p-6 ">
               <Typography weight={600} className="mb-4 text-lg text-[#0B0B0B]">
-                Add New Certificate
+                {editingIndex ? 'Edit Certificate' : 'Add New Certificate'}
               </Typography>
 
               <ControlledInput

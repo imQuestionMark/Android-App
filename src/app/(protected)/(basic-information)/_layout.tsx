@@ -192,7 +192,7 @@ export const CommonLayout = ({
   screenOrder: string[];
 }) => {
   return (
-    <View className="flex-1 px-4">
+    <View className="flex-1 bg-white px-4">
       <View className="mb-[16px] mt-2 flex-row gap-2">
         {screenOrder.map((_, index) => (
           <Step

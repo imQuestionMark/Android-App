@@ -117,7 +117,7 @@ export default function BasicInfo() {
       showsVerticalScrollIndicator={false}
     >
       <View
-        className="grow"
+        className="grow bg-white"
         style={{
           paddingBottom: insets.bottom,
         }}
