@@ -53,7 +53,7 @@ const menuItems = [
 ];
 
 //  extract the href into a type from all menutitems
-type ProfileMenuItem =
+type IProfileMenuItem =
   | 'account-details'
   | 'activity'
   | 'data-privacy'
@@ -68,7 +68,7 @@ const ProfileMenuItem = ({
   href,
 }: {
   description: string;
-  href: ProfileMenuItem;
+  href: IProfileMenuItem;
   title: string;
 }) => {
   const router = useRouter();

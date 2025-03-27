@@ -1,5 +1,5 @@
 import React from 'react';
-import { useController } from 'react-hook-form';
+import { type Control, type Path, useController } from 'react-hook-form';
 import { View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
@@ -8,21 +8,24 @@ import { styles } from '@/components/basic-informations/basic-info/styles';
 import { ErrorMessage, Typography } from '@/components/ui';
 
 import { company } from '../constants';
-import { type ProjectInfoControl } from '../types';
+import type { ProjectFormData } from '../schema';
 
-type CompanyProps = ProjectInfoControl & {};
+type CompanyProps = {
+  control: Control<ProjectFormData>;
+  name: Path<ProjectFormData>;
+};
 
-export const Company = ({ control }: CompanyProps) => {
+export const Company = ({ control, name }: CompanyProps) => {
   const {
     field: { onChange, value },
     fieldState: { error },
   } = useController({
-    name: 'companyName',
+    name,
     control,
   });
 
   return (
-    <View className="mb-5">
+    <View className="">
       <Typography weight={500} className="mb-4 text-[14px] text-[#0B0B0B]">
         Company Name
       </Typography>

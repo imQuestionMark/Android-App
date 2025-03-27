@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Image } from 'expo-image';
 import {
   useFocusEffect,
   useNavigation,
@@ -8,19 +8,22 @@ import {
   useRouter,
 } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import {
+  type Control,
+  type FieldArrayWithId,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
 import {
   BackHandler,
   FlatList,
   Keyboard,
   Modal,
-  Pressable,
-  TextInput,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BasicHeaderButton } from '@/components/basic-informations/header-buttons';
 import { Company } from '@/components/basic-informations/projects/components/company';
@@ -89,24 +92,47 @@ export default function Project() {
     };
   }, [backAction, goBack, goNext, navigation]);
 
-  const { control } = useForm<ProjectFormData>({
-    defaultValues: {
-      project: [
-        {
-          companyName: '',
-          projectTitle: '',
-          client: '',
-          workFrom: '',
-          workTo: '',
-          projectDesc: '',
+  const { control, getValues, trigger, resetField, setValue } =
+    useForm<ProjectFormData>({
+      defaultValues: {
+        project: [
+          {
+            companyName: 'rootquotient technologies limited',
+            projectTitle: 'Avocado',
+            client: 'Supreme',
+            workFrom: '2022',
+            workTo: '2021',
+            projectDesc: '',
+            probSolved: '',
+            skills: '',
+            projectLink: '',
+          },
+          {
+            companyName: 'Fastlane',
+            projectTitle: 'Avocado',
+            client: 'Supreme',
+            workFrom: '2022',
+            workTo: '2025',
+            projectDesc: '',
+            probSolved: '',
+            skills: '',
+            projectLink: '',
+          },
+        ],
+        addProject: {
+          companyName: 'Intellect',
+          projectTitle: 'Test add',
+          client: 'test add',
+          workFrom: '2022',
+          workTo: '2025',
+          projectDesc: 'asdfsadf sadf ',
           probSolved: '',
           skills: '',
-          projectLink: '',
+          projectLink: 'link.com',
         },
-      ],
-    },
-    resolver: zodResolver(ProjectFormSchema),
-  });
+      },
+      resolver: zodResolver(ProjectFormSchema),
+    });
 
   const { fields, append, remove, update } = useFieldArray({
     control,
@@ -114,317 +140,299 @@ export default function Project() {
   });
 
   const [showModal, setShowModal] = useState(false);
-  const [isFlatListView, setIsFlatListView] = useState(false);
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
 
-  // Modal form for adding new education
-  const modalForm = useForm({
-    defaultValues: {
-      addProject: {
-        companyName: '',
-        projectTitle: '',
-        client: '',
-        workFrom: '',
-        workTo: '',
-        projectDesc: '',
-        probSolved: '',
-        skills: '',
-        projectLink: '',
-      },
-    },
-  });
+  const closeModal = useCallback(() => {
+    setShowModal(false);
+    setEditingIndex(null);
+    resetField('addProject');
+  }, [resetField]);
 
-  const handleAddProject = () => {
-    const modalData = modalForm.getValues();
-    const projectData = modalData.addProject || modalData;
-    if (
-      !projectData.companyName ||
-      !projectData.projectTitle ||
-      !projectData.client ||
-      !projectData.workFrom ||
-      !projectData.workTo ||
-      !projectData.projectDesc ||
-      !projectData.probSolved ||
-      !projectData.skills ||
-      !projectData.projectLink
-    ) {
-      return;
-    }
+  const handleAddOrEditProject = async () => {
+    const data = getValues('addProject');
+    if (!data) return console.log('Education data is empty');
 
-    const formattedData = {
-      companyName: projectData.companyName,
-      projectTitle: projectData.projectTitle,
-      client: projectData.client,
-      workFrom: projectData.workFrom,
-      workTo: projectData.workTo,
-      projectDesc: projectData.projectDesc,
-      probSolved: projectData.probSolved,
-      skills: projectData.skills,
-      projectLink: projectData.projectLink,
-    };
+    const educationFieldKeys = Object.keys(data) as (keyof typeof data)[];
+
+    const validateAllFields = await Promise.all(
+      educationFieldKeys.map((field) => trigger(`addProject.${field}`))
+    );
+
+    const isValid = validateAllFields.every(Boolean);
+    if (!isValid) return console.log('Error present', !isValid);
 
     if (editingIndex !== null) {
-      update(editingIndex, formattedData);
+      update(editingIndex, data);
       setEditingIndex(null);
     } else {
-      append(formattedData);
-      setIsFlatListView(true);
+      append(data);
     }
 
-    setShowModal(false);
-    modalForm.reset();
+    closeModal();
   };
 
+  const onDeletePress = (index: number) => {
+    console.log('Index to delete', index);
+    remove(index);
+  };
+
+  const onEditPress = (index: number) => {
+    const value = getValues(`project.${index}`);
+    setValue('addProject', value);
+    setEditingIndex(index);
+    setShowModal(true);
+  };
+
+  const isFlatListView = fields.length > 1;
+  const insets = useSafeAreaInsets();
+
   return (
-    <SafeAreaView className="grow bg-white" edges={['bottom']}>
-      <KeyboardAwareScrollView contentContainerClassName="grow">
-        <View className="gap-4 px-4">
-          {!isFlatListView ? (
-            fields.map((field, index) => (
-              <View key={field.id} className="gap-4">
-                <Company control={control} />
-                <ControlledInput
-                  name={`project.${index}.projectTitle`}
-                  control={control}
-                  label="Project Title"
-                  labelClassName="text-[14px] text-[#0B0B0B]"
-                  inputClassName="border border-[#0000001A] pr-10 h-[48px]rounded-8"
-                />
-                <ControlledInput
-                  name={`project.${index}.client`}
-                  control={control}
-                  label="Client"
-                  labelClassName="text-[14px] text-[#0B0B0B]"
-                  inputClassName="border border-[#0000001A] pr-10 h-[48px]rounded-8"
-                />
-                <View className="flex-row gap-x-4">
-                  <View className="flex-1">
-                    <ControlledInput
-                      name={`project.${index}.workFrom`}
-                      control={control}
-                      label="Worked From"
-                      labelClassName="text-[14px] text-[#0B0B0B]"
-                      inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8"
-                    />
-                  </View>
-                  <View className="flex-1">
-                    <ControlledInput
-                      name={`project.${index}.workTo`}
-                      control={control}
-                      label="Worked To"
-                      labelClassName="text-[14px] text-[#0B0B0B]"
-                      inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8"
-                    />
-                  </View>
-                </View>
-                <Typography
-                  weight={500}
-                  className="mb-1 text-[14px] text-[#0B0B0B]"
-                >
-                  Project Description
-                </Typography>
-                <Controller
-                  control={control}
-                  name={`project.${index}.projectDesc`}
-                  render={({ field: { onChange, value } }) => {
-                    const wordCount = value
-                      ? value.split(/\s+/).filter(Boolean).length
-                      : 0;
-                    const isLimitExceeded = wordCount > 150;
+    <View
+      className="flex-1 bg-white"
+      style={{
+        paddingBottom: insets.bottom,
+      }}
+    >
+      <View className="flex-1">
+        {isFlatListView && (
+          <ProjectList
+            fields={fields}
+            onDeletePress={onDeletePress}
+            onEditPress={onEditPress}
+          />
+        )}
 
-                    return (
-                      <View>
-                        <TextInput
-                          className="text-gray-800 mb-1 rounded-lg border border-[#0000001A] p-3 text-base"
-                          multiline
-                          value={value}
-                          onChangeText={onChange}
-                          placeholder="Write about your project description and what’s your role in the project."
-                        />
-                        <Typography
-                          weight={400}
-                          className={`text-[14px] ${isLimitExceeded ? 'text-red-500' : 'text-[#6D6D6D]'}`}
-                        >
-                          Maximum 500 words
-                        </Typography>
-                      </View>
-                    );
-                  }}
-                />
-                <View className="flex-row">
-                  <Typography
-                    weight={500}
-                    className="mb-1 text-[14px] text-[#0B0B0B]"
-                  >
-                    Problem Solved
-                  </Typography>
-                  <Typography
-                    weight={400}
-                    className="text-[14px] text-[#6D6D6D]"
-                  >
-                    (Optional)
-                  </Typography>
-                </View>
-                <Controller
-                  control={control}
-                  name={`project.${index}.probSolved`}
-                  render={({ field: { onChange, value } }) => {
-                    const wordCount = value
-                      ? value.split(/\s+/).filter(Boolean).length
-                      : 0;
-                    const isLimitExceeded = wordCount > 150;
+        {!isFlatListView && <DefaultView control={control} />}
 
-                    return (
-                      <View>
-                        <TextInput
-                          className="text-gray-800 mb-1 rounded-lg border border-[#0000001A] p-3 text-base"
-                          multiline
-                          value={value}
-                          onChangeText={onChange}
-                          placeholder="Write about the major problem you have faced and how you have solved it."
-                        />
-                        <Typography
-                          weight={400}
-                          className={`text-[14px] ${isLimitExceeded ? 'text-red-500' : 'text-[#6D6D6D]'}`}
-                        >
-                          Maximum 250 words
-                        </Typography>
-                      </View>
-                    );
-                  }}
-                />
-                <Typography className="text-[14px] text-[#0B0B0B]" weight={500}>
-                  Skills employed
-                </Typography>
-                <View className="flex-x-4  flex-row">
-                  <Button className="rounded-8 h-[40px] border border-[#0000001A] bg-white px-[12px] py-[8px]">
-                    <Image
-                      source={require('assets/add.svg')}
-                      className="size-[24px]"
-                    />
-                    <ButtonText className="text-[14px] text-body" weight={400}>
-                      Add Skills
-                    </ButtonText>
-                  </Button>
-                </View>
-                <ControlledInput
-                  name={`project.${index}.projectLink`}
-                  control={control}
-                  label="Project Link"
-                  //placeholder="Provide any demonstration link if you have any"
-                  labelClassName="text-[14px] text-[#0B0B0B]"
-                  inputClassName="border border-[#0000001A] pr-10 h-[48px]rounded-8"
-                />
-              </View>
-            ))
-          ) : (
-            <SafeAreaView>
-              <FlatList
-                data={fields}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item, index }) => (
-                  <View className="shadow-gray-200 relative mb-1 rounded-lg bg-white px-4 py-3 shadow-lg">
-                    <View className="flex-row items-center justify-between">
-                      {/* Left Section: Institute Name & Year */}
-                      <View className="flex-1">
-                        <Typography
-                          weight={600}
-                          color="body"
-                          className="text-lg"
-                        >
-                          {item.companyName}
-                        </Typography>
-                        <Typography color="body" weight={400} type="subtext">
-                          {item.workFrom} - {item.workTo}
-                        </Typography>
-                      </View>
-
-                      {/* Right Section: Edit & Delete Buttons */}
-                      <View className="flex-row gap-1">
-                        {/* Edit Button */}
-                        <Pressable
-                          onPress={() => {
-                            modalForm.reset({
-                              addProject: {
-                                companyName: item.companyName || '',
-                                projectTitle: item.projectTitle || '',
-                                client: item.client || '',
-                                workFrom: item.workFrom || '',
-                                workTo: item.workTo || '',
-                                projectDesc: item.projectDesc || '',
-                                probSolved: item.probSolved || '',
-                                skills: item.skills || '',
-                                projectLink: item.projectLink || '',
-                              },
-                            });
-                            setEditingIndex(index);
-                            setShowModal(true);
-                          }}
-                          className="p-2"
-                        >
-                          <Image
-                            source={require('assets/edit.svg')}
-                            className="size-[15px]"
-                          />
-                        </Pressable>
-
-                        {/* Delete Button (Hidden for the first item) */}
-                        {index !== 0 && (
-                          <Pressable
-                            onPress={() => remove(index)}
-                            className="p-2"
-                          >
-                            <Image
-                              source={require('assets/delete.svg')}
-                              className="size-[15px]"
-                            />
-                          </Pressable>
-                        )}
-                      </View>
-                    </View>
-                  </View>
-                )}
-                ItemSeparatorComponent={() => (
-                  <View className="bg-gray-400 shadow-gray-500 mb-2 h-px w-full shadow-md" />
-                )}
-              />
-            </SafeAreaView>
-          )}
-
-          {/* Add Button - Opens Modal */}
-          <Button
-            className="mx-[47px] h-[48px] rounded-[12px] border-dashed px-[13.5px]"
-            variant="outline"
-            onPress={() => setShowModal(true)}
-          >
-            <Image source={require('assets/add.svg')} className="size-[24px]" />
-            <ButtonText className="font-poppins-regular text-[14px] text-primary">
-              Add Project
-            </ButtonText>
-          </Button>
-        </View>
-        {/* </KeyboardAwareScrollView> */}
-
-        {/* Modal for Adding New Education */}
-        <Modal
-          transparent
-          visible={showModal}
-          animationType="fade"
-          onRequestClose={() => setShowModal(false)}
+        <Button
+          className="mx-[47px] my-4 h-[48px] rounded-[12px] border-dashed"
+          variant="outline"
+          onPress={() => setShowModal(true)}
         >
-          {/* Blur Background */}
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View className="flex-1 items-center justify-center px-3">
+          <Ionicons name="add" size={24} color="#0400D1" />
+          <ButtonText className="font-poppins-regular text-[14px] text-primary">
+            Add Project
+          </ButtonText>
+        </Button>
+
+        <ProjectModal
+          control={control}
+          showModal={showModal}
+          closeModal={closeModal}
+          isEditing={editingIndex}
+          handleAddOrEditProject={handleAddOrEditProject}
+        />
+      </View>
+    </View>
+  );
+}
+
+type IProjectList = {
+  fields: FieldArrayWithId<ProjectFormData, 'project'>[];
+  onDeletePress: (index: number) => void;
+  onEditPress: (index: number) => void;
+};
+
+const ProjectList = ({ fields, onDeletePress, onEditPress }: IProjectList) => {
+  return (
+    <FlatList
+      data={fields}
+      className="flex-1"
+      keyExtractor={(item) => item.id}
+      showsVerticalScrollIndicator={false}
+      renderItem={({ item, index }) => (
+        <ProjectListItem
+          item={item}
+          index={index}
+          handleEdit={() => onEditPress(index)}
+          handleDelete={() => onDeletePress(index)}
+        />
+      )}
+      ItemSeparatorComponent={() => (
+        <View className="bg-gray-400 shadow-gray-500 mb-2 h-px w-full" />
+      )}
+    />
+  );
+};
+
+type IProjectListItem = {
+  handleDelete: () => void;
+  handleEdit: () => void;
+  index: number;
+  item: FieldArrayWithId<ProjectFormData, 'project'>;
+};
+
+const ProjectListItem = ({
+  item,
+  handleEdit,
+  handleDelete,
+  index,
+}: IProjectListItem) => {
+  return (
+    <View
+      className="relative mx-[3px] my-1 rounded-lg bg-white px-4 py-3"
+      style={{
+        boxShadow: 'rgba(100, 100, 111, 0.2) 0px 1px 5px 1px,',
+      }}
+    >
+      <View className="flex-row items-center justify-between">
+        <View className="flex-1">
+          <Typography weight={600} color="body" className="text-lg">
+            {item.companyName}
+          </Typography>
+          <Typography color="body" weight={400} type="subtext">
+            {item.workFrom} - {item.workTo}
+          </Typography>
+        </View>
+
+        <View className="flex-row gap-1">
+          <Button onPress={handleEdit} variant="ghost" className="p-2">
+            <Ionicons name="pencil" size={15} color="black" />
+          </Button>
+
+          {index !== 0 && (
+            <Button variant="ghost" onPress={handleDelete} className="p-2">
+              <Ionicons name="trash-bin" size={15} color="black" />
+            </Button>
+          )}
+        </View>
+      </View>
+    </View>
+  );
+};
+
+const DefaultView = ({ control }: { control: Control<ProjectFormData> }) => {
+  return (
+    <KeyboardAwareScrollView
+      className="flex-1"
+      showsVerticalScrollIndicator={false}
+      contentContainerClassName="pb-10 gap-4"
+      bottomOffset={100}
+    >
+      <Company control={control} name="project.0.companyName" />
+
+      <ControlledInput
+        name={`project.0.projectTitle`}
+        control={control}
+        label="Project Title"
+        labelClassName="text-[14px] text-[#0B0B0B]"
+        inputClassName="border border-[#0000001A] h-[48px] rounded-8"
+      />
+
+      <ControlledInput
+        name={`project.0.client`}
+        control={control}
+        label="Client"
+        labelClassName="text-[14px] text-[#0B0B0B]"
+        inputClassName="border border-[#0000001A] h-[48px] rounded-8"
+      />
+
+      <View className="flex-row gap-x-4">
+        <View className="flex-1">
+          <ControlledInput
+            name={`project.0.workFrom`}
+            control={control}
+            label="Worked From"
+            labelClassName="text-[14px] text-[#0B0B0B]"
+            inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8"
+          />
+        </View>
+
+        <View className="flex-1">
+          <ControlledInput
+            name={`project.0.workTo`}
+            control={control}
+            label="Worked To"
+            labelClassName="text-[14px] text-[#0B0B0B]"
+            inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8"
+          />
+        </View>
+      </View>
+
+      <ControlledInput
+        control={control}
+        name={`project.0.projectDesc`}
+        label="Project Description"
+        multiline
+        labelClassName="text-[14px]"
+        placeholder="Write about your project description and what's your role in the project."
+        // onChangeText={debouncedValidation}
+        inputClassName="text-gray-800  rounded-lg border border-[#0000001A] bg-white p-3 h-auto text-base"
+        style={{ minHeight: 100, textAlignVertical: 'top' }}
+      />
+
+      <ControlledInput
+        control={control}
+        name={`project.0.probSolved`}
+        label="Problem Solved (Optional)"
+        multiline
+        labelClassName="text-[14px]"
+        placeholder="Write about the major problem you have faced and how you have solved it."
+        // onChangeText={debouncedValidation}
+        inputClassName="text-gray-800  rounded-lg border border-[#0000001A] bg-white p-3 h-auto text-base"
+        style={{ minHeight: 100, textAlignVertical: 'top' }}
+      />
+
+      <Typography className="text-[14px] text-[#0B0B0B]" weight={500}>
+        Skills employed
+      </Typography>
+
+      <View className="flex-row">
+        <Button className="rounded-8 h-[40px] border border-[#0000001A] bg-white px-[12px] py-[8px]">
+          <Ionicons name="add" size={24} color="#0400D1" />
+          <ButtonText className="text-[14px] text-body" weight={400}>
+            Add Skills
+          </ButtonText>
+        </Button>
+      </View>
+
+      <ControlledInput
+        name={`project.0.projectLink`}
+        control={control}
+        label="Project Link"
+        labelClassName="text-[14px] text-[#0B0B0B]"
+        inputClassName="border border-[#0000001A] pr-10 h-[48px]rounded-8"
+      />
+    </KeyboardAwareScrollView>
+  );
+};
+
+type IProjectModal = {
+  closeModal: () => void;
+  control: Control<ProjectFormData>;
+  handleAddOrEditProject: () => void;
+  isEditing: null | number;
+  showModal: boolean;
+};
+
+const ProjectModal = ({
+  control,
+  showModal,
+  closeModal,
+  handleAddOrEditProject,
+  isEditing,
+}: IProjectModal) => {
+  return (
+    <Modal
+      transparent
+      visible={showModal}
+      animationType="fade"
+      onRequestClose={closeModal}
+    >
+      <KeyboardAwareScrollView>
+        <TouchableWithoutFeedback onPress={closeModal}>
+          <View className="flex-1 items-center justify-center px-3">
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View className="size-full gap-2 rounded-2xl bg-white p-4 shadow-lg">
                 <Typography
                   weight={600}
                   className="mb-4 text-lg text-[#0B0B0B]"
                 >
-                  Add New Project
+                  {isEditing ? 'Edit Project' : 'Add New Project'}
                 </Typography>
 
-                {/* Modal Form */}
-                <Company control={control} />
+                <Company control={control} name="addProject.companyName" />
+
                 <ControlledInput
                   name={`addProject.projectTitle`}
                   control={control}
@@ -432,6 +440,7 @@ export default function Project() {
                   labelClassName="text-[14px] text-[#0B0B0B]"
                   inputClassName="border border-[#0000001A] pr-10 h-[48px]rounded-8"
                 />
+
                 <ControlledInput
                   name={`addProject.client`}
                   control={control}
@@ -459,93 +468,40 @@ export default function Project() {
                     />
                   </View>
                 </View>
-                <Typography
-                  weight={500}
-                  className="mb-1 text-[14px] text-[#0B0B0B]"
-                >
-                  Project Description
-                </Typography>
-                <Controller
-                  control={control}
-                  name={`addProject.projectDesc`}
-                  render={({ field: { onChange, value } }) => {
-                    const wordCount = value
-                      ? value.split(/\s+/).filter(Boolean).length
-                      : 0;
-                    const isLimitExceeded = wordCount > 150;
 
-                    return (
-                      <View>
-                        <TextInput
-                          className="text-gray-800 mb-1 rounded-lg border border-[#0000001A] p-3 text-base"
-                          multiline
-                          value={value}
-                          onChangeText={onChange}
-                          placeholder="Write about your project description and what’s your role in the project."
-                        />
-                        <Typography
-                          weight={400}
-                          className={`text-[14px] ${isLimitExceeded ? 'text-red-500' : 'text-[#6D6D6D]'}`}
-                        >
-                          Maximum 500 words
-                        </Typography>
-                      </View>
-                    );
-                  }}
+                <ControlledInput
+                  control={control}
+                  name="addProject.projectDesc"
+                  label="Project Description"
+                  multiline
+                  labelClassName="text-[14px]"
+                  placeholder="Write about your project description and what's your role in the project."
+                  // onChangeText={debouncedValidation}
+                  inputClassName="text-gray-800  rounded-lg border border-[#0000001A] bg-white p-3 h-auto text-base"
+                  style={{ minHeight: 100, textAlignVertical: 'top' }}
                 />
-                <View className="flex-row">
-                  <Typography
-                    weight={500}
-                    className="mb-1 text-[14px] text-[#0B0B0B]"
-                  >
-                    Problem Solved
-                  </Typography>
-                  <Typography
-                    weight={400}
-                    className="text-[14px] text-[#6D6D6D]"
-                  >
-                    (Optional)
-                  </Typography>
-                </View>
-                <Controller
+
+                <ControlledInput
                   control={control}
                   name={`addProject.probSolved`}
-                  render={({ field: { onChange, value } }) => {
-                    const wordCount = value
-                      ? value.split(/\s+/).filter(Boolean).length
-                      : 0;
-                    const isLimitExceeded = wordCount > 150;
-
-                    return (
-                      <View>
-                        <TextInput
-                          className="text-gray-800 mb-1 rounded-lg border border-[#0000001A] p-3 text-base"
-                          multiline
-                          value={value}
-                          onChangeText={onChange}
-                          placeholder="Write about the major problem you have faced and how you have solved it."
-                        />
-                        <Typography
-                          weight={400}
-                          className={`text-[14px] ${isLimitExceeded ? 'text-red-500' : 'text-[#6D6D6D]'}`}
-                        >
-                          Maximum 250 words
-                        </Typography>
-                      </View>
-                    );
-                  }}
+                  label="Problem Solved (Optional)"
+                  multiline
+                  labelClassName="text-[14px]"
+                  placeholder="Write about the major problem you have faced and how you have solved it."
+                  // onChangeText={debouncedValidation}
+                  inputClassName="text-gray-800  rounded-lg border border-[#0000001A] bg-white p-3 h-auto text-base"
+                  style={{ minHeight: 100, textAlignVertical: 'top' }}
                 />
+
                 <View className="flex-x-4  flex-row">
                   <Button className="rounded-8 h-[40px] border border-[#0000001A] bg-white px-[12px] py-[8px]">
-                    <Image
-                      source={require('assets/add.svg')}
-                      className="size-[24px]"
-                    />
+                    <Ionicons name="add" size={24} color="#0400D1" />
                     <ButtonText className="text-[14px] text-body" weight={400}>
                       Add Skills
                     </ButtonText>
                   </Button>
                 </View>
+
                 <ControlledInput
                   name={`addProject.projectLink`}
                   control={control}
@@ -555,29 +511,28 @@ export default function Project() {
                   inputClassName="border border-[#0000001A] pr-10 h-[48px]rounded-8"
                 />
 
-                {/* Buttons Row */}
                 <View className="mt-4 flex-row justify-between">
-                  {/* Cancel Button */}
                   <Button
                     className="bg-gray-300 mr-2 flex-1 border border-[#0000001A]"
-                    onPress={() => setShowModal(false)}
+                    onPress={closeModal}
                   >
                     <ButtonText className="text-black">Cancel</ButtonText>
                   </Button>
 
-                  {/* Save Button */}
                   <Button
                     className="ml-2 flex-1 bg-primary"
-                    onPress={modalForm.handleSubmit(handleAddProject)}
+                    onPress={handleAddOrEditProject}
                   >
-                    <ButtonText className="text-white">Add</ButtonText>
+                    <ButtonText className="text-white">
+                      {isEditing ? 'Save' : 'Add'}
+                    </ButtonText>
                   </Button>
                 </View>
               </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
       </KeyboardAwareScrollView>
-    </SafeAreaView>
+    </Modal>
   );
-}
+};
