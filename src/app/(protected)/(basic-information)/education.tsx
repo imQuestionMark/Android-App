@@ -328,7 +328,7 @@ const EducationList = ({
         />
       )}
       ItemSeparatorComponent={() => (
-        <View className="bg-gray-400 shadow-gray-500 mb-2 h-px w-full shadow-md" />
+        <View className="bg-gray-400 mb-2 h-px w-full" />
       )}
     />
   );
@@ -458,7 +458,7 @@ const AddEducationModal = ({
         <TouchableWithoutFeedback onPress={hideModal}>
           <View className="flex-1 items-center justify-center px-3">
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View className="w-full gap-4 rounded-2xl bg-white p-6 shadow-lg">
+              <View className="w-full gap-4 rounded-2xl bg-white p-6">
                 <Typography
                   weight={600}
                   className="mb-4 text-lg text-[#0B0B0B]"
