@@ -4,7 +4,7 @@ const Index = () => {
   return (
     <>
       <Stack />
-      <Redirect href={{ pathname: '/projects' }} />
+      <Redirect href={{ pathname: '/wall' }} />
     </>
   );
 };
