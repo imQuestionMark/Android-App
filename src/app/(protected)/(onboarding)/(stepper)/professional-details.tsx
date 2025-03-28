@@ -25,8 +25,8 @@ import useBoundStore from '@/lib/store';
 import { devLog } from '@/lib/utils';
 
 const DEFAULT_VALUES: ProfessionalFormData = {
-  roles: ['66e617457cde7fde2db67a91', '66e825fb212be8a319daccb5'],
-  locations: ['67792d6d0854c9f5c628669c'],
+  roles: [],
+  locations: [],
   workModes: ['Hybrid'],
   currentCTC: '1',
   expectedCTC: '2',
