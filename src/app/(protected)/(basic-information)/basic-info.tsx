@@ -1,5 +1,6 @@
 import Feather from '@expo/vector-icons/Feather';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CommonActions } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import {
   useFocusEffect,
@@ -91,6 +92,12 @@ export default function BasicInfo() {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
     };
   }, [backAction, goBack, goNext, navigation]);
+
+  useEffect(() => {
+    const preload = CommonActions.preload('links');
+    console.log('Preload', preload);
+    navigation.dispatch(preload);
+  }, [navigation]);
 
   const validation = useCallback(
     async (text: string) => {

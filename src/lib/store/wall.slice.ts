@@ -37,6 +37,8 @@ export const useWallStore = create<WallState>((set, get) => ({
       const screenOrder = get().screenOrder;
       const index = screenOrder.indexOf(screenName);
 
+      console.log('Setting current screen -->', screenName);
+
       if (index !== -1) {
         set({ currentStepIndex: index });
       }

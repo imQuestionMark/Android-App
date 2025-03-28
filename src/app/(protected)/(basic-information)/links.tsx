@@ -1,12 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  useFocusEffect,
-  useNavigation,
-  usePathname,
-  useRouter,
-} from 'expo-router';
+import { useNavigation, usePathname, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import {
@@ -71,7 +66,7 @@ export default function Links() {
     setCurrentStep(currentScreen);
   }, [currentScreen, setCurrentStep]);
 
-  useFocusEffect(updateCurrentScreen);
+  useEffect(updateCurrentScreen, [updateCurrentScreen]);
 
   const goBack = useCallback(() => {
     const prev = getPreviousScreen(currentScreen);
@@ -94,6 +89,8 @@ export default function Links() {
   }, [goBack]);
 
   useEffect(() => {
+    if (!navigation.isFocused()) return;
+
     navigation.setOptions({
       headerLeft: () => <BasicHeaderButton label="Back" onPress={goBack} />,
       headerRight: () => <BasicHeaderButton label="Next" onPress={goNext} />,
