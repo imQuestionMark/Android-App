@@ -1,12 +1,15 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
 import { Image } from 'expo-image';
-import React, { useCallback, useState } from 'react';
-import { View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
+import Pdf from 'react-native-pdf';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Typography } from '@/components/ui';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
+import { useDocumentPicker } from '@/lib/hooks/document-upload';
+import { devLog } from '@/lib/utils';
 
 type UploadProgressProps = {
   onCancel: () => void;
@@ -107,91 +110,175 @@ const UploadZone = ({ onUpload }: UploadZoneProps) => (
 );
 
 export default function UploadResume() {
+  const [timeRemaining, setTimeRemaining] = useState(20);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [timeRemaining, setTimeRemaining] = useState(30);
   const [isUploading, setIsUploading] = useState(false);
+  const uploadInterval = useRef<NodeJS.Timeout | null>(null);
+  const { pickDocument, selectedFiles } = useDocumentPicker();
+  const [size, setSize] = useState({ height: 0, width: 0 });
+  const [filePath, setFilePath] = useState<null | string>(null);
 
-  const handleUpload = useCallback(async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: 'application/pdf',
-        // copyToCacheDirectory: true,
-        multiple: false,
-      });
-
-      console.log('🚀🚀🚀 ~ handleUpload ~ result:', result);
-
-      if (result.assets && result.assets[0]) {
-        const file = result.assets[0];
-        if (file.size && file.size > 5 * 1024 * 1024) {
-          // Show error for files larger than 5MB
-          console.error('File size is larger than 5MB');
-          return;
-        }
-
-        setIsUploading(true);
-
-        // Simulate upload progress
-        const interval = setInterval(() => {
-          setUploadProgress((prev) => {
-            if (prev >= 100) {
-              clearInterval(interval);
-              setIsUploading(false);
-              return 100;
-            }
-            return prev + 5;
-          });
-          setTimeRemaining((prev) => Math.max(0, prev - 1));
-        }, 250);
-      }
-    } catch (error) {
-      console.error('Error picking document:', error);
+  const clearUploadInterval = useCallback(() => {
+    if (uploadInterval.current) {
+      clearInterval(uploadInterval.current);
+      uploadInterval.current = null;
     }
   }, []);
 
+  useEffect(() => {
+    console.log({ size });
+  }, [size]);
+
+  const resetTimer = useCallback(() => {
+    clearUploadInterval();
+    setUploadProgress(0);
+    setTimeRemaining(20);
+    setIsUploading(false);
+  }, [clearUploadInterval]);
+
+  const handleUpload = useCallback(async () => {
+    try {
+      const result = await pickDocument({
+        allowedTypes: 'PDF',
+        multiple: true,
+        maxSizeInMB: 30,
+      });
+
+      devLog('🚀🚀🚀:', result);
+
+      if (!result) return;
+      const path = await convertContentUriToFilePath(result.assets[0].uri);
+
+      console.log('🚀🚀🚀 ~ handleUpload ~ path:', path);
+
+      setFilePath(path);
+
+      // resetTimer();
+
+      // setIsUploading(true);
+
+      // uploadInterval.current = setInterval(() => {
+      //   setUploadProgress((prev) => {
+      //     if (prev >= 100) {
+      //       clearUploadInterval();
+      //       resetTimer();
+      //       return 100;
+      //     }
+      //     return prev + 5;
+      //   });
+
+      //   setTimeRemaining((prev) => Math.max(1, prev - 1));
+      // }, 1000);
+    } catch (error) {
+      console.error('Error picking document:', error);
+    }
+  }, [pickDocument]);
+
   const handlePause = useCallback(() => {
-    // Implement pause functionality
-  }, []);
+    clearUploadInterval();
+  }, [clearUploadInterval]);
 
   const handleCancel = useCallback(() => {
-    setUploadProgress(0);
-    setTimeRemaining(30);
-    setIsUploading(false);
-  }, []);
+    resetTimer();
+  }, [resetTimer]);
+  const screenWidth = Dimensions.get('window').width;
+  const screenHeight = Dimensions.get('window').height;
+
+  const convertContentUriToFilePath = async (uri: string) => {
+    try {
+      const fileUri = FileSystem.cacheDirectory + 'temp.pdf';
+      await FileSystem.copyAsync({
+        from: uri,
+        to: fileUri,
+      });
+      return fileUri;
+    } catch (error) {
+      console.error('Error converting URI:', error);
+      return uri;
+    }
+  };
 
   return (
-    <SafeAreaView className="grow gap-6 bg-white p-3">
-      <View className="items-center px-[35px]">
-        <Image
-          className="h-[301px] w-[360px]"
-          source={require('assets/resume.png')}
-          contentFit="contain"
-          transition={200}
-        />
-      </View>
+    <SafeAreaView className="grow bg-white p-3">
+      <ScrollView contentContainerClassName="grow gap-6 bg-purple-200">
+        <View className="items-center px-[35px]">
+          <Image
+            className="h-[301px] w-[360px]"
+            source={require('assets/resume.png')}
+            contentFit="contain"
+            transition={200}
+          />
+        </View>
 
-      <View className="justify-center gap-[2px]">
-        <Typography
-          weight={700}
-          className="text-[18px] leading-[26px] text-main"
-        >
-          Upload Existing Resume
-        </Typography>
-        <Typography className="text-[14px] leading-[16px] text-[#929497]">
-          Add your resume here, and you can upload up to 5 MB max
-        </Typography>
-      </View>
+        <View className="justify-center gap-[2px]">
+          <Typography
+            weight={700}
+            className="text-[18px] leading-[26px] text-main"
+          >
+            Upload Existing Resume
+          </Typography>
+          <Typography className="text-[14px] leading-[16px] text-[#929497]">
+            Add your resume here, and you can upload up to 5 MB max
+          </Typography>
+        </View>
 
-      <UploadZone onUpload={handleUpload} />
+        <UploadZone onUpload={handleUpload} />
 
-      {isUploading && (
-        <UploadProgress
-          progress={uploadProgress}
-          timeRemaining={timeRemaining}
-          onPause={handlePause}
-          onCancel={handleCancel}
-        />
-      )}
+        {selectedFiles?.assets &&
+          selectedFiles.assets.length > 0 &&
+          filePath && (
+            <View style={styles.container}>
+              <Pdf
+                source={{
+                  uri: filePath,
+                  cache: true,
+                }}
+                trustAllCerts={false}
+                onLoadComplete={(numberOfPages, _, size) => {
+                  console.log(`Number of pages: ${numberOfPages}`);
+                  console.log({ size });
+                  setSize(size);
+                }}
+                onPageChanged={(page) => {
+                  console.log(`Current page: ${page}`);
+                }}
+                onError={(error) => {
+                  console.log(error);
+                }}
+                onPressLink={(uri) => {
+                  console.log(`Link pressed: ${uri}`);
+                }}
+                fitPolicy={0}
+                style={{
+                  flex: 1,
+                  width: screenWidth,
+                  height: size.height || screenHeight,
+                }}
+              />
+            </View>
+          )}
+
+        {isUploading && (
+          <UploadProgress
+            progress={uploadProgress}
+            timeRemaining={timeRemaining}
+            onPause={handlePause}
+            onCancel={handleCancel}
+          />
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexGrow: 1,
+    backgroundColor: 'red',
+  },
+  pdf: {
+    flex: 1,
+    backgroundColor: 'green',
+  },
+});

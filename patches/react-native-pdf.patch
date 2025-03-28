@@ -1,0 +1,22 @@
+diff --git a/android/src/main/java/org/wonday/pdf/PdfView.java b/android/src/main/java/org/wonday/pdf/PdfView.java
+index 7b7a1253afc6c522307606f5d21d53494f47f2e2..621dbb5386bf9d26475312afb073a1da15be0c35 100644
+--- a/android/src/main/java/org/wonday/pdf/PdfView.java
++++ b/android/src/main/java/org/wonday/pdf/PdfView.java
+@@ -12,6 +12,8 @@ import java.io.File;
+ 
+ import android.content.ContentResolver;
+ import android.content.Context;
++import android.os.Handler;
++import android.os.Looper;
+ import android.util.SizeF;
+ import android.view.View;
+ import android.view.ViewGroup;
+@@ -157,7 +159,7 @@ public class PdfView extends PDFView implements OnPageChangeListener,OnLoadCompl
+         TopChangeEvent tce = new TopChangeEvent(surfaceId, getId(), event);
+ 
+         if (dispatcher != null) {
+-            dispatcher.dispatchEvent(tce);
++          new Handler(Looper.getMainLooper()).postDelayed(() -> dispatcher.dispatchEvent(tce), 10);        
+         }
+         //        ReactContext reactContext = (ReactContext)this.getContext();
+ //        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(

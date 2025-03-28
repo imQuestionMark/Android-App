@@ -56,6 +56,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       monochromeImage: './assets/icons/adaptive-icon.png',
       backgroundColor: '#2800C9',
     },
+    permissions: [
+      'android.permission.READ_EXTERNAL_STORAGE',
+      'android.permission.MANAGE_DOCUMENTS',
+    ],
     package: Env.PACKAGE,
     versionCode: 1,
   },
@@ -107,6 +111,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     'expo-document-picker',
+    [
+      'expo-image-picker',
+      {
+        photosPermission:
+          'The app accesses your photos to let you share them with your friends.',
+      },
+    ],
+    '@config-plugins/react-native-pdf',
+    '@config-plugins/react-native-blob-util',
   ],
   extra: {
     ...ClientEnv,
