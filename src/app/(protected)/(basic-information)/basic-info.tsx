@@ -1,7 +1,9 @@
+/* eslint-disable max-lines-per-function */
 import Feather from '@expo/vector-icons/Feather';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CommonActions } from '@react-navigation/native';
 import { Image } from 'expo-image';
+import * as ImagePicker from 'expo-image-picker';
 import {
   useFocusEffect,
   useNavigation,
@@ -9,9 +11,9 @@ import {
   useRouter,
 } from 'expo-router';
 import debounce from 'lodash.debounce';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { BackHandler, View } from 'react-native';
+import { Alert, BackHandler, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -23,9 +25,6 @@ import {
 import { BasicHeaderButton } from '@/components/basic-informations/header-buttons';
 import { Button, ControlledInput } from '@/components/ui';
 import { useWallStore, type WallScreen } from '@/lib/store/wall.slice';
-
-const blurhash =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 const defaultValues: BasicInfoFormData = {
   firstName: '',
@@ -42,6 +41,7 @@ export default function BasicInfo() {
     defaultValues,
     resolver: zodResolver(BasicInfoFormSchema),
   });
+  const [imagePath, setImagePath] = useState<null | string>(null);
 
   const navigation = useNavigation();
   const router = useRouter();
@@ -117,6 +117,23 @@ export default function BasicInfo() {
   );
   const insets = useSafeAreaInsets();
 
+  const openImagePicker = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      console.log(result);
+      const { uri } = result.assets[0];
+      setImagePath(uri);
+      console.log('Image path:', uri);
+    } else {
+      Alert.alert('You did not select any image.');
+    }
+  };
+
   return (
     <KeyboardAwareScrollView
       contentContainerClassName="grow pb-4"
@@ -131,18 +148,25 @@ export default function BasicInfo() {
       >
         <View className="grow gap-4">
           <View className=" mx-auto items-center justify-center ">
-            <Image
-              contentFit="contain"
-              className="size-[100px]"
-              source={require('assets/basic-profile.png')}
-              placeholder={{ blurhash }}
-              cachePolicy="memory-disk"
-            />
             <Button
-              variant="icon"
-              className="absolute bottom-1 right-1 size-7 border-0 bg-[#E5E5FF]"
+              onPress={() => {
+                console.log('Opening image picker');
+                openImagePicker();
+              }}
+              className="relative h-auto bg-transparent"
             >
-              <Feather name="edit-2" size={14} color="#0400D1" />
+              <Image
+                contentFit="cover"
+                className="size-[100px] rounded-full"
+                source={imagePath ?? require('assets/basic-profile.png')}
+                cachePolicy="memory-disk"
+              />
+              <Button
+                variant="icon"
+                className="absolute bottom-1 right-6 size-7 border-0 bg-[#E5E5FF]"
+              >
+                <Feather name="edit-2" size={14} color="#0400D1" />
+              </Button>
             </Button>
           </View>
 
