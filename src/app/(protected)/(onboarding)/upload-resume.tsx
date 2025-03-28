@@ -114,7 +114,7 @@ export default function UploadResume() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const uploadInterval = useRef<NodeJS.Timeout | null>(null);
-  const { pickDocument, selectedFiles } = useDocumentPicker();
+  const { pickDocument } = useDocumentPicker();
   const [size, setSize] = useState({ height: 0, width: 0 });
   const [filePath, setFilePath] = useState<null | string>(null);
 
@@ -224,7 +224,7 @@ export default function UploadResume() {
 
         <UploadZone onUpload={handleUpload} />
 
-        {selectedFiles?.assets &&
+        {/* {selectedFiles?.assets &&
           selectedFiles.assets.length > 0 &&
           filePath && (
             <View style={styles.container}>
@@ -256,7 +256,7 @@ export default function UploadResume() {
                 }}
               />
             </View>
-          )}
+          )} */}
 
         {isUploading && (
           <UploadProgress
