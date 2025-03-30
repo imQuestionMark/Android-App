@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable max-lines-per-function */
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Image } from 'expo-image';
 import {
   useFocusEffect,
   useNavigation,
@@ -9,18 +9,23 @@ import {
   useRouter,
 } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
+  type Control,
+  Controller,
+  type FieldArrayWithId,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
+import {
+  Alert,
   BackHandler,
   FlatList,
-  Keyboard,
   Modal,
-  Pressable,
   TextInput,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   type AchivementFormData,
@@ -37,7 +42,56 @@ import { useWallStore, type WallScreen } from '@/lib/store/wall.slice';
 
 const BASE_PATH = '(protected)/(basic-information)';
 
+type AchievementItemProps = {
+  index: number;
+  name: string;
+  onDelete: () => void;
+  onEdit: () => void;
+};
+
+type AchievementListProps = {
+  fields: FieldArrayWithId<AchivementFormData, 'achievement'>[];
+  onDeletePress: (index: number) => void;
+  onEditPress: (params: {
+    attachment: string | undefined;
+    desc: string;
+    index: number;
+    title: string;
+  }) => void;
+  showModal: () => void;
+};
+
+type DefaultViewProps = {
+  control: Control<AchivementFormData>;
+  showModal: () => void;
+};
+
+type ModalProps = {
+  control: Control<AchivementFormData>;
+  editingIndex: null | number;
+  hideModal: () => void;
+  isModalVisible: boolean;
+  onUpsert: () => Promise<void>;
+};
+
+const defaultValues: AchivementFormData = {
+  achievement: [
+    {
+      title: 'US',
+      desc: '',
+      attachment: '',
+    },
+  ],
+  addAchievement: {
+    title: '',
+    desc: '',
+    attachment: '',
+  },
+};
+
 export default function Achievement() {
+  const insets = useSafeAreaInsets();
+
   const navigation = useNavigation();
   const router = useRouter();
   const pathname = usePathname();
@@ -88,232 +142,310 @@ export default function Achievement() {
     };
   }, [backAction, goBack, goNext, navigation]);
 
-  const { control } = useForm<AchivementFormData>({
-    defaultValues: {
-      achivement: [
-        {
-          title: '',
-          desc: '',
-          attachment: '',
-        },
-      ],
-    },
-    resolver: zodResolver(AchivementFormSchema),
-  });
+  const { control, getValues, resetField, setValue, trigger } =
+    useForm<AchivementFormData>({
+      defaultValues,
+      resolver: zodResolver(AchivementFormSchema),
+      mode: 'all',
+    });
 
   const { fields, append, remove, update } = useFieldArray({
     control,
-    name: 'achivement',
+    name: 'achievement',
   });
 
-  const [showModal, setShowModal] = useState(false);
-  const [isFlatListView, setIsFlatListView] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
 
-  // Modal form for adding new achivement
-  const modalForm = useForm({
-    defaultValues: {
-      addAchivement: {
-        title: '',
-        desc: '',
-        attachment: '',
-      },
-    },
-  });
+  const hasAchievements = fields.length > 1;
 
-  const handleAddAchivement = () => {
-    console.log();
-    const modalData = modalForm.getValues();
-    const achivementData = modalData.addAchivement || modalData;
-    if (
-      !achivementData.title ||
-      !achivementData.desc ||
-      !achivementData.attachment
-    ) {
-      return;
-    }
+  const hideModal = useCallback(() => {
+    setIsModalVisible(false);
+    setEditingIndex(null);
+    resetField('addAchievement');
+  }, [resetField]);
 
-    const formattedData = {
-      title: achivementData.title,
-      desc: achivementData.desc,
-      attachment: achivementData.attachment,
-    };
+  const showModal = useCallback(() => setIsModalVisible(true), []);
+
+  const handleAddOrEditAchivement = async () => {
+    const achievementData = getValues('addAchievement');
+    console.log({ achievementData });
+    if (!achievementData) return console.log('achievement data is empty');
+
+    const achievementFieldKeys = Object.keys(
+      achievementData
+    ) as (keyof typeof achievementData)[];
+
+    const validateAllFields = await Promise.all(
+      achievementFieldKeys.map((field) => trigger(`addAchievement.${field}`))
+    );
+
+    const isValid = validateAllFields.every(Boolean);
+    if (!isValid) return console.log('Error present', !isValid);
 
     if (editingIndex !== null) {
-      update(editingIndex, formattedData);
+      update(editingIndex, achievementData);
       setEditingIndex(null);
     } else {
-      append(formattedData);
-      setIsFlatListView(true);
+      append(achievementData);
     }
 
-    setShowModal(false);
-    modalForm.reset();
+    hideModal();
+  };
+
+  const handleEdit = ({
+    title,
+    desc,
+    attachment,
+    index,
+  }: {
+    attachment: string | undefined;
+    desc: string;
+    index: number;
+    title: string;
+  }) => {
+    setValue('addAchievement.title', title);
+    setValue('addAchievement.desc', desc);
+    setValue('addAchievement.attachment', attachment);
+    setEditingIndex(index);
+    showModal();
+  };
+
+  const handleDelete = (index: number) => {
+    remove(index);
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      {/* <KeyboardAwareScrollView contentContainerClassName="grow"> */}
-
-      <View className="mt-7 gap-4 px-4">
-        {!isFlatListView ? (
-          fields.map((field, index) => (
-            <View key={field.id} className="gap-4">
-              <ControlledInput
-                name={`achivement.${index}.title`}
-                control={control}
-                label="Achivement Title"
-                labelClassName="text-[14px] text-[#0B0B0B]"
-                inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8 "
-              />
-              <Typography
-                weight={500}
-                className="mb-1 text-[14px] text-[#0B0B0B]"
-              >
-                Description
-              </Typography>
-              <Controller
-                control={control}
-                name={`achivement.${index}.desc`}
-                render={({ field: { onChange, value } }) => {
-                  const wordCount = value
-                    ? value.split(/\s+/).filter(Boolean).length
-                    : 0;
-                  const isLimitExceeded = wordCount > 150;
-
-                  return (
-                    <View>
-                      <TextInput
-                        className="text-gray-800 mb-1 rounded-lg border border-[#0000001A] p-3 text-base"
-                        multiline
-                        value={value}
-                        onChangeText={onChange}
-                      />
-                      <Typography
-                        weight={400}
-                        className={`text-[14px] ${isLimitExceeded ? 'text-red-500' : 'text-[#6D6D6D]'}`}
-                      >
-                        Maximum 150 words
-                      </Typography>
-                    </View>
-                  );
-                }}
-              />
-
-              <Typography className="text-[14px] text-[#0B0B0B]" weight={500}>
-                Achivement Attachments
-              </Typography>
-              <View className="flex-x-4  flex-row">
-                <Button className="rounded-8 h-[40px] border border-[#0000001A] bg-white px-[12px] py-[8px]">
-                  <ButtonText className="text-[14px] text-body" weight={400}>
-                    Add Link
-                  </ButtonText>
-                  <Image
-                    source={require('assets/addlink.svg')}
-                    className="size-[16px]"
-                  />
-                </Button>
-              </View>
-            </View>
-          ))
+    <View
+      className="grow bg-white"
+      style={{
+        paddingBottom: insets.bottom,
+      }}
+    >
+      <View className="flex-1 gap-4">
+        {hasAchievements ? (
+          <AchievementList
+            fields={fields}
+            onEditPress={handleEdit}
+            onDeletePress={handleDelete}
+            showModal={showModal}
+          />
         ) : (
-          <SafeAreaView>
-            <FlatList
-              data={fields}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item, index }) => (
-                <View className="shadow-gray-200 relative mb-1 rounded-lg bg-white px-4 py-3 shadow-lg">
-                  <View className="flex-row items-center justify-between">
-                    {/* Left Section: Institute Name & Year */}
-                    <View className="flex-1">
-                      <Typography weight={600} color="body" className="text-lg">
-                        {item.title}
-                      </Typography>
-                    </View>
-
-                    {/* Right Section: Edit & Delete Buttons */}
-                    <View className="flex-row gap-1">
-                      {/* Edit Button */}
-                      <Pressable
-                        onPress={() => {
-                          modalForm.reset({
-                            addAchivement: {
-                              title: item.title || '',
-                              desc: item.desc || '',
-                              attachment: item.attachment || '',
-                            },
-                          });
-                          setEditingIndex(index);
-                          setShowModal(true);
-                        }}
-                        className="p-2"
-                      >
-                        <Image
-                          source={require('assets/edit.svg')}
-                          className="size-[15px]"
-                        />
-                      </Pressable>
-
-                      {/* Delete Button (Hidden for the first item) */}
-                      {index !== 0 && (
-                        <Pressable
-                          onPress={() => remove(index)}
-                          className="p-2"
-                        >
-                          <Image
-                            source={require('assets/delete.svg')}
-                            className="size-[15px]"
-                          />
-                        </Pressable>
-                      )}
-                    </View>
-                  </View>
-                </View>
-              )}
-              ItemSeparatorComponent={() => (
-                <View className="bg-gray-400 shadow-gray-500 mb-2 h-px w-full shadow-md" />
-              )}
-            />
-          </SafeAreaView>
+          <DefaultView control={control} showModal={showModal} />
         )}
-
-        {/* Add Button - Opens Modal */}
-        <Button
-          className="mx-[47px] h-[48px] rounded-[12px] border-dashed px-[13.5px]"
-          variant="outline"
-          onPress={() => setShowModal(true)}
-        >
-          <Image source={require('assets/add.svg')} className="size-[24px]" />
-          <ButtonText className="font-poppins-regular text-[14px] text-primary">
-            Add Achivements
-          </ButtonText>
-        </Button>
       </View>
-      {/* </KeyboardAwareScrollView> */}
+      <AddAchievementModal
+        control={control}
+        editingIndex={editingIndex}
+        hideModal={hideModal}
+        onUpsert={handleAddOrEditAchivement}
+        isModalVisible={isModalVisible}
+      />
+    </View>
+  );
+}
 
-      {/* Modal for Adding New Achivement */}
-      <Modal
-        transparent
-        visible={showModal}
-        animationType="fade"
-        onRequestClose={() => setShowModal(false)}
+const AchievementList = ({
+  fields,
+  onEditPress,
+  onDeletePress,
+  showModal,
+}: AchievementListProps) => {
+  return (
+    <FlatList
+      data={fields}
+      className="flex-1"
+      keyExtractor={(item) => item.id}
+      showsVerticalScrollIndicator={false}
+      maintainVisibleContentPosition={{
+        minIndexForVisible: 0,
+      }}
+      getItemLayout={(_, index) => ({
+        length: 75,
+        offset: 75 * index,
+        index,
+      })}
+      renderItem={({ item, index }) => (
+        <AchievementListItem
+          index={index}
+          name={item.title}
+          onEdit={() =>
+            onEditPress({
+              title: item.title,
+              desc: item.desc,
+              attachment: item.attachment,
+              index,
+            })
+          }
+          onDelete={() => onDeletePress(index)}
+        />
+      )}
+      ItemSeparatorComponent={() => <View className="mb-6 h-px w-full" />}
+      ListFooterComponent={() => {
+        return (
+          <Button
+            className="mx-3 mt-6 h-[48px] rounded-[12px] border-dashed"
+            variant="outline"
+            onPress={showModal}
+          >
+            <Ionicons name="add" size={24} color="#0400D1" />
+            <ButtonText weight={400} color="primary" className="text-[14px]">
+              Add Achievements
+            </ButtonText>
+          </Button>
+        );
+      }}
+    />
+  );
+};
+
+const AchievementListItem = ({
+  name,
+  onEdit,
+  onDelete,
+  index,
+}: AchievementItemProps) => {
+  const handleDelete = useCallback(() => {
+    Alert.alert(
+      'Delete Achievement',
+      'Are you sure you want to delete this achievement?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: onDelete },
+      ]
+    );
+  }, [onDelete]);
+
+  return (
+    <View
+      className="mx-[3px] my-1 rounded-lg bg-white px-4 py-3 "
+      style={{
+        boxShadow: 'rgba(100, 100, 111, 0.2) 0px 1px 5px 1px,',
+      }}
+    >
+      <View className="flex-row items-center justify-between">
+        <View className="grow ">
+          <Typography weight={600} color="body" className="text-lg">
+            {name}
+          </Typography>
+        </View>
+
+        <View className="flex-row gap-1">
+          <Button onPress={onEdit} variant="ghost" className="p-2">
+            <Ionicons name="pencil" size={15} color="black" />
+          </Button>
+
+          {index !== 0 && (
+            <Button variant="ghost" onPress={handleDelete} className="p-2">
+              <Ionicons name="trash-bin" size={15} color="black" />
+            </Button>
+          )}
+        </View>
+      </View>
+    </View>
+  );
+};
+
+const DefaultView = ({ control, showModal }: DefaultViewProps) => {
+  return (
+    <>
+      <View className="gap-4">
+        <ControlledInput
+          name={`achievement.0.title`}
+          control={control}
+          label="Achievement Title"
+          labelClassName="text-[14px] text-[#0B0B0B]"
+          inputClassName="border border-[#0000001A] pr-10 h-[48px]rounded-8"
+        />
+        <Typography weight={500} className="mb-1 text-[14px] text-[#0B0B0B]">
+          Description
+        </Typography>
+        <Controller
+          control={control}
+          name={`achievement.0.desc`}
+          render={({ field: { onChange, value } }) => {
+            const wordCount = value
+              ? value.split(/\s+/).filter(Boolean).length
+              : 0;
+            const isLimitExceeded = wordCount > 150;
+
+            return (
+              <View>
+                <TextInput
+                  className="text-gray-800 mb-1 rounded-lg border border-[#0000001A] p-3 text-base"
+                  multiline
+                  value={value}
+                  onChangeText={onChange}
+                />
+                <Typography
+                  weight={400}
+                  className={`text-[14px] ${isLimitExceeded ? 'text-red-500' : 'text-[#6D6D6D]'}`}
+                >
+                  Maximum 150 words
+                </Typography>
+              </View>
+            );
+          }}
+        />
+
+        <Typography className="text-[14px] text-[#0B0B0B]" weight={500}>
+          Achievement Attachments
+        </Typography>
+
+        <View className="flex-row">
+          <Button className="rounded-8 h-[40px] border border-[#0000001A] bg-white px-[12px] py-[8px]">
+            <ButtonText className="text-[14px] text-body" weight={400}>
+              Add Link
+            </ButtonText>
+            <Ionicons name="link-sharp" size={16} color="black" />
+          </Button>
+        </View>
+      </View>
+      <Button
+        className="mx-[47px] mb-8 h-[48px] rounded-[12px] border-dashed px-[13.5px]"
+        variant="outline"
+        onPress={showModal}
       >
-        {/* Blur Background */}
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View className="flex-1 items-center justify-center px-3">
-            <View className="w-full gap-4 rounded-2xl bg-white p-6 shadow-lg">
+        <Ionicons name="add" size={24} color="black" />
+        <ButtonText weight={400} color="primary" className="text-[14px]">
+          Add Achievements
+        </ButtonText>
+      </Button>
+    </>
+  );
+};
+
+const AddAchievementModal = ({
+  isModalVisible,
+  hideModal,
+  control,
+  onUpsert,
+  editingIndex,
+}: ModalProps) => {
+  return (
+    <Modal
+      transparent
+      visible={isModalVisible}
+      animationType="fade"
+      onRequestClose={hideModal}
+    >
+      <TouchableWithoutFeedback onPress={hideModal}>
+        <View className="flex-1 items-center justify-center bg-gray/30 px-3">
+          <TouchableWithoutFeedback>
+            <View className="w-full gap-4 rounded-2xl bg-white p-6 ">
               <Typography weight={600} className="mb-4 text-lg text-[#0B0B0B]">
-                Add New Achivement
+                {editingIndex ? 'Edit Achievement' : 'Add New Achievement'}
               </Typography>
 
-              {/* Modal Form */}
               <ControlledInput
-                name="addAchivement.title"
-                control={modalForm.control}
-                label="Achivement Title"
+                name="addAchievement.title"
+                control={control}
+                label="Achievement Title"
+                autoFocus
                 labelClassName="text-[14px] text-[#0B0B0B]"
                 inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8  "
               />
+
               <Typography
                 weight={500}
                 className="mb-1 text-[14px] text-[#0B0B0B]"
@@ -322,7 +454,7 @@ export default function Achievement() {
               </Typography>
               <Controller
                 control={control}
-                name="addAchivement.desc"
+                name="addAchievement.desc"
                 render={({ field: { onChange, value } }) => {
                   const wordCount = value
                     ? value.split(/\s+/).filter(Boolean).length
@@ -349,42 +481,36 @@ export default function Achievement() {
               />
 
               <Typography className="text-[14px] text-[#0B0B0B]" weight={500}>
-                Achivement Attachments
+                Achievement Attachments
               </Typography>
-              <View className="flex-x-4  flex-row">
+
+              <View className="flex-row">
                 <Button className="rounded-8 h-[40px] border border-[#0000001A] bg-white px-[12px] py-[8px]">
                   <ButtonText className="text-[14px] text-body" weight={400}>
                     Add Link
                   </ButtonText>
-                  <Image
-                    source={require('assets/addlink.svg')}
-                    className="size-[16px]"
-                  />
+                  <Ionicons name="link-sharp" size={16} color="black" />
                 </Button>
               </View>
 
-              {/* Buttons Row */}
               <View className="mt-4 flex-row justify-between">
-                {/* Cancel Button */}
                 <Button
                   className="bg-gray-300 mr-2 flex-1 border border-[#0000001A]"
-                  onPress={() => setShowModal(false)}
+                  onPress={hideModal}
                 >
                   <ButtonText className="text-black">Cancel</ButtonText>
                 </Button>
 
-                {/* Save Button */}
-                <Button
-                  className="ml-2 flex-1 bg-primary"
-                  onPress={modalForm.handleSubmit(handleAddAchivement)}
-                >
-                  <ButtonText className="text-white">Add</ButtonText>
+                <Button className="ml-2 flex-1 bg-primary" onPress={onUpsert}>
+                  <ButtonText className="text-white">
+                    {editingIndex !== null ? 'Edit ' : 'Add'}
+                  </ButtonText>
                 </Button>
               </View>
             </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-    </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
   );
-}
+};

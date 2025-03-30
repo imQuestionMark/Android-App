@@ -1,21 +1,14 @@
 import z from 'zod';
 
-export const AchivementFormSchema = z.object({
-  achivement: z.array(
-    z.object({
-      title: z.string().optional(),
-      desc: z.string().optional(),
-      attachment: z.string().optional(),
-    })
-  ),
+const AchivementBaseFormSchema = z.object({
+  title: z.string({ required_error: '' }),
+  desc: z.string(),
+  attachment: z.string().optional(),
+});
 
-  addAchivement: z
-    .object({
-      title: z.string().optional(),
-      desc: z.string().optional(),
-      attachment: z.string().optional(),
-    })
-    .optional(),
+export const AchivementFormSchema = z.object({
+  achievement: z.array(AchivementBaseFormSchema),
+  addAchievement: AchivementBaseFormSchema.optional(),
 });
 
 export type AchivementFormData = z.infer<typeof AchivementFormSchema>;
