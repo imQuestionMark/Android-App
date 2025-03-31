@@ -104,6 +104,7 @@ export default function PersonalDetails() {
           {/* @TODO: Fix max width based on dimensions */}
           <Pressable
             onPress={toggleCalendarModal}
+            testID="dob-calendar"
             className="mt-3 max-w-64 flex-row items-center gap-4 rounded-md bg-white px-7 "
           >
             <Ionicons name="calendar-outline" size={18} color="#5A5A5A" />
@@ -121,6 +122,7 @@ export default function PersonalDetails() {
             animationType="fade"
             visible={showCalendarModal}
             onRequestClose={hideCalendarModal}
+            testID="calendar-modal"
           >
             <TouchableWithoutFeedback onPress={hideCalendarModal}>
               {/* mb-[150px] */}

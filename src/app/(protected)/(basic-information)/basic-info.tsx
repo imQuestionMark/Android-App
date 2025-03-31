@@ -153,6 +153,7 @@ export default function BasicInfo() {
                 console.log('Opening image picker');
                 openImagePicker();
               }}
+              testID="basic-info-image-picker"
               className="relative h-auto bg-transparent"
             >
               <Image
@@ -160,6 +161,7 @@ export default function BasicInfo() {
                 className="size-[100px] rounded-full"
                 source={imagePath ?? require('assets/basic-profile.png')}
                 cachePolicy="memory-disk"
+                testID="image-view"
               />
               <Button
                 variant="icon"

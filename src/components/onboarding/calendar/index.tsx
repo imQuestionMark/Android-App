@@ -93,6 +93,7 @@ export function ControlledCalendar({ control, hideCalendarModal }: TCalendar) {
         onDayPress={handleDayPress}
         style={{ borderRadius: 6 }}
         initialDate={currentDateString}
+        testID="day-view"
         dayComponent={(data) => _renderDay(data)}
         // onPressArrowLeft={handleLeftArrowPress}
         // onPressArrowRight={handleRightArrowPress}

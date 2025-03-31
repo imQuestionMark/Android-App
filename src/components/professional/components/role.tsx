@@ -66,6 +66,7 @@ export const Role = ({ control }: RoleProps) => {
         Select Your Role
       </Typography>
       <MultiSelect
+        testID="role-dropdown"
         ref={field.ref}
         value={field.value}
         activeColor=""
@@ -85,6 +86,7 @@ export const Role = ({ control }: RoleProps) => {
                       onPress={() => {
                         handleOptimisticUpdate();
                       }}
+                      testID="add-new-role-button"
                     >
                       <ButtonText>{query} ( Add New )</ButtonText>
                     </Button>
@@ -111,6 +113,7 @@ export const Role = ({ control }: RoleProps) => {
                 onSearch(e);
                 setQuery(e);
               }}
+              testID="role-search"
             />
           );
         }}
