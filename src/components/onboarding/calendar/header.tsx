@@ -12,7 +12,11 @@ export const CalendarHeader = ({ date, toggleMonthModal }: THeader) => {
   const formattedDate = new XDate(date);
   const title = formattedDate.toString('MMMM yyyy');
   return (
-    <Pressable hitSlop={25} onPress={toggleMonthModal}>
+    <Pressable
+      hitSlop={25}
+      onPress={toggleMonthModal}
+      accessibilityLabel="month-header"
+    >
       <Typography
         weight={700}
         color="main"

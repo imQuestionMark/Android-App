@@ -29,6 +29,7 @@ export const MonthHeader = ({
           console.log('Log on Press year modal');
           toggleYearModal();
         }}
+        accessibilityLabel="year-header"
       >
         <Typography className={yearText()}>{year}</Typography>
       </Pressable>

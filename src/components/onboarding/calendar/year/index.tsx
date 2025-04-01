@@ -44,6 +44,7 @@ export const YearModal = ({
                 data={_YEARS}
                 keyExtractor={(item) => item.toString()}
                 testID="year-scrolllist"
+                accessibilityLabel="year-scrolllist-label"
                 renderItem={({ item, index }) => (
                   <Pressable
                     onPress={() => {
