@@ -105,9 +105,15 @@ export default function PersonalDetails() {
           <Pressable
             onPress={toggleCalendarModal}
             testID="dob-calendar"
+            accessibilityLabel="dob-calendar-label"
             className="mt-3 max-w-64 flex-row items-center gap-4 rounded-md bg-white px-7 "
           >
-            <Ionicons name="calendar-outline" size={18} color="#5A5A5A" />
+            <Ionicons
+              name="calendar-outline"
+              size={18}
+              color="#5A5A5A"
+              accessibilityLabel="calendar-icon"
+            />
             <Typography
               weight={400}
               color="body"
@@ -123,8 +129,12 @@ export default function PersonalDetails() {
             visible={showCalendarModal}
             onRequestClose={hideCalendarModal}
             testID="calendar-modal"
+            accessible={showCalendarModal}
           >
-            <TouchableWithoutFeedback onPress={hideCalendarModal}>
+            <TouchableWithoutFeedback
+              onPress={hideCalendarModal}
+              accessible={showCalendarModal}
+            >
               {/* mb-[150px] */}
               <View className="max-w-[500px] flex-1 items-center justify-center">
                 <ControlledCalendar
