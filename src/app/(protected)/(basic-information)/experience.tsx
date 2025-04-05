@@ -10,6 +10,7 @@ import {
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   type Control,
+  Controller,
   type FieldArrayWithId,
   useFieldArray,
   useForm,
@@ -19,11 +20,13 @@ import {
   BackHandler,
   FlatList,
   Modal,
+  Pressable,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Locations } from '@/components/basic-informations/experience/components/location';
 import {
   type ExperienceFormData,
   ExperienceFormSchema,
@@ -54,7 +57,7 @@ type ExperienceListProps = {
     currentWorking: string;
     index: number;
     joinDate: string;
-    LeaveDate: string;
+    leaveDate: string;
     locations: string;
     role: string;
   }) => void;
@@ -81,17 +84,33 @@ const defaultValues: ExperienceFormData = {
       companyName: 'Intellect',
       role: 'developer',
       joinDate: '2024',
-      LeaveDate: '2026',
+      leaveDate: '2026',
+      locations: 'chennai',
+    },
+    {
+      currentWorking: 'USA',
+      companyName: 'Intellect',
+      role: 'developer',
+      joinDate: '2024',
+      leaveDate: '2026',
+      locations: 'chennai',
+    },
+    {
+      currentWorking: 'USA',
+      companyName: 'Intellect',
+      role: 'developer',
+      joinDate: '2024',
+      leaveDate: '2026',
       locations: 'chennai',
     },
   ],
   addExperience: {
-    currentWorking: '',
+    currentWorking: 'uSA',
     companyName: '',
     role: '',
     joinDate: '2024',
-    LeaveDate: '2026',
-    locations: '',
+    leaveDate: '2026',
+    locations: 'chennai',
   },
 };
 
@@ -116,6 +135,7 @@ export default function Experience() {
 
   const goBack = useCallback(() => {
     const prev = getPreviousScreen(currentScreen);
+
     if (prev) return router.dismissTo({ pathname: `/${BASE_PATH}/${prev}` });
 
     router.replace({ pathname: '/wall' });
@@ -125,6 +145,7 @@ export default function Experience() {
     if (isLastStep) return router.replace({ pathname: '/wall' });
 
     const nextScreen = getNextScreen(currentScreen);
+    console.log('🚀🚀🚀 ~ goBack ~ prev:', nextScreen);
     if (nextScreen) router.push({ pathname: `/${BASE_PATH}/${nextScreen}` });
   }, [currentScreen, getNextScreen, isLastStep, router]);
 
@@ -162,7 +183,7 @@ export default function Experience() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
 
-  const hasExperience = fields.length > 0;
+  const hasExperience = fields.length > 1;
 
   const hideModal = useCallback(() => {
     setIsModalVisible(false);
@@ -172,7 +193,7 @@ export default function Experience() {
 
   const showModal = useCallback(() => setIsModalVisible(true), []);
 
-  const handleAddOrEditAchivement = async () => {
+  const handleAddOrEditExperience = async () => {
     const experienceData = getValues('addExperience');
     console.log({ experienceData });
     if (!experienceData) return console.log('experience data is empty');
@@ -203,7 +224,7 @@ export default function Experience() {
     companyName,
     role,
     joinDate,
-    LeaveDate,
+    leaveDate,
     locations,
     index,
   }: {
@@ -211,14 +232,14 @@ export default function Experience() {
     currentWorking: string;
     index: number;
     joinDate: string;
-    LeaveDate: string;
+    leaveDate: string;
     locations: string;
     role: string;
   }) => {
     setValue('addExperience.currentWorking', currentWorking);
     setValue('addExperience.companyName', companyName);
     setValue('addExperience.role', role);
-    setValue('addExperience.LeaveDate', LeaveDate);
+    setValue('addExperience.leaveDate', leaveDate);
     setValue('addExperience.joinDate', joinDate);
     setValue('addExperience.locations', locations);
     setEditingIndex(index);
@@ -236,8 +257,8 @@ export default function Experience() {
         paddingBottom: insets.bottom,
       }}
     >
-      <View className=" gap-4 px-4">
-        {!hasExperience ? (
+      <View className="flex-1 gap-4 ">
+        {hasExperience ? (
           <ExperienceList
             fields={fields}
             onEditPress={handleEdit}
@@ -252,7 +273,7 @@ export default function Experience() {
         control={control}
         editingIndex={editingIndex}
         hideModal={hideModal}
-        onUpsert={handleAddOrEditAchivement}
+        onUpsert={handleAddOrEditExperience}
         isModalVisible={isModalVisible}
       />
     </View>
@@ -271,14 +292,6 @@ const ExperienceList = ({
       className="flex-1"
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}
-      maintainVisibleContentPosition={{
-        minIndexForVisible: 0,
-      }}
-      getItemLayout={(_, index) => ({
-        length: 75,
-        offset: 75 * index,
-        index,
-      })}
       renderItem={({ item, index }) => (
         <ExperienceListItem
           index={index}
@@ -289,7 +302,7 @@ const ExperienceList = ({
               companyName: item.companyName,
               role: item.role,
               joinDate: item.joinDate,
-              LeaveDate: item.LeaveDate,
+              leaveDate: item.leaveDate,
               locations: item.locations,
               index,
             })
@@ -315,6 +328,50 @@ const ExperienceList = ({
     />
   );
 };
+
+type ExperienceRadioGroupProps = {
+  control: Control<ExperienceFormData>;
+  name: `addExperience.currentWorking` | `experience.0.currentWorking`;
+};
+
+const ExperienceRadioGroup = ({ control, name }: ExperienceRadioGroupProps) => (
+  <View className="">
+    <Typography className="mb-[8px] text-[14px] text-[#0B0B0B] " weight={500}>
+      Currently Working in this Company?
+    </Typography>
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { onChange, value } }) => (
+        <View className="flex-row gap-x-[40px]">
+          {['yes', 'no'].map((option) => (
+            <Pressable
+              key={option}
+              onPress={() => onChange(option)}
+              className="flex-row items-center gap-x-1"
+            >
+              <View
+                className={`size-6 rounded-full border-2 ${
+                  value === option ? 'border-primary' : 'border-gray-300'
+                } items-center justify-center`}
+              >
+                {value === option && (
+                  <View className="size-3 rounded-full bg-primary" />
+                )}
+              </View>
+              <Typography
+                className="mx-2 text-[14px] capitalize text-[#222222]"
+                weight={400}
+              >
+                {option}
+              </Typography>
+            </Pressable>
+          ))}
+        </View>
+      )}
+    />
+  </View>
+);
 
 const ExperienceListItem = ({
   name,
@@ -366,6 +423,11 @@ const ExperienceListItem = ({
 const DefaultView = ({ control, showModal }: DefaultViewProps) => {
   return (
     <>
+      <ExperienceRadioGroup
+        control={control}
+        name="experience.0.currentWorking"
+      />
+
       <View className="gap-4">
         <ControlledInput
           name={`experience.0.companyName`}
@@ -394,16 +456,16 @@ const DefaultView = ({ control, showModal }: DefaultViewProps) => {
           </View>
           <View className="flex-1">
             <ControlledInput
-              name={`experience.0.LeaveDate`}
+              name={`experience.0.leaveDate`}
               control={control}
-              label="Leaving"
+              label="Leaving Date"
               labelClassName="text-[14px] text-[#0B0B0B]"
               inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8"
             />
           </View>
         </View>
 
-        {/* <Locations control={control} /> */}
+        <Locations control={control} name="experience.0.locations" />
       </View>
       <Button
         className="mx-[47px] mb-8 h-[48px] rounded-[12px] border-dashed px-[13.5px]"
@@ -441,6 +503,11 @@ const AddExperienceModal = ({
                 {editingIndex ? 'Edit Experience' : 'Add New Experience'}
               </Typography>
 
+              <ExperienceRadioGroup
+                control={control}
+                name="addExperience.currentWorking"
+              />
+
               <ControlledInput
                 name={`addExperience.companyName`}
                 control={control}
@@ -468,16 +535,16 @@ const AddExperienceModal = ({
                 </View>
                 <View className="flex-1">
                   <ControlledInput
-                    name={`addExperience.LeaveDate`}
+                    name={`addExperience.leaveDate`}
                     control={control}
-                    label="Leaving"
+                    label="Leaving Date"
                     labelClassName="text-[14px] text-[#0B0B0B]"
                     inputClassName="border border-[#0000001A] pr-10 h-[48px] rounded-8"
                   />
                 </View>
               </View>
 
-              {/* <Locations control={control} /> */}
+              <Locations control={control} name="addExperience.locations" />
 
               <View className="mt-4 flex-row justify-between">
                 <Button

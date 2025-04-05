@@ -5,7 +5,7 @@ export const ExperienceBaseFormSchema = z.object({
   companyName: z.string().min(1, 'Company Name is required'),
   role: z.string(),
   joinDate: z.string().min(4, 'Join Date is required'),
-  LeaveDate: z.string().min(4, 'Leave Date is required'),
+  leaveDate: z.string().min(4, 'Leave Date is required'),
   locations: z.string().min(1, 'Select your Company location'),
 });
 

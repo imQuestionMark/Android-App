@@ -27,7 +27,7 @@ export const Locations = ({ control, name }: ControlledLocationProps) => {
   return (
     <View className="mb-5">
       <Typography weight={500} className="mb-4 text-[14px] text-[#0B0B0B]">
-        Current Location
+        Location
       </Typography>
       <Dropdown
         value={value}

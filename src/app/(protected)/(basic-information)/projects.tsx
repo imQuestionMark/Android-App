@@ -493,6 +493,10 @@ const ProjectModal = ({
                   style={{ minHeight: 100, textAlignVertical: 'top' }}
                 />
 
+                <Typography className="text-[14px] text-[#0B0B0B]" weight={500}>
+                  Skills employed
+                </Typography>
+
                 <View className="flex-x-4  flex-row">
                   <Button className="rounded-8 h-[40px] border border-[#0000001A] bg-white px-[12px] py-[8px]">
                     <Ionicons name="add" size={24} color="#0400D1" />

@@ -1,15 +1,13 @@
 import z from 'zod';
 
+export const LinksBaseFormSchema = z.object({
+  label: z.string().min(1, 'Label is required'),
+  url: z.string().url('Invalid URL'),
+});
+
 export const LinksFormSchema = z.object({
-  links: z.array(
-    z.object({
-      label: z.string().min(1, 'Label is required'),
-      url: z.string().url('Invalid URL'),
-    })
-  ),
-  newlinks: z
-    .string({ required_error: 'Please Enter Label Name' })
-    .min(3, { message: 'Please Enter Label Name' }),
+  links: z.array(LinksBaseFormSchema),
+  addLinks: LinksBaseFormSchema.optional(),
 });
 
 export type LinksFormData = z.infer<typeof LinksFormSchema>;

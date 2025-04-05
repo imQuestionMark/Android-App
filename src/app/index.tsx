@@ -4,7 +4,9 @@ const Index = () => {
   return (
     <>
       <Stack />
-      <Redirect href={{ pathname: '/personal-details' }} />
+      <Redirect
+        href={{ pathname: '/(protected)/(basic-information)/experience' }}
+      />
     </>
   );
 };
