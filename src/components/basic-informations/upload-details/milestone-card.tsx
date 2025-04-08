@@ -63,7 +63,7 @@ const MilestoneCard = ({ item }: IMilestoneCardProps) => {
         <View
           className={iconContainer({ active: active, completed: completed })}
         >
-          <Ionicons name="add" size={24} color="white" />
+          <Ionicons name="book" size={24} color="white" />
         </View>
 
         {item.number < 8 && (
