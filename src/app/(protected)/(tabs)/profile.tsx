@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import * as Updates from 'expo-updates';
 import React, { useEffect } from 'react';
-import { Pressable, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import GradientView from '@/components/onboarding/gradient-view';
@@ -182,6 +182,8 @@ function UpdatesDemo() {
     availableUpdate,
     isUpdateAvailable,
     isUpdatePending,
+    isDownloading,
+    isChecking,
   } = Updates.useUpdates();
 
   const isEnabled = Updates.isEnabled;
@@ -202,17 +204,19 @@ function UpdatesDemo() {
     : 'This app is running an update';
 
   return (
-    <View>
+    <View className="gap-2">
       {isEnabled && <Typography>Updates are enabled</Typography>}
       {availableUpdate && <Typography>Update available</Typography>}
       <Typography>{runTypeMessage}</Typography>
 
       <Button onPress={() => Updates.checkForUpdateAsync()}>
+        {isChecking && <ActivityIndicator />}
         <ButtonText>Check manually for updates</ButtonText>
       </Button>
 
       {showDownloadButton && (
         <Button onPress={() => Updates.fetchUpdateAsync()}>
+          {isDownloading && <ActivityIndicator />}
           <ButtonText>Download and run update</ButtonText>
         </Button>
       )}
