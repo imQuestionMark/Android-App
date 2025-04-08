@@ -1,8 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigation, usePathname, useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   type Control,
   type FieldArrayWithId,
@@ -11,7 +10,6 @@ import {
 } from 'react-hook-form';
 import {
   Alert,
-  BackHandler,
   FlatList,
   Modal,
   TouchableWithoutFeedback,
@@ -19,7 +17,6 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { BasicHeaderButton } from '@/components/basic-informations/header-buttons';
 import {
   type LinksFormData,
   LinksFormSchema,
@@ -30,9 +27,7 @@ import {
   ControlledInput,
   Typography,
 } from '@/components/ui';
-import { useWallStore, type WallScreen } from '@/lib/store/wall.slice';
-
-const BASE_PATH = '(protected)/(basic-information)';
+import { useWallNavigationFlow } from '@/lib/hooks/(basic-information)/use-navigation-flow';
 
 type LinkItemProps = {
   index: number;
@@ -75,57 +70,7 @@ const defaultValues: LinksFormData = {
 };
 
 export default function Links() {
-  const navigation = useNavigation();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const currentScreen = pathname.slice(1) as WallScreen;
-
-  const isLastStep = currentScreen === 'achievement';
-  const { setCurrentStep, getPreviousScreen, getNextScreen } = useWallStore(
-    (state) => state.actions
-  );
-
-  const updateCurrentScreen = useCallback(() => {
-    setCurrentStep(currentScreen);
-  }, [currentScreen, setCurrentStep]);
-
-  useEffect(updateCurrentScreen, [updateCurrentScreen]);
-
-  const goBack = useCallback(() => {
-    const prev = getPreviousScreen(currentScreen);
-    if (prev) return router.dismissTo({ pathname: `/${BASE_PATH}/${prev}` });
-
-    router.replace({ pathname: '/wall' });
-  }, [currentScreen, getPreviousScreen, router]);
-
-  const goNext = useCallback(() => {
-    if (isLastStep) return router.replace({ pathname: '/wall' });
-
-    const nextScreen = getNextScreen(currentScreen);
-    if (nextScreen) router.push({ pathname: `/${BASE_PATH}/${nextScreen}` });
-  }, [currentScreen, getNextScreen, isLastStep, router]);
-
-  const backAction = useCallback(() => {
-    console.log('Trapped Back Handler');
-    goBack();
-    return true;
-  }, [goBack]);
-
-  useEffect(() => {
-    if (!navigation.isFocused()) return;
-
-    navigation.setOptions({
-      headerLeft: () => <BasicHeaderButton label="Back" onPress={goBack} />,
-      headerRight: () => <BasicHeaderButton label="Next" onPress={goNext} />,
-    });
-
-    BackHandler.addEventListener('hardwareBackPress', backAction);
-
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', backAction);
-    };
-  }, [backAction, goBack, goNext, navigation]);
+  useWallNavigationFlow();
 
   const { control, resetField, getValues, setValue, trigger } =
     useForm<LinksFormData>({

@@ -66,7 +66,7 @@ const steps = [
     title: 'Achievements',
     description:
       'Enter your acheivements let recruiters know about work ethics.',
-    href: '/achievements',
+    href: '/achievement',
   },
 ];
 

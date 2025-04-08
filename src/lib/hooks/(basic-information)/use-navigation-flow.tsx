@@ -5,13 +5,14 @@ import {
   useRouter,
 } from 'expo-router';
 import { useCallback, useEffect } from 'react';
+import { BackHandler } from 'react-native';
 
 import { BasicHeaderButton } from '@/components/basic-informations/header-buttons';
 import { useWallStore, type WallScreen } from '@/lib/store/wall.slice';
 
 const BASE_PATH = '(protected)/(basic-information)';
 
-export function useNavigationFlow() {
+export function useWallNavigationFlow() {
   const navigation = useNavigation();
   const router = useRouter();
   const pathname = usePathname();
@@ -32,17 +33,24 @@ export function useNavigationFlow() {
 
   const goBack = useCallback(() => {
     const prev = getPreviousScreen(currentScreen);
-    if (prev) return router.push({ pathname: `/${BASE_PATH}/${prev}` });
+    if (prev) return router.dismissTo({ pathname: `/${BASE_PATH}/${prev}` });
 
-    router.replace({ pathname: '/wall' });
+    router.dismissTo({ pathname: '/wall/upload-details' });
   }, [currentScreen, getPreviousScreen, router]);
 
   const goNext = useCallback(() => {
-    if (isLastStep) return router.replace({ pathname: '/wall' });
+    if (isLastStep)
+      return router.dismissTo({ pathname: '/wall/upload-details' });
 
     const nextScreen = getNextScreen(currentScreen);
     if (nextScreen) router.push({ pathname: `/${BASE_PATH}/${nextScreen}` });
   }, [currentScreen, getNextScreen, isLastStep, router]);
+
+  const backAction = useCallback(() => {
+    console.log('Trapped Back Handler');
+    goBack();
+    return true;
+  }, [goBack]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -54,5 +62,11 @@ export function useNavigationFlow() {
         />
       ),
     });
-  }, [goBack, goNext, isLastStep, navigation]);
+
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+    };
+  }, [backAction, goBack, goNext, navigation]);
 }
