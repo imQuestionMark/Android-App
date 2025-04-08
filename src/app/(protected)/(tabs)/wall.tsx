@@ -46,7 +46,10 @@ export default function Wall() {
 
   return (
     <SafeAreaView edges={['left', 'top', 'right']} className="grow bg-white">
-      <ScrollView contentContainerClassName="p-4 pb-24 gap-[25px]">
+      <ScrollView
+        contentContainerClassName="p-4 pb-24 gap-[25px]"
+        showsVerticalScrollIndicator={false}
+      >
         <ActiveWall />
         <CreateWall />
         <RecentWall />
@@ -155,7 +158,7 @@ const CreateWall = () => {
         <Button
           className=" h-[46px] flex-1 gap-3 bg-[#2800C9]"
           onPress={() => {
-            router.push({ pathname: '/basic-info' });
+            router.push({ pathname: '/wall/upload-details' });
           }}
         >
           <Ionicons name="add-circle-outline" size={24} color="white" />

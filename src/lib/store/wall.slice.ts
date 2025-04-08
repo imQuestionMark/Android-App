@@ -43,6 +43,7 @@ export const useWallStore = create<WallState>((set, get) => ({
         set({ currentStepIndex: index });
       }
     },
+
     getNextScreen: (currentScreen) => {
       const screenOrder = get().screenOrder;
       const currentIndex = screenOrder.indexOf(currentScreen);
@@ -51,6 +52,7 @@ export const useWallStore = create<WallState>((set, get) => ({
       }
       return null;
     },
+
     getPreviousScreen: (currentScreen) => {
       const screenOrder = get().screenOrder;
       const currentIndex = screenOrder.indexOf(currentScreen);
