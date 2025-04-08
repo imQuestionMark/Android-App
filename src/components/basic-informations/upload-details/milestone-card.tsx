@@ -39,7 +39,7 @@ const styles = tv({
     },
     completed: {
       true: {
-        iconContainer: 'bg-black',
+        iconContainer: 'bg-green',
       },
     },
   },
