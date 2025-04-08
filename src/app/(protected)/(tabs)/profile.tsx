@@ -1,10 +1,12 @@
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
+import * as Updates from 'expo-updates';
+import React, { useEffect } from 'react';
 import { Pressable, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import GradientView from '@/components/onboarding/gradient-view';
-import { Typography } from '@/components/ui';
+import { Button, ButtonText, Typography } from '@/components/ui';
 
 const menuItems = [
   {
@@ -167,7 +169,53 @@ export default function ProfileMain() {
             />
           ))}
         </View>
+
+        <UpdatesDemo />
       </KeyboardAwareScrollView>
     </GradientView>
+  );
+}
+
+function UpdatesDemo() {
+  const {
+    currentlyRunning,
+    availableUpdate,
+    isUpdateAvailable,
+    isUpdatePending,
+  } = Updates.useUpdates();
+
+  const isEnabled = Updates.isEnabled;
+
+  useEffect(() => {
+    if (isUpdatePending) {
+      // Update has successfully downloaded; apply it now
+      Updates.reloadAsync();
+    }
+  }, [isUpdatePending]);
+
+  // If true, we show the button to download and run the update
+  const showDownloadButton = isUpdateAvailable;
+
+  // Show whether or not we are running embedded code or an update
+  const runTypeMessage = currentlyRunning.isEmbeddedLaunch
+    ? 'This app is running from built-in code'
+    : 'This app is running an update';
+
+  return (
+    <View>
+      {isEnabled && <Typography>Updates are enabled</Typography>}
+      {availableUpdate && <Typography>Update available</Typography>}
+      <Typography>{runTypeMessage}</Typography>
+
+      <Button onPress={() => Updates.checkForUpdateAsync()}>
+        <ButtonText>Check manually for updates</ButtonText>
+      </Button>
+
+      {showDownloadButton && (
+        <Button onPress={() => Updates.fetchUpdateAsync()}>
+          <ButtonText>Download and run update</ButtonText>
+        </Button>
+      )}
+    </View>
   );
 }
