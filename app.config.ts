@@ -5,8 +5,7 @@ import type { AppIconBadgeConfig } from 'app-icon-badge/types';
 import { ClientEnv, Env } from './env';
 
 const appIconBadgeConfig: AppIconBadgeConfig = {
-  // enabled: Env.APP_ENV !== 'production',
-  enabled: false,
+  enabled: Env.APP_ENV !== 'production' && Env.APP_ENV !== 'staging',
   badges: [
     {
       text: Env.APP_ENV,
@@ -33,8 +32,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
   updates: {
-    enabled: false,
+    enabled: true,
     fallbackToCacheTimeout: 0,
+    url: Env.EAS_UPDATE_URL,
+  },
+  runtimeVersion: {
+    policy: 'appVersion',
   },
   assetBundlePatterns: ['**/*'],
   ios: {
