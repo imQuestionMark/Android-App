@@ -40,14 +40,6 @@
         "FLIPPER_DISABLE": "1"
       }
     },
-    "arm-only-local": {
-      "android": {
-        "buildType": "apk",
-        "distribution": "internal",
-        "gradleCommand": ":app:assembleRelease -PsupportedAbis=armeabi-v7a,arm64-v8a",
-        "withoutCredentials": true
-      }
-    },
     "development": {
       "developmentClient": true,
       "distribution": "internal",
@@ -61,7 +53,8 @@
       "env": {
         "APP_ENV": "development",
         "EXPO_NO_DOTENV": "1"
-      }
+      },
+      "channel": "development"
     },
     "simulator": {
       "pnpm": "9.15.4",
@@ -75,7 +68,8 @@
       "env": {
         "APP_ENV": "development",
         "EXPO_NO_DOTENV": "1"
-      }
+      },
+      "channel": "simulator"
     }
   }
 }
