@@ -68,5 +68,5 @@ export function useWallNavigationFlow() {
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
     };
-  }, [backAction, goBack, goNext, navigation]);
+  }, [backAction, goBack, goNext, isLastStep, navigation]);
 }
