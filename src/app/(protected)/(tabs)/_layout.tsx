@@ -44,7 +44,7 @@ export default function TabLayout() {
       safeAreaInsets={{ bottom: bottom + 10 }}
     >
       <Tabs.Screen
-        name="home"
+        name="(home)"
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
