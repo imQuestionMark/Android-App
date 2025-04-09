@@ -1,14 +1,62 @@
+/* eslint-disable perfectionist/sort-named-imports */
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
-import { FlatList, ScrollView, View } from 'react-native';
+import { useState } from 'react';
+import {
+  FlatList,
+  type GestureResponderEvent,
+  ScrollView,
+  TextInput as RNTextInput,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Svg, { Line } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
 
 import { Button, ButtonText, Typography } from '@/components/ui';
 
-const jobs = [
+type Job = {
+  company: string;
+  experience: string;
+  id: string;
+  isSaved: boolean;
+  location: string;
+  logo: any;
+  matchingSkills?: number;
+  postedDays: number;
+  tag: string;
+  title: string;
+};
+
+type FilterComponentProps = {
+  activeFilter: FilterOptions;
+  filters: FilterOptions[];
+  handleFilterPress: (filter: FilterOptions) => void;
+};
+
+type FilterPillProps = {
+  isActive: boolean;
+  label: string;
+  onPress: (event: GestureResponderEvent) => void;
+};
+
+type JobCardProps = {
+  job: Job;
+};
+
+type JobListingProps = {
+  jobs: Job[];
+};
+
+type FilterOptions =
+  | 'All'
+  | 'Designing'
+  | 'Development'
+  | 'Marketing'
+  | 'Sales';
+
+const jobs: Job[] = [
   {
     id: '1',
     title: 'UI / UX Designer',
@@ -46,11 +94,17 @@ const jobs = [
   },
 ];
 
-const Home = () => {
-  const [activeFilter, setActiveFilter] = useState('All');
-  const filters = ['All', 'Development', 'Designing', 'Marketing', 'Sales'];
+const Home: React.FC = () => {
+  const [activeFilter, setActiveFilter] = useState<FilterOptions>('All');
+  const filters: FilterOptions[] = [
+    'All',
+    'Development',
+    'Designing',
+    'Marketing',
+    'Sales',
+  ];
 
-  const handleFilterPress = (filter) => {
+  const handleFilterPress = (filter: FilterOptions) => {
     setActiveFilter(filter);
   };
 
@@ -60,7 +114,7 @@ const Home = () => {
   });
 
   return (
-    <LinearGradient colors={['#DFE8FF', '#FFFFFF']} className="flex-1">
+    <LinearGradient colors={['#DFE8FF', '#FFFFFF']} style={{ flex: 1 }}>
       <SafeAreaView className="grow px-5" edges={['top']}>
         <View className="flex-row gap-2">
           <Typography weight={500} className="text-[24px] text-black">
@@ -70,6 +124,8 @@ const Home = () => {
             John!
           </Typography>
         </View>
+
+        <SearchBar />
 
         <FilterComponent
           filters={filters}
@@ -96,7 +152,11 @@ const Home = () => {
 
 export default Home;
 
-const FilterComponent = ({ filters, activeFilter, handleFilterPress }) => {
+const FilterComponent: React.FC<FilterComponentProps> = ({
+  filters,
+  activeFilter,
+  handleFilterPress,
+}) => {
   return (
     <View className="my-4">
       <ScrollView
@@ -138,7 +198,11 @@ const pillStyles = tv({
 
 const { pill, text } = pillStyles();
 
-const FilterPill = ({ label, isActive, onPress }) => {
+const FilterPill: React.FC<FilterPillProps> = ({
+  label,
+  isActive,
+  onPress,
+}) => {
   return (
     <Button variant="link" className={pill({ isActive })} onPress={onPress}>
       <Typography className={text({ isActive })}>{label}</Typography>
@@ -146,7 +210,7 @@ const FilterPill = ({ label, isActive, onPress }) => {
   );
 };
 
-const JobCard = ({ job }) => {
+const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const {
     title,
     company,
@@ -159,7 +223,12 @@ const JobCard = ({ job }) => {
   } = job;
 
   return (
-    <View className="border-gray-200 mb-4 rounded-[12px]  bg-white pt-4">
+    <View
+      className="border-gray-200 mx-px mb-4 rounded-[12px] bg-white pt-4"
+      style={{
+        boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.15)',
+      }}
+    >
       <View className="flex-row items-start justify-between px-4">
         <View className="flex-row gap-6">
           <Image source={logo} contentFit="contain" className="size-[55px]" />
@@ -185,7 +254,19 @@ const JobCard = ({ job }) => {
         </View>
       </View>
 
-      <View className="m-4 border-b border-dashed border-[#838383]" />
+      <View className="m-4">
+        <Svg height="2" width="100%">
+          <Line
+            x1="0"
+            y1="0"
+            x2="100%"
+            y2="0"
+            stroke="#838383"
+            strokeWidth="2"
+            strokeDasharray="6, 3"
+          />
+        </Svg>
+      </View>
 
       <View className="mb-3 mt-2 gap-4">
         <View className="flex-row items-center gap-4 px-4">
@@ -213,7 +294,13 @@ const JobCard = ({ job }) => {
       </View>
 
       {matchingSkills && (
-        <View className="flex-row gap-4 rounded-e-[12px] bg-green px-4 py-3">
+        <View
+          className="flex-row gap-4  bg-green px-4 py-3"
+          style={{
+            borderBottomEndRadius: 12,
+            borderBottomStartRadius: 12,
+          }}
+        >
           <Ionicons name="shield-checkmark-outline" size={20} color="white" />
           <Typography className="text-[14px] text-white" weight={500}>
             match {matchingSkills} Skills
@@ -224,7 +311,7 @@ const JobCard = ({ job }) => {
   );
 };
 
-const JobListing = ({ jobs }) => {
+const JobListing: React.FC<JobListingProps> = ({ jobs }) => {
   return (
     <View className="mt-4 flex-1">
       <FlatList
@@ -242,6 +329,37 @@ const JobListing = ({ jobs }) => {
           </View>
         )}
       />
+    </View>
+  );
+};
+
+const SearchBar = () => {
+  return (
+    <View
+      className="my-3  flex-row items-center gap-[12px] rounded-[12px] bg-white px-4 py-2"
+      style={{ boxShadow: '0px 1px 7px rgba(0, 0, 0, 0.15)' }}
+    >
+      <Ionicons name="search" size={24} color="#838383" />
+
+      <RNTextInput
+        className="flex-1 overflow-hidden border-0 bg-white font-poppins-regular text-[18px]"
+        placeholder="Search Company, Job Profile, People"
+        inputMode="search"
+        multiline={false}
+        numberOfLines={1}
+        autoCapitalize="none"
+        autoCorrect={false}
+        autoComplete="off"
+        spellCheck={false}
+        placeholderTextColor="#838383"
+        style={{
+          includeFontPadding: false,
+        }}
+      />
+
+      <Button variant="icon" className="border-0">
+        <Ionicons name="filter" size={24} color="#838383" />
+      </Button>
     </View>
   );
 };
