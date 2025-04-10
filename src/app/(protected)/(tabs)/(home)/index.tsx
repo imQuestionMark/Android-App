@@ -3,7 +3,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   FlatList,
   type GestureResponderEvent,
@@ -96,15 +96,16 @@ const jobs: Job[] = [
   },
 ];
 
+const filters: FilterOptions[] = [
+  'All',
+  'Development',
+  'Designing',
+  'Marketing',
+  'Sales',
+];
+
 const Home: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<FilterOptions>('All');
-  const filters: FilterOptions[] = [
-    'All',
-    'Development',
-    'Designing',
-    'Marketing',
-    'Sales',
-  ];
 
   const handleFilterPress = (filter: FilterOptions) => {
     setActiveFilter(filter);
@@ -212,7 +213,7 @@ const FilterPill: React.FC<FilterPillProps> = ({
   );
 };
 
-const JobCard: React.FC<JobCardProps> = ({ job }) => {
+export const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const {
     title,
     company,
@@ -315,7 +316,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
   );
 };
 
-const JobListing: React.FC<JobListingProps> = ({ jobs }) => {
+export const JobListing: React.FC<JobListingProps> = ({ jobs }) => {
   return (
     <View className="mt-4 flex-1">
       <FlatList

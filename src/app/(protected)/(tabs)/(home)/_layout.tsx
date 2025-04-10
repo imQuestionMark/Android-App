@@ -5,6 +5,7 @@ export default function HomeStackLayout() {
     <Stack
       screenOptions={{
         contentStyle: { backgroundColor: 'white' },
+        headerShadowVisible: false,
       }}
     >
       <Stack.Screen
