@@ -97,7 +97,7 @@ const JobDetails = () => {
   return (
     <SafeAreaView className="flex-1" edges={[]}>
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View className="px-4 pb-6">
+        <View className="px-4 pb-10">
           <JobDetailsCard job={fakeJob} />
           <CompanyCard />
           <JobDescription />
@@ -234,7 +234,7 @@ const CompanyCard = () => {
 
 const JobDescription = () => {
   return (
-    <View className="my-4">
+    <View className="mt-4">
       <View>
         <Typography weight={500} className="text-[20px]" color="main">
           Job Profile
