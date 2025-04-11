@@ -8,7 +8,7 @@ import Svg, { Line } from 'react-native-svg';
 
 import { Button, ButtonText, Typography } from '@/components/ui';
 
-import { JobListing } from '.';
+import { JobCard } from '.';
 
 type Job = {
   company: string;
@@ -341,7 +341,9 @@ const JobDescription = () => {
           </Button>
         </View>
 
-        <JobListing jobs={jobs} />
+        {jobs.map((item) => (
+          <JobCard job={item} key={item.id} />
+        ))}
       </View>
     </View>
   );
