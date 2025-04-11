@@ -136,17 +136,6 @@ const Home: React.FC = () => {
           handleFilterPress={handleFilterPress}
         />
 
-        <View className="flex-row items-center justify-between">
-          <Typography weight={600} className="text-[20px] text-black">
-            Top Companies Hiring
-          </Typography>
-          <Button variant="link" className="px-0">
-            <ButtonText className="text-gray-500 text-[14px] underline">
-              View all
-            </ButtonText>
-          </Button>
-        </View>
-
         <JobListing jobs={filteredJobs} />
       </SafeAreaView>
     </LinearGradient>
@@ -161,7 +150,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   handleFilterPress,
 }) => {
   return (
-    <View className="my-4">
+    <View className="mt-4">
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -333,6 +322,23 @@ export const JobListing: React.FC<JobListingProps> = ({ jobs }) => {
             </Typography>
           </View>
         )}
+        ListFooterComponent={() => {
+          return <View className="pb-14" />;
+        }}
+        ListHeaderComponent={() => {
+          return (
+            <View className="mb-4 flex-row items-center justify-between">
+              <Typography weight={600} className="text-[20px] text-black">
+                Top Companies Hiring
+              </Typography>
+              <Button variant="link" className="px-0">
+                <ButtonText className="text-gray-500 text-[14px] underline">
+                  View all
+                </ButtonText>
+              </Button>
+            </View>
+          );
+        }}
       />
     </View>
   );
