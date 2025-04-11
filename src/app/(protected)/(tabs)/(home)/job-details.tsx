@@ -110,6 +110,13 @@ const JobDetails = () => {
 const JobDetailsCard: React.FC<JobCardProps> = ({ job }) => {
   const { title, company, logo, location } = job;
 
+  const router = useRouter();
+
+  const handleApplyJob = async () => {
+    console.log('Clicked on Apply Job');
+    router.push({ pathname: '/applied-success' });
+  };
+
   return (
     <LinearGradient
       colors={['#DFE8FF', '#FFFFFF']}
@@ -169,7 +176,7 @@ const JobDetailsCard: React.FC<JobCardProps> = ({ job }) => {
         </View>
 
         <View className="mt-4 items-center justify-center">
-          <Button className="px-20" variant="solid">
+          <Button className="px-20" variant="solid" onPress={handleApplyJob}>
             <ButtonText weight={500} className="text-[16px]">
               Apply Job
             </ButtonText>
@@ -200,6 +207,7 @@ const CompanyCard = () => {
   const handleViewCompany = () => {
     router.push({ pathname: '/company-details' });
   };
+
   return (
     <View className="mt-4 flex-row gap-6 rounded-[12px] border border-[#EFEFF1] p-[16px]">
       <Image
@@ -233,6 +241,13 @@ const CompanyCard = () => {
 };
 
 const JobDescription = () => {
+  const router = useRouter();
+
+  const handleApplyJob = async () => {
+    console.log('Clicked on Apply Job');
+    router.push({ pathname: '/applied-success' });
+  };
+
   return (
     <View className="mt-4">
       <View>
@@ -308,7 +323,7 @@ const JobDescription = () => {
             <ButtonText className="text-[13px]">Check</ButtonText>
           </Button>
 
-          <Button className="grow px-[12px]">
+          <Button className="grow px-[12px]" onPress={handleApplyJob}>
             <ButtonText className="text-[13px]">Apply Job</ButtonText>
           </Button>
         </View>

@@ -1,5 +1,4 @@
 import { Redirect, Stack } from 'expo-router';
-
 const Index = () => {
   return (
     <>
