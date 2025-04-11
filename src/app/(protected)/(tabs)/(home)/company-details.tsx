@@ -3,7 +3,13 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Linking from 'expo-linking';
 import { useState } from 'react';
-import { Platform, Pressable, ScrollView, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  Pressable,
+  ScrollView,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
 
@@ -189,6 +195,14 @@ const Location = () => {
     }
   };
 
+  const Loading = () => {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator size={'large'} />;
+      </View>
+    );
+  };
+
   return (
     <View className="mt-4 flex-row gap-6 rounded-[12px] border border-[#EFEFF1] p-[16px]">
       <View className="grow gap-2">
@@ -200,10 +214,17 @@ const Location = () => {
         </Typography>
 
         <Pressable onPress={openMaps}>
-          <View className="h-[180px] w-full overflow-hidden rounded-[15px] bg-red-200">
+          <View className="h-[180px] w-full overflow-hidden rounded-[15px]">
             <WebView
               source={{ html: mapContent(coordinates) }}
               scrollEnabled={false}
+              renderLoading={Loading}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              startInLoadingState
             />
           </View>
         </Pressable>

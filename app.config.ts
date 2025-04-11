@@ -4,9 +4,11 @@ import type { AppIconBadgeConfig } from 'app-icon-badge/types';
 
 import { ClientEnv, Env } from './env';
 
+const isAndroid = process.env.EXPO_PLATFORM === 'android';
+
 const appIconBadgeConfig: AppIconBadgeConfig = {
   // enabled: Env.APP_ENV !== 'production' && Env.APP_ENV !== 'staging',
-  enabled: false,
+  enabled: Env.APP_ENV !== 'production' && isAndroid,
   badges: [
     {
       text: Env.APP_ENV,
