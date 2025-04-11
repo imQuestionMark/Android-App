@@ -198,7 +198,7 @@ const Location = () => {
   const Loading = () => {
     return (
       <View className="flex-1 items-center justify-center">
-        <ActivityIndicator size={'large'} />;
+        <ActivityIndicator size={'large'} />
       </View>
     );
   };
@@ -224,6 +224,8 @@ const Location = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
+              cacheEnabled={false}
+              cacheMode="LOAD_NO_CACHE"
               startInLoadingState
             />
           </View>
