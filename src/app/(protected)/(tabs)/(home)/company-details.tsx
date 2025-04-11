@@ -3,13 +3,7 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Linking from 'expo-linking';
 import { useState } from 'react';
-import {
-  ActivityIndicator,
-  Platform,
-  Pressable,
-  ScrollView,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Platform, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
 
@@ -98,59 +92,131 @@ const mapContent = (coords) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Simple Leaflet Map</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      touch-action: none;
+      height: 100%;
       overflow: hidden;
-      position: fixed;
-      width: 100%;
-      height: 100%;
     }
-
-    #map {
+    #map, #errorView {
       height: 100%;
       width: 100%;
     }
-
-    html, body {
-      height: 100%;
+    #errorView {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      text-align:center;
+      line-break:break-all;
+      flex-direction: column;
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    #errorView.visible {
+      display: flex;
+    }
+    button {
+      margin-top: 12px;
+      padding: 10px 16px;
+      font-size: 14px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
     }
   </style>
 </head>
 <body>
   <div id="map"></div>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <div id="errorView">
+    <div id="errorMessage">Loading...</div>
+    <button onclick="initMap()">Retry</button>
+  </div>
+
   <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const coordinates = [${coords.latitude}, ${coords.longitude}];
-    const map = L.map('map', {
-      center: coordinates,
-      zoom: 16,
-      zoomControl: false,    
-      dragging: false, 
-      touchZoom: false,     
-      scrollWheelZoom: false, 
-      doubleClickZoom: false, 
-      boxZoom: false,
-      keyboard: false,
-      tap: false,
-      attributionControl: false
-    });
+    function showError(message) {
+      document.getElementById('map').style.display = 'none';
+      const errorView = document.getElementById('errorView');
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.innerText = message;
+      errorView.classList.add('visible');
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: ''
-    }).addTo(map);
+      window.ReactNativeWebView?.postMessage(JSON.stringify({
+        type: 'error',
+        message
+      }));
+    }
 
-    const marker = L.marker(coordinates).addTo(map);
-    marker.bindPopup("Figma Inc.")
-  });
+    function initMap() {
+      try {
+        if (!window.L || !L.map) {
+          throw new Error('Map engine not loaded. Please check your internet connection.');
+        }
+
+        document.getElementById('map').style.display = 'block';
+        document.getElementById('errorView').classList.remove('visible');
+
+        const map = L.map('map', {
+          center: [${coords.latitude}, ${coords.longitude}],
+          zoom: 16,
+          zoomControl: false,
+          dragging: false,
+          touchZoom: false,
+          scrollWheelZoom: false,
+          doubleClickZoom: false,
+          boxZoom: false,
+          keyboard: false,
+          tap: false,
+          attributionControl: false,
+        });
+
+        const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: ''
+        });
+
+        tileLayer.on('tileerror', function () {
+          showError('Map tiles failed to load. Try again when internet is available.');
+        });
+
+        tileLayer.addTo(map);
+
+        const marker = L.marker([${coords.latitude}, ${coords.longitude}]).addTo(map);
+        marker.bindPopup("Treasure");
+
+        document.getElementById('map').addEventListener('click', function () {
+          window.ReactNativeWebView?.postMessage(JSON.stringify({
+            type: 'openMap',
+            coords: {
+              latitude: ${coords.latitude},
+              longitude: ${coords.longitude},
+              label: "Treasure"
+            }
+          }));
+        });
+
+      } catch (e) {
+        showError(e.message || 'Unexpected map error occurred');
+      }
+    }
+
+    window.onerror = function (message) {
+      showError('Unexpected error: ' + message);
+    };
+
+    const leafletScript = document.createElement('script');
+    leafletScript.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    leafletScript.onload = () => {
+      initMap();
+    };
+    leafletScript.onerror = () => {
+      showError('Leaflet failed to load. Are you connected to the internet?');
+    };
+    document.head.appendChild(leafletScript);
   </script>
 </body>
 </html>
@@ -195,10 +261,21 @@ const Location = () => {
     }
   };
 
-  const Loading = () => {
+  const LoadingIndicator = () => {
     return (
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator size={'large'} />
+      </View>
+    );
+  };
+
+  const ErrorIndicator = ({ errorName }: { errorName?: string }) => {
+    console.log('🚀🚀🚀 ~ ErrorIndicator ~ error:', errorName);
+
+    return (
+      <View className="flex-1 items-center justify-center">
+        <Typography>Something went wrong</Typography>
+        <Typography>{errorName}</Typography>
       </View>
     );
   };
@@ -213,23 +290,57 @@ const Location = () => {
           21, Sabari Street, Nesapakkam,. K.K. Nagar West, Chennai - 600 078
         </Typography>
 
-        <Pressable onPress={openMaps}>
-          <View className="h-[180px] w-full overflow-hidden rounded-[15px]">
-            <WebView
-              source={{ html: mapContent(coordinates) }}
-              scrollEnabled={false}
-              renderLoading={Loading}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-              cacheEnabled={false}
-              cacheMode="LOAD_NO_CACHE"
-              startInLoadingState
-            />
-          </View>
-        </Pressable>
+        <View className="h-[180px] w-full overflow-hidden rounded-[15px]">
+          <WebView
+            source={{ html: mapContent(coordinates) }}
+            scrollEnabled={false}
+            renderLoading={LoadingIndicator}
+            renderError={(errorName) => (
+              <ErrorIndicator errorName={errorName} />
+            )}
+            onMessage={(event) => {
+              try {
+                const data = JSON.parse(event.nativeEvent.data);
+
+                if (data.type === 'error') {
+                  console.log('WebView error:', data.message);
+                }
+
+                if (data.type === 'openMap') {
+                  const { latitude, longitude, label } = data.coords;
+
+                  const scheme = Platform.select({
+                    ios: 'maps:',
+                    android: 'geo:',
+                  });
+
+                  const latLng = `${latitude},${longitude}`;
+                  const url = Platform.select({
+                    ios: `${scheme}0,0?q=${latLng}(${label})`,
+                    android: `${scheme}0,0?q=${latLng}(${label})`,
+                  });
+
+                  if (url) {
+                    Linking.openURL(url).catch((err) =>
+                      console.error('Failed to open maps:', err)
+                    );
+                  }
+                }
+              } catch (e) {
+                console.warn('Failed to parse WebView message', e);
+              }
+            }}
+            onHttpError={(e) => console.log(e)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            cacheEnabled={false}
+            cacheMode="LOAD_NO_CACHE"
+            startInLoadingState
+          />
+        </View>
       </View>
     </View>
   );

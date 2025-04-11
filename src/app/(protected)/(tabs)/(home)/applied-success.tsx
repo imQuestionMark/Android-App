@@ -1,8 +1,6 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Link, useNavigation, useRouter } from 'expo-router';
-import { useCallback, useEffect } from 'react';
+import { Link } from 'expo-router';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,29 +8,6 @@ import { Button, ButtonText, Typography } from '@/components/ui';
 import { Hashtag } from '@/components/ui/icons/hashtag';
 
 const AppliedSuccess = () => {
-  const navigation = useNavigation();
-  const router = useRouter();
-
-  const goBack = useCallback(() => {
-    console.log('Back button pressed');
-    router.dismissTo({ pathname: '/(protected)/(tabs)/(home)' });
-  }, [router]);
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Button
-          onPress={goBack}
-          variant="outline"
-          className="-ml-6 border-0"
-          hitSlop={{ left: 10, right: 10, bottom: 15 }}
-        >
-          <Ionicons name="arrow-back" size={24} />
-        </Button>
-      ),
-    });
-  }, [goBack, navigation, router]);
-
   return (
     <SafeAreaView className="grow p-4" edges={[]}>
       <LinearGradient
