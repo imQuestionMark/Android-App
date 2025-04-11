@@ -21,7 +21,12 @@ const AppliedSuccess = () => {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
-        <Button onPress={goBack} variant="outline" className="-ml-4 border-0">
+        <Button
+          onPress={goBack}
+          variant="outline"
+          className="-ml-6 border-0"
+          hitSlop={{ left: 10, right: 10, bottom: 15 }}
+        >
           <Ionicons name="arrow-back" size={24} />
         </Button>
       ),
