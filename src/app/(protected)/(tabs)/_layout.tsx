@@ -40,6 +40,7 @@ export default function TabLayout() {
             <Pressable className="flex-1" {...props} android_ripple={null} />
           );
         },
+        animation: 'shift',
       }}
       safeAreaInsets={{ bottom: bottom + 10 }}
     >
