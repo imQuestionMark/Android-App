@@ -1,6 +1,8 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
+import { useCallback } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -8,8 +10,26 @@ import { Button, ButtonText, Typography } from '@/components/ui';
 import { Hashtag } from '@/components/ui/icons/hashtag';
 
 const AppliedSuccess = () => {
+  const router = useRouter();
+
+  const goToHome = useCallback(() => {
+    console.log('Back button pressed');
+    router.dismissTo({ pathname: '/(protected)/(tabs)/(home)' });
+  }, [router]);
+
   return (
-    <SafeAreaView className="grow p-4" edges={[]}>
+    <SafeAreaView className="grow p-4" edges={['top']}>
+      <View className="pb-4">
+        <Button
+          onPress={goToHome}
+          variant="icon"
+          className="border-0"
+          hitSlop={{ left: 10, right: 10, bottom: 15 }}
+        >
+          <Ionicons name="arrow-back" size={24} />
+        </Button>
+      </View>
+
       <LinearGradient
         colors={['#DFE8FF', 'white']}
         style={{
@@ -49,15 +69,9 @@ const AppliedSuccess = () => {
           </View>
 
           <View className="mt-6 flex-row flex-wrap gap-4">
-            <Link
-              href={{ pathname: '/(protected)/(tabs)/(home)' }}
-              replace
-              asChild
-            >
-              <Button variant="solid" className="grow">
-                <ButtonText className="text-[13px]">Browse Job</ButtonText>
-              </Button>
-            </Link>
+            <Button variant="solid" className="grow" onPress={goToHome}>
+              <ButtonText className="text-[13px]">Browse Job</ButtonText>
+            </Button>
           </View>
         </View>
       </LinearGradient>
