@@ -2,6 +2,7 @@ import '../../global.css';
 
 import { useReactNavigationDevTools } from '@dev-plugins/react-navigation';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { useLogger } from '@react-navigation/devtools';
 import { ThemeProvider } from '@react-navigation/native';
 import { Stack, useNavigationContainerRef, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -35,6 +36,7 @@ SplashScreen.setOptions({
 export default function RootLayout() {
   const navigationRef = useNavigationContainerRef();
   useReactNavigationDevTools(navigationRef);
+  useLogger(navigationRef);
 
   const authStatus = useBoundStore((state) => state.status);
   const onboardingStep = useBoundStore((state) => state.onboardingStep);

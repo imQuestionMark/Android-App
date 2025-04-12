@@ -1,9 +1,9 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-import { useCallback } from 'react';
-import { View } from 'react-native';
+import { useRootNavigationState, useRouter } from 'expo-router';
+import { useCallback, useEffect } from 'react';
+import { BackHandler, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, ButtonText, Typography } from '@/components/ui';
@@ -11,11 +11,26 @@ import { Hashtag } from '@/components/ui/icons/hashtag';
 
 const AppliedSuccess = () => {
   const router = useRouter();
+  const state = useRootNavigationState();
+  console.log(JSON.stringify(state, null, 2));
 
   const goToHome = useCallback(() => {
     console.log('Back button pressed');
     router.dismissTo({ pathname: '/(protected)/(tabs)/(home)' });
   }, [router]);
+
+  const backAction = useCallback(() => {
+    console.log('Trapped Back Handler');
+    goToHome();
+    return true;
+  }, [goToHome]);
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+  }, [backAction]);
 
   return (
     <SafeAreaView className="grow p-4" edges={['top']}>
