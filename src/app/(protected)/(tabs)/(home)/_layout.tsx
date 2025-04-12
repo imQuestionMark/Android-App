@@ -9,15 +9,22 @@ export default function HomeStackLayout() {
         headerStyle: {
           backgroundColor: 'white',
         },
+        animation: 'slide_from_right',
       }}
     >
       <Stack.Screen
         name="index"
-        options={{ title: 'Home', headerShown: false }}
+        options={{
+          title: 'Home',
+          headerShown: false,
+        }}
       />
       <Stack.Screen
         name="job-details"
-        options={{ title: '', headerTintColor: 'black' }}
+        options={{
+          title: '',
+          headerTintColor: 'black',
+        }}
       />
 
       <Stack.Screen
