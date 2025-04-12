@@ -13,8 +13,15 @@ import {
   type Variables,
 } from '@/api/authentication/verification';
 import GradientView from '@/components/onboarding/gradient-view';
-import { Button, ButtonText, colors, Typography,ErrorMessage } from '@/components/ui';
+import {
+  Button,
+  ButtonText,
+  colors,
+  ErrorMessage,
+  Typography,
+} from '@/components/ui';
 import useBoundStore from '@/lib/store';
+import { devLog } from '@/lib/utils';
 
 const DEFAULT_TIMEOUT = 60;
 
@@ -86,22 +93,15 @@ export default function Verification() {
             <View className="">
               <View className="mb-3.5 flex-row gap-2">
                 <Typography weight={700} color="main" className="text-[32px]">
-                <Typography weight={700} color="main" className="text-[32px]">
                   Welcome
                 </Typography>
-                <Typography
-                  weight={700}
-                  color="primary"
-                  className="text-[32px]"
-                >
-                </Typography>
+
                 <Typography
                   weight={700}
                   color="primary"
                   className="text-[32px]"
                 >
                   Onboard!
-                </Typography>
                 </Typography>
               </View>
 
@@ -113,19 +113,13 @@ export default function Verification() {
                 >
                   Verify your account
                 </Typography>
-                <Typography
-                  weight={500}
-                  color="body"
-                  className="font-poppins-semibold text-[12px]"
-                >
-                </Typography>
+
                 <Typography
                   weight={500}
                   color="body"
                   className="font-poppins-semibold text-[12px]"
                 >
                   OTP send to your email address. Please enter
-                </Typography>
                 </Typography>
               </View>
             </View>
@@ -152,7 +146,6 @@ export default function Verification() {
               <View className="mb-6  flex flex-row items-center justify-center">
                 <Typography weight={500} color="main" className="text-base">
                   Didn't receive OTP?
-                </Typography>
                 </Typography>
 
                 <Button
@@ -196,17 +189,14 @@ const _THEME = {
     width: 52,
     borderRadius: 8,
     backgroundColor: colors.white,
-    backgroundColor: colors.white,
     borderWidth: 2,
     borderColor: '#00000038',
   },
   focusedPinCodeContainerStyle: {
     borderWidth: 2,
     borderColor: colors.primary,
-    borderColor: colors.primary,
   },
   focusStickStyle: {
-    borderColor: colors.primary,
     borderColor: colors.primary,
     borderWidth: 1,
     height: 20,
