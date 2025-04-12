@@ -35,12 +35,14 @@ export function useWallNavigationFlow() {
     const prev = getPreviousScreen(currentScreen);
     if (prev) return router.dismissTo({ pathname: `/${BASE_PATH}/${prev}` });
 
-    router.dismissTo({ pathname: '/wall/upload-details' });
+    router.dismissTo({ pathname: '/(protected)/(wall)/upload-details' });
   }, [currentScreen, getPreviousScreen, router]);
 
   const goNext = useCallback(() => {
     if (isLastStep)
-      return router.dismissTo({ pathname: '/wall/upload-details' });
+      return router.dismissTo({
+        pathname: '/(protected)/(wall)/upload-details',
+      });
 
     const nextScreen = getNextScreen(currentScreen);
     if (nextScreen) router.push({ pathname: `/${BASE_PATH}/${nextScreen}` });

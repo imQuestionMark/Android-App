@@ -37,6 +37,7 @@ const BasicInfoStackLayout = () => {
               title={getHeaderTitle(options, route.name)}
             />
           ),
+          animation: 'fade_from_bottom',
         }}
         screenLayout={(props) => (
           <CommonLayout

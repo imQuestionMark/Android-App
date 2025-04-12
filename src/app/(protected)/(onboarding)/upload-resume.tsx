@@ -200,7 +200,7 @@ export default function UploadResume() {
 
   return (
     <SafeAreaView className="grow bg-white p-3">
-      <ScrollView contentContainerClassName="grow gap-6 bg-purple-200">
+      <ScrollView contentContainerClassName="grow gap-6">
         <View className="items-center px-[35px]">
           <Image
             className="h-[301px] w-[360px]"

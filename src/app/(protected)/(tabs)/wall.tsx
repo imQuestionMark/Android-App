@@ -158,7 +158,7 @@ const CreateWall = () => {
         <Button
           className=" h-[46px] flex-1 gap-3 bg-[#2800C9]"
           onPress={() => {
-            router.push({ pathname: '/wall/upload-details' });
+            router.push({ pathname: '/(protected)/(wall)/upload-details' });
           }}
         >
           <Ionicons name="add-circle-outline" size={24} color="white" />
