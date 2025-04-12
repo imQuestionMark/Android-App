@@ -1,4 +1,4 @@
-import { Slot } from 'expo-router';
+import { Slot, Stack } from 'expo-router';
 
 import GradientView from '@/components/onboarding/gradient-view';
 import BottomNav from '@/components/personal-details/bottom-nav';
@@ -13,6 +13,11 @@ const OnboardingLayout = () => {
         <Slot />
         <BottomNav onPress={handler} />
       </GradientView>
+      <Stack.Screen
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
     </>
   );
 };

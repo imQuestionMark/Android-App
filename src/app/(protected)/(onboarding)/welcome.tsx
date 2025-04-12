@@ -30,7 +30,7 @@ export default function Professional() {
         <View className="gap-[10px]">
           <Link
             href={{
-              pathname: '/home',
+              pathname: '/(protected)/(tabs)/(home)',
             }}
             asChild
           >

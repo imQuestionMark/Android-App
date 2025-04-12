@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function WallLayout() {
+export default function OnboardingLayout() {
   return (
     <Stack
       screenOptions={{
@@ -8,9 +8,8 @@ export default function WallLayout() {
         contentStyle: {
           backgroundColor: 'white',
         },
+        animation: 'slide_from_right',
       }}
-    >
-      <Stack.Screen name="upload-details" options={{}} />
-    </Stack>
+    ></Stack>
   );
 }
