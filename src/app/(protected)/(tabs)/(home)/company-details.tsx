@@ -32,14 +32,13 @@ const CompanyDetails = () => {
 
 export default CompanyDetails;
 
-const DetailsCard = ({ details }) => {
-  const openMaps = async () => {
-    const android = `geo:0,0?q=13.0358471, 80.2321063(Treasure)`;
-    const ios = `maps:0,0?q=13.0358471, 80.2321063(Treasure)`;
-    const url = Platform.select({ ios, android });
-    if (url) await Linking.openURL(url);
-  };
+type Details = {
+  company: string;
+  location: string;
+  logo: unknown;
+};
 
+const DetailsCard = ({ details }: { details: Details }) => {
   const visitWebsite = () => {
     const url = `https://figma.com`;
     openLinkInBrowser(url);
@@ -75,7 +74,7 @@ const DetailsCard = ({ details }) => {
         </View>
 
         <View className="mt-2 flex-row flex-wrap gap-4">
-          <Button className="grow" variant="outline" onPress={openMaps}>
+          <Button className="grow" variant="outline" onPress={() => {}}>
             <ButtonText className="text-[13px]">Linkedin Profile</ButtonText>
           </Button>
 
@@ -88,7 +87,12 @@ const DetailsCard = ({ details }) => {
   );
 };
 
-const mapContent = (coords) => `
+type Coordinates = {
+  latitude: number;
+  longitude: number;
+};
+
+const mapContent = (coords: Coordinates) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -227,39 +231,6 @@ const Location = () => {
     latitude: 13.0358471,
     longitude: 80.2321063,
   });
-
-  const openMaps = async () => {
-    const { latitude, longitude } = coordinates;
-    const label = 'Treasure';
-
-    const scheme = Platform.select({
-      ios: 'maps:',
-      android: 'geo:',
-    });
-
-    const latLng = `${latitude},${longitude}`;
-    const url = Platform.select({
-      ios: `${scheme}0,0?q=${latLng}(${label})`,
-      android: `${scheme}0,0?q=${latLng}(${label})`,
-    });
-
-    try {
-      if (!url) return console.log('No URL provided');
-      // const canOpen = await Linking.canOpenURL(url);
-      const canOpen = true;
-
-      console.log('🚀🚀🚀 ~ openMaps ~ canOpen:', canOpen);
-      console.log('🚀🚀🚀 ~ openMaps ~ url:', url);
-
-      if (canOpen && url) {
-        await Linking.openURL(url);
-      } else {
-        console.log("Can't open maps app");
-      }
-    } catch (error) {
-      console.error('Error opening maps:', error);
-    }
-  };
 
   const LoadingIndicator = () => {
     return (

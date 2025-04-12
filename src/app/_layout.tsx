@@ -54,9 +54,9 @@ export default function RootLayout() {
       // const isAuthenticated = true;
       // const hasCompletedOnboarding = true;
       // const hasNotStartedOnboarding = false;
-      const isAuthenticated = authStatus === 'authenticated';
-      const hasCompletedOnboarding = onboardingStep === _ONBOARDING_COMPLETED;
-      const hasNotStartedOnboarding = onboardingStep === _ONBOARDING_UNSTARTED;
+      // const isAuthenticated = authStatus === 'authenticated';
+      // const hasCompletedOnboarding = onboardingStep === _ONBOARDING_COMPLETED;
+      // const hasNotStartedOnboarding = onboardingStep === _ONBOARDING_UNSTARTED;
 
       try {
         //   const inAuthGroup = segments[0] === '(authentication)';

@@ -1,9 +1,9 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as FileSystem from 'expo-file-system';
 import { Image } from 'expo-image';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
-import Pdf from 'react-native-pdf';
+import { useCallback, useRef, useState } from 'react';
+import { ScrollView, View } from 'react-native';
+// import Pdf from 'react-native-pdf';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Typography } from '@/components/ui';
@@ -115,8 +115,8 @@ export default function UploadResume() {
   const [isUploading, setIsUploading] = useState(false);
   const uploadInterval = useRef<NodeJS.Timeout | null>(null);
   const { pickDocument } = useDocumentPicker();
-  const [size, setSize] = useState({ height: 0, width: 0 });
-  const [filePath, setFilePath] = useState<null | string>(null);
+  // const [size, setSize] = useState({ height: 0, width: 0 });
+  // const [filePath, setFilePath] = useState<null | string>(null);
 
   const clearUploadInterval = useCallback(() => {
     if (uploadInterval.current) {
@@ -124,10 +124,6 @@ export default function UploadResume() {
       uploadInterval.current = null;
     }
   }, []);
-
-  useEffect(() => {
-    console.log({ size });
-  }, [size]);
 
   const resetTimer = useCallback(() => {
     clearUploadInterval();
@@ -151,7 +147,7 @@ export default function UploadResume() {
 
       console.log('🚀🚀🚀 ~ handleUpload ~ path:', path);
 
-      setFilePath(path);
+      // setFilePath(path);
 
       // resetTimer();
 
@@ -181,8 +177,6 @@ export default function UploadResume() {
   const handleCancel = useCallback(() => {
     resetTimer();
   }, [resetTimer]);
-  const screenWidth = Dimensions.get('window').width;
-  const screenHeight = Dimensions.get('window').height;
 
   const convertContentUriToFilePath = async (uri: string) => {
     try {
@@ -271,14 +265,14 @@ export default function UploadResume() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexGrow: 1,
-    backgroundColor: 'red',
-  },
-  pdf: {
-    flex: 1,
-    backgroundColor: 'green',
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     flexGrow: 1,
+//     backgroundColor: 'red',
+//   },
+//   pdf: {
+//     flex: 1,
+//     backgroundColor: 'green',
+//   },
+// });
