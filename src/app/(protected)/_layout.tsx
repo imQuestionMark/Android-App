@@ -9,7 +9,6 @@ export default function ProtectedLayout() {
           backgroundColor: 'white',
         },
         animation: 'slide_from_bottom',
-        }}
       }}
     >
       <Stack.Screen name="(basic-information)" options={{}} />
