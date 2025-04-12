@@ -1,4 +1,4 @@
-import { Image } from 'expo-image';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import React from 'react';
 import { View } from 'react-native';
@@ -6,7 +6,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, ButtonText, Typography } from '@/components/ui';
-
 export default function NotificationManage() {
   return (
     <SafeAreaView className="flex-1 bg-white px-4 pt-4">
@@ -57,9 +56,10 @@ export default function NotificationManage() {
                   });
                 }}
               >
-                <Image
-                  source={require('assets/profile-push-arrow.svg')}
-                  className="size-[24px]"
+                <Ionicons
+                  name="arrow-forward-circle-outline"
+                  size={24}
+                  color="gray"
                 />
               </Button>
             </View>

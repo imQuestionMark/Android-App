@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import * as Updates from 'expo-updates';
@@ -98,10 +99,10 @@ const ProfileMenuItem = ({
               {description}
             </Typography>
           </View>
-          <Image
-            contentFit="contain"
-            source={require('assets/profile-push-arrow.svg')}
-            className="mt-[-18px] size-[24px]"
+          <Ionicons
+            name="arrow-forward-circle-outline"
+            size={24}
+            color="gray"
           />
         </View>
       </View>

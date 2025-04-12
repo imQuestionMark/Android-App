@@ -1,4 +1,4 @@
-import { Image } from 'expo-image';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import React from 'react';
 import { View } from 'react-native';
@@ -53,9 +53,10 @@ export default function DataPrivacy() {
                   });
                 }}
               >
-                <Image
-                  source={require('assets/profile-push-arrow.svg')}
-                  className="size-[24px]"
+                <Ionicons
+                  name="arrow-forward-circle-outline"
+                  size={24}
+                  color="gray"
                 />
               </Button>
             </View>
