@@ -1,4 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { HeaderBackButton } from '@react-navigation/elements';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRootNavigationState, useRouter } from 'expo-router';
@@ -34,15 +35,13 @@ const AppliedSuccess = () => {
 
   return (
     <SafeAreaView className="grow p-4" edges={['top']}>
-      <View className="pb-4">
-        <Button
+      <View className="mb-4 flex-row">
+        <HeaderBackButton
+          accessibilityLabel="Go to Home"
           onPress={goToHome}
-          variant="icon"
-          className="border-0"
-          hitSlop={{ left: 10, right: 10, bottom: 15 }}
-        >
-          <Ionicons name="arrow-back" size={24} />
-        </Button>
+          style={{ paddingHorizontal: 0, marginHorizontal: 0 }}
+          backImage={() => <Ionicons name="arrow-back" size={24} />}
+        />
       </View>
 
       <LinearGradient
