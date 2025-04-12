@@ -34,6 +34,7 @@ export const YearModal = ({
       animationType="fade"
       visible={isYearModalVisisble}
       onRequestClose={toggleYearModal}
+      testID="year-modal"
     >
       <TouchableWithoutFeedback onPress={toggleYearModal}>
         <View className={container()}>
@@ -42,6 +43,8 @@ export const YearModal = ({
               <FlatList
                 data={_YEARS}
                 keyExtractor={(item) => item.toString()}
+                testID="year-scrolllist"
+                accessibilityLabel="year-scrolllist-label"
                 renderItem={({ item, index }) => (
                   <Pressable
                     onPress={() => {

@@ -1,4 +1,4 @@
-import { Linking } from 'react-native';
+import * as Linking from 'expo-linking';
 import type { StoreApi, UseBoundStore } from 'zustand';
 
 export function openLinkInBrowser(url: string) {

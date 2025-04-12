@@ -40,6 +40,7 @@ export const MonthModal = ({
       animationType="fade"
       visible={isMonthModalVisisble}
       onRequestClose={toggleMonthModal}
+      testID="month-modal"
     >
       <TouchableWithoutFeedback onPress={toggleMonthModal}>
         <View className={container()}>

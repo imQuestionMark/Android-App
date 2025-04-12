@@ -20,7 +20,6 @@ type Response = z.infer<typeof locationResponseSchema>;
 
 const fetchLocations = async () => {
   const response = await client.get(API_ROUTES.LOCATION.GET);
-  console.log('Location response', response);
   return locationResponseSchema.parse(response.data.data);
 };
 

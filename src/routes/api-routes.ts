@@ -31,10 +31,15 @@ const USER = {
   PERSONAL_DATA: '/user/personal-data-protected',
 };
 
+const WALL = {
+  BASIC_INFORMATION: '/wall/basic-info/',
+};
+
 export const API_ROUTES = {
   ...AUTH,
   ...LOCATION,
   ...JOB,
   ...ONBOARDING,
   ...USER,
+  ...WALL,
 } as const;

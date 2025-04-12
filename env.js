@@ -39,8 +39,8 @@ const PACKAGE = 'com.banana'; // android package name
 const NAME = 'Banana'; // app name
 const EXPO_ACCOUNT_OWNER = 'rishabkhivsara'; // expo account owner
 const EAS_PROJECT_ID = '52f32a19-7088-4919-98a1-f288190f1a2e'; // eas project id
-const SCHEME = 'Banana'; // app scheme
-
+const SCHEME = 'banana'; // app scheme
+const EAS_UPDATE_URL = `https://u.expo.dev/${EAS_PROJECT_ID}`; // eas update url
 /**
  * We declare a function withEnvSuffix that will add a suffix to the variable name based on the APP_ENV
  * Add a suffix to variable env based on APP_ENV
@@ -86,6 +86,7 @@ const buildTime = z.object({
   EXPO_ACCOUNT_OWNER: z.string(),
   EAS_PROJECT_ID: z.string(),
   // ADD YOUR BUILD TIME ENV VARS HERE
+  EAS_UPDATE_URL: z.string(),
 });
 
 /**
@@ -109,6 +110,7 @@ const _clientEnv = {
 const _buildTimeEnv = {
   EXPO_ACCOUNT_OWNER,
   EAS_PROJECT_ID,
+  EAS_UPDATE_URL,
   // ADD YOUR ENV VARS HERE TOO
 };
 

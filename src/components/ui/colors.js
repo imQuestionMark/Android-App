@@ -2,6 +2,7 @@ module.exports = {
   white: '#ffffff',
   black: '#000000',
   primary: '#0400D1',
+  secondary: '#1849D6',
   main: '#161616',
   body: '#5A5A5A',
   green: '#4CAF50',

@@ -1,22 +1,32 @@
-import { View } from 'react-native';
+import { type UseFormSetValue, useWatch } from 'react-hook-form';
 
-import { ControlledInput, Typography } from '@/components/ui';
+import { type ProfessionalFormData } from '@/api/authentication/professional-details';
+import { ControlledInput } from '@/components/ui';
 
-import type { ProfessionalControl } from '../types';
+import { type ProfessionalControl } from '../types';
 
-type CTCProps = ProfessionalControl & {};
+type CTCProps = ProfessionalControl & {
+  setValue: UseFormSetValue<ProfessionalFormData>;
+};
 
-export const CTC = ({ control }: CTCProps) => {
+export const CTC = ({ control, setValue }: CTCProps) => {
+  const currentCTC = useWatch({ control, name: 'currentCTC' }) || '';
+
+  const formatToLPA = (value: string) => (value ? `${value} LPA` : '');
+  const removeNonNumeric = (value: string) => value.replace(/\D/g, '');
+
   return (
-    <View className="mb-5">
-      <Typography weight={500} className="mb-4 text-[16px]">
-        Current CTC
-      </Typography>
+    <>
       <ControlledInput
         name="currentCTC"
         control={control}
         placeholder="8 LPA"
+        label="Current CTC"
+        keyboardType="numeric"
+        onChangeText={(text) => setValue('currentCTC', removeNonNumeric(text))}
+        onBlur={() => setValue('currentCTC', formatToLPA(currentCTC))}
+        onFocus={() => setValue('expectedCTC', removeNonNumeric(currentCTC))}
       />
-    </View>
+    </>
   );
 };

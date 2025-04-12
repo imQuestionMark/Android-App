@@ -7,7 +7,7 @@ import {
   type MarkedDates,
 } from 'react-native-calendars/src/types';
 
-import { type PersonalDetailsProps } from '@/app/(authentication)/personal-details';
+import { type PersonalDetailsProps } from '@/api/authentication/personal-details';
 import { usePersonalStore } from '@/lib/store/personal-details';
 
 import { _renderArrows } from './arrows';
@@ -93,6 +93,7 @@ export function ControlledCalendar({ control, hideCalendarModal }: TCalendar) {
         onDayPress={handleDayPress}
         style={{ borderRadius: 6 }}
         initialDate={currentDateString}
+        testID="day-view"
         dayComponent={(data) => _renderDay(data)}
         // onPressArrowLeft={handleLeftArrowPress}
         // onPressArrowRight={handleRightArrowPress}

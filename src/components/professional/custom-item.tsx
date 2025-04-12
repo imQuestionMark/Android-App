@@ -15,7 +15,7 @@ export const CustomItem = ({
 }) => {
   {
     return (
-      <View className={itemContainer()}>
+      <View className={itemContainer()} testID="job-role-item">
         <View className={itemIcon({ selected })}>
           <Svg width="20" fill="none" height="20" viewBox="0 0 20 20">
             <Path

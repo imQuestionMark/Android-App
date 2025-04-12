@@ -1,6 +1,6 @@
 <h1 align="center">
   <img alt="logo" src="./assets/icons/splash-icon-dark.png" width="124px" style="border-radius:10px"/><br/>
-Banana</h1>
+Banana </h1>
 
 ## Todo
 

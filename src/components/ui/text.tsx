@@ -53,7 +53,10 @@ export const Typography = forwardRef<RNText, TypographyProps>(
         ref={ref}
         className={textStyles({ type, color, weight, className })}
         style={StyleSheet.flatten([
-          { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+          {
+            writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            includeFontPadding: false,
+          },
           style,
         ])}
         {...props}

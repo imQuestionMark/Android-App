@@ -4,9 +4,11 @@ import type { AppIconBadgeConfig } from 'app-icon-badge/types';
 
 import { ClientEnv, Env } from './env';
 
+const isAndroid = process.env.EXPO_PLATFORM === 'android';
+
 const appIconBadgeConfig: AppIconBadgeConfig = {
-  // enabled: Env.APP_ENV !== 'production',
-  enabled: false,
+  // enabled: Env.APP_ENV !== 'production' && Env.APP_ENV !== 'staging',
+  enabled: Env.APP_ENV !== 'production' && isAndroid,
   badges: [
     {
       text: Env.APP_ENV,
@@ -33,7 +35,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
   updates: {
+    enabled: true,
     fallbackToCacheTimeout: 0,
+    url: Env.EAS_UPDATE_URL,
+  },
+  runtimeVersion: {
+    policy: 'appVersion',
   },
   assetBundlePatterns: ['**/*'],
   ios: {
@@ -55,6 +62,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       monochromeImage: './assets/icons/adaptive-icon.png',
       backgroundColor: '#2800C9',
     },
+    permissions: [
+      'android.permission.READ_EXTERNAL_STORAGE',
+      'android.permission.MANAGE_DOCUMENTS',
+    ],
     package: Env.PACKAGE,
     versionCode: 1,
   },
@@ -96,7 +107,25 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     'expo-router',
     'expo-secure-store',
     ['app-icon-badge', appIconBadgeConfig],
-    ['react-native-edge-to-edge'],
+    [
+      'react-native-edge-to-edge',
+      {
+        android: {
+          parentTheme: 'Light',
+          // enforceNavigationBarContrast: false,
+        },
+      },
+    ],
+    'expo-document-picker',
+    [
+      'expo-image-picker',
+      {
+        photosPermission:
+          'The app accesses your photos to let you share them with your friends.',
+      },
+    ],
+    '@config-plugins/react-native-pdf',
+    '@config-plugins/react-native-blob-util',
   ],
   extra: {
     ...ClientEnv,
