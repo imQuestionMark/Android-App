@@ -57,8 +57,11 @@ export default function AccountDetails() {
   };
 
   return (
-    <SafeAreaView className=" mt-9 justify-center bg-white  px-[16px]">
-      <KeyboardAwareScrollView contentContainerClassName="grow">
+    <SafeAreaView className="grow justify-center bg-white px-[16px]">
+      <KeyboardAwareScrollView
+        contentContainerClassName="grow"
+        showsVerticalScrollIndicator={false}
+      >
         <View className="mb-[25px]">
           <Typography weight={600} color="main" className="text-[24px]">
             Account Details

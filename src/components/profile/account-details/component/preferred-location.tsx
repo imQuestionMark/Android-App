@@ -21,11 +21,10 @@ export const ProfilePreferredLocations = ({ control }: MoWProps) => {
     control,
   });
 
-  const LocationPlaceholder = (
-    <Typography weight={400} className="text-[14px]">
-      {value.length ? value.join(', ') : 'Select Preferred Locations'}
-    </Typography>
-  );
+  const LocationPlaceholder = value.length
+    ? value.join(', ')
+    : 'Select Preferred Locations';
+
   return (
     <View>
       <Typography weight={500} className="mb-4 text-[14px] text-[#0B0B0B]">

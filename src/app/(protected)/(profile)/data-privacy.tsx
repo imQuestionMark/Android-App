@@ -49,7 +49,7 @@ export default function DataPrivacy() {
                   console.log('Navigating ...');
 
                   router.push({
-                    pathname: '/(profile)/language-selection',
+                    pathname: '/(protected)/(profile)/language-selection',
                   });
                 }}
               >

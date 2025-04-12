@@ -21,11 +21,9 @@ export const ProfileModeOfWork = ({ control }: MoWProps) => {
     control,
   });
 
-  const ModePlaceholder = (
-    <Typography weight={400} className="text-[14px]">
-      {value.length ? value.join(', ') : 'Select Preferred Modes'}
-    </Typography>
-  );
+  const ModePlaceholder = value.length
+    ? value.join(', ')
+    : 'Select Preferred Modes';
 
   return (
     <View>

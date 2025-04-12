@@ -70,7 +70,7 @@ const buttonStyles = tv({
       variant: 'icon',
       size: ['xs', 'sm', 'md', 'lg', 'xl', '2xl'],
       className: {
-        base: 'size-10 rounded-full border border-primary p-0',
+        base: 'size-10 rounded-full border-0 p-0',
       },
     },
   ],

@@ -8,61 +8,63 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import GradientView from '@/components/onboarding/gradient-view';
 import { Button, ButtonText, Typography } from '@/components/ui';
 
-const menuItems = [
+type IMenuItems = {
+  description: string;
+  href?: IProfileMenuItem;
+  id: string;
+  title: string;
+};
+
+const menuItems: IMenuItems[] = [
   {
     id: 'account',
     title: 'Account',
     description: 'Personal Info Profile Picture',
-    href: '/(profile)/account-details',
+    href: '/(protected)/(profile)/account-details',
   },
   {
     id: 'activity',
     title: 'My Activity',
     description: 'You can view saved and applied jobs',
-    href: '/(profile)/activity',
   },
   {
     id: 'preferences',
     title: 'General Preference',
     description: 'App preference, Common change, Themes',
-    href: '/(profile)/general-preference',
+    href: '/(protected)/(profile)/general-preference',
   },
   {
     id: 'notifications',
     title: 'Notification Manage',
     description: 'Choose your Notification Preference',
-    href: '/(profile)/notifications',
+    href: '/(protected)/(profile)/notification/notification-manage',
   },
   {
     id: 'privacy',
     title: 'Data Privacy & Protection',
     description: 'Enable/Disable your Private Information to be displayed.',
-    href: '/(profile)/data-privacy',
+    href: '/(protected)/(profile)/data-privacy',
   },
   {
     id: 'support',
     title: 'Help & Support',
     description:
       'Customer Support - 24*7 , Chat support, Customer call representative',
-    href: '/(profile)/support',
   },
   {
     id: 'policy',
     title: 'Privacy Policy',
     description: 'Read our Privacy policy documentation.',
-    href: '/(profile)/policy',
   },
 ];
 
 //  extract the href into a type from all menutitems
 type IProfileMenuItem =
-  | 'account-details'
-  | 'activity'
-  | 'data-privacy'
-  | 'general-preference'
-  | 'notifications'
-  | 'policy'
-  | 'support';
+  | '/(protected)/(profile)/account-details'
+  | '/(protected)/(profile)/data-privacy'
+  | '/(protected)/(profile)/general-preference'
+  | '/(protected)/(profile)/language-selection'
+  | '/(protected)/(profile)/notification/notification-manage';
 
 const ProfileMenuItem = ({
   title,
@@ -70,13 +72,13 @@ const ProfileMenuItem = ({
   href,
 }: {
   description: string;
-  href: IProfileMenuItem;
+  href?: IProfileMenuItem;
   title: string;
 }) => {
   const router = useRouter();
 
   const handlePress = () => {
-    router.push({ pathname: href });
+    if (href) router.push({ pathname: href });
   };
 
   return (
@@ -110,7 +112,10 @@ const ProfileMenuItem = ({
 export default function ProfileMain() {
   return (
     <GradientView edges={['top', 'left', 'right']}>
-      <KeyboardAwareScrollView contentContainerClassName="grow justify-center gap-16 px-[16px]">
+      <KeyboardAwareScrollView
+        contentContainerClassName="grow justify-center gap-16 px-[16px]"
+        showsVerticalScrollIndicator={false}
+      >
         <View className="justify-between gap-3">
           <View>
             <Typography weight={600} color="main" className="text-[24px]">
