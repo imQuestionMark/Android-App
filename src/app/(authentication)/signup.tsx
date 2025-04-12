@@ -12,8 +12,12 @@ import {
 } from '@/api/authentication/signup';
 import GradientView from '@/components/onboarding/gradient-view';
 import { TermsandConditions } from '@/components/onboarding/terms-text';
-import { ControlledInput, Typography } from '@/components/ui';
-import { Button, ButtonText } from '@/components/ui/button';
+import {
+  Button,
+  ButtonText,
+  ControlledInput,
+  Typography,
+} from '@/components/ui';
 import { useUserStore } from '@/lib/store/user-store';
 import { devLog } from '@/lib/utils';
 
