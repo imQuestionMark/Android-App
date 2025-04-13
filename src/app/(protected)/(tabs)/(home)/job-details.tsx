@@ -26,7 +26,7 @@ const fakeMoreJobs: TJob[] = [
       'We are looking for a skilled Software Engineer to join our dynamic team, specializing in backend development using Django and Python.',
     noticePeriod: '2 months',
     check: 75,
-    _id: '67fb5f44620ee9ed8e2dd2f8',
+    id: '67fb5f44620ee9ed8e2dd2f8',
   },
   {
     designation: 'Frontend Developer - Engineer',
@@ -43,7 +43,7 @@ const fakeMoreJobs: TJob[] = [
       'We are looking for a skilled Software Engineer to join our dynamic team, specializing in backend development using Django and Python.',
     noticePeriod: '2 months',
     check: 75,
-    _id: '67fb9bf8ce011b052a6f5173',
+    id: '67fb9bf8ce011b052a6f5173',
   },
 ];
 
@@ -62,7 +62,7 @@ const fakeJobDetails: TJob = {
     'We are looking for a skilled Software Engineer to join our dynamic team, specializing in backend development using Django and Python.',
   noticePeriod: '2 months',
   check: 75,
-  _id: '67fb5f44620ee9ed8e2dd2f8',
+  id: '67fb5f44620ee9ed8e2dd2f8',
 };
 
 const JobDetails = () => {
@@ -98,7 +98,7 @@ const MoreJobs = ({ fakeMoreJobs }: { fakeMoreJobs: TJob[] }) => {
       </View>
 
       {fakeMoreJobs.map((item) => (
-        <JobCard job={item} key={item._id} />
+        <JobCard job={item} key={item.id} />
       ))}
     </View>
   );

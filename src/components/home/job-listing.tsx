@@ -11,11 +11,11 @@ export const JobListing = ({ jobs }: { jobs: TJob[] }) => {
     <View className="mt-4 flex-1">
       <FlatList
         data={jobs}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => <JobCard job={item} />}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={jobs.length === 0 ? { flex: 1 } : null}
-        ListHeaderComponent={ListHeader}
+        // ListHeaderComponent={ListHeader}
         ListEmptyComponent={ListEmpty}
         ListFooterComponent={ListFooter}
       />
@@ -23,9 +23,9 @@ export const JobListing = ({ jobs }: { jobs: TJob[] }) => {
   );
 };
 
-const ListHeader = () => {
+export const ListHeader = () => {
   return (
-    <View className="mb-4 flex-row items-center justify-between">
+    <View className="mt-4 flex-row items-center justify-between">
       <Typography weight={600} className="text-[20px] text-black">
         Top Companies Hiring
       </Typography>

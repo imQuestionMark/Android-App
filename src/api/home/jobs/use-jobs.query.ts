@@ -19,7 +19,7 @@ const jobItem = z.object({
   jobDescription: z.string(),
   noticePeriod: z.string(),
   check: z.number(),
-  _id: z.string(),
+  id: z.string(),
 });
 
 const jobResponseSchema = z.object({
@@ -31,12 +31,14 @@ export type TJob = z.infer<typeof jobItem>;
 export type TJobResponse = z.infer<typeof jobResponseSchema>;
 type Variables = void;
 
-const fetchJobs = async () => {
+export const fetchJobs = async () => {
   const response = await client.get(API_ROUTES.JOB.GET);
+  // throw new Promise((resolve) => setTimeout(resolve, 3000)); // force suspense
+
   return jobResponseSchema.parse(response.data.data);
 };
 
-export const useRolesQuery = createQuery<TJobResponse, Variables, AxiosError>({
+export const useJobsQuery = createQuery<TJobResponse, Variables, AxiosError>({
   queryKey: ['jobs'],
   fetcher: fetchJobs,
   retry: false,
