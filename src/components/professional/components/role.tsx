@@ -5,7 +5,7 @@ import { View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 
 import { queryClient } from '@/api';
-import { useJobs } from '@/api/professional/use-roles.query';
+import { useRolesQuery } from '@/api/professional/use-roles.query';
 import { Button, ButtonText, Input, Typography } from '@/components/ui';
 
 import { ErrorMessage } from '../../ui/error-message';
@@ -25,17 +25,17 @@ export const Role = ({ control }: RoleProps) => {
   });
   const [query, setQuery] = useState<string>('');
 
-  const data = queryClient.getQueryData(useJobs.getKey());
+  const data = queryClient.getQueryData(useRolesQuery.getKey());
 
   const handleOptimisticUpdate = () => {
-    const currentData = queryClient.getQueryData(useJobs.getKey());
+    const currentData = queryClient.getQueryData(useRolesQuery.getKey());
     if (query) {
       const newData = [
         { id: query, label: query },
         ...(currentData?.items || []),
       ];
 
-      queryClient.setQueryData(useJobs.getKey(), { items: newData });
+      queryClient.setQueryData(useRolesQuery.getKey(), { items: newData });
     }
     resetSearch();
   };

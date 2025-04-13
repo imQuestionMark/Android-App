@@ -2,76 +2,77 @@ import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { type TJob } from '@/api/home/jobs/use-jobs.query';
 import { CompanyCard } from '@/components/home/company-card';
-import { type TBadge } from '@/components/home/job-badge';
 import { JobCard } from '@/components/home/job-card';
 import { JobDescription } from '@/components/home/job-description';
-import { JobDetailsCard, type TJob } from '@/components/home/job-details-card';
+import { JobDetailsCard } from '@/components/home/job-details-card';
 import { Button, ButtonText, Typography } from '@/components/ui';
 import { DottedLine } from '@/components/ui/dotted-line';
 
 const fakeMoreJobs: TJob[] = [
   {
-    id: '1',
-    title: 'UI / UX Designer',
-    company: 'Figma',
-    logo: require('assets/figma.png'),
-    location: 'New York, United States',
-    experience: '1-2 years Experience',
-    postedDays: 20,
-    matchingSkills: 5,
-    isSaved: true,
-    tag: 'Designing',
+    designation: 'Mobile Developer - Engineer',
+    location: ['New York', 'San Francisco'],
+    isActive: true,
+    jobType: 'Full-time',
+    workMode: 'Hybrid',
+    skillsRequired: ['Python', 'Django', 'REST APIs', 'PostgreSQL'],
+    recruiterId: '6794c33bc93430e53630b4f5',
+    minExperience: 3,
+    maxExperience: 5,
+    salary: '0.5 LPA-4 LPA',
+    jobDescription:
+      'We are looking for a skilled Software Engineer to join our dynamic team, specializing in backend development using Django and Python.',
+    noticePeriod: '2 months',
+    check: 75,
+    _id: '67fb5f44620ee9ed8e2dd2f8',
   },
   {
-    id: '2',
-    title: 'Data Analyst',
-    company: 'Huawei',
-    logo: require('assets/huawei.png'),
-    location: 'Tokyo, Japan',
-    experience: '1-2 years Experience',
-    postedDays: 20,
-    isSaved: false,
-    tag: 'Development',
+    designation: 'Frontend Developer - Engineer',
+    location: ['New York', 'San Francisco'],
+    isActive: true,
+    jobType: 'Full-time',
+    workMode: 'Hybrid',
+    skillsRequired: ['Python', 'Django', 'REST APIs', 'PostgreSQL'],
+    recruiterId: '6794c33bc93430e53630b4f5',
+    minExperience: 3,
+    maxExperience: 5,
+    salary: '0.5 LPA-4 LPA',
+    jobDescription:
+      'We are looking for a skilled Software Engineer to join our dynamic team, specializing in backend development using Django and Python.',
+    noticePeriod: '2 months',
+    check: 75,
+    _id: '67fb9bf8ce011b052a6f5173',
   },
 ];
 
 const fakeJobDetails: TJob = {
-  id: '1',
-  title: 'UI / UX Designer',
-  company: 'Figma',
-  logo: require('assets/figma.png'),
-  location: 'New York, United States',
-  experience: '1-2 years Experience',
-  postedDays: 20,
-  matchingSkills: 5,
-  isSaved: true,
-  tag: 'Designing',
+  designation: 'Backend Developer - Engineer',
+  location: ['New York', 'San Francisco'],
+  isActive: true,
+  jobType: 'Full-time',
+  workMode: 'Hybrid',
+  skillsRequired: ['Python', 'Django', 'REST APIs', 'PostgreSQL'],
+  recruiterId: '6794c33bc93430e53630b4f5',
+  minExperience: 3,
+  maxExperience: 5,
+  salary: '0.5 LPA-4 LPA',
+  jobDescription:
+    'We are looking for a skilled Software Engineer to join our dynamic team, specializing in backend development using Django and Python.',
+  noticePeriod: '2 months',
+  check: 75,
+  _id: '67fb5f44620ee9ed8e2dd2f8',
 };
-
-const fakeBadges: TBadge[] = [
-  {
-    icon: 'bag-outline',
-    label: '1-2 Years',
-  },
-  {
-    icon: 'bag-outline',
-    label: 'Remote',
-  },
-  {
-    icon: 'bag-outline',
-    label: 'Fulltime',
-  },
-];
 
 const JobDetails = () => {
   return (
     <SafeAreaView className="flex-1" edges={[]}>
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <View className="px-4 pb-10">
-          <JobDetailsCard job={fakeJobDetails} badges={fakeBadges} />
+          <JobDetailsCard job={fakeJobDetails} />
           <CompanyCard />
-          <JobDescription />
+          <JobDescription skills={fakeJobDetails.skillsRequired} />
           <DottedLine className="my-12" />
           <MoreJobs fakeMoreJobs={fakeMoreJobs} />
         </View>
@@ -97,7 +98,7 @@ const MoreJobs = ({ fakeMoreJobs }: { fakeMoreJobs: TJob[] }) => {
       </View>
 
       {fakeMoreJobs.map((item) => (
-        <JobCard job={item} key={item.id} />
+        <JobCard job={item} key={item._id} />
       ))}
     </View>
   );

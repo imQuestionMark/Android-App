@@ -1,17 +1,17 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FlatList, View } from 'react-native';
 
+import { type TJob } from '@/api/home/jobs/use-jobs.query';
 import { Button, ButtonText, Typography } from '@/components/ui';
 
 import { JobCard } from './job-card';
-import { type TJob } from './job-details-card';
 
 export const JobListing = ({ jobs }: { jobs: TJob[] }) => {
   return (
     <View className="mt-4 flex-1">
       <FlatList
         data={jobs}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         renderItem={({ item }) => <JobCard job={item} />}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={jobs.length === 0 ? { flex: 1 } : null}

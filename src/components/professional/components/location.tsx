@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 
 import { queryClient } from '@/api';
-import { useLocations } from '@/api/professional/use-locations.query';
+import { useLocationsQuery } from '@/api/professional/use-locations.query';
 import { Typography } from '@/components/ui';
 
 import { ErrorMessage } from '../../ui/error-message';
@@ -23,7 +23,7 @@ export const Location = ({ control }: LocationProps) => {
     control,
   });
 
-  const data = queryClient.getQueryData(useLocations.getKey());
+  const data = queryClient.getQueryData(useLocationsQuery.getKey());
 
   const dropdownData = useMemo(() => {
     if (!data || !data.items) return [];

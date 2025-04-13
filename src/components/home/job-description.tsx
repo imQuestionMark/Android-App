@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import { Button, ButtonText, Typography } from '../ui';
 
-export const JobDescription = () => {
+export const JobDescription = ({ skills }: { skills: string[] }) => {
   const router = useRouter();
 
   const handleApplyJob = async () => {
@@ -18,7 +18,7 @@ export const JobDescription = () => {
       <QualificationDescription />
 
       <View className="mt-4">
-        <DescriptionBadges />
+        <DescriptionBadges skills={skills} />
 
         <View className="mt-2 flex-row justify-between gap-4">
           <Button variant="outline" className="grow px-[12px]">
@@ -92,7 +92,7 @@ const ProfileDescription = () => {
   );
 };
 
-const DescriptionBadges = () => {
+const DescriptionBadges = ({ skills }: { skills: string[] }) => {
   return (
     <View>
       <Typography weight={500} className="text-[20px]" color="main">
@@ -100,14 +100,7 @@ const DescriptionBadges = () => {
       </Typography>
 
       <View className="flex-row flex-wrap gap-5 p-[16px]">
-        {[
-          'Graphic Designing',
-          'Adobe XD',
-          'Web-design',
-          'Adobe Photoshop',
-          'Figma',
-          'Illustrator',
-        ].map((item) => (
+        {skills.map((item) => (
           <SkillBadge key={item} label={item} />
         ))}
       </View>

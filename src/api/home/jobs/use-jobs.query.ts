@@ -26,6 +26,8 @@ const jobResponseSchema = z.object({
   items: z.array(jobItem),
 });
 
+export type TJob = z.infer<typeof jobItem>;
+
 export type TJobResponse = z.infer<typeof jobResponseSchema>;
 type Variables = void;
 

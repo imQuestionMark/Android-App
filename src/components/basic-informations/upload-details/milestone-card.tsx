@@ -5,19 +5,12 @@ import { Pressable, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
 
+import { type TStep } from '@/app/(protected)/(wall)/upload-details';
 import { Typography } from '@/components/ui';
 
 type IMilestoneCardProps = {
   active?: boolean;
-  item: {
-    active?: boolean;
-    completed?: boolean;
-    description: string;
-    extraContent?: string;
-    href: string;
-    number: number;
-    title: string;
-  };
+  item: TStep;
 };
 
 const styles = tv({

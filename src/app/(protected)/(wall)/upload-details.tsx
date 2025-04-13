@@ -9,7 +9,27 @@ import MilestoneCard from '@/components/basic-informations/upload-details/milest
 import { Button, ButtonText, Typography } from '@/components/ui';
 import { Idea } from '@/components/ui/icons/idea';
 
-const steps = [
+export type TStepsHref =
+  | '/achievement'
+  | '/basic-info'
+  | '/certificates'
+  | '/education'
+  | '/experience'
+  | '/links'
+  | '/projects'
+  | '/skills';
+
+export type TStep = {
+  active?: boolean;
+  completed?: boolean;
+  description: string;
+  extraContent?: string;
+  href: TStepsHref;
+  number: number;
+  title: string;
+};
+
+const steps: TStep[] = [
   {
     number: 1,
     title: 'Basic Information',

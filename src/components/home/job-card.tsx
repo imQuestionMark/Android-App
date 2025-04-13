@@ -3,39 +3,14 @@ import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { Pressable, View } from 'react-native';
 
-import { Button, Typography } from '@/components/ui';
-
-import { DottedLine } from '../ui/dotted-line';
-
-type Job = {
-  company: string;
-  experience: string;
-  id: string;
-  isSaved: boolean;
-  location: string;
-  logo: any;
-  matchingSkills?: number;
-  postedDays: number;
-  tag: string;
-  title: string;
-};
+import { type TJob } from '@/api/home/jobs/use-jobs.query';
+import { Button, DottedLine, Typography } from '@/components/ui';
 
 type JobCardProps = {
-  job: Job;
+  job: TJob;
 };
 
 export const JobCard: React.FC<JobCardProps> = ({ job }) => {
-  const {
-    title,
-    company,
-    logo,
-    location,
-    experience,
-    postedDays,
-    matchingSkills,
-    isSaved,
-  } = job;
-
   return (
     <Link href={{ pathname: '/job-details' }} asChild>
       <Pressable
@@ -46,25 +21,45 @@ export const JobCard: React.FC<JobCardProps> = ({ job }) => {
       >
         <View className="flex-row items-start justify-between px-4">
           <View className="flex-row gap-6">
-            <Image source={logo} contentFit="contain" className="size-[55px]" />
+            <Image
+              source={'job.logo'}
+              contentFit="contain"
+              placeholder={
+                'https://avatar.iran.liara.run/username?username=Figma+'
+              }
+              className="size-[55px]"
+              alt={job.designation.slice(0, 1)}
+            />
 
             <View className="flex-1 flex-row justify-between">
-              <View>
-                <Typography className="text-[20px] text-black" weight={500}>
-                  {title}
+              <View className="flex-1">
+                <Typography className="text-[20px] text-black" weight={600}>
+                  {job.designation}
                 </Typography>
-                <Typography className="text-[18px]" weight={500}>
-                  {company}
+                <Typography
+                  className="text-[18px]"
+                  weight={500}
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                >
+                  {/* {job.recruiterId} */}
+                  Figma
                 </Typography>
               </View>
 
-              <Button variant="icon" className="border-0" onPress={() => {}}>
-                {isSaved ? (
-                  <Ionicons name="bookmark" size={24} color="#0400D1" />
-                ) : (
-                  <Ionicons name="bookmark-outline" size={24} color="#0400D1" />
-                )}
-              </Button>
+              <View>
+                <Button variant="icon" className="border-0" onPress={() => {}}>
+                  {job.isActive ? (
+                    <Ionicons name="bookmark" size={24} color="#0400D1" />
+                  ) : (
+                    <Ionicons
+                      name="bookmark-outline"
+                      size={24}
+                      color="#0400D1"
+                    />
+                  )}
+                </Button>
+              </View>
             </View>
           </View>
         </View>
@@ -75,28 +70,28 @@ export const JobCard: React.FC<JobCardProps> = ({ job }) => {
           <View className="flex-row items-center gap-4 px-4">
             <Ionicons name="location-outline" size={20} color="#596574" />
             <Typography className="text-[16px] text-[#596574]">
-              {location}
+              {job.location.join(', ')}
             </Typography>
           </View>
 
           <View className="flex-row justify-between ">
-            <View className="flex-row items-center gap-2 rounded-r-xl bg-[#F2F9FF] px-4 py-1">
+            <View className="flex-row items-center gap-2 rounded-r-xl bg-[#F2F9FF] px-3 py-2">
               <Ionicons name="bag-outline" size={20} color="#0400D1" />
               <Typography className="text-[16px] text-primary">
-                {experience}
+                {job.minExperience}-{job.maxExperience} years Experience
               </Typography>
             </View>
 
             <View className="flex-row items-center gap-2 pr-4">
               <Ionicons name="time-outline" size={20} color="#596574" />
-              <Typography className="text-[16px] text-[#596574]">
-                {postedDays} days ago
+              <Typography className="text-[14px] text-[#596574]">
+                {job.noticePeriod} ago
               </Typography>
             </View>
           </View>
         </View>
 
-        {matchingSkills && (
+        {job.check && (
           <View
             className="flex-row gap-4  bg-green px-4 py-3"
             style={{
@@ -106,7 +101,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job }) => {
           >
             <Ionicons name="shield-checkmark-outline" size={20} color="white" />
             <Typography className="text-[14px] text-white" weight={500}>
-              match {matchingSkills} Skills
+              match {job.check} Skills
             </Typography>
           </View>
         )}
