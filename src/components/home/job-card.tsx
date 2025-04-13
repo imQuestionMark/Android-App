@@ -27,6 +27,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job }) => {
               placeholder={
                 'https://avatar.iran.liara.run/username?username=Figma+'
               }
+              placeholderContentFit="contain"
               className="size-[55px]"
               alt={job.designation.slice(0, 1)}
             />
