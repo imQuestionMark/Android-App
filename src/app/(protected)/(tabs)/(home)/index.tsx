@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { type TJobResponse } from '@/api/home/jobs/use-jobs.query';
 import { type TJob } from '@/components/home/job-details-card';
 import { FilterComponent } from '@/components/home/job-filter';
 import { JobListing } from '@/components/home/job-listing';
@@ -54,6 +55,44 @@ const fakeJobs: TJob[] = [
   },
 ];
 
+export const fakePostmanJobs: TJobResponse = {
+  items: [
+    {
+      designation: 'Backend Developer - Engineer',
+      location: ['New York', 'San Francisco'],
+      isActive: true,
+      jobType: 'Full-time',
+      workMode: 'Hybrid',
+      skillsRequired: ['Python', 'Django', 'REST APIs', 'PostgreSQL'],
+      recruiterId: '6794c33bc93430e53630b4f5',
+      minExperience: 3,
+      maxExperience: 5,
+      salary: '0.5 LPA-4 LPA',
+      jobDescription:
+        'We are looking for a skilled Software Engineer to join our dynamic team, specializing in backend development using Django and Python.',
+      noticePeriod: '2 months',
+      check: 75,
+      _id: '67fb5f44620ee9ed8e2dd2f8',
+    },
+    {
+      designation: 'Frontend Developer - Engineer',
+      location: ['New York', 'San Francisco'],
+      isActive: true,
+      jobType: 'Full-time',
+      workMode: 'Hybrid',
+      skillsRequired: ['Python', 'Django', 'REST APIs', 'PostgreSQL'],
+      recruiterId: '6794c33bc93430e53630b4f5',
+      minExperience: 3,
+      maxExperience: 5,
+      salary: '0.5 LPA-4 LPA',
+      jobDescription:
+        'We are looking for a skilled Software Engineer to join our dynamic team, specializing in backend development using Django and Python.',
+      noticePeriod: '2 months',
+      check: 75,
+      _id: '67fb9bf8ce011b052a6f5173',
+    },
+  ],
+};
 const fakeFilters: FilterOptions[] = [
   'All',
   'Development',

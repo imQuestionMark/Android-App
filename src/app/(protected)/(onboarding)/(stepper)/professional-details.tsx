@@ -10,8 +10,8 @@ import {
   type ProfessionalFormData,
   professionalFormSchema,
 } from '@/api/authentication/professional-details';
-import { useJobs } from '@/api/professional/use-jobs';
-import { useLocations } from '@/api/professional/use-locations';
+import { useLocationsQuery } from '@/api/professional/use-locations.query';
+import { useRolesQuery } from '@/api/professional/use-roles.query';
 import {
   CTC,
   ExpCTC,
@@ -49,7 +49,7 @@ const Professional = () => {
   const resetHandler = useBoundStore((state) => state.resetHandler);
 
   const results = useQueries({
-    queries: [useJobs.getOptions(), useLocations.getOptions()],
+    queries: [useRolesQuery.getOptions(), useLocationsQuery.getOptions()],
   });
 
   useEffect(() => {

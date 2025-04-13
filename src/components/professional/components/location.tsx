@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 
 import { queryClient } from '@/api';
-import { useLocations } from '@/api/professional/use-locations';
+import { useLocations } from '@/api/professional/use-locations.query';
 import { Typography } from '@/components/ui';
 
 import { ErrorMessage } from '../../ui/error-message';

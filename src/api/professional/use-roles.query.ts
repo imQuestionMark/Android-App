@@ -18,13 +18,13 @@ const jobResponseSchema = z.object({
 type Response = z.infer<typeof jobResponseSchema>;
 type Variables = void;
 
-const fetchJobs = async () => {
+const fetchRoles = async () => {
   const response = await client.get(API_ROUTES.JOB_ROLES.GET);
   return jobResponseSchema.parse(response.data.data);
 };
 
-export const useJobs = createQuery<Response, Variables, AxiosError>({
-  queryKey: ['jobs'],
-  fetcher: fetchJobs,
+export const useRolesQuery = createQuery<Response, Variables, AxiosError>({
+  queryKey: ['roles'],
+  fetcher: fetchRoles,
   retry: false,
 });

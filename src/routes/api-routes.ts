@@ -22,7 +22,7 @@ const JOB = {
     POST: '/job-roles/add-jobrole',
   },
   JOB: {
-    GET: '/job/get-job/',
+    GET: '/job/list',
   },
 } as const;
 

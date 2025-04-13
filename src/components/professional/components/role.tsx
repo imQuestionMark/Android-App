@@ -5,7 +5,7 @@ import { View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 
 import { queryClient } from '@/api';
-import { useJobs } from '@/api/professional/use-jobs';
+import { useJobs } from '@/api/professional/use-roles.query';
 import { Button, ButtonText, Input, Typography } from '@/components/ui';
 
 import { ErrorMessage } from '../../ui/error-message';

@@ -23,7 +23,7 @@ const fetchLocations = async () => {
   return locationResponseSchema.parse(response.data.data);
 };
 
-export const useLocations = createQuery<Response, Variables, Error>({
+export const useLocationsQuery = createQuery<Response, Variables, Error>({
   queryKey: ['locations'],
   fetcher: fetchLocations,
   retry: false,
