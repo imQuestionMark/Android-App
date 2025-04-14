@@ -215,7 +215,10 @@ function UpdatesDemo() {
       {availableUpdate && <Typography>Update available</Typography>}
       <Typography>{runTypeMessage}</Typography>
 
-      <Button onPress={() => Updates.checkForUpdateAsync()}>
+      <Button
+        onPress={() => Updates.checkForUpdateAsync()}
+        className="bg-red-200"
+      >
         {isChecking && <ActivityIndicator />}
         <ButtonText>Check manually for updates</ButtonText>
       </Button>
